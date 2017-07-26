@@ -19,9 +19,30 @@
     <ClInclude Include="include\DNDMain.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDDebug.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDGame.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDDLL.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDSingleton.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDError.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDUser.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGame.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

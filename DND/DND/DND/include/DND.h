@@ -10,7 +10,10 @@
 #ifndef _DND_DND_H_
 #define _DND_DND_H_
 
-#include "DNDMain.h"
+#define DND_IMPORT
 
+#include "DNDMain.h"
+#include "DNDSingleton.h"
+#include "DNDGame.h"
 
 #endif

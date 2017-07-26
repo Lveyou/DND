@@ -12,9 +12,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DND.h" />
+    <ClInclude Include="include\DNDDebug.h" />
+    <ClInclude Include="include\DNDDLL.h" />
+    <ClInclude Include="include\DNDError.h" />
+    <ClInclude Include="include\DNDGame.h" />
     <ClInclude Include="include\DNDMain.h" />
+    <ClInclude Include="include\DNDSingleton.h" />
+    <ClInclude Include="include\DNDUser.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DNDGame.cpp" />
     <ClCompile Include="src\DNDMain.cpp" />
   </ItemGroup>
   <ItemGroup>
