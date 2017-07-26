@@ -37,12 +37,39 @@
     <ClInclude Include="include\DNDUser.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDSystem.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDSystem_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDString.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDMath.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDValue.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGame.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDSystem_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDString.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDMath.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDUser.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

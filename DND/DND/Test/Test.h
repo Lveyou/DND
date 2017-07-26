@@ -6,8 +6,12 @@ using namespace DND;
 
 class Test : public Game
 {
-public:
-	virtual void Update() override;
+private:
+	virtual void _update() override;
+	virtual void _init() override;
+	virtual void _release() override;
 };
+
+extern Test g_app;
 
 #endif

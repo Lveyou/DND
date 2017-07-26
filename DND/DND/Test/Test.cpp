@@ -1,6 +1,19 @@
 #include "Test.h"
 
-void Test::Update()
+Test g_app;
+
+
+void Test::_update()
+{
+	
+}
+
+void Test::_init()
+{
+	sys->ApplyWindow();
+}
+
+void Test::_release()
 {
 
 }

@@ -12,8 +12,11 @@
 
 #define DND_IMPORT
 
-#include "DNDMain.h"
-#include "DNDSingleton.h"
-#include "DNDGame.h"
+#include "DNDMain.h"					//DNDMain
+#include "DNDSingleton.h"				//singleton template class
+#include "DNDGame.h"					//Game base class
+#include "DNDString.h"					//String
+#include "DNDSystem.h"					//System
+
 
 #endif

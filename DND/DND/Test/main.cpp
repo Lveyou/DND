@@ -2,6 +2,7 @@
 
 DNDMain()
 {
-	Test g_test;
-	Test g_test2;
+	g_app.Init();
+	g_app.EnterLoop();
+	g_app.Release();
 }

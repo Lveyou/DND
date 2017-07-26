@@ -17,12 +17,21 @@
     <ClInclude Include="include\DNDError.h" />
     <ClInclude Include="include\DNDGame.h" />
     <ClInclude Include="include\DNDMain.h" />
+    <ClInclude Include="include\DNDMath.h" />
     <ClInclude Include="include\DNDSingleton.h" />
+    <ClInclude Include="include\DNDString.h" />
+    <ClInclude Include="include\DNDSystem.h" />
     <ClInclude Include="include\DNDUser.h" />
+    <ClInclude Include="include\DNDValue.h" />
+    <ClInclude Include="src\DNDSystem_imp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDGame.cpp" />
+    <ClCompile Include="src\DNDUser.cpp" />
     <ClCompile Include="src\DNDMain.cpp" />
+    <ClCompile Include="src\DNDMath.cpp" />
+    <ClCompile Include="src\DNDString.cpp" />
+    <ClCompile Include="src\DNDSystem_imp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="export.def" />
