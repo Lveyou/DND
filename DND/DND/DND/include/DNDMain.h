@@ -1,0 +1,14 @@
+//////////////////////////////////////////////////////////////////////////
+//name:		DNDMian
+//author:	Lveyou
+//data:		17-07-26
+
+//other:
+//17-07-26: 此文件声明DNDMain宏，作为新的入口函数 - Lveyou
+//////////////////////////////////////////////////////////////////////////
+#ifndef _DND_MAIN_H_
+#define _DND_MAIN_H_
+
+#define DNDMain extern "C" __declspec(dllexport) void _func_dnd_main
+
+#endif
