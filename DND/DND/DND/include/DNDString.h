@@ -12,6 +12,7 @@
 
 
 #include "DNDDLL.h"
+#include "DNDTypedef.h"
 #include <vector>
 using namespace std;
 
@@ -24,53 +25,53 @@ namespace DND
 		//==================构造、析构、操作符========================
 		String();//空串
 		String(const char* str);//字符数组
-		String(const wchar_t* wcs);//宽字符数组
-		String(wchar_t wc);//宽字符
+		String(const WCHAR* wcs);//宽字符数组
+		String(WCHAR wc);//宽字符
 		~String();//析构
 		String(const String& b);//复制构造
 		//String(const unsigned b);
-		String(const int b);//数字构造
-		String(wchar_t ch, unsigned len);//填充len 个 ch
+		String(const Int32 b);//数字构造
+		String(WCHAR ch, UInt32 len);//填充len 个 ch
 		String(StrVector*);//strvector构造
 		String& operator=(const String& b);//=号重载
 		String operator+(const String& b) const;//连接
 		bool operator==(const String& b) const;//相同
 		bool operator<(const String& b) const;//小于
 
-		unsigned GetLength() const;//返回长度
+		UInt32 GetLength() const;//返回长度
 		//==================转化==================
-		const wchar_t* GetWcs() const;
-		void GetWideCharStr(wchar_t* target, unsigned max_len) const;//获得宽字符数组
-		void GetMultiByteStr(char* target, unsigned max_len) const;//获取字符数组
+		const WCHAR* GetWcs() const;
+		void GetWideCharStr(WCHAR* target, UInt32 max_len) const;//获得宽字符数组
+		void GetMultiByteStr(char* target, UInt32 max_len) const;//获取字符数组
 		int GetInt();//返回int
 
 		void Clear();//设为空串
 		void Pop();//去掉结尾
 		
 		//==================查找==================
-		unsigned FindEnd(wchar_t wc);//查找最后一个
-		unsigned FindStr(const String& str);//查找字符串位置，返回-1代表不存在
-		unsigned FindN(wchar_t wc, unsigned N);//查找第n个要查找的字符
-		unsigned GetCharCount(wchar_t ch);//返回某字符出现的个数
-		String GetStr(unsigned begin, unsigned end);//返回区间内的字符串
+		UInt32 FindEnd(WCHAR wc);//查找最后一个
+		UInt32 FindStr(const String& str);//查找字符串位置，返回-1代表不存在
+		UInt32 FindN(WCHAR wc, UInt32 N);//查找第n个要查找的字符
+		UInt32 GetCharCount(WCHAR ch);//返回某字符出现的个数
+		String GetStr(UInt32 begin, UInt32 end);//返回区间内的字符串
 		//==================删除==================
-		void Cut(unsigned begin, unsigned end);//去掉区间内的字符串 [b, e]
-		void CutTail(unsigned i);//去掉i位置后的 包括i
-		void CutHead(unsigned i);//去掉i位置前的 包括i
+		void Cut(UInt32 begin, UInt32 end);//去掉区间内的字符串 [b, e]
+		void CutTail(UInt32 i);//去掉i位置后的 包括i
+		void CutHead(UInt32 i);//去掉i位置前的 包括i
 		void CutHeadStr(const String& str);//去除头部字符串
 		
 		
 		//==================修改==================
-		void DeleteChar(unsigned i);//i位置删除一个字符
-		void InsertChar(unsigned i, wchar_t ch);//i位置前插入一个字符,第一个字符位置为0
-		void ReplaceChar(wchar_t source, wchar_t target);//替换某个字符
+		void DeleteChar(UInt32 i);//i位置删除一个字符
+		void InsertChar(UInt32 i, WCHAR ch);//i位置前插入一个字符,第一个字符位置为0
+		void ReplaceChar(WCHAR source, WCHAR target);//替换某个字符
 		
-		unsigned Split(wchar_t wc, String* strs, unsigned max_size);//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
-		static String Format(unsigned max_size, const wchar_t* format, ...);//max size 不包含结束符
+		UInt32 Split(WCHAR wc, String* strs, UInt32 max_size);//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
+		static String Format(UInt32 max_size, const WCHAR* format, ...);//max size 不包含结束符
 	private:
 		StrVector* p;
 		void _init();
-		void _copy(const wchar_t* wcs);
+		void _copy(const WCHAR* wcs);
 	};
 }
 

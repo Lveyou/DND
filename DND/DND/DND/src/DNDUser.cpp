@@ -17,7 +17,7 @@ namespace DND
 
 	}
 
-	Size::Size(unsigned iw, unsigned ih) :
+	Size::Size(UInt32 iw, UInt32 ih) :
 		w(iw), h(ih)
 	{
 
@@ -198,7 +198,7 @@ namespace DND
 		d = id;
 	}
 
-	float DND::Vector4::operator[](unsigned index)
+	float DND::Vector4::operator[](UInt32 index)
 	{
 		return *((float*)this + index);
 	}

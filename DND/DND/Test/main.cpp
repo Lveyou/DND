@@ -8,11 +8,12 @@ DNDMain()
 	DebuggerConsole _debuggerConsole;
 	Debug::SetDebugger(&_debuggerConsole);
 	
+	
+	Test app;
+	app.Init();
+	app.EnterLoop();
+	app.Release();
 
-	Test g_app;
-	g_app.Init();
-	g_app.EnterLoop();
-	g_app.Release();
-
+	
 	
 }

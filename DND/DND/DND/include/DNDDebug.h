@@ -12,10 +12,20 @@
 
 #include "DNDDLL.h"
 #include "DNDString.h"
+#include "DNDError.h"
 #include <windows.h>
+
+#define debug_info(str)\
+	Debug::WriteLine(str, DebugLevel::INFO)
 
 #define debug_notice(str)\
 	Debug::WriteLine(str, DebugLevel::NOTICE)
+
+#define debug_warn(str)\
+	Debug::WriteLine(str, DebugLevel::WARN)
+
+#define debug_err(str)\
+	Debug::WriteLine(str, DebugLevel::ERR)
 
 namespace DND
 {
@@ -24,6 +34,8 @@ namespace DND
 	{
 		enum NAME
 		{
+			BLANK,
+			TIME,
 			INFO,
 			NOTICE,
 			WARN,
@@ -51,23 +63,28 @@ namespace DND
 	class DLL_API DebuggerConsole : public Debugger
 	{
 	public:
+		//if SetTimeStamp(true),WriteLine will add the time ahead. 
 		virtual void WriteLine(const String& str, int level) override;
 		virtual void Write(const String& str, int level) override;
 		virtual void WriteEndl(int level) override;	
 
-		enum Color
-		{
-			WHITE,//info
-			GREEN,//notice
-			YELLOW,//warning
-			RED,//error
-		};
+		//Temporary WriteLine
+		virtual void TempWrite(const String& str, int level);
+		void SetTimeStamp(bool open);
+		//enum Color
+		//{
+		//	WHITE,//info
+		//	GREEN,//notice
+		//	YELLOW,//warning
+		//	RED,//error
+		//};
 		//build console window and relocation stream
 		DebuggerConsole();
 		~DebuggerConsole();
 	private:
 		HANDLE _handleOutput;
 		HWND _consoleHwnd;
+		bool _bTimeStamp;
 		void _get_console_hwnd();
 		
 	};
@@ -84,7 +101,11 @@ namespace DND
 		static void WriteEndl(int level = DebugLevel::ERR);
 		static void SetDebugger(Debugger* debugger);
 		template<typename T>
-		static T* GetDebugger();
+		static T* GetDebugger()
+		{
+			dnd_assert(_debugger, ERROR_00008);
+			return dynamic_cast<T*>(_debugger);
+		}
 	private:
 		static Debugger* _debugger;
 	};

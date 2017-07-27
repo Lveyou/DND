@@ -21,13 +21,17 @@
     <ClInclude Include="include\DNDSingleton.h" />
     <ClInclude Include="include\DNDString.h" />
     <ClInclude Include="include\DNDSystem.h" />
+    <ClInclude Include="include\DNDTime.h" />
+    <ClInclude Include="include\DNDTypedef.h" />
     <ClInclude Include="include\DNDUser.h" />
     <ClInclude Include="include\DNDValue.h" />
     <ClInclude Include="src\DNDSystem_imp.h" />
+    <ClInclude Include="src\DNDTime_imp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDDebug.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />
+    <ClCompile Include="src\DNDTime_imp.cpp" />
     <ClCompile Include="src\DNDUser.cpp" />
     <ClCompile Include="src\DNDMain.cpp" />
     <ClCompile Include="src\DNDMath.cpp" />
@@ -70,6 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\DND\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

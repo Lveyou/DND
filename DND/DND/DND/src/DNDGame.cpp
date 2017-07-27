@@ -1,7 +1,7 @@
 #include "DNDGame.h"
 #include "DNDError.h"
 #include "DNDSystem_imp.h"
-
+#include "DNDTime_imp.h"
 #include "DNDError.h"
 
 namespace DND
@@ -13,6 +13,7 @@ namespace DND
 		dnd_assert(!_game, ERROR_00000);
 		_game = this;
 		sys = NULL;
+		time = NULL;
 		_bEndLoop = false;
 	}
 
@@ -37,8 +38,14 @@ namespace DND
 		MSG msg;
 		ZeroMemory(&msg, sizeof(MSG));
 
+		Time_imp* t = (Time_imp*)time;
+		t->_init_loop_start();
+
 		while (!_bEndLoop)
 		{
+			//_last 上一帧 时间戳
+			//_expect_delta 预期的时间变化
+			//未完
 			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 			{
 				if(msg.message == WM_QUIT)
@@ -46,10 +53,17 @@ namespace DND
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
+			else
+			{
+				t->_update();
+				_fixed_update();
+				_update();
+				_late_update();
 
-			_fixed_update();
-			_update();
-			_late_update();
+				t->_set_last();
+			}
+
+			
 		}
 	}
 
@@ -57,7 +71,7 @@ namespace DND
 	{
 		_release();
 
-		
+		_release_engine();
 	}
 
 	void Game::_fixed_update()
@@ -73,6 +87,7 @@ namespace DND
 	void Game::_init_engine()
 	{
 		sys = new System_imp;
+		time = new Time_imp;
 	}
 
 	Game* Game::Get()
@@ -105,5 +120,12 @@ namespace DND
 		}
 		return 0;
 	}
+
+	void Game::_release_engine()
+	{
+		delete time;
+		delete sys;
+	}
+
 }
 

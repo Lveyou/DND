@@ -6,11 +6,11 @@
 
 namespace DND
 {
-	class StrVector : public vector<wchar_t>
+	class StrVector : public vector<WCHAR>
 	{
 	public:
-		StrVector(vector<wchar_t>* p) : 
-			vector<wchar_t>(*p)
+		StrVector(vector<WCHAR>* p) : 
+			vector<WCHAR>(*p)
 		{
 			
 		}
@@ -29,8 +29,8 @@ namespace DND
 	{
 		_init();
 
-		unsigned len = strlen(str) + 1;
-		wchar_t* wcs = new wchar_t[len];
+		UInt32 len = strlen(str) + 1;
+		WCHAR* wcs = new WCHAR[len];
 		MultiByteToWideChar(CP_ACP, NULL, str, -1, wcs, len);
 		p->reserve(len);
 
@@ -39,11 +39,11 @@ namespace DND
 		delete[] wcs;
 	}
 
-	String::String(const wchar_t* wcs)
+	String::String(const WCHAR* wcs)
 	{
 		_init();
 
-		unsigned len = wcslen(wcs);
+		UInt32 len = wcslen(wcs);
 
 		p->reserve(len);
 
@@ -52,7 +52,7 @@ namespace DND
 		
 	}
 
-	String::String(wchar_t wc)
+	String::String(WCHAR wc)
 	{
 		_init();
 
@@ -69,8 +69,8 @@ namespace DND
 	String::String(const int b)
 	{
 		_init();
-		unsigned len = Math::Get_Int_Length(b) + 1;
-		wchar_t* wcs = new wchar_t[len];
+		UInt32 len = Math::Get_Int_Length(b) + 1;
+		WCHAR* wcs = new WCHAR[len];
 		swprintf_s(wcs, len, L"%d", b);
 
 		p->reserve(len - 1);
@@ -78,7 +78,7 @@ namespace DND
 		delete[] wcs;
 	}
 
-	String::String(wchar_t ch, unsigned len)
+	String::String(WCHAR ch, UInt32 len)
 	{
 		_init();
 
@@ -103,23 +103,23 @@ namespace DND
 		return wcscmp(GetWcs(), b.GetWcs()) < 0;
 	}
 
-	unsigned String::GetLength() const
+	UInt32 String::GetLength() const
 	{
 		return p->size();
 	}
 
 
-	const wchar_t* String::GetWcs() const
+	const WCHAR* String::GetWcs() const
 	{
 		p->push_back(0);
-		wchar_t * temp = &(*p)[0];//保证0下标不越界
+		WCHAR * temp = &(*p)[0];//保证0下标不越界
 		p->pop_back();
 		return temp;
 	}
 
-	void String::GetWideCharStr(wchar_t* target, unsigned max_len) const
+	void String::GetWideCharStr(WCHAR* target, UInt32 max_len) const
 	{
-		unsigned i = 0;
+		UInt32 i = 0;
 		while (i < max_len && i < p->size())
 		{
 			target[i] = (*p)[i];
@@ -150,9 +150,9 @@ namespace DND
 		p = new StrVector;
 	}
 
-	void String::_copy(const wchar_t* wcs)
+	void String::_copy(const WCHAR* wcs)
 	{
-		unsigned i = 0;
+		UInt32 i = 0;
 		while (wcs[i])
 		{
 			p->push_back(wcs[i]);
@@ -160,7 +160,7 @@ namespace DND
 		}
 	}
 
-	void String::GetMultiByteStr(char* target, unsigned max_len) const
+	void String::GetMultiByteStr(char* target, UInt32 max_len) const
 	{
 
 		WideCharToMultiByte(CP_ACP, NULL, GetWcs(), -1, target, max_len * 2, NULL, NULL);
@@ -185,19 +185,19 @@ namespace DND
 		p->pop_back();
 	}
 
-	unsigned String::FindEnd(wchar_t ch)
+	UInt32 String::FindEnd(WCHAR ch)
 	{
 		return FindN(ch, GetCharCount(ch));
 	}
 
-	unsigned String::FindStr(const String& str)
+	UInt32 String::FindStr(const String& str)
 	{
 		auto s = search(p->begin(), p->end(), str.p->begin(), str.p->end());
 		
 		return s == p->end() ? -1 : s - p->begin();
 	}
 
-	unsigned String::FindN(wchar_t wc, unsigned N)
+	UInt32 String::FindN(WCHAR wc, UInt32 N)
 	{
 		if (N == 0)
 			return -1;
@@ -218,27 +218,27 @@ namespace DND
 		}
 	}
 
-	unsigned String::GetCharCount(wchar_t ch)
+	UInt32 String::GetCharCount(WCHAR ch)
 	{
 		return count(p->begin(), p->end(), ch);
 	}
 
-	String String::GetStr(unsigned begin, unsigned end)
+	String String::GetStr(UInt32 begin, UInt32 end)
 	{
-		return String(&StrVector(&vector<wchar_t>(p->begin() + begin, p->begin() + end)));
+		return String(&StrVector(&vector<WCHAR>(p->begin() + begin, p->begin() + end)));
 	}
 
-	void String::Cut(unsigned begin, unsigned end)
+	void String::Cut(UInt32 begin, UInt32 end)
 	{
 		p->erase(p->begin() + begin, p->begin() + end);
 	}
 
-	void String::CutTail(unsigned i)
+	void String::CutTail(UInt32 i)
 	{
 		p->erase(p->begin() + i, p->end());
 	}
 
-	void String::CutHead(unsigned i)
+	void String::CutHead(UInt32 i)
 	{
 		p->erase(p->begin(), p->begin() + i);
 	}
@@ -253,27 +253,27 @@ namespace DND
 		}
 	}
 
-	void String::DeleteChar(unsigned i)
+	void String::DeleteChar(UInt32 i)
 	{
 		p->erase(p->begin() + i);
 	}
 
-	void String::InsertChar(unsigned i, wchar_t ch)
+	void String::InsertChar(UInt32 i, WCHAR ch)
 	{
 		p->insert(p->begin() + i, ch);
 	}
 
-	void String::ReplaceChar(wchar_t source, wchar_t target)
+	void String::ReplaceChar(WCHAR source, WCHAR target)
 	{
 		replace(p->begin(), p->end(), source, target);
 	}
 
-	unsigned String::Split(wchar_t wc, String* strs, unsigned max_size)
+	UInt32 String::Split(WCHAR wc, String* strs, UInt32 max_size)
 	{
 		auto itor_begin = p->begin();
 		auto itor_find = itor_begin;
 	
-		unsigned i = 0;
+		UInt32 i = 0;
 		while (i < max_size)
 		{
 			itor_find = find(itor_begin, p->end(), wc);
@@ -282,7 +282,7 @@ namespace DND
 				return i;
 			else
 			{
-				strs[i] = &StrVector(&vector<wchar_t>(itor_begin, itor_find));
+				strs[i] = &StrVector(&vector<WCHAR>(itor_begin, itor_find));
 				itor_begin = itor_find;
 			}
 			++i;
@@ -290,10 +290,10 @@ namespace DND
 		return max_size;
 	}
 
-	String String::Format(unsigned max_size, const wchar_t* format, ...)
+	String String::Format(UInt32 max_size, const WCHAR* format, ...)
 	{
 	
-		wchar_t* wcs = new wchar_t[max_size + 1];
+		WCHAR* wcs = new WCHAR[max_size + 1];
 
 		va_list args;
 		va_start(args, format);

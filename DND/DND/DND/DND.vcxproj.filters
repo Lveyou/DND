@@ -52,6 +52,15 @@
     <ClInclude Include="include\DNDValue.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDTime.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDTime_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDTypedef.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -73,6 +82,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDDebug.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDTime_imp.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

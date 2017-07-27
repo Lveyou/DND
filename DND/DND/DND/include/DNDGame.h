@@ -16,6 +16,7 @@
 namespace DND
 {
 	class System;
+	class Time;
 	class DLL_API Game
 	{	
 		friend class System_imp;
@@ -26,8 +27,9 @@ namespace DND
 		void EndLoop();
 		
 	public:
-		inline static Game* Get();
+		static Game* Get();
 		System* sys;
+		Time* time;
 	protected:
 		Game();
 	private:
@@ -40,6 +42,7 @@ namespace DND
 		virtual void _late_update();
 	private:
 		void _init_engine();
+		void _release_engine();
 		static Game* _game;
 		static LRESULT CALLBACK _window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		bool _bEndLoop;

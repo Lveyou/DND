@@ -7,20 +7,20 @@
 
 namespace DND
 {
-	unsigned Math::Get_Pow2_Large(unsigned var)
+	UInt32 Math::Get_Pow2_Large(UInt32 var)
 	{
-		unsigned int m = 1;
+		UInt32 m = 1;
 		while (m < var)
 			m <<= 1;
 		return m;
 	}
 
-	unsigned Math::Get_Unsigned_Length(unsigned var)
+	UInt32 Math::Get_Unsigned_Length(UInt32 var)
 	{
 		if (var == 0)
 			return 1;
-		unsigned m = var;
-		unsigned l = 0;
+		UInt32 m = var;
+		UInt32 l = 0;
 		while (m != 0)
 		{
 			m /= 10;
@@ -42,12 +42,12 @@ namespace DND
 		return !((dot.x < rect.p1.x) || (dot.x > rect.p2.x) || (dot.y < rect.p1.y) || (dot.y > rect.p2.y));
 	}
 
-	unsigned DND::Math::Get_Int_Length(int var)
+	UInt32 DND::Math::Get_Int_Length(int var)
 	{
 		if (var == 0)
 			return 1;
-		unsigned m = var;
-		unsigned l = 0;
+		UInt32 m = var;
+		UInt32 l = 0;
 		while (m != 0)
 		{
 			m /= 10;
@@ -84,7 +84,7 @@ namespace DND
 		x = x * (1.5f - xhalf * x * x);
 		return x;
 	}
-	unsigned g_seed = 0;
+	UInt32 g_seed = 0;
 	int DND::Math::Get_Rand_Int(int min, int max)
 	{
 		//随机数算法 copy 自 hge
@@ -114,9 +114,9 @@ namespace DND
 		return min + (g_seed >> 16)*(1.0f / 65535.0f)*(max - min);
 	}
 
-	void DND::Math::Set_Seed(unsigned int seed)
+	void DND::Math::Set_Seed(UInt32 seed)
 	{
-		if (!seed) g_seed = (unsigned int)time(0);
+		if (!seed) g_seed = (UInt32)time(0);
 		else g_seed = seed;
 	}
 

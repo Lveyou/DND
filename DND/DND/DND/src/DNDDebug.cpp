@@ -1,6 +1,8 @@
 #include "DNDDebug.h"
 #include "DNDError.h"
 #include "DNDValue.h"
+#include "DNDGame.h"
+#include "DNDTime.h"
 #include <windows.h>
 #include <iostream>
 
@@ -33,12 +35,6 @@ namespace DND
 		_debugger = debugger;
 	}
 
-	template<typename T>
-	T* Debug::GetDebugger()
-	{
-		dnd_assert(_debugger, ERROR_00008);
-		return dynamic_cast<T>(_debugger);
-	}
 
 	Debugger* Debug::_debugger = NULL;
 	//do nothing
@@ -60,6 +56,12 @@ namespace DND
 
 	void DebuggerConsole::WriteLine(const String& str, int level)
 	{
+		if(_bTimeStamp)
+		{
+			Write(String(L"[") + Game::Get()->time->GetHMSString() + L"]", DebugLevel::TIME);
+			Write(L"=", DebugLevel::BLANK);
+		}
+			
 		Write(str, level);
 		WriteEndl(level);
 	}
@@ -68,24 +70,38 @@ namespace DND
 	{
 		switch(level)
 		{
+		case DebugLevel::BLANK:
+			SetConsoleTextAttribute(_handleOutput,
+				FOREGROUND_INTENSITY |
+				BACKGROUND_INTENSITY);
+			break;
+		case DebugLevel::TIME:
+			SetConsoleTextAttribute(_handleOutput,
+				BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE |
+				BACKGROUND_INTENSITY);
+			break;
 		case DebugLevel::INFO:
 			SetConsoleTextAttribute(_handleOutput,
 				FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE |
+				BACKGROUND_BLUE |
 				FOREGROUND_INTENSITY);
 			break;
 		case DebugLevel::NOTICE:
 			SetConsoleTextAttribute(_handleOutput,
 				FOREGROUND_GREEN |
+				BACKGROUND_GREEN |
 				FOREGROUND_INTENSITY);
 			break;
 		case DebugLevel::WARN:
 			SetConsoleTextAttribute(_handleOutput,
 				FOREGROUND_GREEN | FOREGROUND_RED |
+				BACKGROUND_GREEN | BACKGROUND_RED |
 				FOREGROUND_INTENSITY);
 			break;
 		case DebugLevel::ERR:
 			SetConsoleTextAttribute(_handleOutput,
 				FOREGROUND_RED |
+				BACKGROUND_RED |
 				FOREGROUND_INTENSITY);
 			break;
 		}
@@ -107,6 +123,7 @@ namespace DND
 
 		_get_console_hwnd();
 		_handleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+		_bTimeStamp = true;
 	}
 
 	void DebuggerConsole::_get_console_hwnd()
@@ -127,6 +144,18 @@ namespace DND
 	DebuggerConsole::~DebuggerConsole()
 	{
 		FreeConsole();
+	}
+
+	void DebuggerConsole::SetTimeStamp(bool open)
+	{
+		_bTimeStamp = open;
+	}
+
+	void DebuggerConsole::TempWrite(const String& str, int level)
+	{
+		UInt32 len = str.GetLength();
+		Write(str, level);
+		Write(String(L'\b', len), level);
 	}
 
 }
