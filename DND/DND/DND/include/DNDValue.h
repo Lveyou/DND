@@ -21,6 +21,8 @@ namespace DND
 	const String DEFAULT_WINDOW_TITLE = L"DND";
 	const DWORD DEFAULT_WINDOW_STYLE = WS_OVERLAPPEDWINDOW;
 	const Size DEFAULT_WINDOW_SIZE = Size(800, 600);
+	const String DEFAULT_CONSOLE_TITLE = L"DNDDebuggerConsole - author:Lveyou";
+
 }
 
 

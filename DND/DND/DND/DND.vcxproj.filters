@@ -72,6 +72,9 @@
     <ClCompile Include="src\DNDUser.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\DNDDebug.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="export.def" />

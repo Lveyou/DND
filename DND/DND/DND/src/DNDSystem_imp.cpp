@@ -23,8 +23,8 @@ namespace DND
 		wc.lpszClassName = L"DNDWindowClass";//窗口类名
 
 		dnd_assert(RegisterClass(&wc), ERROR_00002);
+		
 		//创建窗口
-
 		_hWnd = CreateWindow(
 			L"DNDWindowClass",
 			L"DNDFirstWindow",

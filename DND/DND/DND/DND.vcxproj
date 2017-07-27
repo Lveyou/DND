@@ -26,6 +26,7 @@
     <ClInclude Include="src\DNDSystem_imp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DNDDebug.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />
     <ClCompile Include="src\DNDUser.cpp" />
     <ClCompile Include="src\DNDMain.cpp" />

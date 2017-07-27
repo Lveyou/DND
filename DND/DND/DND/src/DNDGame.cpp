@@ -12,16 +12,23 @@ namespace DND
 	{
 		dnd_assert(!_game, ERROR_00000);
 		_game = this;
+		sys = NULL;
+		_bEndLoop = false;
 	}
 
 	void Game::Init()
 	{
+		
 		//init engine
 		_init_engine();
+		debug_notice(L"DND: init engine ok!");
 		//init window
 		((System_imp*)sys)->_create_window();
+		debug_notice(L"DND: create window ok!");
 		//init user
 		_init();
+		debug_notice(L"DND: user init ok!");
+		debug_notice(L"DND: game init ok!");
 	}
 
 	void Game::EnterLoop()
@@ -49,6 +56,8 @@ namespace DND
 	void Game::Release()
 	{
 		_release();
+
+		
 	}
 
 	void Game::_fixed_update()

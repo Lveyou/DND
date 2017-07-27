@@ -17,6 +17,7 @@
 #include "DNDGame.h"					//Game base class
 #include "DNDString.h"					//String
 #include "DNDSystem.h"					//System
+#include "DNDDebug.h"
 
 
 #endif

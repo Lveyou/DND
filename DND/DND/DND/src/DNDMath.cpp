@@ -116,7 +116,7 @@ namespace DND
 
 	void DND::Math::Set_Seed(unsigned int seed)
 	{
-		if (!seed) g_seed = time(0);
+		if (!seed) g_seed = (unsigned int)time(0);
 		else g_seed = seed;
 	}
 

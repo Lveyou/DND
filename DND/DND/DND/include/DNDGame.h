@@ -7,8 +7,8 @@
 //17-07-26: 继承此类来开始程序 - Lveyou
 //////////////////////////////////////////////////////////////////////////
 
-#ifndef _DND_DEBUG_H_
-#define _DND_DEBUG_H_
+#ifndef _DND_GAME_H_
+#define _DND_GAME_H_
 
 #include "DNDDLL.h"
 #include <windows.h>
