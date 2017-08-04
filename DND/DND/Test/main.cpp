@@ -13,7 +13,4 @@ DNDMain()
 	app.Init();
 	app.EnterLoop();
 	app.Release();
-
-	
-	
 }

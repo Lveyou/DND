@@ -1,8 +1,11 @@
-#include "DNDGame.h"
+﻿#include "DNDGame.h"
 #include "DNDError.h"
 #include "DNDSystem_imp.h"
 #include "DNDTime_imp.h"
 #include "DNDError.h"
+#include "DNDDirectX.h"
+
+
 
 namespace DND
 {
@@ -39,32 +42,70 @@ namespace DND
 		ZeroMemory(&msg, sizeof(MSG));
 
 		Time_imp* t = (Time_imp*)time;
-		t->_init_loop_start();
+		
+		t->_update_current();
+		t->_set_last();
+		double sec_count = 0;
+		UInt32 sec_frame = 0;
+		t->_loopStart = static_cast<UInt64>(::time(0));
 
-		while (!_bEndLoop)
+		do 
 		{
-			//_last ��һ֡ ʱ���
-			//_expect_delta Ԥ�ڵ�ʱ��仯
-			//δ��
-			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			//如果消息循环阻塞，代表游戏世界停止
+			while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 			{
 				if(msg.message == WM_QUIT)
 					break;
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
+				
 			}
+			t->_update_current();
+			t->_set_last();
+			///////////////////////////d1: HDD -> CPU////////////////////////////////
+			//用户逻辑片段
+			_fixed_update();
+			_update();
+			_late_update();
+
+			t->_update_current();
+			double d1 = t->_get_cl_delta();
+			//////////////////////////////////////////////////////////////////////////
+			double sleepTime = t->_delta - d1 - t->_except_render;
+			
+			//如果时间不够就不绘图了
+			if(sleepTime < 0)
+				debug_warn(L"DND: SKIP CPU -> GPU and Render!");
 			else
 			{
-				t->_update();
-				_fixed_update();
-				_update();
-				_late_update();
-
-				t->_set_last();
+				///////////////////////d2: CPU -> GPU//////////////////////////////////
+				//render
+				t->_update_current();
+				double d2 = t->_get_cl_delta();
+				t->_except_render = d2 - d1;
+				////////////////////////Sleep//////////////////////////////////////////
+				Sleep((t->_delta - d2) * 1000);
+				///////////////////////GPU->显示器//////////////////////////////////////
+				_dx->_run_render();
 			}
 
+			t->_update_current();
+			t->_real_delta = t->_get_cl_delta();
+
+			///////////////////////////////FPS统计//////////////////////////////////////
+			++sec_frame;
+			sec_count += t->_real_delta;
+			if(sec_count >= 1.0)
+			{
+				t->_real_fps = sec_frame;
+				sec_frame = 0;
+				sec_count = 0;
+			}
+			//////////////////////////////////////////////////////////////////////////
 			
-		}
+			
+		}while(!_bEndLoop);
+
 	}
 
 	void Game::Release()
@@ -88,6 +129,8 @@ namespace DND
 	{
 		sys = new System_imp;
 		time = new Time_imp;
+		_dx = new DirectX;
+		_dx->_init();
 	}
 
 	Game* Game::Get()
@@ -123,6 +166,8 @@ namespace DND
 
 	void Game::_release_engine()
 	{
+		_dx->_release_all();
+		delete _dx;
 		delete time;
 		delete sys;
 	}

@@ -24,10 +24,10 @@
 //用户的项目在Release时，可以定义此宏
 #ifdef DND_NO_DEBUG
 #define dnd_assert(exp, str)\
-	assert(exp && L#str)
+	assert((exp) && L#str)
 #else
 #define dnd_assert(exp, str)\
-	if(exp);else{Debug::WriteLine(str);assert(0 && L#str);}
+	if((exp));else{Debug::WriteLine((str));assert(0 && L#str);}
 #endif
 
 
@@ -46,6 +46,21 @@ namespace DND
 	const String ERROR_00009 = L"AllocConsole失败。";
 	const String ERROR_00010 = L"获取Console句柄失败。";
 	const String ERROR_00011 = L"_debuggerDefault为NULL。";
+	const String ERROR_00012 = L"DXGIFactory创建失败。";
+	const String ERROR_00013 = L"获取默认显卡失败。";
+	const String ERROR_00014 = L"获取默认显示器失败。";
+	const String ERROR_00015 = L"创建Device失败。";
+	const String ERROR_00016 = L"创建SwapChain失败。";
+	const String ERROR_00017 = L"显示表面视图已经存在。";
+	const String ERROR_00018 = L"释放显示表面视图失败。";
+	const String ERROR_00019 = L"获取显示表面纹理失败。";
+	const String ERROR_00020 = L"创建显示表面视图失败。";
+	const String ERROR_00021 = L"释放深度模板视图失败。";
+	const String ERROR_00022 = L"创建索引缓存失败。";
+	const String ERROR_00023 = L"混合状态创建失败。";
+	const String ERROR_00024 = L"创建深度模板状态失败。";
+	const String ERROR_00025 = L"创建深度模板纹理失败。";
+	const String ERROR_00026 = L"创建深度模板视图失败。";
 }
 
 

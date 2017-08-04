@@ -25,21 +25,26 @@ namespace DND
 		//example: "14:47:39"
 		virtual String GetHMSString() override;
 		virtual UInt32 GetFPS() override;
+		virtual UInt32 GetRealFPS() override;
 		virtual double GetDelta() override;
 	private:
 		Time_imp();
-		void _init_loop_start();
-		void _update();
-		void _set_last();
+		
 		UInt64 _start;
 		UInt64 _loopStart;
-		double _count;//(s), Frame func run calc count.
-		double _delta;//(s), not Equal to 1/FPS
-		UInt32 _fps;//  frame func calc times in one second.
+		
+		double _real_delta;			//(s), 上一帧运行时间
+		UInt32 _real_fps;			//真实帧数
+		double _delta;				//(s), 上一帧运行时间
+		UInt32 _fps;				//设置的帧数
+		double _except_render;		//估算的绘图时间（CPU->GPU->显示器）
 		//下面的变量 主要计算两帧之间时间差
 		LARGE_INTEGER _freq;//cpu时钟频率，一秒多少次时钟周期
-		LARGE_INTEGER _last;//上一帧累计时钟周期
+		LARGE_INTEGER _last;//前一个累计时钟周期
 		LARGE_INTEGER _current;//当前的累计时钟周期
+		void _update_current();
+		void _set_last();
+		double _get_cl_delta();
 	};
 }
 

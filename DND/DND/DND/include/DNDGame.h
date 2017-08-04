@@ -17,6 +17,7 @@ namespace DND
 {
 	class System;
 	class Time;
+	class DirectX;
 	class DLL_API Game
 	{	
 		friend class System_imp;
@@ -30,6 +31,8 @@ namespace DND
 		static Game* Get();
 		System* sys;
 		Time* time;
+	private:
+		DirectX* _dx;
 	protected:
 		Game();
 	private:

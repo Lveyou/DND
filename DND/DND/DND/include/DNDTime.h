@@ -22,6 +22,7 @@ namespace DND
 	public:
 		virtual String GetHMSString() = 0;
 		virtual UInt32 GetFPS() = 0;
+		virtual UInt32 GetRealFPS() = 0;
 		virtual double GetDelta() = 0;
 
 	};

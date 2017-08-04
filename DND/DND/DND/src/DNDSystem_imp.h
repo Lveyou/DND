@@ -19,6 +19,7 @@ namespace DND
 	class System_imp : System
 	{	
 		friend class Game;
+		friend class DirectX;
 	private:
 		virtual void SetWindowTitle(const String& title) override;
 		virtual void SetWindowCenter() override;

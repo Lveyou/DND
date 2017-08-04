@@ -3,8 +3,10 @@
 
 void Test::_update()
 {
-	Debug::GetDebugger<DebuggerConsole>()->TempWrite(String(L"FPS:") + (Int32)time->GetFPS(),
+	Debug::GetDebugger<DebuggerConsole>()->TempWrite(String(L"FPS:") + (Int32)time->GetRealFPS(),
 		DebugLevel::NOTICE);
+
+	
 }
 
 void Test::_init()
