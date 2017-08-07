@@ -64,6 +64,9 @@
     <ClInclude Include="src\DNDDirectX.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDColor.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -91,6 +94,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDDirectX.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDColor.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

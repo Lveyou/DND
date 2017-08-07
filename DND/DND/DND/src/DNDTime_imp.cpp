@@ -5,7 +5,7 @@ namespace DND
 {
 
 	Time_imp::Time_imp() : 
-		_start(static_cast<UInt64>(time(0))),
+		_start(static_cast<UINT64>(time(0))),
 		_loopStart(0),
 		_real_delta(0),
 		_real_fps(0),
@@ -26,7 +26,7 @@ namespace DND
 		return String::Format(10, L"%02d:%02d:%02d", t.tm_hour, t.tm_min, t.tm_sec);
 	}
 
-	UInt32 Time_imp::GetFPS()
+	UINT32 Time_imp::GetFPS()
 	{
 		return _fps;
 	}
@@ -51,7 +51,7 @@ namespace DND
 		return (double)(_current.QuadPart - _last.QuadPart) / (double)_freq.QuadPart;
 	}
 
-	UInt32 Time_imp::GetRealFPS()
+	UINT32 Time_imp::GetRealFPS()
 	{
 		return _real_fps;
 	}

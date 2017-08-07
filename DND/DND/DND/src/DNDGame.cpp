@@ -18,6 +18,7 @@ namespace DND
 		sys = NULL;
 		time = NULL;
 		_bEndLoop = false;
+		_dx = NULL;
 	}
 
 	void Game::Init()
@@ -29,6 +30,9 @@ namespace DND
 		//init window
 		((System_imp*)sys)->_create_window();
 		debug_notice(L"DND: create window ok!");
+		_dx = new DirectX;
+		_dx->_init();
+		debug_notice(L"DND: init directx ok!");
 		//init user
 		_init();
 		debug_notice(L"DND: user init ok!");
@@ -46,8 +50,8 @@ namespace DND
 		t->_update_current();
 		t->_set_last();
 		double sec_count = 0;
-		UInt32 sec_frame = 0;
-		t->_loopStart = static_cast<UInt64>(::time(0));
+		UINT32 sec_frame = 0;
+		t->_loopStart = static_cast<UINT64>(::time(0));
 
 		do 
 		{
@@ -129,8 +133,7 @@ namespace DND
 	{
 		sys = new System_imp;
 		time = new Time_imp;
-		_dx = new DirectX;
-		_dx->_init();
+		
 	}
 
 	Game* Game::Get()

@@ -153,7 +153,7 @@ namespace DND
 
 	void DebuggerConsole::TempWrite(const String& str, int level)
 	{
-		UInt32 len = str.GetLength();
+		UINT32 len = str.GetLength();
 		Write(str, level);
 		Write(String(L'\b', len), level);
 	}

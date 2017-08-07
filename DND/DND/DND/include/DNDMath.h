@@ -19,9 +19,9 @@ namespace DND
 	class DLL_API Math
 	{
 	public:
-		static UInt32 Get_Pow2_Large(UInt32 var);
-		static UInt32 Get_Unsigned_Length(UInt32 var);
-		static UInt32 Get_Int_Length(int var);
+		static UINT32 Get_Pow2_Large(UINT32 var);
+		static UINT32 Get_Unsigned_Length(UINT32 var);
+		static UINT32 Get_Int_Length(int var);
 		static bool Test_Collision_Rect_And_Rect(const Rect& r0, const Rect& r1);
 		static bool Test_Collision_Rect_And_Rect(const Vector4& r0, const Vector4& r1);
 		static bool Test_Collision_Dot_In_Rect(const Point& dot, const Rect& rect);
@@ -30,7 +30,7 @@ namespace DND
 		static float Inv_Sqrt(float x);
 		static int Get_Rand_Int(int min, int max);//返回[min,max]区间的随机数
 		static float Get_Rand_Float(float min, float max);//此函数尚未测试正确性
-		static void Set_Seed(UInt32 seed);//设置种子
+		static void Set_Seed(UINT32 seed);//设置种子
 		static void Swap_Int(int& a, int& b);
 		static void Swap_Float(float& a, float& b);
 		static float Get_Between(float var, float min, float max);//取上界和下界，包含

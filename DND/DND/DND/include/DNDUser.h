@@ -22,10 +22,10 @@ namespace DND
 	class DLL_API Point
 	{
 	public:
-		Int32 x;
-		Int32 y;
+		INT32 x;
+		INT32 y;
 		Point();
-		Point(Int32 x, Int32 y);
+		Point(INT32 x, INT32 y);
 
 		Point operator-(const Point& b) const;
 		Point operator+(const Point& b) const;
@@ -34,10 +34,10 @@ namespace DND
 	class DLL_API Size
 	{
 	public:
-		UInt32 w;
-		UInt32 h;
+		UINT32 w;
+		UINT32 h;
 		Size();
-		Size(UInt32 w, UInt32 h);
+		Size(UINT32 w, UINT32 h);
 		Size(const String& value);
 		bool operator==(const Size& b);
 		Size operator-(const Size& b);
@@ -105,7 +105,7 @@ namespace DND
 		float a, b, c, d;//x,y,w,h
 		Vector4();
 		Vector4(float ia, float ib, float ic, float id);
-		float operator[](UInt32 index);
+		float operator[](UINT32 index);
 		Vector4 operator-(const Vector2& v2) const;
 		Vector4 operator+(const Vector2& v2) const;
 		Vector4(const String& value);

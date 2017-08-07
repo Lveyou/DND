@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DND.h" />
+    <ClInclude Include="include\DNDColor.h" />
     <ClInclude Include="include\DNDDebug.h" />
     <ClInclude Include="include\DNDDLL.h" />
     <ClInclude Include="include\DNDError.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="src\DNDTime_imp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DNDColor.cpp" />
     <ClCompile Include="src\DNDDebug.cpp" />
     <ClCompile Include="src\DNDDirectX.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />

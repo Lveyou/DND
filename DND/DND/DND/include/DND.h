@@ -20,6 +20,6 @@
 #include "DNDSystem.h"					//System
 #include "DNDDebug.h"					//Debug
 #include "DNDTime.h"					//Time
-
+#include "DNDColor.h"					//Color
 
 #endif

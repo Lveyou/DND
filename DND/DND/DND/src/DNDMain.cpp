@@ -22,6 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
 	_func_dnd_main();
 
 	//DND::System_imp::Get_Instance()->_release_all();
+	
 
 	return 0;
 }

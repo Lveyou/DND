@@ -2,6 +2,7 @@
 #include "DNDSystem_imp.h"
 #include "DNDDebug.h"
 #include "DNDGame.h"
+#include "DNDColor.h"
 
 namespace DND
 {
@@ -76,7 +77,7 @@ namespace DND
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
 
 		//需尝试的 Ferature 版本 数组
-		const UInt32 ARRAY_NUM = 6;
+		const UINT32 ARRAY_NUM = 6;
 		D3D_FEATURE_LEVEL array_feature[ARRAY_NUM] =
 		{
 			D3D_FEATURE_LEVEL_11_0,
@@ -89,19 +90,19 @@ namespace DND
 		};
 		UINT create_devive_flags = 0;
 #if defined(DEBUG) || defined(_DEBUG)
-		create_devive_flags |= D3D11_CREATE_DEVICE_DEBUG;
+		if(_MSC_VER > 1600)
+			create_devive_flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-		
 		//创建设备， 设备关联 和 交换链（分开创建才能屏蔽alt+enter）
 		dnd_assert(!FAILED(D3D11CreateDevice(
-			m_adapter,
-			D3D_DRIVER_TYPE_NULL,
-			NULL, create_devive_flags,
-			array_feature, ARRAY_NUM,
-			D3D11_SDK_VERSION,
-			&m_device,
-			&m_feature_level,
-			&m_device_context)), ERROR_00015);
+		m_adapter,
+		D3D_DRIVER_TYPE_UNKNOWN,
+		NULL, create_devive_flags,
+		array_feature, ARRAY_NUM,
+		D3D11_SDK_VERSION,
+		&m_device,
+		&m_feature_level,
+		&m_device_context)), ERROR_00015);
 
 		//创建交换链
 		ZeroMemory(&m_swap_chain_desc, sizeof(m_swap_chain_desc));
@@ -119,7 +120,6 @@ namespace DND
 		m_swap_chain_desc.Windowed = true;
 		m_swap_chain_desc.Flags = 0;
 			//DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-
 		dnd_assert(!FAILED(m_factory->CreateSwapChain(m_device, &m_swap_chain_desc, &m_swap_chain)),
 			ERROR_00016);
 		debug_notice(L"DND: directx init device and swapchain ok!");
@@ -128,9 +128,12 @@ namespace DND
 
 	void DirectX::_run_render()
 	{
-		
-
-		float clear_color[4] = { 0.0f,0.0f,1.0f,1.0f };//RGBA
+		static Color c = Color::CLEARCOLOR_DIRECTX;
+		static float clear_color[4] = { 
+			c.r(),
+			c.g(),
+			c.b(),
+			c.a() };//RGBA
 
 		m_device_context->ClearRenderTargetView(m_main_render_target_view, clear_color);
 		m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -188,7 +191,7 @@ namespace DND
 
 	void DirectX::_release_depth_stencil_view()
 	{
-		dnd_assert(!m_depth_stencil_view, ERROR_00021);
+		dnd_assert(m_depth_stencil_view, ERROR_00021);
 
 		m_depth_stencil_view->Release();
 		m_depth_stencil_view = NULL;

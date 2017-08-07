@@ -29,7 +29,7 @@ namespace DND
 	{
 		_init();
 
-		UInt32 len = strlen(str) + 1;
+		UINT32 len = strlen(str) + 1;
 		WCHAR* wcs = new WCHAR[len];
 		MultiByteToWideChar(CP_ACP, NULL, str, -1, wcs, len);
 		p->reserve(len);
@@ -43,7 +43,7 @@ namespace DND
 	{
 		_init();
 
-		UInt32 len = wcslen(wcs);
+		UINT32 len = wcslen(wcs);
 
 		p->reserve(len);
 
@@ -69,7 +69,7 @@ namespace DND
 	String::String(const int b)
 	{
 		_init();
-		UInt32 len = Math::Get_Int_Length(b) + 1;
+		UINT32 len = Math::Get_Int_Length(b) + 1;
 		WCHAR* wcs = new WCHAR[len];
 		swprintf_s(wcs, len, L"%d", b);
 
@@ -78,7 +78,7 @@ namespace DND
 		delete[] wcs;
 	}
 
-	String::String(WCHAR ch, UInt32 len)
+	String::String(WCHAR ch, UINT32 len)
 	{
 		_init();
 
@@ -103,7 +103,7 @@ namespace DND
 		return wcscmp(GetWcs(), b.GetWcs()) < 0;
 	}
 
-	UInt32 String::GetLength() const
+	UINT32 String::GetLength() const
 	{
 		return p->size();
 	}
@@ -117,9 +117,9 @@ namespace DND
 		return temp;
 	}
 
-	void String::GetWideCharStr(WCHAR* target, UInt32 max_len) const
+	void String::GetWideCharStr(WCHAR* target, UINT32 max_len) const
 	{
-		UInt32 i = 0;
+		UINT32 i = 0;
 		while (i < max_len && i < p->size())
 		{
 			target[i] = (*p)[i];
@@ -152,7 +152,7 @@ namespace DND
 
 	void String::_copy(const WCHAR* wcs)
 	{
-		UInt32 i = 0;
+		UINT32 i = 0;
 		while (wcs[i])
 		{
 			p->push_back(wcs[i]);
@@ -160,7 +160,7 @@ namespace DND
 		}
 	}
 
-	void String::GetMultiByteStr(char* target, UInt32 max_len) const
+	void String::GetMultiByteStr(char* target, UINT32 max_len) const
 	{
 
 		WideCharToMultiByte(CP_ACP, NULL, GetWcs(), -1, target, max_len * 2, NULL, NULL);
@@ -185,19 +185,19 @@ namespace DND
 		p->pop_back();
 	}
 
-	UInt32 String::FindEnd(WCHAR ch)
+	UINT32 String::FindEnd(WCHAR ch)
 	{
 		return FindN(ch, GetCharCount(ch));
 	}
 
-	UInt32 String::FindStr(const String& str)
+	UINT32 String::FindStr(const String& str)
 	{
 		auto s = search(p->begin(), p->end(), str.p->begin(), str.p->end());
 		
 		return s == p->end() ? -1 : s - p->begin();
 	}
 
-	UInt32 String::FindN(WCHAR wc, UInt32 N)
+	UINT32 String::FindN(WCHAR wc, UINT32 N)
 	{
 		if (N == 0)
 			return -1;
@@ -218,27 +218,27 @@ namespace DND
 		}
 	}
 
-	UInt32 String::GetCharCount(WCHAR ch)
+	UINT32 String::GetCharCount(WCHAR ch)
 	{
 		return count(p->begin(), p->end(), ch);
 	}
 
-	String String::GetStr(UInt32 begin, UInt32 end)
+	String String::GetStr(UINT32 begin, UINT32 end)
 	{
 		return String(&StrVector(&vector<WCHAR>(p->begin() + begin, p->begin() + end)));
 	}
 
-	void String::Cut(UInt32 begin, UInt32 end)
+	void String::Cut(UINT32 begin, UINT32 end)
 	{
 		p->erase(p->begin() + begin, p->begin() + end);
 	}
 
-	void String::CutTail(UInt32 i)
+	void String::CutTail(UINT32 i)
 	{
 		p->erase(p->begin() + i, p->end());
 	}
 
-	void String::CutHead(UInt32 i)
+	void String::CutHead(UINT32 i)
 	{
 		p->erase(p->begin(), p->begin() + i);
 	}
@@ -253,12 +253,12 @@ namespace DND
 		}
 	}
 
-	void String::DeleteChar(UInt32 i)
+	void String::DeleteChar(UINT32 i)
 	{
 		p->erase(p->begin() + i);
 	}
 
-	void String::InsertChar(UInt32 i, WCHAR ch)
+	void String::InsertChar(UINT32 i, WCHAR ch)
 	{
 		p->insert(p->begin() + i, ch);
 	}
@@ -268,12 +268,12 @@ namespace DND
 		replace(p->begin(), p->end(), source, target);
 	}
 
-	UInt32 String::Split(WCHAR wc, String* strs, UInt32 max_size)
+	UINT32 String::Split(WCHAR wc, String* strs, UINT32 max_size)
 	{
 		auto itor_begin = p->begin();
 		auto itor_find = itor_begin;
 	
-		UInt32 i = 0;
+		UINT32 i = 0;
 		while (i < max_size)
 		{
 			itor_find = find(itor_begin, p->end(), wc);
@@ -290,7 +290,7 @@ namespace DND
 		return max_size;
 	}
 
-	String String::Format(UInt32 max_size, const WCHAR* format, ...)
+	String String::Format(UINT32 max_size, const WCHAR* format, ...)
 	{
 	
 		WCHAR* wcs = new WCHAR[max_size + 1];
