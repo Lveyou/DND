@@ -21,6 +21,7 @@ namespace DND
 	class DLL_API Game
 	{	
 		friend class System_imp;
+		friend class GfxSimple;
 	public:
 		void Init();							//init game
 		void EnterLoop();						//enter gameloop

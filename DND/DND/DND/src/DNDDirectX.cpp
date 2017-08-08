@@ -6,18 +6,306 @@
 
 namespace DND
 {
+	const String STRING_PATH_SHADER_SIMPLE = L"DND/Shader/simple.fx";
+	const String STRING_PATH_SHADER_2D = L"DND/Shader/2d.fx";
+
+	void GfxSimple::_create_vertex_buffer_dot()
+	{
+		D3D11_BUFFER_DESC desc_dot;
+		ZeroMemory(&desc_dot, sizeof(desc_dot));
+
+		desc_dot.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		desc_dot.ByteWidth = sizeof(VertexSimple) * size_dots;
+		desc_dot.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		desc_dot.MiscFlags = 0;
+		desc_dot.StructureByteStride = 0;
+		desc_dot.Usage = D3D11_USAGE_DYNAMIC;
+
+		dnd_assert(!FAILED(directx->m_device->CreateBuffer(&desc_dot, NULL, &buffer_dots)),
+			ERROR_00027);
+	}
+
+	GfxSimple::GfxSimple()
+	{
+		size_dots = 1024;
+		size_lines = 1024;
+		vertex_dots = new VertexSimple[size_dots];
+		vertex_lines = new VertexSimple[size_lines];
+		len_dots = 0;
+		len_lines = 0;
+
+
+		buffer_dots = NULL;
+		buffer_lines = NULL;
+		vs = NULL;
+		ps = NULL;
+		vs_buffer = NULL;
+		ps_buffer = NULL;
+		input_layout = NULL;
+
+		//此类只在dx初始化后使用
+		directx = Game::Get()->_dx;
+	}
+
+	void GfxSimple::_release_vertex_buffer_line()
+	{
+		dnd_assert(buffer_lines, ERROR_00030);
+		buffer_lines->Release();
+		buffer_lines = NULL;
+	}
+
+	void GfxSimple::_update()
+	{
+		D3D11_MAPPED_SUBRESOURCE res_dot;
+		if (FAILED(directx->m_device_context->Map(
+			(ID3D11Resource*)buffer_dots, 0,
+			D3D11_MAP_WRITE_DISCARD, 0,
+			&res_dot)))
+		{
+			assert(0 && L"dot map 失败！");
+			return;
+		}
+
+		//for (unsigned i = 0; i < len_dots; ++i)
+		//{
+		//	((VertexSimple*)res_dot.pData)[i] = vertex_dots[i];
+		//}
+		memcpy(res_dot.pData, vertex_dots, len_dots*sizeof(VertexSimple));
+
+		directx->m_device_context->Unmap(
+			(ID3D11Resource*)buffer_dots, 0);
+
+
+		D3D11_MAPPED_SUBRESOURCE res_line;
+		if (FAILED(directx->m_device_context->Map(
+			(ID3D11Resource*)buffer_lines, 0,
+			D3D11_MAP_WRITE_DISCARD, 0,
+			&res_line)))
+		{
+			assert(0 && L"line map 失败！");
+			return;
+		}
+
+		memcpy(res_line.pData, vertex_lines, len_lines*sizeof(VertexSimple));
+
+		directx->m_device_context->Unmap(
+			(ID3D11Resource*)buffer_lines, 0);
+		/*directx->m_device_context->UpdateSubresource(
+		(ID3D11Resource*)buffer_dots, 0, NULL,
+		vertex_dots, 0, 0);
+
+		directx->m_device_context->UpdateSubresource(
+		(ID3D11Resource*)buffer_lines, 0, NULL,
+		vertex_lines, 0, 0);*/
+	}
+
+	void GfxSimple::_release_vertex_buffer_dot()
+	{
+		dnd_assert(buffer_dots, ERROR_00029);
+		
+		buffer_dots->Release();
+		buffer_dots = NULL;
+	}
+
+	void GfxSimple::_create_vertex_buffer_line()
+	{
+		D3D11_BUFFER_DESC desc_line;
+		ZeroMemory(&desc_line, sizeof(desc_line));
+
+		desc_line.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		desc_line.ByteWidth = sizeof(VertexSimple) * size_lines;
+		desc_line.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		desc_line.MiscFlags = 0;
+		desc_line.StructureByteStride = 0;
+		desc_line.Usage = D3D11_USAGE_DYNAMIC;
+
+		dnd_assert(!FAILED(directx->m_device->CreateBuffer(&desc_line, NULL, &buffer_lines)),
+			ERROR_00028);
+	}
+
+	void GfxSimple::_render()
+	{
+		unsigned stride = sizeof(VertexSimple);
+		unsigned offset = 0;
+
+		
+
+		directx->m_device_context->IASetInputLayout(input_layout);
+		directx->m_device_context->IASetVertexBuffers(0, 1, &buffer_dots, &stride, &offset);
+		directx->m_device_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
+
+		directx->m_device_context->VSSetShader(vs, 0, 0);
+		directx->m_device_context->PSSetShader(ps, 0, 0);
+		directx->m_device_context->Draw(len_dots, 0);
+
+		len_dots = 0;
+
+		directx->m_device_context->IASetInputLayout(input_layout);
+		directx->m_device_context->IASetVertexBuffers(0, 1, &buffer_lines, &stride, &offset);
+		directx->m_device_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+
+		directx->m_device_context->VSSetShader(vs, 0, 0);
+		directx->m_device_context->PSSetShader(ps, 0, 0);
+		directx->m_device_context->Draw(len_lines, 0);
+
+		len_lines = 0;
+	}
+
+	void GfxSimple::_add_dot(XMFLOAT3 pos, XMFLOAT4 color)
+	{
+		if (len_dots >= size_dots)
+		{
+			VertexSimple* temp = new VertexSimple[size_dots <<= 1];
+			for (unsigned i = 0; i < len_dots; ++i)
+			{
+				temp[i] = vertex_dots[i];
+			}
+			delete[] vertex_dots;
+			vertex_dots = temp;
+
+			_release_vertex_buffer_dot();
+			_create_vertex_buffer_dot();
+		}
+		vertex_dots[len_dots].pos = pos;
+		vertex_dots[len_dots++].color = color;
+
+	}
+
+	void GfxSimple::_release_all()
+	{
+		input_layout->Release();
+
+		ps->Release();
+		ps_buffer->Release();
+		
+		vs->Release();
+		vs_buffer->Release();
+		
+		buffer_lines->Release();
+		buffer_dots->Release();
+
+		delete[] vertex_lines;
+		delete[] vertex_dots;
+	}
+
+	void GfxSimple::_add_line(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color)
+	{
+		if (len_lines >= size_lines)
+		{
+			VertexSimple* temp = new VertexSimple[size_lines <<= 1];
+			for (unsigned i = 0; i < len_lines; ++i)
+			{
+				temp[i] = vertex_dots[i];
+			}
+			delete[] vertex_lines;
+			vertex_lines = temp;
+
+			_release_vertex_buffer_line();
+			_create_vertex_buffer_line();
+		}
+
+		vertex_lines[len_lines].pos = pos1;
+		vertex_lines[len_lines++].color = color;
+		vertex_lines[len_lines].pos = pos2;
+		vertex_lines[len_lines++].color = color;
+	}
+
+	void GfxSimple::_create_pixel_shader()
+	{
+
+		dnd_assert(!FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(), 0, 0,
+			"PS", "ps_5_0",
+			0, 0, NULL, &ps_buffer, NULL, NULL)),
+			ERROR_00031);
+			/*	if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL, 0, 0,
+			"PS", "ps_5_0",
+			0, 0, NULL, &ps_buffer, NULL, NULL)))
+			{
+			assert(0 && L"编译simple ps 失败（从内存）！");
+			return;
+			}
+			delete buffer;*/
+		dnd_assert(!FAILED(directx->m_device->CreatePixelShader(
+			ps_buffer->GetBufferPointer(),
+			ps_buffer->GetBufferSize(), 0,
+			&ps)),
+			ERROR_00032);	
+	}
+
+	void GfxSimple::_create_input_layout()
+	{
+	
+		D3D11_INPUT_ELEMENT_DESC layout[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 }
+		};
+
+		unsigned len = ARRAYSIZE(layout);
+
+		dnd_assert(!FAILED(directx->m_device->CreateInputLayout(
+			layout, len,
+			vs_buffer->GetBufferPointer(),
+			vs_buffer->GetBufferSize(),
+			&input_layout)),
+			ERROR_00033);
+	}
+
+	void GfxSimple::_create_vertex_shader()
+	{
+		dnd_assert(!FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(), 0, 0,
+			"VS", "vs_5_0",
+			0, 0, NULL, &vs_buffer, NULL, NULL)),
+			ERROR_00034);
+			/*if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL, 0, 0,
+			"VS", "vs_5_0",
+			0, 0, NULL, &vs_buffer, NULL, NULL)))
+			{
+			assert(0 && L"编译simple vs 失败（从内存）！");
+			return;
+			}
+			delete buffer;*/
+
+
+		dnd_assert(!FAILED(directx->m_device->CreateVertexShader(
+			vs_buffer->GetBufferPointer(),
+			vs_buffer->GetBufferSize(), 0,
+			&vs)),
+			ERROR_00035);
+	}
+
+	void GfxSimple::_init()
+	{
+		_create_vertex_buffer_dot();
+		debug_notice(L"DND: GfxSimple create buffer dot ok!");
+		_create_vertex_buffer_line();
+		debug_notice(L"DND: GfxSimple create buffer line ok!");
+		_create_vertex_shader();
+		debug_notice(L"DND: GfxSimple create vertex shader ok!");
+		_create_pixel_shader();
+		debug_notice(L"DND: GfxSimple create pixel shader ok!");
+		_create_input_layout();
+		debug_notice(L"DND: GfxSimple create buffer dot ok!");
+	}
+
+	///////////////////end Simple////////////////////////////////////////////
 	void DirectX::_init()
 	{
 		_init_dxgi();
+		debug_notice(L"DND: directx init dxgi ok!");
 		_init_device_and_swap_chain();
-
+		debug_notice(L"DND: directx init device and swapchain ok!");
 		_init_render_target_view();
+		debug_notice(L"DND: directx init render target ok!");
 		_init_depth_stencil_view();
+		debug_notice(L"DND: directx init depth stencil view ok!");
 		_init_depth_stencil_state();
-		
+		debug_notice(L"DND: directx init depth stencil state ok!");
 		_reset_viewport();
 		_init_index_buffer();
+		debug_notice(L"DND: directx init index buffer ok!");
 		_init_blend_state();
+		debug_notice(L"DND: directx init blend state ok!");
 
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		m_device_context->OMSetRenderTargets(1, &m_main_render_target_view, m_depth_stencil_view);
@@ -25,16 +313,14 @@ namespace DND
 		m_device_context->OMSetBlendState(m_blend_state, blendFactor, 0xffffffff);
 		m_device_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
 
-		/*GfxSimple* gfx_simple = GfxSimple::Get_Instance();
-		gfx_simple->_create_vertex_buffer_dot();
-		gfx_simple->_create_vertex_buffer_line();
-		gfx_simple->_create_vertex_shader();
-		gfx_simple->_create_pixel_shader();
-		gfx_simple->_create_input_layout();
+		m_gfx_simple = new GfxSimple;
+		m_gfx_simple->_init();
+		debug_notice(L"DND: GfxSimple init all ok!");
 
-		Gfx2D* gfx_2d = Gfx2D::Get_Instance();
+		/*Gfx2D* gfx_2d = Gfx2D::Get_Instance();
 		gfx_2d->_init_2d_shader();
 		gfx_2d->_create_input_layout();*/
+		debug_notice(L"DND: directx init all ok!");
 	}
 
 	void DirectX::_init_dxgi()
@@ -56,7 +342,7 @@ namespace DND
 		m_display_modes = new DXGI_MODE_DESC[m_display_mode_length];
 		m_output->GetDisplayModeList(format, 0, &m_display_mode_length, m_display_modes);
 
-		debug_notice(L"DND: directx init dxgi ok!");
+		
 	}
 
 	bool DirectX::_check_support_full_screen_size(int w, int h)
@@ -122,7 +408,7 @@ namespace DND
 			//DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		dnd_assert(!FAILED(m_factory->CreateSwapChain(m_device, &m_swap_chain_desc, &m_swap_chain)),
 			ERROR_00016);
-		debug_notice(L"DND: directx init device and swapchain ok!");
+		
 
 	}
 
@@ -148,11 +434,10 @@ namespace DND
 		////gfx_2d->m_color_texture->SetResource()
 		//_render_canvass();
 
-		////点线绘图
-		//GfxSimple* gfx_simple = GfxSimple::Get_Instance();
-		//gfx_simple->_update();
-		//gfx_simple->_render();
-
+		//点线绘图
+		
+		m_gfx_simple->_update();
+		m_gfx_simple->_render();
 		
 
 		//HRESULT hr = 
@@ -246,7 +531,7 @@ namespace DND
 
 		dnd_assert(!FAILED(m_device->CreateBuffer(&desc_index, &init_data, &m_index_buffer)),
 			ERROR_00022);
-		debug_notice(L"DND: directx init index buffer ok!");
+		
 	}
 
 	void DND::DirectX::_init_blend_state()
@@ -270,7 +555,7 @@ namespace DND
 		dnd_assert(!FAILED(m_device->CreateBlendState(&desc, &m_blend_state)),
 			ERROR_00023);
 		
-		debug_notice(L"DND: directx init blend state ok!");
+		
 	}
 
 	void DND::DirectX::_init_depth_stencil_state()
@@ -302,7 +587,7 @@ namespace DND
 		dnd_assert(!FAILED(m_device->CreateDepthStencilState(&desc, &m_depth_stencil_state)),
 			ERROR_00024);
 		
-		debug_notice(L"DND: directx init depth stencil ok!");
+		
 	}
 
 	void DND::DirectX::_init_depth_stencil_view()
@@ -344,10 +629,10 @@ namespace DND
 	{
 
 		/*	Gfx2D* gfx_2d = Gfx2D::Get_Instance();
-		gfx_2d->_release_all();
+		gfx_2d->_release_all();*/
 
-		GfxSimple* gfx_simple = GfxSimple::Get_Instance();
-		gfx_simple->_release_all();*/
+		
+		m_gfx_simple->_release_all();
 
 		m_device_context->OMSetBlendState(NULL, NULL, 0xffffffff);
 		m_blend_state->Release();
@@ -397,6 +682,7 @@ namespace DND
 		m_depth_stencil_state = NULL;
 		m_depth_stencil_view = NULL;
 		m_vsync = false;
+		m_gfx_simple = NULL;
 	}
 
 	/*void DirectX::_render_canvass()

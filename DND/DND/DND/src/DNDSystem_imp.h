@@ -12,6 +12,7 @@
 
 #include "DNDDLL.h"
 #include "DNDSystem.h"
+#include "DNDDirectX.h"
 #include <windows.h>
 
 namespace DND
@@ -28,6 +29,7 @@ namespace DND
 		virtual void SetWindowPoint(Point point) override;
 		virtual void ApplyWindow() override;
 		virtual Size GetDesktopSize() override;
+		virtual void RenderDot(Point pos, Color color = Color::WHITE) override;
 
 		String _windowTitle;
 		DWORD _windowStyle;

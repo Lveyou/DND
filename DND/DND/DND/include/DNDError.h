@@ -61,6 +61,15 @@ namespace DND
 	const String ERROR_00024 = L"创建深度模板状态失败。";
 	const String ERROR_00025 = L"创建深度模板纹理失败。";
 	const String ERROR_00026 = L"创建深度模板视图失败。";
+	const String ERROR_00027 = L"创建dot顶点缓存失败。";
+	const String ERROR_00028 = L"创建line顶点缓存失败。";
+	const String ERROR_00029 = L"释放buffer_dots失败。";
+	const String ERROR_00030 = L"释放buffer_lines失败。";
+	const String ERROR_00031 = L"编译simple ps失败。";
+	const String ERROR_00032 = L"创建simple ps失败。";
+	const String ERROR_00033 = L"创建simple输入布局失败。";
+	const String ERROR_00034 = L"编译simple vs失败。";
+	const String ERROR_00035 = L"创建simple vs失败。";
 }
 
 

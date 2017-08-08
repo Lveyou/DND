@@ -27,6 +27,67 @@ using namespace std;
 
 namespace DND
 {
+	class DirectX;
+	class GfxSimple
+	{
+	public:
+		//顶点类型
+		struct VertexSimple
+		{
+			XMFLOAT3 pos;
+			XMFLOAT4 color;
+		};
+		
+		//
+		void _init();
+		void _create_vertex_buffer_dot();
+		void _create_vertex_buffer_line();
+		void _release_vertex_buffer_dot();
+		void _release_vertex_buffer_line();
+		void _create_vertex_shader();
+		void _create_input_layout();
+		void _create_pixel_shader();
+
+		//更新顶点缓存
+		void _update();
+		void _render();
+
+		void _add_dot(XMFLOAT3 pos, XMFLOAT4 color);
+		void _add_line(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color);
+
+		void _release_all();
+
+		GfxSimple();
+		//内存缓存
+		VertexSimple* vertex_dots;
+		VertexSimple* vertex_lines;
+		unsigned len_dots;
+		unsigned len_lines;
+		unsigned size_dots;
+		unsigned size_lines;
+
+		//顶点缓存
+		ID3D11Buffer* buffer_dots;
+		ID3D11Buffer* buffer_lines;
+
+		//vs ps
+		ID3D11VertexShader* vs;
+		ID3D11PixelShader* ps;
+
+		//vs buffer 编译好的顶点shader
+		ID3DBlob* vs_buffer;
+
+		//ps buffer 编译好的像素shader
+		ID3DBlob* ps_buffer;
+
+		//input layout
+		ID3D11InputLayout* input_layout;
+
+		DirectX* directx;
+
+	
+	};
+
 	class DirectX
 	{
 	public:
@@ -38,13 +99,7 @@ namespace DND
 		void _init_index_buffer();			//初始化索引缓存
 		void _init_blend_state();			//初始化绑定状态
 		void _init_depth_stencil_state();	//初始化深度模板缓存
-		
-		
 		void _release_all();
-
-		//只需要调用一次的
-	
-		
 		//多次释放和建立
 		void _init_render_target_view();	//创建显示表面视图
 		void _release_render_target_view();	//释放显示表面视图
@@ -94,13 +149,15 @@ namespace DND
 
 		//垂直同步
 		bool m_vsync;
-		//Camera
-	//	Camera* m_camera;
 
 		//窗口大小发生改变,在present结束后 进行实际的大小改变
 		volatile unsigned m_size_change;
 
 		void _resize();
+		//Camera
+	//	Camera* m_camera;
+		GfxSimple* m_gfx_simple;
+
 	private:
 	};
 

@@ -6,7 +6,8 @@ void Test::_update()
 	Debug::GetDebugger<DebuggerConsole>()->TempWrite(String(L"FPS:") + (INT32)time->GetRealFPS(),
 		DebugLevel::NOTICE);
 
-	
+	//////////////////////////Dot//////////////////////////////////////
+	sys->RenderDot(Point(0, 0));
 }
 
 void Test::_init()

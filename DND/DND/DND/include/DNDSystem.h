@@ -14,6 +14,7 @@
 #include "DNDString.h"
 #include <windows.h>
 #include "DNDUser.h"
+#include "DNDColor.h"
 
 namespace DND
 {
@@ -25,10 +26,12 @@ namespace DND
 		virtual void SetWindowCenter() = 0;
 		virtual void SetWindowStyle(DWORD style = WS_POPUP)  = 0;
 		virtual void SetWindowSize(Size size) = 0;
-		virtual void SetWindowPoint(Point size) = 0;
+		virtual void SetWindowPoint(Point pos) = 0;
 		//
 		virtual void ApplyWindow() = 0;
-		virtual Size GetDesktopSize()  = 0;
+		virtual Size GetDesktopSize() = 0;
+		//render
+		virtual void RenderDot(Point pos, Color color = Color::WHITE) = 0;
 	};
 }
 
