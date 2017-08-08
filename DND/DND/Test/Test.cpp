@@ -36,7 +36,7 @@ void Test::_init()
 	sys->SetWindowStyle(WS_OVERLAPPEDWINDOW);
 		//WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
 	sys->ApplyWindow();
-	time->SetFPS(120);
+	time->SetFPS(140);
 }
 
 void Test::_release()
