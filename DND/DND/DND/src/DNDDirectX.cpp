@@ -264,10 +264,15 @@ namespace DND
 		
 
 		ID3DX11EffectVariable* variable = effect->GetVariableByName("wvp");
-		ID3DX11EffectMatrixVariable* wvp_variable = variable->AsMatrix();
+		wvp_variable = variable->AsMatrix();
 		dnd_assert(wvp_variable->IsValid(), ERROR_00036);
 
 		//一开始就设置好wvp
+		_reset_wvp();
+	}
+
+	void GfxSimple::_reset_wvp()
+	{
 		XMMATRIX wvp = XMLoadFloat4x4(&directx->m_wvp);
 		wvp_variable->SetMatrix((float*)&wvp);
 		pass->Apply(0, directx->m_device_context);
@@ -303,7 +308,7 @@ namespace DND
 		debug_notice(L"DND: directx init index buffer ok!");
 		_init_blend_state();
 		debug_notice(L"DND: directx init blend state ok!");
-		_init_wvp();
+		_reset_wvp();
 		debug_notice(L"DND: directx init wvp ok!");
 
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -324,6 +329,7 @@ namespace DND
 		gfx_2d->_init_2d_shader();
 		gfx_2d->_create_input_layout();*/
 		debug_notice(L"DND: directx init all ok!");
+		m_inited = true;
 	}
 
 	void DirectX::_init_dxgi()
@@ -424,8 +430,7 @@ namespace DND
 			c.b(),
 			c.a() };//RGBA
 
-		m_device_context->ClearRenderTargetView(m_main_render_target_view, clear_color);
-		m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		
 		
 		
 		////三角形们
@@ -440,14 +445,12 @@ namespace DND
 		//点线绘图
 		
 		m_gfx_simple->_update();
+
+		m_device_context->ClearRenderTargetView(m_main_render_target_view, clear_color);
+		m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
 		m_gfx_simple->_render();
 		
-
-		//HRESULT hr = 
-		m_swap_chain->Present(m_vsync, 0);
-		//IDebug.WriteLine(String::CreateFormat(L"%x", hr));
-
-	
 	}
 
 	void DirectX::_init_render_target_view()
@@ -485,6 +488,17 @@ namespace DND
 		m_depth_stencil_view = NULL;
 	}
 
+
+	void DirectX::_present()
+	{
+		m_swap_chain->Present(m_vsync, 0);
+		if (m_size_change)
+		{
+			m_size_change = false;
+			_resize();
+		}
+	}
+
 	void DirectX::_reset_viewport()
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
@@ -498,6 +512,7 @@ namespace DND
 
 		m_device_context->RSSetViewports(1, &vp);
 	}
+
 
 
 
@@ -593,19 +608,19 @@ namespace DND
 		
 	}
 
-	void DirectX::_init_wvp()
+	void DirectX::_reset_wvp()
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
 		float w = sys->_windowSize.w;
 		float h = sys->_windowSize.h;
-		XMVECTOR eye = XMLoadFloat3(&XMFLOAT3(w/2.0f, h/2.0f, -1.0f));
+		XMVECTOR eye = XMLoadFloat3(&XMFLOAT3(w/2.0f - 0.5f, h/2.0f - 0.5f, -1.0f));
 		XMVECTOR direction = XMLoadFloat3(&XMFLOAT3(0, 0, 1.0f));//z轴
 		XMVECTOR up = XMLoadFloat3(&XMFLOAT3(0, -1.0f, 0));//-y轴
 		XMMATRIX mat_v = XMMatrixLookToRH(eye, direction, up);
 
 		XMMATRIX mat_p = XMMatrixOrthographicRH(
 		sys->_windowSize.w,
-		sys->_windowSize.h, -1.0f , 1.0f);
+		sys->_windowSize.h, 0, 1.0f);
 		
 		XMMATRIX mat_wvp = XMMatrixMultiply(mat_v, mat_p);
 		//XMMATRIX
@@ -686,8 +701,33 @@ namespace DND
 
 	}
 
+	void DirectX::_resize()
+	{
+		Size s = Game::Get()->sys->GetWindowSize();
+
+		_release_depth_stencil_view();
+		_release_render_target_view();
+
+		m_swap_chain->ResizeBuffers(1,
+			s.w,
+			s.h,
+			m_swap_chain_desc.BufferDesc.Format,
+			m_swap_chain_desc.Flags
+			);
+		_init_render_target_view();
+		_init_depth_stencil_view();
+
+		m_device_context->OMSetRenderTargets(1, &m_main_render_target_view, m_depth_stencil_view);
+		m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 0);
+		_reset_viewport();
+		_reset_wvp();
+		m_gfx_simple->_reset_wvp();
+
+	}
+
 	DirectX::DirectX()
 	{
+		m_inited = false;
 		//d3d部分（现在已改为 使用默认显卡 和显示器）
 		m_factory = NULL;
 		m_adapter = NULL;

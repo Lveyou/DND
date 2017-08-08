@@ -48,6 +48,9 @@ namespace DND
 		void _create_input_layout();
 		void _create_shader();
 
+		//重设wvp
+		void _reset_wvp();
+
 		//更新顶点缓存
 		void _update();
 		void _render();
@@ -77,7 +80,8 @@ namespace DND
 		ID3DX11EffectTechnique* technique;
 		//pass
 		ID3DX11EffectPass* pass;
-		//
+		//wvp
+		ID3DX11EffectMatrixVariable* wvp_variable;
 
 		DirectX* directx;
 
@@ -89,13 +93,14 @@ namespace DND
 	public:
 		bool _check_support_full_screen_size(int w,int h);
 		//只能调用一次的
+		bool m_inited;
 		void _init();						//初始化directx所有
 		void _init_dxgi();					//初始化dxgi
 		void _init_device_and_swap_chain();	//创建设备和交换链
 		void _init_index_buffer();			//初始化索引缓存
 		void _init_blend_state();			//初始化绑定状态
 		void _init_depth_stencil_state();	//初始化深度模板缓存
-		void _init_wvp();					//初始化世界、观察、投影矩阵
+		
 		void _release_all();
 		//多次释放和建立
 		void _init_render_target_view();	//创建显示表面视图
@@ -106,9 +111,14 @@ namespace DND
 
 		//反复调用的
 		void _reset_viewport();				//重设viewport
-
+		void _reset_wvp();					//重设世界、观察、投影矩阵
+		void _present();
 
 		void _run_render();
+		//窗口大小发生改变,
+		bool m_size_change;
+		void _resize();
+
 		DirectX();
 		//d3d部分（现在已改为 使用默认显卡 和显示器）
 		IDXGIFactory* m_factory;
@@ -147,10 +157,7 @@ namespace DND
 		//垂直同步
 		bool m_vsync;
 
-		//窗口大小发生改变,在present结束后 进行实际的大小改变
-		volatile unsigned m_size_change;
-
-		void _resize();
+		
 		//Camera
 	//	Camera* m_camera;
 		GfxSimple* m_gfx_simple;

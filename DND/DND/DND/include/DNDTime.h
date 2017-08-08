@@ -24,6 +24,7 @@ namespace DND
 		virtual UINT32 GetFPS() = 0;
 		virtual UINT32 GetRealFPS() = 0;
 		virtual double GetDelta() = 0;
+		virtual void SetFPS(UINT32 fps) = 0;
 
 	};
 }

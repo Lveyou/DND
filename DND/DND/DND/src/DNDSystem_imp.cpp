@@ -78,6 +78,16 @@ namespace DND
 		_windowSize = size;
 	}
 
+	Size System_imp::GetWindowSize()
+	{
+		return _windowSize;
+	}
+
+	HWND System_imp::GetWindowHwnd()
+	{
+		return _hWnd;
+	}
+
 	void System_imp::ApplyWindow()
 	{
 		RECT rect = {0, 0, _windowSize.w, _windowSize.h};
@@ -112,7 +122,7 @@ namespace DND
 
 	void System_imp::RenderDot(Point pos, Color color /*= Color::WHITE*/)
 	{
-		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3(pos.x , pos.y, 0),
+		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3(pos.x, pos.y, 0),
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
 	}
 

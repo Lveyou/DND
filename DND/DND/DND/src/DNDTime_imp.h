@@ -27,15 +27,16 @@ namespace DND
 		virtual UINT32 GetFPS() override;
 		virtual UINT32 GetRealFPS() override;
 		virtual double GetDelta() override;
+		virtual void SetFPS(UINT32 fps) override;
 	private:
 		Time_imp();
 		
 		UINT64 _start;
 		UINT64 _loopStart;
 		
-		double _real_delta;			//(s), 上一帧运行时间
+		double _real_delta;			//(s)真实间隔时间
 		UINT32 _real_fps;			//真实帧数
-		double _delta;				//(s), 上一帧运行时间
+		double _delta;				//(s)一帧应该运行的时间
 		UINT32 _fps;				//设置的帧数
 		double _except_render;		//估算的绘图时间（CPU->GPU->显示器）
 		//下面的变量 主要计算两帧之间时间差

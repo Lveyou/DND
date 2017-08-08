@@ -36,6 +36,12 @@ namespace DND
 		return _real_delta;
 	}
 
+	void Time_imp::SetFPS(UINT32 fps)
+	{
+		_fps = fps;
+		_delta = 1.0 / _fps;
+	}
+
 	void Time_imp::_set_last()
 	{
 		_last = _current;

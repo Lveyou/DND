@@ -27,6 +27,10 @@ namespace DND
 		virtual void SetWindowStyle(DWORD style) override;
 		virtual void SetWindowSize(Size size) override;
 		virtual void SetWindowPoint(Point point) override;
+
+		virtual Size GetWindowSize() override;
+		virtual HWND GetWindowHwnd() override;
+
 		virtual void ApplyWindow() override;
 		virtual Size GetDesktopSize() override;
 		virtual void RenderDot(Point pos, Color color = Color::WHITE) override;

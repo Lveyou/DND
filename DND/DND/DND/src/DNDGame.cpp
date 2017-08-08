@@ -23,11 +23,12 @@ namespace DND
 
 	void Game::Init()
 	{
-		
+		//创建窗口后才能初始化dx
+
 		//init engine
 		_init_engine();
 		debug_notice(L"DND: init engine ok!");
-		//init window
+		//init window （这个只是隐藏的窗口）
 		((System_imp*)sys)->_create_window();
 		debug_notice(L"DND: create window ok!");
 		_dx = new DirectX;
@@ -51,6 +52,7 @@ namespace DND
 		t->_set_last();
 		double sec_count = 0;
 		UINT32 sec_frame = 0;
+	
 		t->_loopStart = static_cast<UINT64>(::time(0));
 
 		do 
@@ -64,6 +66,8 @@ namespace DND
 				DispatchMessage(&msg);
 				
 			}
+			//////////////////////////////////////////////////////////////////////////
+
 			t->_update_current();
 			t->_set_last();
 			///////////////////////////d1: HDD -> CPU////////////////////////////////
@@ -83,19 +87,29 @@ namespace DND
 			else
 			{
 				///////////////////////d2: CPU -> GPU//////////////////////////////////
+				_dx->_run_render();
 				//render
 				t->_update_current();
 				double d2 = t->_get_cl_delta();
 				t->_except_render = d2 - d1;
-				////////////////////////Sleep//////////////////////////////////////////
+				////////////////////////Sleep至毫秒/////////////////////////////////////
 				Sleep((t->_delta - d2) * 1000);
 				///////////////////////GPU->显示器//////////////////////////////////////
-				_dx->_run_render();
+				_dx->_present();
+				////////////////////////延时至CPU周期/////////////////////////////////////////
+				t->_update_current();
+				double d3 = t->_get_cl_delta();
+				while (t->_delta - d3 > 1.0 / 100000)
+				{
+					t->_update_current();
+					d3 = t->_get_cl_delta();
+				}
+				
 			}
 
 			t->_update_current();
 			t->_real_delta = t->_get_cl_delta();
-
+			//OutputDebugString(String::Format(256, L"%lf\n", t->_real_delta).GetWcs());
 			///////////////////////////////FPS统计//////////////////////////////////////
 			++sec_frame;
 			sec_count += t->_real_delta;
@@ -150,6 +164,7 @@ namespace DND
 	{
 		PAINTSTRUCT ps;
 		HDC hdc;
+		System_imp* sys = (System_imp*)(Get()->sys);
 		switch (msg)
 		{
 		case WM_CREATE:
@@ -160,6 +175,62 @@ namespace DND
 			PostQuitMessage(0);
 			Get()->EndLoop();
 			return true;
+			break;
+		case WM_SIZE:
+		{
+			if (Get()->_dx && wParam != SIZE_MINIMIZED)
+			{
+				static WPARAM wparam_pre = SIZE_RESTORED;
+				switch (wParam)
+				{
+				case SIZE_MAXIMIZED:
+				{
+					wparam_pre = SIZE_MAXIMIZED;
+					RECT rect;
+					GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
+					sys->_windowSize.w = rect.right - rect.left;
+					sys->_windowSize.h = rect.bottom - rect.top;
+					Get()->_dx->m_size_change = true;
+				}
+				break;
+				case SIZE_RESTORED:
+				{
+					if (SIZE_RESTORED != wparam_pre)
+					{
+						RECT rect;
+						GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
+						sys->_windowSize.w = rect.right - rect.left;
+						sys->_windowSize.h = rect.bottom - rect.top;
+						Get()->_dx->m_size_change = true;
+						wparam_pre = SIZE_RESTORED;
+					}
+				}
+				break;
+				default:
+					break;
+				}
+			}
+
+		}
+		break;
+		//exitsizemove并不能获取大小
+		//消息返回的并非客户区大小
+		case WM_EXITSIZEMOVE:
+		{
+			if (Get()->_dx)
+			{
+				RECT rect;
+				GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
+				sys->_windowSize.w = rect.right - rect.left;
+				sys->_windowSize.h = rect.bottom - rect.top;
+				Get()->_dx->m_size_change = true;
+			}
+
+		}
+		break;
+		case WM_MOVE:
+			sys->_windowPoint.x = LOWORD(lParam);
+			sys->_windowPoint.y = HIWORD(lParam);
 			break;
 		default:
 			return DefWindowProc(hWnd, msg, wParam, lParam);
