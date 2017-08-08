@@ -6,8 +6,12 @@ void Test::_update()
 	Debug::GetDebugger<DebuggerConsole>()->TempWrite(String(L"FPS:") + (INT32)time->GetRealFPS(),
 		DebugLevel::NOTICE);
 
-	//////////////////////////Dot//////////////////////////////////////
-	sys->RenderDot(Point(0, 0));
+	//////////////////////////Dot≤‚ ‘//////////////////////////////////
+	for(unsigned i = 10; i < 400; i += 5)
+	{
+		sys->RenderDot(Point(i, 100), Color::YELLOW);
+	}
+	
 }
 
 void Test::_init()

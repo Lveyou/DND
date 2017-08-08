@@ -28,3 +28,13 @@ float4 PS(PS_INPUT input) : SV_Target
 {
 	return input.Color;
 }
+
+technique11 main11
+{
+	pass p0
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS()));
+		SetGeometryShader(NULL);
+		SetPixelShader(CompileShader(ps_5_0, PS()));
+	}
+}

@@ -112,7 +112,7 @@ namespace DND
 
 	void System_imp::RenderDot(Point pos, Color color /*= Color::WHITE*/)
 	{
-		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3(pos.x , -0.5f, 0),
+		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3(pos.x , pos.y, 0),
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
 	}
 

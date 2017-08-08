@@ -65,11 +65,12 @@ namespace DND
 	const String ERROR_00028 = L"¥¥Ω®line∂•µ„ª∫¥Ê ß∞‹°£";
 	const String ERROR_00029 = L" Õ∑≈buffer_dots ß∞‹°£";
 	const String ERROR_00030 = L" Õ∑≈buffer_lines ß∞‹°£";
-	const String ERROR_00031 = L"±‡“Îsimple ps ß∞‹°£";
-	const String ERROR_00032 = L"¥¥Ω®simple ps ß∞‹°£";
+	const String ERROR_00031 = L"±‡“Îsimple shader ß∞‹°£";
+	const String ERROR_00032 = L"¥¥Ω®simple effect ß∞‹°£";
 	const String ERROR_00033 = L"¥¥Ω®simple ‰»Î≤ºæ÷ ß∞‹°£";
-	const String ERROR_00034 = L"±‡“Îsimple vs ß∞‹°£";
-	const String ERROR_00035 = L"¥¥Ω®simple vs ß∞‹°£";
+	const String ERROR_00034 = L"ªÒ»°simple technique ß∞‹";
+	const String ERROR_00035 = L"ªÒ»°simple pass ß∞‹";
+	const String ERROR_00036 = L"ªÒ»°simple wvp ß∞‹";
 }
 
 

@@ -99,8 +99,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\effect11_sdk\include;..\..\dx11_sdk\include;..\DND\include;$(WindowsSdkDir)include;$(VCInstallDir)include</IncludePath>
-    <LibraryPath>..\..\effect11_sdk\lib\x86\Debug;..\..\dx11_sdk\lib\x86;$(WindowsSdkDir)lib;$(VCInstallDir)lib</LibraryPath>
+    <IncludePath>..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(WindowsSdkDir)include;$(VCInstallDir)include</IncludePath>
+    <LibraryPath>..\Debug;..\..\dx11_sdk\lib\x86;$(WindowsSdkDir)lib;$(VCInstallDir)lib</LibraryPath>
     <ExcludePath>
     </ExcludePath>
   </PropertyGroup>
@@ -130,7 +130,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

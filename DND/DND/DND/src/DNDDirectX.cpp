@@ -37,11 +37,11 @@ namespace DND
 
 		buffer_dots = NULL;
 		buffer_lines = NULL;
-		vs = NULL;
-		ps = NULL;
-		vs_buffer = NULL;
-		ps_buffer = NULL;
+	
 		input_layout = NULL;
+		effect = NULL;
+		technique = NULL;
+		pass = NULL;
 
 		//此类只在dx初始化后使用
 		directx = Game::Get()->_dx;
@@ -132,20 +132,17 @@ namespace DND
 
 		directx->m_device_context->IASetInputLayout(input_layout);
 		directx->m_device_context->IASetVertexBuffers(0, 1, &buffer_dots, &stride, &offset);
-		directx->m_device_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
+		directx->m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
-		directx->m_device_context->VSSetShader(vs, 0, 0);
-		directx->m_device_context->PSSetShader(ps, 0, 0);
 		directx->m_device_context->Draw(len_dots, 0);
 
 		len_dots = 0;
 
 		directx->m_device_context->IASetInputLayout(input_layout);
 		directx->m_device_context->IASetVertexBuffers(0, 1, &buffer_lines, &stride, &offset);
-		directx->m_device_context->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+		directx->m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-		directx->m_device_context->VSSetShader(vs, 0, 0);
-		directx->m_device_context->PSSetShader(ps, 0, 0);
+
 		directx->m_device_context->Draw(len_lines, 0);
 
 		len_lines = 0;
@@ -174,13 +171,8 @@ namespace DND
 	void GfxSimple::_release_all()
 	{
 		input_layout->Release();
+		effect->Release();
 
-		ps->Release();
-		ps_buffer->Release();
-		
-		vs->Release();
-		vs_buffer->Release();
-		
 		buffer_lines->Release();
 		buffer_dots->Release();
 
@@ -210,28 +202,6 @@ namespace DND
 		vertex_lines[len_lines++].color = color;
 	}
 
-	void GfxSimple::_create_pixel_shader()
-	{
-
-		dnd_assert(!FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(), 0, 0,
-			"PS", "ps_5_0",
-			0, 0, NULL, &ps_buffer, NULL, NULL)),
-			ERROR_00031);
-			/*	if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL, 0, 0,
-			"PS", "ps_5_0",
-			0, 0, NULL, &ps_buffer, NULL, NULL)))
-			{
-			assert(0 && L"编译simple ps 失败（从内存）！");
-			return;
-			}
-			delete buffer;*/
-		dnd_assert(!FAILED(directx->m_device->CreatePixelShader(
-			ps_buffer->GetBufferPointer(),
-			ps_buffer->GetBufferSize(), 0,
-			&ps)),
-			ERROR_00032);	
-	}
-
 	void GfxSimple::_create_input_layout()
 	{
 	
@@ -242,36 +212,65 @@ namespace DND
 		};
 
 		unsigned len = ARRAYSIZE(layout);
+		D3DX11_PASS_DESC pass_desc;
+		pass->GetDesc(&pass_desc);
 
 		dnd_assert(!FAILED(directx->m_device->CreateInputLayout(
 			layout, len,
-			vs_buffer->GetBufferPointer(),
-			vs_buffer->GetBufferSize(),
+			pass_desc.pIAInputSignature,
+			pass_desc.IAInputSignatureSize,
 			&input_layout)),
 			ERROR_00033);
 	}
 
-	void GfxSimple::_create_vertex_shader()
+	void GfxSimple::_create_shader()
 	{
-		dnd_assert(!FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(), 0, 0,
-			"VS", "vs_5_0",
-			0, 0, NULL, &vs_buffer, NULL, NULL)),
-			ERROR_00034);
-			/*if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL, 0, 0,
-			"VS", "vs_5_0",
-			0, 0, NULL, &vs_buffer, NULL, NULL)))
-			{
-			assert(0 && L"编译simple vs 失败（从内存）！");
-			return;
-			}
-			delete buffer;*/
 
+		UINT shader_flags = 0;
+#if defined(DEBUG) || defined(_DEBUG)
+		shader_flags |= D3DCOMPILE_DEBUG;
+		shader_flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif
 
-		dnd_assert(!FAILED(directx->m_device->CreateVertexShader(
-			vs_buffer->GetBufferPointer(),
-			vs_buffer->GetBufferSize(), 0,
-			&vs)),
-			ERROR_00035);
+		ID3D10Blob* compiled_shader = NULL;
+		ID3D10Blob* error_message = NULL;
+
+		if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(),
+			NULL, NULL, NULL, "fx_5_0",
+			shader_flags, 0, NULL,
+			&compiled_shader, &error_message, NULL)))
+		{
+			if (error_message)
+				debug_err(String((char*)error_message->GetBufferPointer()));
+			dnd_assert(0, ERROR_00031);
+		}
+
+		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
+			compiled_shader->GetBufferPointer(),
+			compiled_shader->GetBufferSize(),
+			0, directx->m_device, &effect)),
+				ERROR_00032);
+
+		if (compiled_shader)
+			compiled_shader->Release();
+		if (error_message)
+			error_message->Release();
+
+		technique = effect->GetTechniqueByName("main11");
+		dnd_assert(technique, ERROR_00034);
+		
+		pass = technique->GetPassByName("p0");
+		dnd_assert(pass, ERROR_00035);
+		
+
+		ID3DX11EffectVariable* variable = effect->GetVariableByName("wvp");
+		ID3DX11EffectMatrixVariable* wvp_variable = variable->AsMatrix();
+		dnd_assert(wvp_variable->IsValid(), ERROR_00036);
+
+		//一开始就设置好wvp
+		XMMATRIX wvp = XMLoadFloat4x4(&directx->m_wvp);
+		wvp_variable->SetMatrix((float*)&wvp);
+		pass->Apply(0, directx->m_device_context);
 	}
 
 	void GfxSimple::_init()
@@ -280,10 +279,8 @@ namespace DND
 		debug_notice(L"DND: GfxSimple create buffer dot ok!");
 		_create_vertex_buffer_line();
 		debug_notice(L"DND: GfxSimple create buffer line ok!");
-		_create_vertex_shader();
-		debug_notice(L"DND: GfxSimple create vertex shader ok!");
-		_create_pixel_shader();
-		debug_notice(L"DND: GfxSimple create pixel shader ok!");
+		_create_shader();
+		debug_notice(L"DND: GfxSimple create shader ok!");
 		_create_input_layout();
 		debug_notice(L"DND: GfxSimple create buffer dot ok!");
 	}
@@ -306,6 +303,8 @@ namespace DND
 		debug_notice(L"DND: directx init index buffer ok!");
 		_init_blend_state();
 		debug_notice(L"DND: directx init blend state ok!");
+		_init_wvp();
+		debug_notice(L"DND: directx init wvp ok!");
 
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		m_device_context->OMSetRenderTargets(1, &m_main_render_target_view, m_depth_stencil_view);
@@ -313,10 +312,14 @@ namespace DND
 		m_device_context->OMSetBlendState(m_blend_state, blendFactor, 0xffffffff);
 		m_device_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
 
+		
+
 		m_gfx_simple = new GfxSimple;
 		m_gfx_simple->_init();
 		debug_notice(L"DND: GfxSimple init all ok!");
 
+		
+		
 		/*Gfx2D* gfx_2d = Gfx2D::Get_Instance();
 		gfx_2d->_init_2d_shader();
 		gfx_2d->_create_input_layout();*/
@@ -534,7 +537,7 @@ namespace DND
 		
 	}
 
-	void DND::DirectX::_init_blend_state()
+	void DirectX::_init_blend_state()
 	{
 		D3D11_BLEND_DESC desc;
 		desc.AlphaToCoverageEnable = false;
@@ -558,7 +561,7 @@ namespace DND
 		
 	}
 
-	void DND::DirectX::_init_depth_stencil_state()
+	void DirectX::_init_depth_stencil_state()
 	{
 		D3D11_DEPTH_STENCIL_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
@@ -590,7 +593,26 @@ namespace DND
 		
 	}
 
-	void DND::DirectX::_init_depth_stencil_view()
+	void DirectX::_init_wvp()
+	{
+		System_imp* sys = (System_imp*)(Game::Get()->sys);
+		float w = sys->_windowSize.w;
+		float h = sys->_windowSize.h;
+		XMVECTOR eye = XMLoadFloat3(&XMFLOAT3(w/2.0f, h/2.0f, -1.0f));
+		XMVECTOR direction = XMLoadFloat3(&XMFLOAT3(0, 0, 1.0f));//z轴
+		XMVECTOR up = XMLoadFloat3(&XMFLOAT3(0, -1.0f, 0));//-y轴
+		XMMATRIX mat_v = XMMatrixLookToRH(eye, direction, up);
+
+		XMMATRIX mat_p = XMMatrixOrthographicRH(
+		sys->_windowSize.w,
+		sys->_windowSize.h, -1.0f , 1.0f);
+		
+		XMMATRIX mat_wvp = XMMatrixMultiply(mat_v, mat_p);
+		//XMMATRIX
+		XMStoreFloat4x4(&m_wvp, mat_wvp);
+	}
+
+	void DirectX::_init_depth_stencil_view()
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
 
@@ -625,7 +647,7 @@ namespace DND
 		depth_stencil_buffer->Release();
 	}
 
-	void DND::DirectX::_release_all()
+	void DirectX::_release_all()
 	{
 
 		/*	Gfx2D* gfx_2d = Gfx2D::Get_Instance();
@@ -683,7 +705,10 @@ namespace DND
 		m_depth_stencil_view = NULL;
 		m_vsync = false;
 		m_gfx_simple = NULL;
+		//m_wvp = 
 	}
+
+	
 
 	/*void DirectX::_render_canvass()
 	{

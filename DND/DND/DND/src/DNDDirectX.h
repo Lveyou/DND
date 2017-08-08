@@ -44,9 +44,9 @@ namespace DND
 		void _create_vertex_buffer_line();
 		void _release_vertex_buffer_dot();
 		void _release_vertex_buffer_line();
-		void _create_vertex_shader();
+		
 		void _create_input_layout();
-		void _create_pixel_shader();
+		void _create_shader();
 
 		//更新顶点缓存
 		void _update();
@@ -65,23 +65,19 @@ namespace DND
 		unsigned len_lines;
 		unsigned size_dots;
 		unsigned size_lines;
-
 		//顶点缓存
 		ID3D11Buffer* buffer_dots;
 		ID3D11Buffer* buffer_lines;
 
-		//vs ps
-		ID3D11VertexShader* vs;
-		ID3D11PixelShader* ps;
-
-		//vs buffer 编译好的顶点shader
-		ID3DBlob* vs_buffer;
-
-		//ps buffer 编译好的像素shader
-		ID3DBlob* ps_buffer;
-
 		//input layout
 		ID3D11InputLayout* input_layout;
+		//effect
+		ID3DX11Effect* effect;
+		//technique
+		ID3DX11EffectTechnique* technique;
+		//pass
+		ID3DX11EffectPass* pass;
+		//
 
 		DirectX* directx;
 
@@ -99,6 +95,7 @@ namespace DND
 		void _init_index_buffer();			//初始化索引缓存
 		void _init_blend_state();			//初始化绑定状态
 		void _init_depth_stencil_state();	//初始化深度模板缓存
+		void _init_wvp();					//初始化世界、观察、投影矩阵
 		void _release_all();
 		//多次释放和建立
 		void _init_render_target_view();	//创建显示表面视图
@@ -146,7 +143,7 @@ namespace DND
 		/*Canvas* _create_canvas(unsigned order);
 		map<unsigned, Canvas_imp*> m_canvass;
 		void _render_canvass();*/
-
+		XMFLOAT4X4 m_wvp;
 		//垂直同步
 		bool m_vsync;
 
