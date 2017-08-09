@@ -34,7 +34,7 @@ namespace DND
 		virtual void ApplyWindow() = 0;
 		virtual Size GetDesktopSize() = 0;
 		//render
-		virtual void RenderDot(Point pos, Color color = Color::WHITE) = 0;
+		virtual void RenderDot(Vector2 pos, Color color = Color::WHITE) = 0;
 	};
 }
 

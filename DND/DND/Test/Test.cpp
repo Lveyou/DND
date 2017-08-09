@@ -8,10 +8,12 @@ void Test::_update()
 
 	OutputDebugString((String(L"FPS:") + (INT32)time->GetRealFPS() + L'\n').GetWcs());
 	//////////////////////////Dot≤‚ ‘//////////////////////////////////
+	static float y = 0;
 	for(unsigned i = 10; i < 400; i += 5)
 	{
-		sys->RenderDot(Point(i, 100), Color::YELLOW);
+		sys->RenderDot(Point(i, y), Color::GREEN);
 	}
+	y += 20.0f * time->GetRealDelta();
 	Size sw = sys->GetWindowSize();
 	sys->RenderDot(Point(0, 0), Color::RED);
 	sys->RenderDot(Point(sw.w - 1, 0), Color::RED);

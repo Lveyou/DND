@@ -33,7 +33,7 @@ namespace DND
 
 		virtual void ApplyWindow() override;
 		virtual Size GetDesktopSize() override;
-		virtual void RenderDot(Point pos, Color color = Color::WHITE) override;
+		virtual void RenderDot(Vector2 pos, Color color = Color::WHITE) override;
 
 		String _windowTitle;
 		DWORD _windowStyle;

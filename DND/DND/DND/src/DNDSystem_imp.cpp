@@ -120,9 +120,9 @@ namespace DND
 		return Size(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));;
 	}
 
-	void System_imp::RenderDot(Point pos, Color color /*= Color::WHITE*/)
+	void System_imp::RenderDot(Vector2 pos, Color color /*= Color::WHITE*/)
 	{
-		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3((float)pos.x, (float)pos.y, 0),
+		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3(pos.a, pos.b, 0),
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
 	}
 

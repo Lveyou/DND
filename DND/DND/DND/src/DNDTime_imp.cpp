@@ -33,6 +33,11 @@ namespace DND
 
 	double Time_imp::GetDelta()
 	{
+		return _delta;
+	}
+
+	double Time_imp::GetRealDelta()
+	{
 		return _real_delta;
 	}
 

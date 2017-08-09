@@ -27,6 +27,7 @@ namespace DND
 		virtual UINT32 GetFPS() override;
 		virtual UINT32 GetRealFPS() override;
 		virtual double GetDelta() override;
+		virtual double GetRealDelta() override;
 		virtual void SetFPS(UINT32 fps) override;
 	private:
 		Time_imp();
