@@ -178,6 +178,12 @@ namespace DND
 			Get()->EndLoop();
 			return true;
 			break;
+		case WM_PAINT:
+			hdc = BeginPaint(sys->_hWnd, &ps);
+			EndPaint(sys->_hWnd, &ps);
+			Get()->_dx->_present();
+			return true;
+			break;
 		case WM_SIZE:
 		{
 			if (Get()->_dx && wParam != SIZE_MINIMIZED)
