@@ -611,16 +611,16 @@ namespace DND
 	void DirectX::_reset_wvp()
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
-		float w = sys->_windowSize.w;
-		float h = sys->_windowSize.h;
+		float w = (float)sys->_windowSize.w;
+		float h = (float)sys->_windowSize.h;
 		XMVECTOR eye = XMLoadFloat3(&XMFLOAT3(w/2.0f - 0.5f, h/2.0f - 0.5f, -1.0f));
 		XMVECTOR direction = XMLoadFloat3(&XMFLOAT3(0, 0, 1.0f));//zÖá
 		XMVECTOR up = XMLoadFloat3(&XMFLOAT3(0, -1.0f, 0));//-yÖá
 		XMMATRIX mat_v = XMMatrixLookToRH(eye, direction, up);
 
 		XMMATRIX mat_p = XMMatrixOrthographicRH(
-		sys->_windowSize.w,
-		sys->_windowSize.h, 0, 1.0f);
+		(float)sys->_windowSize.w,
+		(float)sys->_windowSize.h, 0, 1.0f);
 		
 		XMMATRIX mat_wvp = XMMatrixMultiply(mat_v, mat_p);
 		//XMMATRIX

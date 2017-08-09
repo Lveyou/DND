@@ -93,7 +93,7 @@ namespace DND
 				double d2 = t->_get_cl_delta();
 				t->_except_render = d2 - d1;
 				////////////////////////Sleep至毫秒/////////////////////////////////////
-				long st = (t->_delta - d2) * 1000 - 15;
+				long st = (long)((t->_delta - d2) * 1000 - 15);
 				if(st > 0)	
 					Sleep(st);
 				///////////////////////GPU->显示器//////////////////////////////////////
