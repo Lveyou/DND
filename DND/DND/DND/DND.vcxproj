@@ -99,8 +99,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(WindowsSdkDir)include;$(VCInstallDir)include</IncludePath>
-    <LibraryPath>..\Debug;..\..\dx11_sdk\lib\x86;$(WindowsSdkDir)lib;$(VCInstallDir)lib</LibraryPath>
+    <IncludePath>..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
     <ExcludePath>
     </ExcludePath>
   </PropertyGroup>
