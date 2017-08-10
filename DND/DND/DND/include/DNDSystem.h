@@ -30,6 +30,7 @@ namespace DND
 
 		virtual Size GetWindowSize() = 0;
 		virtual HWND GetWindowHwnd() = 0;
+		virtual bool IsFoucs() = 0;
 		//
 		virtual void ApplyWindow() = 0;
 		virtual Size GetDesktopSize() = 0;

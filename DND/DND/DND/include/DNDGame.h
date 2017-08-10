@@ -18,10 +18,12 @@ namespace DND
 	class System;
 	class Time;
 	class DirectX;
+	class Input;
 	class DLL_API Game
 	{	
 		friend class System_imp;
 		friend class GfxSimple;
+		friend class Input_imp;
 	public:
 		void Init();							//init game
 		void EnterLoop();						//enter gameloop
@@ -32,6 +34,7 @@ namespace DND
 		static Game* Get();
 		System* sys;
 		Time* time;
+		Input* input;
 	private:
 		DirectX* _dx;
 	protected:
@@ -48,6 +51,7 @@ namespace DND
 		void _init_engine();
 		void _release_engine();
 		static Game* _game;
+		static LRESULT CALLBACK _on_wm_size(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK _window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		bool _bEndLoop;
 	};

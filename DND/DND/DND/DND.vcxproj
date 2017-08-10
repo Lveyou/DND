@@ -25,6 +25,7 @@
     <ClInclude Include="include\DNDDLL.h" />
     <ClInclude Include="include\DNDError.h" />
     <ClInclude Include="include\DNDGame.h" />
+    <ClInclude Include="include\DNDInput.h" />
     <ClInclude Include="include\DNDMain.h" />
     <ClInclude Include="include\DNDMath.h" />
     <ClInclude Include="include\DNDSingleton.h" />
@@ -35,6 +36,7 @@
     <ClInclude Include="include\DNDUser.h" />
     <ClInclude Include="include\DNDValue.h" />
     <ClInclude Include="src\DNDDirectX.h" />
+    <ClInclude Include="src\DNDInput_imp.h" />
     <ClInclude Include="src\DNDSystem_imp.h" />
     <ClInclude Include="src\DNDTime_imp.h" />
   </ItemGroup>
@@ -43,6 +45,7 @@
     <ClCompile Include="src\DNDDebug.cpp" />
     <ClCompile Include="src\DNDDirectX.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />
+    <ClCompile Include="src\DNDInput_imp.cpp" />
     <ClCompile Include="src\DNDTime_imp.cpp" />
     <ClCompile Include="src\DNDUser.cpp" />
     <ClCompile Include="src\DNDMain.cpp" />

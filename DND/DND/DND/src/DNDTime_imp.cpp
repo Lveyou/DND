@@ -5,8 +5,6 @@ namespace DND
 {
 
 	Time_imp::Time_imp() : 
-		_start(static_cast<UINT64>(time(0))),
-		_loopStart(0),
 		_real_delta(0),
 		_real_fps(0),
 		_delta(1.0/60),
@@ -14,6 +12,7 @@ namespace DND
 		_except_render(0)
 	{
 		QueryPerformanceFrequency(&_freq);
+		QueryPerformanceCounter(&_start);
 	}
 
 	String Time_imp::GetHMSString()
@@ -65,6 +64,13 @@ namespace DND
 	UINT32 Time_imp::GetRealFPS()
 	{
 		return _real_fps;
+	}
+
+	double Time_imp::GetCurrent()
+	{
+		LARGE_INTEGER now;
+		QueryPerformanceCounter(&now);
+		return (double)(now.QuadPart - _start.QuadPart) / (double)_freq.QuadPart;
 	}
 
 

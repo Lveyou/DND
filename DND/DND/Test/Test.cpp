@@ -8,10 +8,12 @@ void Test::_update()
 
 	OutputDebugString((String(L"FPS:") + (INT32)time->GetRealFPS() + L'\n').GetWcs());
 	//////////////////////////Dot≤‚ ‘//////////////////////////////////
+	static float x = 0;
 	static float y = 0;
-	for(unsigned i = 10; i < 400; i += 5)
+	static float d = 5;
+	for(unsigned i = 10; i < 400; i += d)
 	{
-		sys->RenderDot(Point(i, y), Color::GREEN);
+		sys->RenderDot(Point(i + x, y), Color::YELLOW);
 	}
 	y += 20.0f * time->GetRealDelta();
 	Size sw = sys->GetWindowSize();
@@ -19,7 +21,21 @@ void Test::_update()
 	sys->RenderDot(Point(sw.w - 1, 0), Color::RED);
 	sys->RenderDot(Point(0, sw.h - 1), Color::RED);
 	sys->RenderDot(Point(sw.w - 1, sw.h - 1), Color::RED);
-	
+	/////////////////////////input≤‚ ‘/////////////////////////////////////////
+	if(input->KeyState(KeyCode::A))
+		x -= 200.0f * time->GetRealDelta();
+	if(input->KeyState(KeyCode::D))
+		x += 200.0f * time->GetRealDelta();
+	if(input->KeyState(KeyCode::W))
+		y -= 200.0f * time->GetRealDelta();
+	if(input->KeyState(KeyCode::S))
+		y += 200.0f * time->GetRealDelta();
+	if(int dd = input->GetMouseWheelDelta())
+	{
+		d += dd;
+		if(d < 1)
+			d = 1;
+	}
 }
 
 void Test::_init()

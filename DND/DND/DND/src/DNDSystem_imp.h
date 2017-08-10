@@ -19,6 +19,7 @@ namespace DND
 {
 	class System_imp : System
 	{	
+		friend class Input_imp;
 		friend class Game;
 		friend class DirectX;
 	private:
@@ -30,6 +31,7 @@ namespace DND
 
 		virtual Size GetWindowSize() override;
 		virtual HWND GetWindowHwnd() override;
+		virtual bool IsFoucs() override;
 
 		virtual void ApplyWindow() override;
 		virtual Size GetDesktopSize() override;
@@ -45,6 +47,7 @@ namespace DND
 		
 		HWND _hWnd;
 		HINSTANCE _hInstance;
+		bool _foucs;
 	};
 
 	

@@ -21,5 +21,6 @@
 #include "DNDDebug.h"					//Debug
 #include "DNDTime.h"					//Time
 #include "DNDColor.h"					//Color
+#include "DNDInput.h"					//Input
 
 #endif

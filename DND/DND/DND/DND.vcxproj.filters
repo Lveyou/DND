@@ -67,6 +67,12 @@
     <ClInclude Include="include\DNDColor.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDInput.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDInput_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -97,6 +103,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDColor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDInput_imp.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

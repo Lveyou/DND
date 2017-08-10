@@ -52,6 +52,7 @@ namespace DND
 
 		_hWnd = 0;
 		_hInstance = GetModuleHandle(0);
+		_foucs = true;
 
 	}
 
@@ -86,6 +87,11 @@ namespace DND
 	HWND System_imp::GetWindowHwnd()
 	{
 		return _hWnd;
+	}
+
+	bool System_imp::IsFoucs()
+	{
+		return _foucs;
 	}
 
 	void System_imp::ApplyWindow()
@@ -125,6 +131,8 @@ namespace DND
 		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3(pos.a, pos.b, 0),
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
 	}
+
+	
 
 	
 
