@@ -118,7 +118,7 @@ namespace DND
 		//窗口大小发生改变,
 		bool m_size_change;
 		void _resize();
-
+		void _on_wm_paint();
 		DirectX();
 		//d3d部分（现在已改为 使用默认显卡 和显示器）
 		IDXGIFactory* m_factory;

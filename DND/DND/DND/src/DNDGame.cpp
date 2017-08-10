@@ -85,7 +85,10 @@ namespace DND
 			
 			//如果时间不够就不绘图了
 			if(sleepTime < 0)
+			{
 				debug_warn(L"DND: SKIP CPU -> GPU and Render!");
+				t->_except_render = 0;
+			}
 			else
 			{
 				///////////////////////d2: CPU -> GPU//////////////////////////////////
@@ -109,9 +112,11 @@ namespace DND
 					d3 = t->_get_cl_delta();
 				}
 			}
+			//////////////////////////////重置滚轮状态//////////////////////////////////////
+			i->_mouse_wheel_delta = 0;
+			//////////////////////////////计算real_delta///////////////////////////////////
 			t->_update_current();
 			t->_real_delta = t->_get_cl_delta();
-			//OutputDebugString(String::Format(256, L"%lf\n", t->_real_delta).GetWcs());
 			///////////////////////////////FPS统计//////////////////////////////////////
 			++sec_frame;
 			sec_count += t->_real_delta;
@@ -121,8 +126,7 @@ namespace DND
 				sec_frame = 0;
 				sec_count = 0;
 			}
-			//////////////////////////////重置滚轮状态//////////////////////////////////////
-			i->_mouse_wheel_delta = 0;
+			
 			
 		}while(!_bEndLoop);
 
@@ -230,9 +234,7 @@ namespace DND
 			Get()->EndLoop();
 			break;
 		case WM_PAINT:
-			hdc = BeginPaint(sys->_hWnd, &ps);
-			EndPaint(sys->_hWnd, &ps);
-			Get()->_dx->_present();
+			Get()->_dx->_on_wm_paint();
 			break;
 		case WM_ACTIVATE:
 			sys->_foucs = (LOWORD(wParam) != WA_INACTIVE);

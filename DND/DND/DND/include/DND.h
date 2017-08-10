@@ -22,5 +22,6 @@
 #include "DNDTime.h"					//Time
 #include "DNDColor.h"					//Color
 #include "DNDInput.h"					//Input
+#include "DNDImage.h"					//Image
 
 #endif

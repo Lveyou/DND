@@ -290,6 +290,8 @@ namespace DND
 		debug_notice(L"DND: GfxSimple create buffer dot ok!");
 	}
 
+
+
 	///////////////////end Simple////////////////////////////////////////////
 	void DirectX::_init()
 	{
@@ -746,6 +748,21 @@ namespace DND
 		m_vsync = false;
 		m_gfx_simple = NULL;
 		//m_wvp = 
+
+	}
+
+	void DirectX::_on_wm_paint()
+	{
+		//HDC hdc;
+		//hdc = BeginPaint(sys->_hWnd, &ps);
+		//IDXGISurface1* surface;
+		//m_output->GetDisplaySurfaceData((IDXGISurface*)surface);
+		//surface->GetDC(false, &hdc);
+		//EndPaint(sys->_hWnd, &ps);
+		//Get()->_dx->_present();
+
+		//todo: 这里待改为截图后GDI显示
+		m_swap_chain->Present(0, 0);
 	}
 
 	

@@ -3,8 +3,8 @@
 
 void Test::_update()
 {
-	Debug::GetDebugger<DebuggerConsole>()->TempWrite(String(L"FPS:") + (INT32)time->GetRealFPS(),
-		DebugLevel::NOTICE);
+	//Debug::GetDebugger<DebuggerConsole>()->TempWrite(String(L"FPS:") + (INT32)time->GetRealFPS(),
+	//	DebugLevel::NOTICE);
 
 	OutputDebugString((String(L"FPS:") + (INT32)time->GetRealFPS() + L'\n').GetWcs());
 	//////////////////////////Dot≤‚ ‘//////////////////////////////////
@@ -36,6 +36,7 @@ void Test::_update()
 		if(d < 1)
 			d = 1;
 	}
+	img_test->Render(Point(200,200));
 }
 
 void Test::_init()
@@ -54,7 +55,9 @@ void Test::_init()
 	sys->SetWindowStyle(WS_OVERLAPPEDWINDOW);
 		//WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
 	sys->ApplyWindow();
-	time->SetFPS(140);
+	time->SetFPS(120);
+
+	img_test = Image::Create(L"DND\\head.png");
 }
 
 void Test::_release()

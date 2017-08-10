@@ -73,6 +73,9 @@
     <ClInclude Include="src\DNDInput_imp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDImage.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -106,6 +109,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDInput_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDImage.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

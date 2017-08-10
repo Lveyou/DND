@@ -13,6 +13,7 @@ private:
 	virtual void _init() override;
 	virtual void _release() override;
 	
+	Image* img_test;
 };
 
 
