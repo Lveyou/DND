@@ -65,7 +65,6 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 		directx->m_device_context->IASetVertexBuffers(0, 1, &_buffer_vertex, &a, &b);
 		
 		gfx_2d->m_color_texture->SetResource(_tex->_shader_resource_view);
-		gfx_2d->m_pass->Apply(0, directx->m_device_context);
 
 		directx->m_device_context->DrawIndexed(_sprites.size() * 6, 0, 0);
 	}

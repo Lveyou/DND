@@ -116,6 +116,11 @@ namespace DND
 		SetFocus(_hWnd);*/
 	}
 
+	void System_imp::SetVsync(bool vsync /*= true*/)
+	{
+		Game::Get()->_dx->m_vsync = vsync;
+	}
+
 	void System_imp::SetWindowPoint(Point point)
 	{
 		_windowPoint = point;

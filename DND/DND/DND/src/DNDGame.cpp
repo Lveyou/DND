@@ -101,19 +101,25 @@ namespace DND
 				double d2 = t->_get_cl_delta();
 				t->_except_render = d2 - d1;
 				////////////////////////Sleep至毫秒/////////////////////////////////////
-				long st = (long)((t->_delta - d2) * 1000 - 15);
-				if(st > 0)	
-					Sleep(st);
-				///////////////////////GPU->显示器//////////////////////////////////////
-				_dx->_present();
-				////////////////////////延时至CPU周期/////////////////////////////////////////
-				t->_update_current();
-				double d3 = t->_get_cl_delta();
-				while (t->_delta - d3 > 1.0 / 100000)
+				if (t->_fps != 0)//为0代表尽快执行
 				{
+					long st = (long)((t->_delta - d2) * 1000 - 15);
+					if (st > 0)
+						Sleep(st);
+					///////////////////////GPU->显示器//////////////////////////////////////
+					_dx->_present();
+					////////////////////////延时至CPU周期/////////////////////////////////////////
 					t->_update_current();
-					d3 = t->_get_cl_delta();
+					double d3 = t->_get_cl_delta();
+					while (t->_delta - d3 > 1.0 / 100000)
+					{
+						t->_update_current();
+						d3 = t->_get_cl_delta();
+					}
 				}
+				else
+					_dx->_present();
+				
 			}
 			//////////////////////////////重置滚轮状态//////////////////////////////////////
 			i->_mouse_wheel_delta = 0;

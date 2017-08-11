@@ -105,7 +105,7 @@ namespace DND
 	{
 		XMMATRIX wvp = XMLoadFloat4x4(&directx->m_wvp);
 		m_wvp_variable->SetMatrix((float*)&wvp);
-		m_pass->Apply(0, directx->m_device_context);
+		//m_pass->Apply(0, directx->m_device_context);
 	}
 
 	Gfx2D::Gfx2D()
@@ -245,12 +245,10 @@ namespace DND
 		unsigned stride = sizeof(VertexSimple);
 		unsigned offset = 0;
 
-		
 
 		directx->m_device_context->IASetInputLayout(input_layout);
 		directx->m_device_context->IASetVertexBuffers(0, 1, &buffer_dots, &stride, &offset);
 		directx->m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-
 		directx->m_device_context->Draw(len_dots, 0);
 
 		len_dots = 0;
@@ -392,7 +390,7 @@ namespace DND
 	{
 		XMMATRIX wvp = XMLoadFloat4x4(&directx->m_wvp);
 		wvp_variable->SetMatrix((float*)&wvp);
-		pass->Apply(0, directx->m_device_context);
+		//pass->Apply(0, directx->m_device_context);
 	}
 
 	void GfxSimple::_init()
@@ -553,12 +551,8 @@ namespace DND
 
 		
 		
-		
-		
-		//设置顶点缓存 贴图就交给 canvas了
-		
 
-		//点线绘图
+		
 		_update_canvass();
 		m_gfx_simple->_update();
 
@@ -568,7 +562,12 @@ namespace DND
 		////三角形
 		m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		m_device_context->IASetInputLayout(m_gfx_2d->m_input_layout);
+		m_gfx_2d->m_pass->Apply(0, m_device_context);
+		//设置顶点缓存 贴图就交给 canvas了
 		_render_canvass();
+
+		//点线绘图
+		m_gfx_simple->pass->Apply(0, m_device_context);
 		m_gfx_simple->_render();
 		
 	}

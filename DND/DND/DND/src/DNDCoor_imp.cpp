@@ -19,20 +19,21 @@ namespace DND
 	Coor_imp::Coor_imp()
 	{
 		_parent = 0;
-		_scale.a = _scale.b = 1.0f;
+		_scale.x = _scale.y = 1.0f;
 		_rotate = 0;
+		_position.x = _position.y = 0;
 		_update_matrix();
 	}
 
 	void Coor_imp::SetPosition(Vector2 pos)
 	{
 		_changed = true;
-		_position = pos;
+		_position = XMFLOAT2(pos.a, pos.b);
 	}
 
 	Vector2 Coor_imp::GetPosition()
 	{
-		return _position;
+		return Vector2(_position.x, _position.y);
 	}
 
 	void Coor_imp::SetRotate(float rotate)
@@ -49,12 +50,12 @@ namespace DND
 	void Coor_imp::SetScale(Vector2 scale)
 	{
 		_changed = true;
-		_scale = scale;
+		_scale = XMFLOAT2(scale.a, scale.b);
 	}
 
 	Vector2 Coor_imp::GetScale()
 	{
-		return _scale;
+		return Vector2(_scale.x, _scale.y);
 	}
 
 	Vector2 Coor_imp::ThisToWorld(Vector2 point)
@@ -72,11 +73,10 @@ namespace DND
 		if (_changed)
 			_update_matrix();
 
-		XMVECTOR point_out = XMLoadFloat3(&XMFLOAT3(point.a, point.b, 0));
+		XMVECTOR point_out = XMLoadFloat2(&XMFLOAT2(point.a, point.b));
 
 		XMMATRIX mat = XMLoadFloat4x4(&_mat);
-		point_out = XMVector3TransformCoord(point_out, mat);
-
+		point_out = XMVector2TransformCoord(point_out, mat);
 		return Vector2(XMVectorGetX(point_out), XMVectorGetY(point_out));
 	}
 
@@ -95,10 +95,10 @@ namespace DND
 		if (_changed)
 			_update_matrix();
 
-		XMVECTOR point_out = XMLoadFloat3(&XMFLOAT3(point.a, point.b, 0));
+		XMVECTOR point_out = XMLoadFloat2(&XMFLOAT2(point.a, point.b));
 
 		XMMATRIX mat = XMLoadFloat4x4(&_mat_inv);
-		point_out = XMVector3TransformCoord(point_out, mat);
+		point_out = XMVector2TransformCoord(point_out, mat);
 
 		return Vector2(XMVectorGetX(point_out), XMVectorGetY(point_out));
 	}
@@ -135,53 +135,14 @@ namespace DND
 		//所有点先
 		_changed = false;
 
-		bool p = true;
-		bool r = true;
-		bool s = true;
+		FXMVECTOR s = XMLoadFloat2(&_scale);
+		FXMVECTOR sOrigin = XMLoadFloat2(&XMFLOAT2(0, 0));
+		CXMVECTOR translation = XMLoadFloat2(&_position);
 
-		if (_position == Vector2())
-		p = false;///position一定变换
-		if (_rotate == 0)
-			r = false;
-		if (_scale == Vector2(1.0f, 1.0f))
-			s = false;
-
-		XMMATRIX mat = XMMatrixIdentity();
-		XMMATRIX mat_inv = XMMatrixIdentity();
-
-
-		if (r)
-		{
-			XMMATRIX rotate = XMMatrixRotationZ(-_rotate);
-			mat *= rotate;
-		}
-		if (s)
-		{
-			XMMATRIX scale = XMMatrixScaling(_scale.a, _scale.b, 1.0f);
-			mat *= scale;
-		}
-		if (p)
-		{
-			XMMATRIX position = XMMatrixTranslation(_position.a, _position.b, 0);
-			mat *= position;
-		}
-
-
-		if (p)
-		{
-			XMMATRIX position = XMMatrixTranslation(-_position.a, -_position.b, 0);
-			mat_inv *= position;
-		}
-		if (s)
-		{
-			XMMATRIX scale = XMMatrixScaling(1.0f / _scale.a, 1.0f / _scale.b, 1.0f);
-			mat_inv *= scale;
-		}
-		if (r)
-		{
-			XMMATRIX rotate = XMMatrixRotationZ(_rotate);
-			mat *= rotate;
-		}
+		XMVECTOR determinant;
+	
+		XMMATRIX mat = XMMatrixAffineTransformation2D(s, sOrigin, _rotate, translation);
+		XMMATRIX mat_inv = XMMatrixInverse(&determinant, mat);
 
 		XMStoreFloat4x4(&_mat, mat);
 		XMStoreFloat4x4(&_mat_inv, mat_inv);

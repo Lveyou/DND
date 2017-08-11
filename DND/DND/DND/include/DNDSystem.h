@@ -27,12 +27,14 @@ namespace DND
 		virtual void SetWindowStyle(DWORD style = WS_POPUP)  = 0;
 		virtual void SetWindowSize(Size size) = 0;
 		virtual void SetWindowPoint(Point pos) = 0;
-
+		virtual void ApplyWindow() = 0;
+		//
+		virtual void SetVsync(bool vsync = true) = 0;
+		//
 		virtual Size GetWindowSize() = 0;
 		virtual HWND GetWindowHwnd() = 0;
 		virtual bool IsFoucs() = 0;
-		//
-		virtual void ApplyWindow() = 0;
+
 		virtual Size GetDesktopSize() = 0;
 		//render
 		virtual void RenderDot(Vector2 pos, Color color = Color::WHITE) = 0;

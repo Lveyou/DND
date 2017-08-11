@@ -40,9 +40,9 @@ namespace DND
 		Coor* _parent;//父坐标系
 		
 		
-		Vector2 _position;
-		float _rotate;//旋转
-		Vector2 _scale;//缩放
+		XMFLOAT2 _position;
+		FLOAT _rotate;//旋转
+		XMFLOAT2 _scale;//缩放
 
 		XMFLOAT4X4 _mat;
 		XMFLOAT4X4 _mat_inv;

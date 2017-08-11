@@ -3,6 +3,11 @@ cbuffer MatrixWVP
 	float4x4 wvp : WORLDVIEWPROJECTION;
 }
 
+RasterizerState DisableCulling
+{
+	CullMode = NONE;
+};
+
 struct VS_INPUT
 {
 	float4 Pos : POSITION;
@@ -36,5 +41,6 @@ technique11 main11
 		SetVertexShader(CompileShader(vs_5_0, VS()));
 		SetGeometryShader(NULL);
 		SetPixelShader(CompileShader(ps_5_0, PS()));
+		SetRasterizerState(DisableCulling);
 	}
 }
