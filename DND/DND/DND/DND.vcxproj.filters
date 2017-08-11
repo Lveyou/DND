@@ -88,6 +88,12 @@
     <ClInclude Include="include\DNDCoor.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="src\DNDCoor_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDTexture.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -127,6 +133,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDCanvas_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDSprite.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDCoor_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDTexture.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

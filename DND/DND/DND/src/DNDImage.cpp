@@ -47,7 +47,7 @@ namespace DND
 			debug_warn(L"DND: Image::AddImageRect传入了空指针！");
 			return;
 		}
-		Size s_size = rect.Get_Size();
+		Size s_size = rect.GetSize();
 
 		if ((tar_xy.x + s_size.w > m_size.w) ||
 			(tar_xy.y + s_size.h > m_size.h))

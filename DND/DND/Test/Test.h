@@ -14,6 +14,7 @@ private:
 	virtual void _release() override;
 	
 	Image* img_test;
+	Sprite* spr_test;
 };
 
 

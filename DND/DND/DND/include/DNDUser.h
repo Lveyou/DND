@@ -83,7 +83,7 @@ namespace DND
 		Vector2(const String& value);
 		Vector2(const Point& point);
 
-
+		bool operator==(const Vector2& vb);
 		Vector2 operator+(const Vector2& vb);
 		Vector2 operator-(const Vector2& vb);
 		Vector2 operator/(float var);
@@ -126,13 +126,30 @@ namespace DND
 		Rect();
 		Rect(Point p1, Point p2);
 		Rect(XYWH xywh);
-		Size Get_Size() const;
+		Size GetSize() const;
 	};
 
 	Size Point_To_Size(const Point& p);
 	Point Size_To_Point(const Size& s);
 	Point operator+(const Point& p, const Size& size);
 	Rect operator+(const Rect& rect,const Point& p);
+
+	//other: 左上角为 0 ，顺时针为 0，1，2，3
+	//构成的两个三角形为 ： 012 ， 023
+	//角度 为 弧度制，默认为顺时针
+	class DLL_API Quad
+	{
+	public:
+		Quad();
+		Quad(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3);
+		Quad(Vector2 lb, Vector2 rt);
+		Quad(Vector2 xy, Vector2 wh, bool center);
+		Quad(Vector2 xy, Vector2 wh, Vector2 anchor);
+		Quad(Vector2 xy, Vector2 wh, Vector2 anchor, float angle);
+
+	public:
+		Vector2 v[4];
+	};
 }
 
 

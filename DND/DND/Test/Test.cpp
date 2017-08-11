@@ -36,7 +36,9 @@ void Test::_update()
 		if(d < 1)
 			d = 1;
 	}
-	img_test->Render(Point(200,200));
+	//img_test->Render(Point(200,200));
+	spr_test->GetCoor()->SetPosition(Vector2(x,y));
+	spr_test->Render();
 }
 
 void Test::_init()
@@ -58,6 +60,10 @@ void Test::_init()
 	time->SetFPS(120);
 
 	img_test = Image::Create(L"DND\\head.png");
+	spr_test = canvas->CreateSprite(img_test);
+	//spr_test->GetCoor()->SetParent(NULL);
+	
+	spr_test->GetCoor()->SetRotate(0.5f);
 }
 
 void Test::_release()

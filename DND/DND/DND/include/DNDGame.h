@@ -19,11 +19,16 @@ namespace DND
 	class Time;
 	class DirectX;
 	class Input;
+	class Canvas;
 	class DLL_API Game
 	{	
 		friend class System_imp;
 		friend class GfxSimple;
+		friend class Gfx2D;
 		friend class Input_imp;
+		friend class Texture;
+		friend class Canvas;
+		friend class Canvas_imp;
 	public:
 		void Init();							//init game
 		void EnterLoop();						//enter gameloop
@@ -35,6 +40,7 @@ namespace DND
 		System* sys;
 		Time* time;
 		Input* input;
+		Canvas* canvas;
 	private:
 		DirectX* _dx;
 	protected:

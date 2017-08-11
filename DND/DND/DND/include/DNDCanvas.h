@@ -17,11 +17,19 @@
 
 namespace DND
 {
+	class Sprite;
 	class DLL_API Canvas
 	{
 	public:
 		static Canvas* Create(UINT32 order);
+		//×Ô¶¯×¢²áÍ¼Ïñ
 		virtual Sprite* CreateSprite(const String& imgName) = 0;
+		virtual Sprite* CreateSprite(const Image* img) = 0;
+		virtual Sprite* CreateSprite(UINT32 imgID,const Quad& quad, Color color = Color::WHITE) = 0;
+
+		virtual void RegisterImageAll(UINT32 imgID, const Image* img) = 0;
+		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) = 0;
+		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) = 0;
 	};
 
 

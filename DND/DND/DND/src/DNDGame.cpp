@@ -5,7 +5,7 @@
 #include "DNDError.h"
 #include "DNDDirectX.h"
 #include "DNDInput_imp.h"
-
+#include "DNDCanvas_imp.h"
 
 namespace DND
 {
@@ -19,6 +19,7 @@ namespace DND
 		time = NULL;
 		_bEndLoop = false;
 		_dx = NULL;
+		canvas = NULL;
 	}
 
 	void Game::Init()
@@ -34,6 +35,8 @@ namespace DND
 		_dx = new DirectX;
 		_dx->_init();
 		debug_notice(L"DND: init directx ok!");
+		canvas = Canvas::Create(0);
+		debug_notice(L"DND: init default canvas ok!");
 		//init user
 		_init();
 		debug_notice(L"DND: user init ok!");

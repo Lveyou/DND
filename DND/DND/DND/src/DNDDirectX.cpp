@@ -3,11 +3,128 @@
 #include "DNDDebug.h"
 #include "DNDGame.h"
 #include "DNDColor.h"
+#include "DNDCanvas_imp.h"
 
 namespace DND
 {
 	const String STRING_PATH_SHADER_SIMPLE = L"DND/Shader/simple.fx";
 	const String STRING_PATH_SHADER_2D = L"DND/Shader/2d.fx";
+
+
+	void Gfx2D::_init()
+	{
+		_init_shader();
+		debug_notice(L"DND: Gfx2D init shader ok!");
+		_create_input_layout();
+		debug_notice(L"DND: Gfx2D create input layout ok!");
+	}
+
+
+	void Gfx2D::_create_input_layout()
+	{
+
+		D3D11_INPUT_ELEMENT_DESC layout[] =
+		{
+			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,0,28,D3D11_INPUT_PER_VERTEX_DATA,0 }
+		};
+
+		unsigned len = ARRAYSIZE(layout);
+		D3DX11_PASS_DESC pass_desc;
+		m_pass->GetDesc(&pass_desc);
+
+		if (FAILED(directx->m_device->CreateInputLayout(
+			layout, len,
+			pass_desc.pIAInputSignature,
+			pass_desc.IAInputSignatureSize,
+			&m_input_layout)))
+		{
+			assert(0 && L"创建simple 输入布局 失败！");
+			return;
+		}
+	}
+
+	void Gfx2D::_init_shader()
+	{
+		UINT shader_flags = 0;
+#if defined(DEBUG) || defined(_DEBUG)
+		shader_flags |= D3DCOMPILE_DEBUG;
+		shader_flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif
+
+		ID3D10Blob* compiled_shader = NULL;
+		ID3D10Blob* error_message = NULL;
+
+
+		if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_2D.GetWcs(),
+			NULL, NULL, NULL, "fx_5_0",
+			shader_flags, 0, NULL,
+			&compiled_shader, &error_message, NULL)))
+		{
+			if (error_message)
+				debug_err(String((char*)error_message->GetBufferPointer()));
+			dnd_assert(0, ERROR_00037);
+		}
+
+		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
+			compiled_shader->GetBufferPointer(),
+			compiled_shader->GetBufferSize(),
+			0, directx->m_device, &m_effect)),
+			ERROR_00045);
+
+		if (compiled_shader)
+			compiled_shader->Release();
+		if (error_message)
+			error_message->Release();
+
+		m_technique = m_effect->GetTechniqueByName("main11");
+		dnd_assert(m_technique, ERROR_00038);
+
+		m_pass = m_technique->GetPassByName("p0");
+		dnd_assert(m_pass, ERROR_00039);
+
+
+		ID3DX11EffectVariable* variable = m_effect->GetVariableByName("wvp");
+		m_wvp_variable = variable->AsMatrix();
+		dnd_assert(m_wvp_variable->IsValid(), ERROR_00040);
+		_reset_wvp();
+
+
+		variable = NULL;
+		variable = m_effect->GetVariableByName("ColorTexture");
+		dnd_assert(variable, ERROR_00041);
+		
+		m_color_texture = variable->AsShaderResource();
+		dnd_assert(m_color_texture, ERROR_00042);
+			
+		
+	}
+
+	void Gfx2D::_reset_wvp()
+	{
+		XMMATRIX wvp = XMLoadFloat4x4(&directx->m_wvp);
+		m_wvp_variable->SetMatrix((float*)&wvp);
+		m_pass->Apply(0, directx->m_device_context);
+	}
+
+	Gfx2D::Gfx2D()
+	{
+		m_input_layout = NULL;
+		m_effect = NULL;
+		m_technique = NULL;
+		m_pass = NULL;
+		m_wvp_variable = NULL;
+		m_color_texture = NULL;
+		//此类只在dx初始化后使用
+		directx = Game::Get()->_dx; 
+	}
+
+	void Gfx2D::_release_all()
+	{
+		m_input_layout->Release();
+		m_effect->Release();	
+	}
 
 	void GfxSimple::_create_vertex_buffer_dot()
 	{
@@ -325,8 +442,10 @@ namespace DND
 		m_gfx_simple->_init();
 		debug_notice(L"DND: GfxSimple init all ok!");
 
-		
-		
+		m_gfx_2d = new Gfx2D;
+		m_gfx_2d->_init();
+		debug_notice(L"DND: Gfx2D init all ok!");
+
 		/*Gfx2D* gfx_2d = Gfx2D::Get_Instance();
 		gfx_2d->_init_2d_shader();
 		gfx_2d->_create_input_layout();*/
@@ -435,22 +554,21 @@ namespace DND
 		
 		
 		
-		////三角形们
-		//Gfx2D* gfx_2d = Gfx2D::Get_Instance();
-
-		//m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		//m_device_context->IASetInputLayout(gfx_2d->m_input_layout);
-		////设置顶点缓存 矩阵 贴图就交给 canvas了
-		////gfx_2d->m_color_texture->SetResource()
-		//_render_canvass();
+		
+		//设置顶点缓存 贴图就交给 canvas了
+		
 
 		//点线绘图
-		
+		_update_canvass();
 		m_gfx_simple->_update();
 
 		m_device_context->ClearRenderTargetView(m_main_render_target_view, clear_color);
 		m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+		////三角形
+		m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		m_device_context->IASetInputLayout(m_gfx_2d->m_input_layout);
+		_render_canvass();
 		m_gfx_simple->_render();
 		
 	}
@@ -724,6 +842,7 @@ namespace DND
 		_reset_viewport();
 		_reset_wvp();
 		m_gfx_simple->_reset_wvp();
+		m_gfx_2d->_reset_wvp();
 
 	}
 
@@ -765,58 +884,39 @@ namespace DND
 		m_swap_chain->Present(0, 0);
 	}
 
-	
 
-	/*void DirectX::_render_canvass()
+	void DirectX::_update_canvass()
 	{
-	map<unsigned, Canvas_imp*>::iterator itor;
-	for (itor = m_canvass.begin(); itor != m_canvass.end(); ++itor)
-	{
-	Canvas_imp* temp = itor->second;
-	temp->_update();
-	temp->_render();
-	}
-	}*/
-
-	//void DirectX_imp::_resize()
-	//{
-	//	System_imp* sys = System_imp::Get_Instance();
-
-	//	_release_depth_stencil_view();
-	//	_release_render_target_view();
-
-	//	m_swap_chain->ResizeBuffers(1,
-	//		sys->m_window_info.size.w,
-	//		sys->m_window_info.size.h,
-	//		m_swap_chain_desc.BufferDesc.Format,
-	//		m_swap_chain_desc.Flags
-	//		);
-	//	_init_render_target_view();
-	//	_init_depth_stencil_view();
-
-	//	m_device_context->OMSetRenderTargets(1, &m_main_render_target_view, m_depth_stencil_view);
-	//	m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 0);
-	//	_reset_viewport();
-	//	
-	//
-	//	AutoPoint::pixel_scale = 2.0f / sys->m_window_info.size.h;
-	//	AutoPoint::ratio_wh = static_cast<float>(sys->m_window_info.size.h) / sys->m_window_info.size.w;
-	//	//所有coor需要刷新，因为Auto_Point需要重新计算
-	//	sys->_update_all_coor();
-	//}
-
-	/*Canvas* DirectX_imp::_create_canvas(unsigned order)
-	{
-	if (m_canvass[order])
-	{
-	assert(0 && L"此order已经被某canvas使用，不能重复创建！");
-	return NULL;
+		for (auto iter = m_canvass.begin(); iter != m_canvass.end(); ++iter)
+		{
+			Canvas_imp* temp = iter->second;
+			temp->_update();
+		}
 	}
 
-	Canvas * temp = new Canvas_imp(order);
-	m_canvass[order] = (Canvas_imp*)temp;
-	return temp;
-	}*/
+
+	void DirectX::_render_canvass()
+	{
+		for (auto iter = m_canvass.begin(); iter != m_canvass.end(); ++iter)
+		{
+			Canvas_imp* temp = iter->second;
+			temp->_render();
+		}
+	}
+
+
+	Canvas* DirectX::_create_canvas(UINT32 order)
+	{
+		if (m_canvass[order])
+		{
+			assert(0 && L"此order已经被某canvas使用，不能重复创建！");
+			return NULL;
+		}
+
+		Canvas * temp = new Canvas_imp(order);
+		m_canvass[order] = (Canvas_imp*)temp;
+		return temp;
+	}
 
 }
 

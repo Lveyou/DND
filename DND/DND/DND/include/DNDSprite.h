@@ -11,6 +11,9 @@
 #define _DND_SPRITE_H_
 
 #include "DNDDLL.h"
+#include "DNDCoor.h"
+#include "DNDUser.h"
+#include "DNDColor.h"
 
 namespace DND
 {
@@ -20,33 +23,31 @@ namespace DND
 		friend class Canvas_imp;
 		friend class Text_imp;
 	public:
-		bool Is_Pickup();
+		bool IsPickup();
 		void Render();
-		void Render_Frame();
-		Coor* Get_Coor();
-		void Set_Order(int order);
-		void Set_Z(const Vector4& z);
-		Size Get_Size();
-		void Set_Color(Color color);
-		Canvas* Get_Canvas();
-		~Sprite();
+		void RenderFrame();
+		Coor* GetCoor();
+		void SetOrder(INT32 order);
+		Size GetSize();
+		void SetColor(Color color);
+		Canvas* GetCanvas();
+		
 
 		Sprite* Clone();
-		void Delete();
 
 	private:
 
 		Sprite();
 		Sprite(const Sprite& b);
-		int m_order;
-		Canvas* m_canvas;
-		Coor* m_coor;
-		Quad m_quad;
-		Color m_color[4];
-		Vector4 m_z;
-		unsigned m_image_rect_ID;
-		bool m_show;
-		bool m_dead;
+		~Sprite();
+		INT32 _order;
+		Canvas* _canvas;
+		Coor* _coor;
+		Quad _quad;
+		Color _color[4];
+		unsigned _image_rect_ID;
+		bool _show;
+		bool _dead;
 	};
 }
 

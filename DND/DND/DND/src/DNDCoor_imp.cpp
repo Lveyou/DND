@@ -9,298 +9,182 @@ namespace DND
 	Coor* Coor::Create(Coor* parent /*= NULL*/)
 	{
 		Coor_imp* coor = new Coor_imp();
-		System_imp* sys = System_imp::Get_Instance();
+		/*System_imp* sys = System_imp::Get_Instance();*/
 
-		sys->m_list_coor.push_back(coor);
-		coor->Set_Parent(parent);
+		/*	sys->m_list_coor.push_back(coor);*/
+		coor->SetParent(parent);
 		return coor;
 	}
 
-	void DND::Coor_imp::Set_Position(Vector3 positon)
+	Coor_imp::Coor_imp()
 	{
-		m_changed = true;
-		m_auto_point = AutoPoint(positon.a, positon.b);
-		m_z = positon.c;
+		_parent = 0;
+		_scale.a = _scale.b = 1.0f;
+		_rotate = 0;
+		_update_matrix();
 	}
 
-	DND::Vector3 DND::Coor_imp::Get_Position()
+	void Coor_imp::SetPosition(Vector2 pos)
 	{
-		return m_auto_point.Get_Position().To_Vector3(m_z);
+		_changed = true;
+		_position = pos;
 	}
 
-	void DND::Coor_imp::Set_Rotate(Vector3 rotate)
+	Vector2 Coor_imp::GetPosition()
 	{
-		m_changed = true;
-		m_rotate = rotate;
+		return _position;
 	}
 
-	Vector3 DND::Coor_imp::Get_Rotate()
+	void Coor_imp::SetRotate(float rotate)
 	{
-		return m_rotate;
+		_changed = true;
+		_rotate = rotate;
 	}
 
-	void DND::Coor_imp::Set_Scale(Vector3 scale)
+	float Coor_imp::GetRotate()
 	{
-		m_changed = true;
-		m_scale = scale;
+		return _rotate;
 	}
 
-	DND::Vector3 DND::Coor_imp::Get_Scale()
+	void Coor_imp::SetScale(Vector2 scale)
 	{
-		return m_scale;
+		_changed = true;
+		_scale = scale;
 	}
 
-	DND::Vector3 DND::Coor_imp::Get_Position_This_To_World(Vector3 point)
+	Vector2 Coor_imp::GetScale()
 	{
-		if (m_changed)
+		return _scale;
+	}
+
+	Vector2 Coor_imp::ThisToWorld(Vector2 point)
+	{
+		if (_changed)
 			_update_matrix();
 
-		return m_parent ?
-			m_parent->Get_Position_This_To_World(Get_Position_This_To_Parent(point)) :
-			Get_Position_This_To_Parent(point);
+		return _parent ?
+			_parent->ThisToWorld(ThisToParent(point)) :
+		ThisToParent(point);
 	}
 
-	DND::Vector3 DND::Coor_imp::Get_Position_This_To_Parent(Vector3 point)
+	DND::Vector2 Coor_imp::ThisToParent(Vector2 point)
 	{
-		if (m_changed)
+		if (_changed)
 			_update_matrix();
 
-		XMVECTOR point_out = XMLoadFloat3((XMFLOAT3*)&point);
+		XMVECTOR point_out = XMLoadFloat3(&XMFLOAT3(point.a, point.b, 0));
 
-		XMMATRIX mat = XMLoadFloat4x4(&m_mat);
+		XMMATRIX mat = XMLoadFloat4x4(&_mat);
 		point_out = XMVector3TransformCoord(point_out, mat);
 
-		return Vector3(XMVectorGetX(point_out), XMVectorGetY(point_out), XMVectorGetZ(point_out));
+		return Vector2(XMVectorGetX(point_out), XMVectorGetY(point_out));
 	}
 
-	DND::Vector3 DND::Coor_imp::Get_Position_World_To_This(Vector3 point)
+	Vector2 Coor_imp::WorldToThis(Vector2 point)
 	{
-		if (m_changed)
+		if (_changed)
 			_update_matrix();
 
-		return m_parent ?
-			Get_Position_Parent_To_This(m_parent->Get_Position_World_To_This(point)) :
-			Get_Position_Parent_To_This(point);
+		return _parent ?
+			ParentToThis(_parent->WorldToThis(point)) :
+		ParentToThis(point);
 	}
 
-	DND::Vector3 DND::Coor_imp::Get_Position_Parent_To_This(Vector3 point)
+	DND::Vector2 Coor_imp::ParentToThis(Vector2 point)
 	{
-		if (m_changed)
+		if (_changed)
 			_update_matrix();
 
-		XMVECTOR point_out = XMLoadFloat3((XMFLOAT3*)&point);
+		XMVECTOR point_out = XMLoadFloat3(&XMFLOAT3(point.a, point.b, 0));
 
-		XMMATRIX mat = XMLoadFloat4x4(&m_mat_inv);
+		XMMATRIX mat = XMLoadFloat4x4(&_mat_inv);
 		point_out = XMVector3TransformCoord(point_out, mat);
 
-		return Vector3(XMVectorGetX(point_out), XMVectorGetY(point_out), XMVectorGetZ(point_out));
+		return Vector2(XMVectorGetX(point_out), XMVectorGetY(point_out));
 	}
 
-	void DND::Coor_imp::_update_matrix()
+	Coor* Coor_imp::GetParent()
+	{
+		return _parent;
+	}
+
+	void Coor_imp::SetParent(Coor* coor)
+	{
+		_changed = true;
+		_parent = coor;
+	}
+
+	Coor* Coor_imp::Clone()
+	{
+		Coor_imp *coor = new Coor_imp();
+
+		/*System_imp* sys = System_imp::Get_Instance(); 
+		sys->m_list_coor.push_back(coor);*/
+
+		coor->_parent = _parent;//父坐标系
+		coor->_position = _position;//坐标
+		coor->_rotate = _rotate;//旋转
+		coor->_scale = _scale;//缩放
+		coor->_changed = true;
+
+		return coor;
+	}
+
+	void Coor_imp::_update_matrix()
 	{
 		//所有点先
-		m_changed = false;
+		_changed = false;
 
 		bool p = true;
 		bool r = true;
 		bool s = true;
 
-		/*Vector3 m_position;
-		if (m_auto_point.Is_Point())
-		{
-			
-			m_position = Vector2(m_auto_point.Get_Point()).To_Vector3(m_z);
-		}
-		else*/
-
-		Vector3 m_position = m_auto_point.Get_Position().To_Vector3(m_z);
-
-		if (m_position == Vector3())
-			p = false;
-		if (m_rotate == Vector3())
+		if (_position == Vector2())
+		p = false;///position一定变换
+		if (_rotate == 0)
 			r = false;
-		if (m_scale == Vector3(1.0f, 1.0f, 1.0f))
+		if (_scale == Vector2(1.0f, 1.0f))
 			s = false;
 
 		XMMATRIX mat = XMMatrixIdentity();
 		XMMATRIX mat_inv = XMMatrixIdentity();
 
+
 		if (r)
 		{
-			XMMATRIX rotate = XMMatrixRotationRollPitchYaw(-m_rotate.a, -m_rotate.b, -m_rotate.c);
+			XMMATRIX rotate = XMMatrixRotationZ(-_rotate);
 			mat *= rotate;
 		}
 		if (s)
 		{
-			XMMATRIX scale = XMMatrixScaling(m_scale.a, m_scale.b, m_scale.c);
+			XMMATRIX scale = XMMatrixScaling(_scale.a, _scale.b, 1.0f);
 			mat *= scale;
 		}
 		if (p)
 		{
-			XMMATRIX position = XMMatrixTranslation(m_position.a, m_position.b, m_position.c);
+			XMMATRIX position = XMMatrixTranslation(_position.a, _position.b, 0);
 			mat *= position;
 		}
 
 
 		if (p)
 		{
-			XMMATRIX position = XMMatrixTranslation(-m_position.a, -m_position.b, -m_position.c);
+			XMMATRIX position = XMMatrixTranslation(-_position.a, -_position.b, 0);
 			mat_inv *= position;
 		}
 		if (s)
 		{
-			XMMATRIX scale = XMMatrixScaling(1.0f / m_scale.a, 1.0f / m_scale.b, 1.0f / m_scale.c);
+			XMMATRIX scale = XMMatrixScaling(1.0f / _scale.a, 1.0f / _scale.b, 1.0f);
 			mat_inv *= scale;
 		}
 		if (r)
 		{
-			XMMATRIX rotate = XMMatrixRotationRollPitchYaw(m_rotate.a, m_rotate.b, m_rotate.c);
-			mat_inv *= rotate;
+			XMMATRIX rotate = XMMatrixRotationZ(_rotate);
+			mat *= rotate;
 		}
 
-		XMStoreFloat4x4(&m_mat, mat);
-		XMStoreFloat4x4(&m_mat_inv, mat_inv);
-	}
-
-	DND::Coor* DND::Coor_imp::Get_Parent()
-	{
-		return m_parent;
-	}
-
-	void DND::Coor_imp::Set_Parent(Coor* coor)
-	{
-		m_changed = true;
-		m_parent = coor;
-	}
-
-	Coor* DND::Coor_imp::Clone()
-	{
-		Coor_imp *coor = new Coor_imp();
-
-		System_imp* sys = System_imp::Get_Instance(); 
-		sys->m_list_coor.push_back(coor);
-
-		coor->m_parent = m_parent;//父坐标系
-		coor->m_auto_point = m_auto_point;//坐标
-		coor->m_z = m_z;//坐标
-		coor->m_rotate = m_rotate;//旋转
-		coor->m_scale = m_scale;//缩放
-
-		coor->m_changed = true;
-		return coor;
-	}
-
-
-	void Coor_imp::Set_Position(AutoPoint auto_point, float z)
-	{
-		m_changed = true;
-		m_auto_point = auto_point;
-		m_z = z;
-	}
-
-	DND::AutoPoint Coor_imp::Get_Auto_Point()
-	{
-		return m_auto_point;
-	}
-
-
-
-	DND::AutoPoint Coor_imp::Get_AutoPoint_This_To_World(AutoPoint point)
-	{
-		Vector3 p;
-		if (point.Is_Point())
-		{
-			p = Vector2(point.Get_Point()).To_Vector3();
-		}
-		else
-			p = point.Get_Position().To_Vector3();
-
-		p = Get_Position_This_To_World(p);
-
-		if (point.Is_Point())
-		{
-			return AutoPoint(static_cast<int>(p.a), static_cast<int>(p.b));
-		}
-		else
-		{
-			return AutoPoint(p.a, p.b);
-		}
-	}
-
-	DND::AutoPoint Coor_imp::Get_AutoPoint_This_To_Parent(AutoPoint point)
-	{
-		Vector3 p;
-		if (point.Is_Point())
-		{
-			p = Vector2(point.Get_Point()).To_Vector3();
-		}
-		else
-			p = point.Get_Position().To_Vector3();
-
-		p = Get_Position_This_To_Parent(p);
-
-		if (point.Is_Point())
-		{
-			return AutoPoint(static_cast<int>(p.a), static_cast<int>(p.b));
-		}
-		else
-		{
-			return AutoPoint(p.a, p.b);
-		}
-	}
-
-	DND::AutoPoint Coor_imp::Get_AutoPoint_World_To_This(AutoPoint point)
-	{
-		Vector3 p;
-		if (point.Is_Point())
-		{
-			p = Vector2(point.Get_Point()).To_Vector3();
-		}
-		else
-			p = point.Get_Position().To_Vector3();
-
-		p = Get_Position_World_To_This(p);
-
-		if (point.Is_Point())
-		{
-			return AutoPoint(static_cast<int>(p.a), static_cast<int>(p.b));
-		}
-		else
-		{
-			return AutoPoint(p.a, p.b);
-		}
-	}
-
-	DND::AutoPoint Coor_imp::Get_AutoPoint_Parent_To_This(AutoPoint point)
-	{
-		Vector3 p;
-		if (point.Is_Point())
-		{
-			p = Vector2(point.Get_Point()).To_Vector3();
-		}
-		else
-			p = point.Get_Position().To_Vector3();
-
-		p = Get_Position_Parent_To_This(p);
-
-		if (point.Is_Point())
-		{
-			return AutoPoint(static_cast<int>(p.a), static_cast<int>(p.b));
-		}
-		else
-		{
-			return AutoPoint(p.a, p.b);
-		}
-	}
-
-	Coor_imp::Coor_imp()
-	{
-		m_parent = 0;
-		m_scale.a = m_scale.b = m_scale.c = 1.0f;
-		m_z = 0;
-		//m_auto_point = AutoPoint(0, 0);
-		//m_changed = true;
-		_update_matrix();
+		XMStoreFloat4x4(&_mat, mat);
+		XMStoreFloat4x4(&_mat_inv, mat_inv);
 	}
 
 }

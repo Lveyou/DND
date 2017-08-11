@@ -28,6 +28,43 @@ using namespace std;
 namespace DND
 {
 	class DirectX;
+	//2d 绘图
+	//sprite 顶点类型（其他地方会用到，所以放外面）
+	struct Vertex2D
+	{
+		XMFLOAT3 pos;
+		XMFLOAT4 color;
+		XMFLOAT2 t;
+	};
+	class Gfx2D
+	{
+	public:
+		void _init();
+		//创建输入布局
+		void _create_input_layout();
+		//编译 2d.fx 和初始化 2d shader
+		void _init_shader();
+		//重设wvp
+		void _reset_wvp();
+		Gfx2D();
+
+		//input_layout
+		ID3D11InputLayout* m_input_layout;
+		//effect
+		ID3DX11Effect* m_effect;
+		//technique
+		ID3DX11EffectTechnique* m_technique;
+		//pass
+		ID3DX11EffectPass* m_pass;
+		//wvp
+		ID3DX11EffectMatrixVariable* m_wvp_variable;
+		//贴图
+		ID3DX11EffectShaderResourceVariable* m_color_texture;
+
+		void _release_all();
+
+		DirectX* directx;
+	};
 	class GfxSimple
 	{
 	public:
@@ -87,7 +124,8 @@ namespace DND
 
 	
 	};
-
+	class Canvas;
+	class Canvas_imp;
 	class DirectX
 	{
 	public:
@@ -150,9 +188,10 @@ namespace DND
 		//深度模板视图
 		ID3D11DepthStencilView* m_depth_stencil_view;
 		//Canvas 相关的内容
-		/*Canvas* _create_canvas(unsigned order);
-		map<unsigned, Canvas_imp*> m_canvass;
-		void _render_canvass();*/
+		Canvas* _create_canvas(UINT32 order);
+		map<UINT32, Canvas_imp*> m_canvass;
+		void _update_canvass();
+		void _render_canvass();
 		XMFLOAT4X4 m_wvp;
 		//垂直同步
 		bool m_vsync;
@@ -161,6 +200,7 @@ namespace DND
 		//Camera
 	//	Camera* m_camera;
 		GfxSimple* m_gfx_simple;
+		Gfx2D* m_gfx_2d;
 
 	private:
 	};

@@ -23,5 +23,8 @@
 #include "DNDColor.h"					//Color
 #include "DNDInput.h"					//Input
 #include "DNDImage.h"					//Image
+#include "DNDCoor.h"					//Coor
+#include "DNDSprite.h"					//Sprite
+#include "DNDCanvas.h"					//Canvas
 
 #endif

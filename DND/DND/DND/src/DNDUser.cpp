@@ -71,6 +71,13 @@ namespace DND
 	}
 
 
+	bool Vector2::operator==(const Vector2& vb)
+	{
+		//这里待改为std的一个方法
+		return (a - vb.a) < 0.001f && (b - vb.b) < 0.001f;
+	}
+
+
 	DND::Vector2 DND::Vector2::operator+(const Vector2& vb)
 	{
 		return Vector2(a + vb.a, b + vb.b);
@@ -262,7 +269,7 @@ namespace DND
 
 	}
 
-	Size Rect::Get_Size() const
+	Size Rect::GetSize() const
 	{
 		return Point_To_Size(p2 - p1);
 	}
@@ -291,6 +298,58 @@ namespace DND
 	Rect operator+(const Rect& rect, const Point& p)
 	{
 		return Rect(rect.p1 + p, rect.p2 + p);
+	}
+
+
+	//quad
+	Quad::Quad(Vector2 xy, Vector2 wh, bool center)
+	{
+		if (center)
+		{
+			Vector2 wh2 = wh * 0.5f;
+			v[0] = xy - wh2;
+			v[2] = xy + wh2;
+			v[1] = Vector2(v[2].a, v[0].b);
+			v[3] = Vector2(v[0].a, v[2].b);
+		}
+		else
+		{
+			v[0] = xy;
+			v[2] = xy + wh;
+			v[1] = Vector2(v[2].a, v[0].b);
+			v[3] = Vector2(v[0].a, v[2].b);
+		}
+	}
+
+	Quad::Quad(Vector2 xy, Vector2 wh, Vector2 anchor)
+	{
+		v[0] = xy - anchor;
+		v[2] = xy + wh - anchor;
+		v[1] = Vector2(v[2].a, v[0].b);
+		v[3] = Vector2(v[0].a, v[2].b);
+	}
+
+
+
+	Quad::Quad(Vector2 lb, Vector2 rt)
+	{
+		v[0] = lb;
+		v[2] = rt;
+		v[1] = Vector2(v[2].a, v[0].b);
+		v[3] = Vector2(v[0].a, v[2].b);
+	}
+
+	Quad::Quad()
+	{
+
+	}
+
+	Quad::Quad(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)	
+	{
+		v[0] = p0;
+		v[1] = p1;
+		v[2] = p2;
+		v[3] = p3;
 	}
 
 }
