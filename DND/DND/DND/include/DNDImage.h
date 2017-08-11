@@ -42,8 +42,8 @@ namespace DND
 		Image(const Image& b);
 		Size m_size;
 		DWORD* m_buffer;
-	
 	};
+
 }
 
 

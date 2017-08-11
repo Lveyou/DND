@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DND.h" />
+    <ClInclude Include="include\DNDCanvas.h" />
     <ClInclude Include="include\DNDColor.h" />
+    <ClInclude Include="include\DNDCoor.h" />
     <ClInclude Include="include\DNDDebug.h" />
     <ClInclude Include="include\DNDDLL.h" />
     <ClInclude Include="include\DNDError.h" />
@@ -30,18 +32,21 @@
     <ClInclude Include="include\DNDMain.h" />
     <ClInclude Include="include\DNDMath.h" />
     <ClInclude Include="include\DNDSingleton.h" />
+    <ClInclude Include="include\DNDSprite.h" />
     <ClInclude Include="include\DNDString.h" />
     <ClInclude Include="include\DNDSystem.h" />
     <ClInclude Include="include\DNDTime.h" />
     <ClInclude Include="include\DNDTypedef.h" />
     <ClInclude Include="include\DNDUser.h" />
     <ClInclude Include="include\DNDValue.h" />
+    <ClInclude Include="src\DNDCanvas_imp.h" />
     <ClInclude Include="src\DNDDirectX.h" />
     <ClInclude Include="src\DNDInput_imp.h" />
     <ClInclude Include="src\DNDSystem_imp.h" />
     <ClInclude Include="src\DNDTime_imp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DNDCanvas_imp.cpp" />
     <ClCompile Include="src\DNDColor.cpp" />
     <ClCompile Include="src\DNDDebug.cpp" />
     <ClCompile Include="src\DNDDirectX.cpp" />

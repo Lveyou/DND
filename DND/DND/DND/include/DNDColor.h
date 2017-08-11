@@ -12,8 +12,7 @@
 
 
 #include "DNDDLL.h"
-
-typedef unsigned long DWORD;
+#include "DNDTypedef.h"
 
 namespace DND
 {
