@@ -11,12 +11,12 @@ namespace DND
 
 	bool Input_imp::KeyUp(int vkey)
 	{
-		return !_key[vkey] && _key_pre[vkey];
+		return !_key[vkey] && _keyPre[vkey];
 	}
 
 	bool Input_imp::KeyDown(int vkey)
 	{
-		return _key[vkey] && !_key_pre[vkey];
+		return _key[vkey] && !_keyPre[vkey];
 	}
 
 	bool Input_imp::KeyState(int vkey)
@@ -34,8 +34,8 @@ namespace DND
 		if (sys->_hWnd)
 			ClientToScreen(sys->_hWnd, &point);
 		SetCursorPos(point.x, point.y - 1);
-		_mouse_position_last.x = p.x;
-		_mouse_position_last.y = p.x;
+		_mousePositionLast.x = p.x;
+		_mousePositionLast.y = p.x;
 	}
 
 	Point Input_imp::GetMousePosition()
@@ -54,14 +54,14 @@ namespace DND
 
 	Point Input_imp::GetMousePositionDelta()
 	{
-		if (_mouse_position_last.x == -1.0f)
+		if (_mousePositionLast.x == -1.0f)
 			return Point(0, 0);
-		return GetMousePosition() - _mouse_position_last;
+		return GetMousePosition() - _mousePositionLast;
 	}
 
 	int Input_imp::GetMouseWheelDelta()
 	{
-		return _mouse_wheel_delta / 120;
+		return _mouseWheelDelta / 120;
 	}
 
 	Input_imp::Input_imp()
@@ -69,24 +69,24 @@ namespace DND
 		for (int i = 0; i <= 0xfe; ++i)
 			_key[i] = NULL;
 		for (int i = 0; i <= 0xfe; ++i)
-			_key_pre[i] = NULL;
-		_mouse_position_last = Point(-1, -1);
-		_mouse_wheel_delta = 0;
-		_run_background = false;
+			_keyPre[i] = NULL;
+		_mousePositionLast = Point(-1, -1);
+		_mouseWheelDelta = 0;
+		_runBackground = false;
 	}
 
 	void Input_imp::_calc_mouse()
 	{
-		_mouse_position_last = GetMousePosition();
+		_mousePositionLast = GetMousePosition();
 	}
 
 	void Input_imp::_input_run()
 	{
-		if (_run_background || Game::Get()->sys->IsFoucs())
+		if (_runBackground || Game::Get()->sys->IsFoucs())
 		{
 			//VK码从0x01开始（上一帧和当前帧）
 			for (int i = 1; i <= 0xfe; ++i)
-				_key_pre[i] = _key[i];
+				_keyPre[i] = _key[i];
 			for (int i = 1; i <= 0xfe; ++i)
 				_key[i] = KEYDOWN(i);
 		}
@@ -94,7 +94,7 @@ namespace DND
 
 	void Input_imp::SetRunBackground(bool run /*= false*/)
 	{
-		_run_background = run;
+		_runBackground = run;
 	}
 
 }

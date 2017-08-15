@@ -27,7 +27,7 @@ namespace DND
 		virtual Sprite* CreateSprite(UINT32 imgID,const Quad& quad, Color color = Color::WHITE) override;
 		virtual void RegisterImageAll(UINT32 imgID, const Image* img) override;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) override;
-		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) override;
+		virtual void RegisterImageRect(UINT32 registerID, UINT32 formID, const Rect& rect) override;
 
 		Canvas_imp(UINT32 order);
 		void _render();
@@ -37,15 +37,15 @@ namespace DND
 
 		UINT32 _order;
 		//all_sprite
-		list<Sprite*> _all_sprite;
+		list<Sprite*> _allSprite;
 		//Sprites 按 绘制顺序（小的先画） 存所有 sprite
 		multimap<int, Sprite*> _sprites;
 
 		
 		//顶点缓存
-		ID3D11Buffer* _buffer_vertex;
+		ID3D11Buffer* _bufferVertex;
 		//顶点缓存(内存区)大小
-		unsigned _vertex_size;
+		unsigned _vertexSize;
 		//顶点内存区
 		Vertex2D* _vertexs;
 		//坐标系
@@ -54,9 +54,9 @@ namespace DND
 		Texture* _tex;
 
 		//用于系统注册idyon
-		unsigned _system_use_id;
+		unsigned _systemUseID;
 		//字符精灵表
-		vector<CharSpriteNode> _char_sprites;
+		vector<CharSpriteNode> _charSprites;
 	};
 
 }

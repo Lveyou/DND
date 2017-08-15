@@ -5,6 +5,7 @@
 
 //other:
 //17-07-26: 数学相关函数。 - Lveyou
+//17-08-15: 随机数和极值 需改为 std方法
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_MATH_H_
@@ -19,27 +20,27 @@ namespace DND
 	class DLL_API Math
 	{
 	public:
-		static UINT32 Get_Pow2_Large(UINT32 var);
-		static UINT32 Get_Unsigned_Length(UINT32 var);
-		static UINT32 Get_Int_Length(int var);
-		static bool Test_Collision_Rect_And_Rect(const Rect& r0, const Rect& r1);
-		static bool Test_Collision_Rect_And_Rect(const Vector4& r0, const Vector4& r1);
-		static bool Test_Collision_Dot_In_Rect(const Point& dot, const Rect& rect);
-		static bool Test_Collision_Dot_In_Rect(const Vector2& dot, const Vector4& rect);
-		static float Get_PI();
-		static float Inv_Sqrt(float x);
-		static int Get_Rand_Int(int min, int max);//返回[min,max]区间的随机数
-		static float Get_Rand_Float(float min, float max);//此函数尚未测试正确性
-		static void Set_Seed(UINT32 seed);//设置种子
-		static void Swap_Int(int& a, int& b);
-		static void Swap_Float(float& a, float& b);
-		static float Get_Between(float var, float min, float max);//取上界和下界，包含
-		static bool Test_Collision_Ray_And_Triangle(const Vector3& orig, const Vector3& dir,
+		static UINT32 GetPow2Large(UINT32 var);
+		static UINT32 GetUIntLength(UINT32 var);
+		static UINT32 GetIntLength(int var);
+		static bool TestCollisionRectAndRect(const Rect& r0, const Rect& r1);
+		static bool TestCollisionRectAndRect(const Vector4& r0, const Vector4& r1);
+		static bool TestCollisionDotInRect(const Point& dot, const Rect& rect);
+		static bool TestCollisionDotInRect(const Vector2& dot, const Vector4& rect);
+		static float GetPI();
+		static float InvSqrt(float x);
+		static int GetRandInt(int min, int max);//返回[min,max]区间的随机数
+		static float GetRandFloat(float min, float max);//此函数尚未测试正确性
+		static void SetSeed(UINT32 seed);//设置种子
+		static void SwapInt(int& a, int& b);
+		static void SwapFloat(float& a, float& b);
+		static float GetBetween(float var, float min, float max);//取上界和下界，包含
+		static bool TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir,
 			const Vector3& v0, const Vector3& v1, const Vector3& v2,
 			float& t, float& u, float& v);//射线与三角形相交
-		static bool Test_Collision_Ray_And_Triangle(const Vector3& orig, const Vector3& dir,
+		static bool TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir,
 			const Vector3& v0, const Vector3& v1, const Vector3& v2);//射线与三角形相交(不返回参数)
-		static float Get_Float_Min();
+		static float GetFloatMin();
 	
 	};
 }

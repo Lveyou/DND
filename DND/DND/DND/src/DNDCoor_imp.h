@@ -45,7 +45,7 @@ namespace DND
 		XMFLOAT2 _scale;//Ëõ·Å
 
 		XMFLOAT4X4 _mat;
-		XMFLOAT4X4 _mat_inv;
+		XMFLOAT4X4 _matInv;
 
 	
 		void _update_matrix();

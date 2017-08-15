@@ -32,13 +32,13 @@ namespace DND
 
 		unsigned len = ARRAYSIZE(layout);
 		D3DX11_PASS_DESC pass_desc;
-		m_pass->GetDesc(&pass_desc);
+		_pass->GetDesc(&pass_desc);
 
-		if (FAILED(directx->m_device->CreateInputLayout(
+		if (FAILED(directx->_device->CreateInputLayout(
 			layout, len,
 			pass_desc.pIAInputSignature,
 			pass_desc.IAInputSignatureSize,
-			&m_input_layout)))
+			&_inputLayout)))
 		{
 			assert(0 && L"创建simple 输入布局 失败！");
 			return;
@@ -70,7 +70,7 @@ namespace DND
 		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
 			compiled_shader->GetBufferPointer(),
 			compiled_shader->GetBufferSize(),
-			0, directx->m_device, &m_effect)),
+			0, directx->_device, &_effect)),
 			ERROR_00045);
 
 		if (compiled_shader)
@@ -78,52 +78,52 @@ namespace DND
 		if (error_message)
 			error_message->Release();
 
-		m_technique = m_effect->GetTechniqueByName("main11");
-		dnd_assert(m_technique, ERROR_00038);
+		_technique = _effect->GetTechniqueByName("main11");
+		dnd_assert(_technique, ERROR_00038);
 
-		m_pass = m_technique->GetPassByName("p0");
-		dnd_assert(m_pass, ERROR_00039);
+		_pass = _technique->GetPassByName("p0");
+		dnd_assert(_pass, ERROR_00039);
 
 
-		ID3DX11EffectVariable* variable = m_effect->GetVariableByName("wvp");
-		m_wvp_variable = variable->AsMatrix();
-		dnd_assert(m_wvp_variable->IsValid(), ERROR_00040);
+		ID3DX11EffectVariable* variable = _effect->GetVariableByName("wvp");
+		_wvpVariable = variable->AsMatrix();
+		dnd_assert(_wvpVariable->IsValid(), ERROR_00040);
 		_reset_wvp();
 
 
 		variable = NULL;
-		variable = m_effect->GetVariableByName("ColorTexture");
+		variable = _effect->GetVariableByName("ColorTexture");
 		dnd_assert(variable, ERROR_00041);
 		
-		m_color_texture = variable->AsShaderResource();
-		dnd_assert(m_color_texture, ERROR_00042);
+		_colorTexture = variable->AsShaderResource();
+		dnd_assert(_colorTexture, ERROR_00042);
 			
 		
 	}
 
 	void Gfx2D::_reset_wvp()
 	{
-		XMMATRIX wvp = XMLoadFloat4x4(&directx->m_wvp);
-		m_wvp_variable->SetMatrix((float*)&wvp);
+		XMMATRIX wvp = XMLoadFloat4x4(&directx->_wvp);
+		_wvpVariable->SetMatrix((float*)&wvp);
 		//m_pass->Apply(0, directx->m_device_context);
 	}
 
 	Gfx2D::Gfx2D()
 	{
-		m_input_layout = NULL;
-		m_effect = NULL;
-		m_technique = NULL;
-		m_pass = NULL;
-		m_wvp_variable = NULL;
-		m_color_texture = NULL;
+		_inputLayout = NULL;
+		_effect = NULL;
+		_technique = NULL;
+		_pass = NULL;
+		_wvpVariable = NULL;
+		_colorTexture = NULL;
 		//此类只在dx初始化后使用
 		directx = Game::Get()->_dx; 
 	}
 
 	void Gfx2D::_release_all()
 	{
-		m_input_layout->Release();
-		m_effect->Release();	
+		_inputLayout->Release();
+		_effect->Release();	
 	}
 
 	void GfxSimple::_create_vertex_buffer_dot()
@@ -132,33 +132,33 @@ namespace DND
 		ZeroMemory(&desc_dot, sizeof(desc_dot));
 
 		desc_dot.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		desc_dot.ByteWidth = sizeof(VertexSimple) * size_dots;
+		desc_dot.ByteWidth = sizeof(VertexSimple) * _sizeDots;
 		desc_dot.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		desc_dot.MiscFlags = 0;
 		desc_dot.StructureByteStride = 0;
 		desc_dot.Usage = D3D11_USAGE_DYNAMIC;
 
-		dnd_assert(!FAILED(directx->m_device->CreateBuffer(&desc_dot, NULL, &buffer_dots)),
+		dnd_assert(!FAILED(directx->_device->CreateBuffer(&desc_dot, NULL, &_bufferDots)),
 			ERROR_00027);
 	}
 
 	GfxSimple::GfxSimple()
 	{
-		size_dots = 1024;
-		size_lines = 1024;
-		vertex_dots = new VertexSimple[size_dots];
-		vertex_lines = new VertexSimple[size_lines];
-		len_dots = 0;
-		len_lines = 0;
+		_sizeDots = 1024;
+		_sizeLines = 1024;
+		_vertexDots = new VertexSimple[_sizeDots];
+		_vertexLines = new VertexSimple[_sizeLines];
+		_lenDots = 0;
+		_lenLines = 0;
 
 
-		buffer_dots = NULL;
-		buffer_lines = NULL;
+		_bufferDots = NULL;
+		_bufferLines = NULL;
 	
-		input_layout = NULL;
-		effect = NULL;
-		technique = NULL;
-		pass = NULL;
+		_inputLayout = NULL;
+		_effect = NULL;
+		_technique = NULL;
+		_pass = NULL;
 
 		//此类只在dx初始化后使用
 		directx = Game::Get()->_dx;
@@ -166,16 +166,16 @@ namespace DND
 
 	void GfxSimple::_release_vertex_buffer_line()
 	{
-		dnd_assert(buffer_lines, ERROR_00030);
-		buffer_lines->Release();
-		buffer_lines = NULL;
+		dnd_assert(_bufferLines, ERROR_00030);
+		_bufferLines->Release();
+		_bufferLines = NULL;
 	}
 
 	void GfxSimple::_update()
 	{
 		D3D11_MAPPED_SUBRESOURCE res_dot;
-		if (FAILED(directx->m_device_context->Map(
-			(ID3D11Resource*)buffer_dots, 0,
+		if (FAILED(directx->_deviceContext->Map(
+			(ID3D11Resource*)_bufferDots, 0,
 			D3D11_MAP_WRITE_DISCARD, 0,
 			&res_dot)))
 		{
@@ -187,15 +187,15 @@ namespace DND
 		//{
 		//	((VertexSimple*)res_dot.pData)[i] = vertex_dots[i];
 		//}
-		memcpy(res_dot.pData, vertex_dots, len_dots*sizeof(VertexSimple));
+		memcpy(res_dot.pData, _vertexDots, _lenDots*sizeof(VertexSimple));
 
-		directx->m_device_context->Unmap(
-			(ID3D11Resource*)buffer_dots, 0);
+		directx->_deviceContext->Unmap(
+			(ID3D11Resource*)_bufferDots, 0);
 
 
 		D3D11_MAPPED_SUBRESOURCE res_line;
-		if (FAILED(directx->m_device_context->Map(
-			(ID3D11Resource*)buffer_lines, 0,
+		if (FAILED(directx->_deviceContext->Map(
+			(ID3D11Resource*)_bufferLines, 0,
 			D3D11_MAP_WRITE_DISCARD, 0,
 			&res_line)))
 		{
@@ -203,10 +203,10 @@ namespace DND
 			return;
 		}
 
-		memcpy(res_line.pData, vertex_lines, len_lines*sizeof(VertexSimple));
+		memcpy(res_line.pData, _vertexLines, _lenLines*sizeof(VertexSimple));
 
-		directx->m_device_context->Unmap(
-			(ID3D11Resource*)buffer_lines, 0);
+		directx->_deviceContext->Unmap(
+			(ID3D11Resource*)_bufferLines, 0);
 		/*directx->m_device_context->UpdateSubresource(
 		(ID3D11Resource*)buffer_dots, 0, NULL,
 		vertex_dots, 0, 0);
@@ -218,10 +218,10 @@ namespace DND
 
 	void GfxSimple::_release_vertex_buffer_dot()
 	{
-		dnd_assert(buffer_dots, ERROR_00029);
+		dnd_assert(_bufferDots, ERROR_00029);
 		
-		buffer_dots->Release();
-		buffer_dots = NULL;
+		_bufferDots->Release();
+		_bufferDots = NULL;
 	}
 
 	void GfxSimple::_create_vertex_buffer_line()
@@ -230,13 +230,13 @@ namespace DND
 		ZeroMemory(&desc_line, sizeof(desc_line));
 
 		desc_line.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		desc_line.ByteWidth = sizeof(VertexSimple) * size_lines;
+		desc_line.ByteWidth = sizeof(VertexSimple) * _sizeLines;
 		desc_line.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		desc_line.MiscFlags = 0;
 		desc_line.StructureByteStride = 0;
 		desc_line.Usage = D3D11_USAGE_DYNAMIC;
 
-		dnd_assert(!FAILED(directx->m_device->CreateBuffer(&desc_line, NULL, &buffer_lines)),
+		dnd_assert(!FAILED(directx->_device->CreateBuffer(&desc_line, NULL, &_bufferLines)),
 			ERROR_00028);
 	}
 
@@ -246,75 +246,75 @@ namespace DND
 		unsigned offset = 0;
 
 
-		directx->m_device_context->IASetInputLayout(input_layout);
-		directx->m_device_context->IASetVertexBuffers(0, 1, &buffer_dots, &stride, &offset);
-		directx->m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-		directx->m_device_context->Draw(len_dots, 0);
+		directx->_deviceContext->IASetInputLayout(_inputLayout);
+		directx->_deviceContext->IASetVertexBuffers(0, 1, &_bufferDots, &stride, &offset);
+		directx->_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+		directx->_deviceContext->Draw(_lenDots, 0);
 
-		len_dots = 0;
+		_lenDots = 0;
 
-		directx->m_device_context->IASetInputLayout(input_layout);
-		directx->m_device_context->IASetVertexBuffers(0, 1, &buffer_lines, &stride, &offset);
-		directx->m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		directx->_deviceContext->IASetInputLayout(_inputLayout);
+		directx->_deviceContext->IASetVertexBuffers(0, 1, &_bufferLines, &stride, &offset);
+		directx->_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 
-		directx->m_device_context->Draw(len_lines, 0);
+		directx->_deviceContext->Draw(_lenLines, 0);
 
-		len_lines = 0;
+		_lenLines = 0;
 	}
 
 	void GfxSimple::_add_dot(XMFLOAT3 pos, XMFLOAT4 color)
 	{
-		if (len_dots >= size_dots)
+		if (_lenDots >= _sizeDots)
 		{
-			VertexSimple* temp = new VertexSimple[size_dots <<= 1];
-			for (unsigned i = 0; i < len_dots; ++i)
+			VertexSimple* temp = new VertexSimple[_sizeDots <<= 1];
+			for (unsigned i = 0; i < _lenDots; ++i)
 			{
-				temp[i] = vertex_dots[i];
+				temp[i] = _vertexDots[i];
 			}
-			delete[] vertex_dots;
-			vertex_dots = temp;
+			delete[] _vertexDots;
+			_vertexDots = temp;
 
 			_release_vertex_buffer_dot();
 			_create_vertex_buffer_dot();
 		}
-		vertex_dots[len_dots].pos = pos;
-		vertex_dots[len_dots++].color = color;
+		_vertexDots[_lenDots].pos = pos;
+		_vertexDots[_lenDots++].color = color;
 
 	}
 
 	void GfxSimple::_release_all()
 	{
-		input_layout->Release();
-		effect->Release();
+		_inputLayout->Release();
+		_effect->Release();
 
-		buffer_lines->Release();
-		buffer_dots->Release();
+		_bufferLines->Release();
+		_bufferDots->Release();
 
-		delete[] vertex_lines;
-		delete[] vertex_dots;
+		delete[] _vertexLines;
+		delete[] _vertexDots;
 	}
 
 	void GfxSimple::_add_line(XMFLOAT3 pos1, XMFLOAT3 pos2, XMFLOAT4 color)
 	{
-		if (len_lines >= size_lines)
+		if (_lenLines >= _sizeLines)
 		{
-			VertexSimple* temp = new VertexSimple[size_lines <<= 1];
-			for (unsigned i = 0; i < len_lines; ++i)
+			VertexSimple* temp = new VertexSimple[_sizeLines <<= 1];
+			for (unsigned i = 0; i < _lenLines; ++i)
 			{
-				temp[i] = vertex_dots[i];
+				temp[i] = _vertexDots[i];
 			}
-			delete[] vertex_lines;
-			vertex_lines = temp;
+			delete[] _vertexLines;
+			_vertexLines = temp;
 
 			_release_vertex_buffer_line();
 			_create_vertex_buffer_line();
 		}
 
-		vertex_lines[len_lines].pos = pos1;
-		vertex_lines[len_lines++].color = color;
-		vertex_lines[len_lines].pos = pos2;
-		vertex_lines[len_lines++].color = color;
+		_vertexLines[_lenLines].pos = pos1;
+		_vertexLines[_lenLines++].color = color;
+		_vertexLines[_lenLines].pos = pos2;
+		_vertexLines[_lenLines++].color = color;
 	}
 
 	void GfxSimple::_create_input_layout()
@@ -328,13 +328,13 @@ namespace DND
 
 		unsigned len = ARRAYSIZE(layout);
 		D3DX11_PASS_DESC pass_desc;
-		pass->GetDesc(&pass_desc);
+		_pass->GetDesc(&pass_desc);
 
-		dnd_assert(!FAILED(directx->m_device->CreateInputLayout(
+		dnd_assert(!FAILED(directx->_device->CreateInputLayout(
 			layout, len,
 			pass_desc.pIAInputSignature,
 			pass_desc.IAInputSignatureSize,
-			&input_layout)),
+			&_inputLayout)),
 			ERROR_00033);
 	}
 
@@ -363,7 +363,7 @@ namespace DND
 		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
 			compiled_shader->GetBufferPointer(),
 			compiled_shader->GetBufferSize(),
-			0, directx->m_device, &effect)),
+			0, directx->_device, &_effect)),
 				ERROR_00032);
 
 		if (compiled_shader)
@@ -371,16 +371,16 @@ namespace DND
 		if (error_message)
 			error_message->Release();
 
-		technique = effect->GetTechniqueByName("main11");
-		dnd_assert(technique, ERROR_00034);
+		_technique = _effect->GetTechniqueByName("main11");
+		dnd_assert(_technique, ERROR_00034);
 		
-		pass = technique->GetPassByName("p0");
-		dnd_assert(pass, ERROR_00035);
+		_pass = _technique->GetPassByName("p0");
+		dnd_assert(_pass, ERROR_00035);
 		
 
-		ID3DX11EffectVariable* variable = effect->GetVariableByName("wvp");
-		wvp_variable = variable->AsMatrix();
-		dnd_assert(wvp_variable->IsValid(), ERROR_00036);
+		ID3DX11EffectVariable* variable = _effect->GetVariableByName("wvp");
+		_wvpVariable = variable->AsMatrix();
+		dnd_assert(_wvpVariable->IsValid(), ERROR_00036);
 
 		//一开始就设置好wvp
 		_reset_wvp();
@@ -388,8 +388,8 @@ namespace DND
 
 	void GfxSimple::_reset_wvp()
 	{
-		XMMATRIX wvp = XMLoadFloat4x4(&directx->m_wvp);
-		wvp_variable->SetMatrix((float*)&wvp);
+		XMMATRIX wvp = XMLoadFloat4x4(&directx->_wvp);
+		_wvpVariable->SetMatrix((float*)&wvp);
 		//pass->Apply(0, directx->m_device_context);
 	}
 
@@ -429,46 +429,46 @@ namespace DND
 		debug_notice(L"DND: directx init wvp ok!");
 
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		m_device_context->OMSetRenderTargets(1, &m_main_render_target_view, m_depth_stencil_view);
-		m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 0);
-		m_device_context->OMSetBlendState(m_blend_state, blendFactor, 0xffffffff);
-		m_device_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
+		_deviceContext->OMSetRenderTargets(1, &_mainRenderTargetView, _depthStencilView);
+		_deviceContext->OMSetDepthStencilState(_depthStencilState, 0);
+		_deviceContext->OMSetBlendState(_blendState, blendFactor, 0xffffffff);
+		_deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 		
 
-		m_gfx_simple = new GfxSimple;
-		m_gfx_simple->_init();
+		_gfxSimple = new GfxSimple;
+		_gfxSimple->_init();
 		debug_notice(L"DND: GfxSimple init all ok!");
 
-		m_gfx_2d = new Gfx2D;
-		m_gfx_2d->_init();
+		_gfx2d = new Gfx2D;
+		_gfx2d->_init();
 		debug_notice(L"DND: Gfx2D init all ok!");
 
 		/*Gfx2D* gfx_2d = Gfx2D::Get_Instance();
 		gfx_2d->_init_2d_shader();
 		gfx_2d->_create_input_layout();*/
 		debug_notice(L"DND: directx init all ok!");
-		m_inited = true;
+		
 	}
 
 	void DirectX::_init_dxgi()
 	{
-		dnd_assert(!FAILED(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&m_factory)),
+		dnd_assert(!FAILED(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&_factory)),
 			ERROR_00012);
 		//////////////////////取得默认显卡///////////////////////////////////
-		dnd_assert(m_factory->EnumAdapters(0, &m_adapter) != DXGI_ERROR_NOT_FOUND,
+		dnd_assert(_factory->EnumAdapters(0, &_adapter) != DXGI_ERROR_NOT_FOUND,
 			ERROR_00013);
 		/////////////////////取得默认显示器//////////////////////////////////////////
-		dnd_assert(m_adapter->EnumOutputs(0, &m_output) != DXGI_ERROR_NOT_FOUND,
+		dnd_assert(_adapter->EnumOutputs(0, &_output) != DXGI_ERROR_NOT_FOUND,
 			ERROR_00014);
 		////////////////////获取显示器支持的全屏显示模式//////////////////////////
-		m_display_modes = 0;
-		m_display_mode_length = 0;
+		_displayModes = 0;
+		_displayModeLength = 0;
 		DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM;
 
-		m_output->GetDisplayModeList(format, 0, &m_display_mode_length, NULL);
-		m_display_modes = new DXGI_MODE_DESC[m_display_mode_length];
-		m_output->GetDisplayModeList(format, 0, &m_display_mode_length, m_display_modes);
+		_output->GetDisplayModeList(format, 0, &_displayModeLength, NULL);
+		_displayModes = new DXGI_MODE_DESC[_displayModeLength];
+		_output->GetDisplayModeList(format, 0, &_displayModeLength, _displayModes);
 
 		
 	}
@@ -476,9 +476,9 @@ namespace DND
 	bool DirectX::_check_support_full_screen_size(int w, int h)
 	{
 		//检测全屏支持分辨率
-		for (UINT i = 0; i < m_display_mode_length; ++i)
+		for (UINT i = 0; i < _displayModeLength; ++i)
 		{
-			if (m_display_modes[i].Width == w && m_display_modes[i].Height == h)
+			if (_displayModes[i].Width == w && _displayModes[i].Height == h)
 			{
 				return true;
 			}
@@ -509,32 +509,32 @@ namespace DND
 #endif
 		//创建设备， 设备关联 和 交换链（分开创建才能屏蔽alt+enter）
 		dnd_assert(!FAILED(D3D11CreateDevice(
-		m_adapter,
+		_adapter,
 		D3D_DRIVER_TYPE_UNKNOWN,
 		NULL, create_devive_flags,
 		array_feature, ARRAY_NUM,
 		D3D11_SDK_VERSION,
-		&m_device,
-		&m_feature_level,
-		&m_device_context)), ERROR_00015);
+		&_device,
+		&_featureLevel,
+		&_deviceContext)), ERROR_00015);
 
 		//创建交换链
-		ZeroMemory(&m_swap_chain_desc, sizeof(m_swap_chain_desc));
+		ZeroMemory(&_swapChainDesc, sizeof(_swapChainDesc));
 
-		m_swap_chain_desc.BufferCount = 1;
-		m_swap_chain_desc.BufferDesc.Width = sys->_windowSize.w;
-		m_swap_chain_desc.BufferDesc.Height = sys->_windowSize.h;
-		m_swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		m_swap_chain_desc.BufferDesc.RefreshRate.Numerator = 60;
-		m_swap_chain_desc.BufferDesc.RefreshRate.Denominator = 1;
-		m_swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		m_swap_chain_desc.OutputWindow = sys->_hWnd;
-		m_swap_chain_desc.SampleDesc.Count = 1;
-		m_swap_chain_desc.SampleDesc.Quality = 0;
-		m_swap_chain_desc.Windowed = true;
-		m_swap_chain_desc.Flags = 0;
+		_swapChainDesc.BufferCount = 1;
+		_swapChainDesc.BufferDesc.Width = sys->_windowSize.w;
+		_swapChainDesc.BufferDesc.Height = sys->_windowSize.h;
+		_swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		_swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+		_swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+		_swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		_swapChainDesc.OutputWindow = sys->_hWnd;
+		_swapChainDesc.SampleDesc.Count = 1;
+		_swapChainDesc.SampleDesc.Quality = 0;
+		_swapChainDesc.Windowed = true;
+		_swapChainDesc.Flags = 0;
 			//DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-		dnd_assert(!FAILED(m_factory->CreateSwapChain(m_device, &m_swap_chain_desc, &m_swap_chain)),
+		dnd_assert(!FAILED(_factory->CreateSwapChain(_device, &_swapChainDesc, &_swapChain)),
 			ERROR_00016);
 		
 
@@ -554,34 +554,34 @@ namespace DND
 
 		
 		_update_canvass();
-		m_gfx_simple->_update();
+		_gfxSimple->_update();
 
-		m_device_context->ClearRenderTargetView(m_main_render_target_view, clear_color);
-		m_device_context->ClearDepthStencilView(m_depth_stencil_view, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		_deviceContext->ClearRenderTargetView(_mainRenderTargetView, clear_color);
+		_deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		////三角形
-		m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		m_device_context->IASetInputLayout(m_gfx_2d->m_input_layout);
-		m_gfx_2d->m_pass->Apply(0, m_device_context);
+		_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		_deviceContext->IASetInputLayout(_gfx2d->_inputLayout);
+		_gfx2d->_pass->Apply(0, _deviceContext);
 		//设置顶点缓存 贴图就交给 canvas了
 		_render_canvass();
 
 		//点线绘图
-		m_gfx_simple->pass->Apply(0, m_device_context);
-		m_gfx_simple->_render();
+		_gfxSimple->_pass->Apply(0, _deviceContext);
+		_gfxSimple->_render();
 		
 	}
 
 	void DirectX::_init_render_target_view()
 	{
-		dnd_assert(!m_main_render_target_view, ERROR_00017);
+		dnd_assert(!_mainRenderTargetView, ERROR_00017);
 
 		//创建显示表面
 		ID3D11Texture2D *back_buffer;
-		dnd_assert(!FAILED(m_swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&back_buffer)), ERROR_00019);
+		dnd_assert(!FAILED(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&back_buffer)), ERROR_00019);
 		
 
-		dnd_assert(!FAILED(m_device->CreateRenderTargetView(back_buffer, NULL, &m_main_render_target_view)),
+		dnd_assert(!FAILED(_device->CreateRenderTargetView(back_buffer, NULL, &_mainRenderTargetView)),
 		ERROR_00020);
 		
 		back_buffer->Release();
@@ -590,10 +590,10 @@ namespace DND
 
 	void DirectX::_release_render_target_view()
 	{
-		dnd_assert(m_main_render_target_view, ERROR_00018);
+		dnd_assert(_mainRenderTargetView, ERROR_00018);
 		
-		m_main_render_target_view->Release();
-		m_main_render_target_view = NULL;
+		_mainRenderTargetView->Release();
+		_mainRenderTargetView = NULL;
 		
 	}
 
@@ -601,19 +601,19 @@ namespace DND
 
 	void DirectX::_release_depth_stencil_view()
 	{
-		dnd_assert(m_depth_stencil_view, ERROR_00021);
+		dnd_assert(_depthStencilView, ERROR_00021);
 
-		m_depth_stencil_view->Release();
-		m_depth_stencil_view = NULL;
+		_depthStencilView->Release();
+		_depthStencilView = NULL;
 	}
 
 
 	void DirectX::_present()
 	{
-		m_swap_chain->Present(m_vsync, 0);
-		if (m_size_change)
+		_swapChain->Present(_vsync, 0);
+		if (_sizeChange)
 		{
-			m_size_change = false;
+			_sizeChange = false;
 			_resize();
 		}
 	}
@@ -629,7 +629,7 @@ namespace DND
 		vp.TopLeftX = 0;
 		vp.TopLeftY = 0;
 
-		m_device_context->RSSetViewports(1, &vp);
+		_deviceContext->RSSetViewports(1, &vp);
 	}
 
 
@@ -666,7 +666,7 @@ namespace DND
 		init_data.SysMemPitch = 0;
 		init_data.SysMemSlicePitch = 0;
 
-		dnd_assert(!FAILED(m_device->CreateBuffer(&desc_index, &init_data, &m_index_buffer)),
+		dnd_assert(!FAILED(_device->CreateBuffer(&desc_index, &init_data, &_indexBuffer)),
 			ERROR_00022);
 		
 	}
@@ -689,7 +689,7 @@ namespace DND
 
 		
 
-		dnd_assert(!FAILED(m_device->CreateBlendState(&desc, &m_blend_state)),
+		dnd_assert(!FAILED(_device->CreateBlendState(&desc, &_blendState)),
 			ERROR_00023);
 		
 		
@@ -721,7 +721,7 @@ namespace DND
 		desc.StencilReadMask = 0xff;
 		desc.StencilWriteMask = 0xff;
 
-		dnd_assert(!FAILED(m_device->CreateDepthStencilState(&desc, &m_depth_stencil_state)),
+		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState)),
 			ERROR_00024);
 		
 		
@@ -743,7 +743,7 @@ namespace DND
 		
 		XMMATRIX mat_wvp = XMMatrixMultiply(mat_v, mat_p);
 		//XMMATRIX
-		XMStoreFloat4x4(&m_wvp, mat_wvp);
+		XMStoreFloat4x4(&_wvp, mat_wvp);
 	}
 
 	void DirectX::_init_depth_stencil_view()
@@ -764,7 +764,7 @@ namespace DND
 		desc.Usage = D3D11_USAGE_DEFAULT;
 
 		ID3D11Texture2D* depth_stencil_buffer;
-		dnd_assert(!FAILED(m_device->CreateTexture2D(&desc, 0, &depth_stencil_buffer)),
+		dnd_assert(!FAILED(_device->CreateTexture2D(&desc, 0, &depth_stencil_buffer)),
 			ERROR_00025);
 	
 		
@@ -775,7 +775,7 @@ namespace DND
 		desc2.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		desc2.Texture2D.MipSlice = 0;
 
-		dnd_assert(!FAILED(m_device->CreateDepthStencilView(depth_stencil_buffer, &desc2, &m_depth_stencil_view)),
+		dnd_assert(!FAILED(_device->CreateDepthStencilView(depth_stencil_buffer, &desc2, &_depthStencilView)),
 			ERROR_00026);
 		
 		depth_stencil_buffer->Release();
@@ -788,27 +788,27 @@ namespace DND
 		gfx_2d->_release_all();*/
 
 		
-		m_gfx_simple->_release_all();
+		_gfxSimple->_release_all();
 
-		m_device_context->OMSetBlendState(NULL, NULL, 0xffffffff);
-		m_blend_state->Release();
+		_deviceContext->OMSetBlendState(NULL, NULL, 0xffffffff);
+		_blendState->Release();
 
-		m_device_context->IASetIndexBuffer(NULL, DXGI_FORMAT_R32_UINT, 0);
-		m_index_buffer->Release();
+		_deviceContext->IASetIndexBuffer(NULL, DXGI_FORMAT_R32_UINT, 0);
+		_indexBuffer->Release();
 
-		m_device_context->OMSetDepthStencilState(NULL, 0);
-		m_depth_stencil_state->Release();
+		_deviceContext->OMSetDepthStencilState(NULL, 0);
+		_depthStencilState->Release();
 
 		_release_depth_stencil_view();
 		_release_render_target_view();
 		
-		m_swap_chain->Release();
-		m_device_context->Release();
+		_swapChain->Release();
+		_deviceContext->Release();
 
-		delete[] m_display_modes;
-		m_output->Release();
-		m_adapter->Release();
-		m_factory->Release();
+		delete[] _displayModes;
+		_output->Release();
+		_adapter->Release();
+		_factory->Release();
 
 		/*ID3D11Debug *d3dDebug;
 		HRESULT hr = m_device->QueryInterface(__uuidof(ID3D11Debug), (void**)(&d3dDebug));
@@ -816,7 +816,7 @@ namespace DND
 		{
 			hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 		}*/
-		m_device->Release();
+		_device->Release();
 
 	}
 
@@ -827,44 +827,44 @@ namespace DND
 		_release_depth_stencil_view();
 		_release_render_target_view();
 
-		m_swap_chain->ResizeBuffers(1,
+		_swapChain->ResizeBuffers(1,
 			s.w,
 			s.h,
-			m_swap_chain_desc.BufferDesc.Format,
-			m_swap_chain_desc.Flags
+			_swapChainDesc.BufferDesc.Format,
+			_swapChainDesc.Flags
 			);
 		_init_render_target_view();
 		_init_depth_stencil_view();
 
-		m_device_context->OMSetRenderTargets(1, &m_main_render_target_view, m_depth_stencil_view);
-		m_device_context->OMSetDepthStencilState(m_depth_stencil_state, 0);
+		_deviceContext->OMSetRenderTargets(1, &_mainRenderTargetView, _depthStencilView);
+		_deviceContext->OMSetDepthStencilState(_depthStencilState, 0);
 		_reset_viewport();
 		_reset_wvp();
-		m_gfx_simple->_reset_wvp();
-		m_gfx_2d->_reset_wvp();
+		_gfxSimple->_reset_wvp();
+		_gfx2d->_reset_wvp();
 
 	}
 
 	DirectX::DirectX()
 	{
-		m_inited = false;
+		
 		//d3d部分（现在已改为 使用默认显卡 和显示器）
-		m_factory = NULL;
-		m_adapter = NULL;
-		m_output = NULL;
-		m_display_modes = NULL;
-		m_display_mode_length = 0;
-		m_swap_chain = NULL;
-		m_device = NULL;
-		m_device_context = NULL;
-		m_main_render_target_view = NULL;
+		_factory = NULL;
+		_adapter = NULL;
+		_output = NULL;
+		_displayModes = NULL;
+		_displayModeLength = 0;
+		_swapChain = NULL;
+		_device = NULL;
+		_deviceContext = NULL;
+		_mainRenderTargetView = NULL;
 		//m_camera = NULL;
-		m_index_buffer = NULL;
-		m_blend_state = NULL;
-		m_depth_stencil_state = NULL;
-		m_depth_stencil_view = NULL;
-		m_vsync = false;
-		m_gfx_simple = NULL;
+		_indexBuffer = NULL;
+		_blendState = NULL;
+		_depthStencilState = NULL;
+		_depthStencilView = NULL;
+		_vsync = false;
+		_gfxSimple = NULL;
 		//m_wvp = 
 
 	}
@@ -880,13 +880,13 @@ namespace DND
 		//Get()->_dx->_present();
 
 		//todo: 这里待改为截图后GDI显示
-		m_swap_chain->Present(0, 0);
+		_swapChain->Present(0, 0);
 	}
 
 
 	void DirectX::_update_canvass()
 	{
-		for (auto iter = m_canvass.begin(); iter != m_canvass.end(); ++iter)
+		for (auto iter = _canvass.begin(); iter != _canvass.end(); ++iter)
 		{
 			Canvas_imp* temp = iter->second;
 			temp->_update();
@@ -896,7 +896,7 @@ namespace DND
 
 	void DirectX::_render_canvass()
 	{
-		for (auto iter = m_canvass.begin(); iter != m_canvass.end(); ++iter)
+		for (auto iter = _canvass.begin(); iter != _canvass.end(); ++iter)
 		{
 			Canvas_imp* temp = iter->second;
 			temp->_render();
@@ -906,14 +906,14 @@ namespace DND
 
 	Canvas* DirectX::_create_canvas(UINT32 order)
 	{
-		if (m_canvass[order])
+		if (_canvass[order])
 		{
 			assert(0 && L"此order已经被某canvas使用，不能重复创建！");
 			return NULL;
 		}
 
 		Canvas * temp = new Canvas_imp(order);
-		m_canvass[order] = (Canvas_imp*)temp;
+		_canvass[order] = (Canvas_imp*)temp;
 		return temp;
 	}
 

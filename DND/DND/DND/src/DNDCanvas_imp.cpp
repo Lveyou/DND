@@ -19,8 +19,8 @@ namespace DND
 
 	Sprite* Canvas_imp::CreateSprite(const Image* img)
 	{
-		RegisterImageAll(_system_use_id++, img);
-		return CreateSprite(_system_use_id - 1,
+		RegisterImageAll(_systemUseID++, img);
+		return CreateSprite(_systemUseID - 1,
 			Quad(Vector2(), Vector2(img->GetSize().w, img->GetSize().h),
 			true));
 	}
@@ -37,7 +37,7 @@ namespace DND
 		spr->_color[2] = color;
 		spr->_color[3] = color;
 		spr->_canvas = this;
-		_all_sprite.push_back(spr);
+		_allSprite.push_back(spr);
 		return spr;
 	}
 void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
@@ -58,15 +58,15 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 	void Canvas_imp::_render()
 	{
 		DirectX* directx = Game::Get()->_dx;
-		Gfx2D* gfx_2d = directx->m_gfx_2d;
+		Gfx2D* gfx_2d = directx->_gfx2d;
 
 		UINT a = sizeof(Vertex2D);
 		UINT b = 0;
-		directx->m_device_context->IASetVertexBuffers(0, 1, &_buffer_vertex, &a, &b);
+		directx->_deviceContext->IASetVertexBuffers(0, 1, &_bufferVertex, &a, &b);
 		
-		gfx_2d->m_color_texture->SetResource(_tex->_shader_resource_view);
+		gfx_2d->_colorTexture->SetResource(_tex->_shaderResourceView);
 
-		directx->m_device_context->DrawIndexed(_sprites.size() * 6, 0, 0);
+		directx->_deviceContext->DrawIndexed(_sprites.size() * 6, 0, 0);
 	}
 	void DND::Canvas_imp::_update()
 	{
@@ -76,7 +76,7 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 		//m_all_sprites => m_sprites
 		//这一步判断哪些 sprite需要 绘制 ，并按顺序插入下一步的 树中
 		Sprite* spr1;
-		for (auto iter1 = _all_sprite.begin(); iter1 != _all_sprite.end();)
+		for (auto iter1 = _allSprite.begin(); iter1 != _allSprite.end();)
 		{
 			spr1 = *iter1;
 
@@ -97,19 +97,19 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 			++iter1;
 		}
 		//
-		_all_sprite.remove(NULL);
+		_allSprite.remove(NULL);
 		//m_sprites => m_vertexs
 		//这一步 将 sprite变化到内存顶点缓存，并判断缓存大小，适时扩大（包括显卡顶点缓存）
 		//其中需要 顶点坐标进行变换（软的，没办法）
-		while (_sprites.size() * 4 > _vertex_size)
+		while (_sprites.size() * 4 > _vertexSize)
 		{
 			_release_vertex_buffer();
 			delete[] _vertexs;
 
-			_vertex_size <<= 1;
+			_vertexSize <<= 1;
 
 			_create_vertex_buffer();
-			_vertexs = new Vertex2D[_vertex_size];
+			_vertexs = new Vertex2D[_vertexSize];
 		}
 
 		/*float whk = static_cast<float>(System_imp::Get_Instance()->m_window_info.size.w) /
@@ -159,16 +159,16 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 		//从内存复制到 显存
 
 		D3D11_MAPPED_SUBRESOURCE res;
-		dnd_assert (!FAILED(directx->m_device_context->Map(
-			(ID3D11Resource*)_buffer_vertex, 0,
+		dnd_assert (!FAILED(directx->_deviceContext->Map(
+			(ID3D11Resource*)_bufferVertex, 0,
 			D3D11_MAP_WRITE_DISCARD, 0,
 			&res)),
 			ERROR_00043);
 
 		memcpy(res.pData, _vertexs, i*sizeof(Vertex2D));
 
-		directx->m_device_context->Unmap(
-			(ID3D11Resource*)_buffer_vertex, 0);
+		directx->_deviceContext->Unmap(
+			(ID3D11Resource*)_bufferVertex, 0);
 		
 	}
 	void DND::Canvas_imp::_create_vertex_buffer()
@@ -178,7 +178,7 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 		ZeroMemory(&desc, sizeof(desc));
 
 		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		desc.ByteWidth = sizeof(Vertex2D) * _vertex_size;
+		desc.ByteWidth = sizeof(Vertex2D) * _vertexSize;
 		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
@@ -186,17 +186,17 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 
 		DirectX* directx = Game::Get()->_dx;
 
-		dnd_assert( !FAILED(directx->m_device->CreateBuffer(&desc, NULL, &_buffer_vertex))
+		dnd_assert( !FAILED(directx->_device->CreateBuffer(&desc, NULL, &_bufferVertex))
 			,ERROR_00044);
 		
 	}
 
 	void DND::Canvas_imp::_release_vertex_buffer()
 	{
-		if (_buffer_vertex)
+		if (_bufferVertex)
 		{
-			_buffer_vertex->Release();
-			_buffer_vertex = NULL;
+			_bufferVertex->Release();
+			_bufferVertex = NULL;
 		}
 	}
 	
@@ -205,10 +205,10 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 		_order = order;
 		_tex = new Texture();//这一步会创建一个纹理
 
-		_vertex_size = 1024;
-		_vertexs = new Vertex2D[_vertex_size];
+		_vertexSize = 1024;
+		_vertexs = new Vertex2D[_vertexSize];
 
-		_system_use_id = CANVAS_SYS_ID_START;
+		_systemUseID = CANVAS_SYS_ID_START;
 		_create_vertex_buffer();
 
 		_coor = Coor::Create();

@@ -97,7 +97,7 @@ namespace DND
 
 		XMVECTOR point_out = XMLoadFloat2(&XMFLOAT2(point.a, point.b));
 
-		XMMATRIX mat = XMLoadFloat4x4(&_mat_inv);
+		XMMATRIX mat = XMLoadFloat4x4(&_matInv);
 		point_out = XMVector2TransformCoord(point_out, mat);
 
 		return Vector2(XMVectorGetX(point_out), XMVectorGetY(point_out));
@@ -145,7 +145,7 @@ namespace DND
 		XMMATRIX mat_inv = XMMatrixInverse(&determinant, mat);
 
 		XMStoreFloat4x4(&_mat, mat);
-		XMStoreFloat4x4(&_mat_inv, mat_inv);
+		XMStoreFloat4x4(&_matInv, mat_inv);
 	}
 
 }

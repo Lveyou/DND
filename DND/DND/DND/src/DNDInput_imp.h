@@ -32,11 +32,11 @@ namespace DND
 		void _calc_mouse();
 		void _input_run();//键盘检测逻辑
 		bool _key[0xff];//键盘消息
-		bool _key_pre[0xff];//上一帧的状态
+		bool _keyPre[0xff];//上一帧的状态
 
-		Point _mouse_position_last;
-		int _mouse_wheel_delta;
-		bool _run_background;
+		Point _mousePositionLast;
+		int _mouseWheelDelta;
+		bool _runBackground;
 	};
 }
 

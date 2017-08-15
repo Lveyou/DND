@@ -29,7 +29,7 @@ namespace DND
 
 		virtual void RegisterImageAll(UINT32 imgID, const Image* img) = 0;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) = 0;
-		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) = 0;
+		virtual void RegisterImageRect(UINT32 registerID, UINT32 formID, const Rect& rect) = 0;
 	};
 
 

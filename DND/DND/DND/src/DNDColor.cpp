@@ -54,7 +54,7 @@ namespace DND
 
 	Color DND::Color::Rand()
 	{
-		return Color(0xff << 24 | Math::Get_Rand_Int(0, 256) << 16 | Math::Get_Rand_Int(0, 256) << 8 | Math::Get_Rand_Int(0, 256));
+		return Color(0xff << 24 | Math::GetRandInt(0, 256) << 16 | Math::GetRandInt(0, 256) << 8 | Math::GetRandInt(0, 256));
 	}
 
 	DND::Color::Color(int A, int R, int G, int B)

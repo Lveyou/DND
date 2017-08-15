@@ -122,7 +122,7 @@ namespace DND
 				
 			}
 			//////////////////////////////重置滚轮状态//////////////////////////////////////
-			i->_mouse_wheel_delta = 0;
+			i->_mouseWheelDelta = 0;
 			//////////////////////////////计算real_delta///////////////////////////////////
 			t->_update_current();
 			t->_real_delta = t->_get_cl_delta();
@@ -193,7 +193,7 @@ namespace DND
 						GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
 						sys->_windowSize.w = rect.right - rect.left;
 						sys->_windowSize.h = rect.bottom - rect.top;
-						Get()->_dx->m_size_change = true;
+						Get()->_dx->_sizeChange = true;
 					}
 					break;
 				case SIZE_RESTORED:
@@ -204,7 +204,7 @@ namespace DND
 							GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
 							sys->_windowSize.w = rect.right - rect.left;
 							sys->_windowSize.h = rect.bottom - rect.top;
-							Get()->_dx->m_size_change = true;
+							Get()->_dx->_sizeChange = true;
 							wparam_pre = SIZE_RESTORED;
 						}
 					}
@@ -223,7 +223,7 @@ namespace DND
 				GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
 				sys->_windowSize.w = rect.right - rect.left;
 				sys->_windowSize.h = rect.bottom - rect.top;
-				Get()->_dx->m_size_change = true;
+				Get()->_dx->_sizeChange = true;
 			}		
 		}
 		return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -249,7 +249,7 @@ namespace DND
 			sys->_foucs = (LOWORD(wParam) != WA_INACTIVE);
 			break;
 		case WM_MOUSEWHEEL:
-			((Input_imp*)(Get()->input))->_mouse_wheel_delta += (short)HIWORD(wParam);
+			((Input_imp*)(Get()->input))->_mouseWheelDelta += (short)HIWORD(wParam);
 			break;
 		case WM_SIZE:
 		case WM_EXITSIZEMOVE:

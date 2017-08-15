@@ -118,7 +118,7 @@ namespace DND
 
 	void System_imp::SetVsync(bool vsync /*= true*/)
 	{
-		Game::Get()->_dx->m_vsync = vsync;
+		Game::Get()->_dx->_vsync = vsync;
 	}
 
 	void System_imp::SetWindowPoint(Point point)
@@ -133,7 +133,7 @@ namespace DND
 
 	void System_imp::RenderDot(Vector2 pos, Color color /*= Color::WHITE*/)
 	{
-		Game::Get()->_dx->m_gfx_simple->_add_dot(XMFLOAT3(pos.a, pos.b, 0),
+		Game::Get()->_dx->_gfxSimple->_add_dot(XMFLOAT3(pos.a, pos.b, 0),
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
 	}
 

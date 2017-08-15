@@ -36,18 +36,9 @@ void Test::_update()
 		if(d < 1)
 			d = 1;
 	}
-	//////////////////////////Sprite²âÊÔ//////////////////////////////////////////
-	static float rotate = 0;
-	if (input->KeyState(KeyCode::Q))
-		rotate -= 3.1415926f / 4 * time->GetRealDelta();
-	if (input->KeyState(KeyCode::E))
-		rotate += 3.1415926f / 4 * time->GetRealDelta();
-	spr_test->GetCoor()->SetScale(Vector2(d/2, d/2));
-	spr_test->GetCoor()->SetRotate(rotate);
+	//img_test->Render(Point(200,200));
 	spr_test->GetCoor()->SetPosition(Vector2(x,y));
 	spr_test->Render();
-
-	spr_bg1->Render();
 }
 
 void Test::_init()
@@ -66,18 +57,13 @@ void Test::_init()
 	sys->SetWindowStyle(WS_OVERLAPPEDWINDOW);
 		//WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
 	sys->ApplyWindow();
-	time->SetFPS(0);
-	sys->SetVsync(true);
+	time->SetFPS(120);
 
 	img_test = Image::Create(L"DND\\head.png");
-	img_bg1 = Image::Create(L"DND\\bg1.png");
-
 	spr_test = canvas->CreateSprite(img_test);
-	spr_test->SetOrder(1);
-	spr_bg1 = canvas->CreateSprite(img_bg1);
-	spr_bg1->GetCoor()->SetPosition(Vector2(400, 300));
+	//spr_test->GetCoor()->SetParent(NULL);
 	
-	
+	spr_test->GetCoor()->SetRotate(3.14f);
 }
 
 void Test::_release()

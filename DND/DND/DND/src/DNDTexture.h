@@ -29,10 +29,10 @@ namespace DND
 		float GetTu(UINT32 imageRectID, UINT32 index);
 		float GetTv(UINT32 imageRectID, UINT32 index);
 		ID3D11Texture2D* _texture;
-		ID3D11ShaderResourceView* _shader_resource_view;
+		ID3D11ShaderResourceView* _shaderResourceView;
 		UINT32 _size;
 		
-		map<unsigned, Rect> _image_rects;
+		map<unsigned, Rect> _imageRects;
 
 		bool _find_xy(const Size& size, Point& xy);
 
@@ -46,7 +46,7 @@ namespace DND
 
 		~Texture();
 		Image* _img;
-		Image* _img_temp;
+		Image* _imgTemp;
 	};
 }
 

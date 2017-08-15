@@ -69,7 +69,7 @@ namespace DND
 	String::String(const int b)
 	{
 		_init();
-		UINT32 len = Math::Get_Int_Length(b) + 1;
+		UINT32 len = Math::GetIntLength(b) + 1;
 		WCHAR* wcs = new WCHAR[len];
 		swprintf_s(wcs, len, L"%d", b);
 

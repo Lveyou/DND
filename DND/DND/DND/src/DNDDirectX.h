@@ -49,17 +49,17 @@ namespace DND
 		Gfx2D();
 
 		//input_layout
-		ID3D11InputLayout* m_input_layout;
+		ID3D11InputLayout* _inputLayout;
 		//effect
-		ID3DX11Effect* m_effect;
+		ID3DX11Effect* _effect;
 		//technique
-		ID3DX11EffectTechnique* m_technique;
+		ID3DX11EffectTechnique* _technique;
 		//pass
-		ID3DX11EffectPass* m_pass;
+		ID3DX11EffectPass* _pass;
 		//wvp
-		ID3DX11EffectMatrixVariable* m_wvp_variable;
+		ID3DX11EffectMatrixVariable* _wvpVariable;
 		//贴图
-		ID3DX11EffectShaderResourceVariable* m_color_texture;
+		ID3DX11EffectShaderResourceVariable* _colorTexture;
 
 		void _release_all();
 
@@ -99,26 +99,26 @@ namespace DND
 
 		GfxSimple();
 		//内存缓存
-		VertexSimple* vertex_dots;
-		VertexSimple* vertex_lines;
-		unsigned len_dots;
-		unsigned len_lines;
-		unsigned size_dots;
-		unsigned size_lines;
+		VertexSimple* _vertexDots;
+		VertexSimple* _vertexLines;
+		unsigned _lenDots;
+		unsigned _lenLines;
+		unsigned _sizeDots;
+		unsigned _sizeLines;
 		//顶点缓存
-		ID3D11Buffer* buffer_dots;
-		ID3D11Buffer* buffer_lines;
+		ID3D11Buffer* _bufferDots;
+		ID3D11Buffer* _bufferLines;
 
 		//input layout
-		ID3D11InputLayout* input_layout;
+		ID3D11InputLayout* _inputLayout;
 		//effect
-		ID3DX11Effect* effect;
+		ID3DX11Effect* _effect;
 		//technique
-		ID3DX11EffectTechnique* technique;
+		ID3DX11EffectTechnique* _technique;
 		//pass
-		ID3DX11EffectPass* pass;
+		ID3DX11EffectPass* _pass;
 		//wvp
-		ID3DX11EffectMatrixVariable* wvp_variable;
+		ID3DX11EffectMatrixVariable* _wvpVariable;
 
 		DirectX* directx;
 
@@ -131,7 +131,6 @@ namespace DND
 	public:
 		bool _check_support_full_screen_size(int w,int h);
 		//只能调用一次的
-		bool m_inited;
 		void _init();						//初始化directx所有
 		void _init_dxgi();					//初始化dxgi
 		void _init_device_and_swap_chain();	//创建设备和交换链
@@ -154,53 +153,53 @@ namespace DND
 
 		void _run_render();
 		//窗口大小发生改变,
-		bool m_size_change;
+		bool _sizeChange;
 		void _resize();
 		void _on_wm_paint();
 		DirectX();
 		//d3d部分（现在已改为 使用默认显卡 和显示器）
-		IDXGIFactory* m_factory;
+		IDXGIFactory* _factory;
 		//主显卡
-		IDXGIAdapter* m_adapter;
+		IDXGIAdapter* _adapter;
 		// 0编号显卡支持的output
-		IDXGIOutput* m_output;
+		IDXGIOutput* _output;
 		// 支持的全屏显示模式的数组
-		DXGI_MODE_DESC* m_display_modes;
-		UINT m_display_mode_length;
+		DXGI_MODE_DESC* _displayModes;
+		UINT _displayModeLength;
 		//交换链信息
-		DXGI_SWAP_CHAIN_DESC m_swap_chain_desc;
+		DXGI_SWAP_CHAIN_DESC _swapChainDesc;
 		//交换链
-		IDXGISwapChain* m_swap_chain;
+		IDXGISwapChain* _swapChain;
 		//device
-		ID3D11Device* m_device;
+		ID3D11Device* _device;
 		//device context
-		ID3D11DeviceContext* m_device_context;
+		ID3D11DeviceContext* _deviceContext;
 		//使用的dx特性版本
-		D3D_FEATURE_LEVEL m_feature_level;
+		D3D_FEATURE_LEVEL _featureLevel;
 		//主显示表面
-		ID3D11RenderTargetView* m_main_render_target_view;
+		ID3D11RenderTargetView* _mainRenderTargetView;
 		//默认索引缓存
-		ID3D11Buffer* m_index_buffer;
+		ID3D11Buffer* _indexBuffer;
 		//混合模式
-		ID3D11BlendState* m_blend_state;
+		ID3D11BlendState* _blendState;
 		//深度模板缓存
-		ID3D11DepthStencilState* m_depth_stencil_state;
+		ID3D11DepthStencilState* _depthStencilState;
 		//深度模板视图
-		ID3D11DepthStencilView* m_depth_stencil_view;
+		ID3D11DepthStencilView* _depthStencilView;
 		//Canvas 相关的内容
 		Canvas* _create_canvas(UINT32 order);
-		map<UINT32, Canvas_imp*> m_canvass;
+		map<UINT32, Canvas_imp*> _canvass;
 		void _update_canvass();
 		void _render_canvass();
-		XMFLOAT4X4 m_wvp;
+		XMFLOAT4X4 _wvp;
 		//垂直同步
-		bool m_vsync;
+		bool _vsync;
 
 		
 		//Camera
 	//	Camera* m_camera;
-		GfxSimple* m_gfx_simple;
-		Gfx2D* m_gfx_2d;
+		GfxSimple* _gfxSimple;
+		Gfx2D* _gfx2d;
 
 	private:
 	};

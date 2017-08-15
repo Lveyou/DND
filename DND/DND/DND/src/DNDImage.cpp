@@ -10,29 +10,29 @@ namespace DND
 	Image* Image::Create(Size size, Color color)
 	{
 		Image* img = new Image;
-		img->m_size = size;
-		img->m_buffer = new DWORD[(unsigned)size.w*(unsigned)size.h];
+		img->_size = size;
+		img->_buffer = new DWORD[(unsigned)size.w*(unsigned)size.h];
 
 		for (unsigned j = 0; j < size.w*size.h; j++)
-			img->m_buffer[j] = color.Get();
+			img->_buffer[j] = color.Get();
 
 		return img;
 	}
 
 	Image::~Image()
 	{
-		if (m_buffer)
-			delete[] m_buffer;
+		if (_buffer)
+			delete[] _buffer;
 	}
 
 	Size Image::GetSize() const
 	{
-		return m_size;
+		return _size;
 	}
 
 	const DWORD* Image::GetBuffer() const
 	{
-		return m_buffer;
+		return _buffer;
 	}
 
 	void Image::AddImage(const Image* img, const Point& tar_xy)
@@ -42,15 +42,15 @@ namespace DND
 
 	void Image::AddImageRect(const Image* img, const Rect& rect, const Point& tar_xy)
 	{
-		if (!img || !img->m_buffer)
+		if (!img || !img->_buffer)
 		{
 			debug_warn(L"DND: Image::AddImageRect传入了空指针！");
 			return;
 		}
 		Size s_size = rect.GetSize();
 
-		if ((tar_xy.x + s_size.w > m_size.w) ||
-			(tar_xy.y + s_size.h > m_size.h))
+		if ((tar_xy.x + s_size.w > _size.w) ||
+			(tar_xy.y + s_size.h > _size.h))
 		{
 			debug_warn(L"DND: Image::AddImageRect源图像过小！");
 			return;
@@ -64,7 +64,7 @@ namespace DND
 			m = 0;
 			for (int i = rect.p1.x; i < rect.p2.x; ++i, ++m)
 			{
-				m_buffer[(tar_xy.y + n) * m_size.w + tar_xy.x + m] = img->m_buffer[j * s_size.w + i];
+				_buffer[(tar_xy.y + n) * _size.w + tar_xy.x + m] = img->_buffer[j * s_size.w + i];
 			}
 
 		}
@@ -76,9 +76,9 @@ namespace DND
 	{
 		System* sys = Game::Get()->sys;
 	
-		for (UINT32 j = 0; j < m_size.h; ++j)
+		for (UINT32 j = 0; j < _size.h; ++j)
 		{
-			for (UINT32 i = 0; i < m_size.w; ++i)
+			for (UINT32 i = 0; i < _size.w; ++i)
 			{
 				sys->RenderDot(Vector2((float)(pos.x + i), (float)(pos.y + j)),
 					GetDotColor(Point(i, j)));
@@ -88,13 +88,13 @@ namespace DND
 
 	Color Image::GetDotColor(Point xy)
 	{
-		if ((UINT32)xy.x >= m_size.w || (UINT32)xy.y >= m_size.h)
+		if ((UINT32)xy.x >= _size.w || (UINT32)xy.y >= _size.h)
 		{
 			debug_warn(L"Image Get_Color 访问区域越界！");
 			return Color::WHITE;
 		}
 
-		return Color(m_buffer[xy.x + xy.y*m_size.w]);
+		return Color(_buffer[xy.x + xy.y*_size.w]);
 	}
 
 	void Image::SaveToPNG(const String& path)
@@ -144,14 +144,14 @@ namespace DND
 
 		unsigned bit_depth = 8;
 		unsigned pixel_byte = 4;
-		unsigned row_byte = m_size.w * pixel_byte;
+		unsigned row_byte = _size.w * pixel_byte;
 
 		//设置输出控制
 		png_init_io(png_ptr, fp);
 		
 
 		//设置图像属性
-		png_set_IHDR(png_ptr, info_ptr, m_size.w, m_size.h, bit_depth,
+		png_set_IHDR(png_ptr, info_ptr, _size.w, _size.h, bit_depth,
 			PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, //交错无
 			PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
@@ -159,18 +159,18 @@ namespace DND
 		png_write_info(png_ptr, info_ptr);
 
 		//获取行指针
-		png_bytepp row_pointers = (png_bytep*)malloc(m_size.h*sizeof(png_bytep));
+		png_bytepp row_pointers = (png_bytep*)malloc(_size.h*sizeof(png_bytep));
 
 		
-		for (unsigned x = 0; x < m_size.h; ++x)
+		for (unsigned x = 0; x < _size.h; ++x)
 		{//分配一行
 			row_pointers[x] = (png_bytep)malloc(row_byte);
 			for (unsigned y = 0; y < row_byte; y += pixel_byte)
 			{
-				row_pointers[x][y + 2] = ((unsigned char*)m_buffer)[x * row_byte + y + 0];
-				row_pointers[x][y + 1] = ((unsigned char*)m_buffer)[x * row_byte + y + 1];
-				row_pointers[x][y + 0] = ((unsigned char*)m_buffer)[x * row_byte + y + 2];
-				row_pointers[x][y + 3] = ((unsigned char*)m_buffer)[x * row_byte + y + 3];
+				row_pointers[x][y + 2] = ((unsigned char*)_buffer)[x * row_byte + y + 0];
+				row_pointers[x][y + 1] = ((unsigned char*)_buffer)[x * row_byte + y + 1];
+				row_pointers[x][y + 0] = ((unsigned char*)_buffer)[x * row_byte + y + 2];
+				row_pointers[x][y + 3] = ((unsigned char*)_buffer)[x * row_byte + y + 3];
 				/*row_pointers[x][y + 2] =
 					row_pointers[x][y + 1] =
 					row_pointers[x][y + 0] =
@@ -188,7 +188,7 @@ namespace DND
 
 	/*	delete[] row_pointers;
 		delete[] image;*/
-		for (unsigned x = 0; x < m_size.h; ++x)
+		for (unsigned x = 0; x < _size.h; ++x)
 		{//释放每行
 			free(row_pointers[x]);
 		}
@@ -288,9 +288,9 @@ namespace DND
 		int color_type = png_get_color_type(png_ptr, info_ptr);        //获得图片颜色
 
 																		//赋值image
-		img->m_size.w = w;
-		img->m_size.h = h;
-		img->m_buffer = new DWORD[w*h];
+		img->_size.w = w;
+		img->_size.h = h;
+		img->_buffer = new DWORD[w*h];
 
 		//从info 复制到 image
 		png_bytep *row_point = NULL;
@@ -304,13 +304,13 @@ namespace DND
 		for (unsigned x = 0; x < h; ++x)
 			for (unsigned y = 0; y < w*block_size; y += block_size)
 			{
-				((unsigned char*)img->m_buffer)[pos + 0] = row_point[x][y + 2];//b;
-				((unsigned char*)img->m_buffer)[pos + 1] = row_point[x][y + 1];//g
-				((unsigned char*)img->m_buffer)[pos + 2] = row_point[x][y + 0];//r
+				((unsigned char*)img->_buffer)[pos + 0] = row_point[x][y + 2];//b;
+				((unsigned char*)img->_buffer)[pos + 1] = row_point[x][y + 1];//g
+				((unsigned char*)img->_buffer)[pos + 2] = row_point[x][y + 0];//r
 				if (color_type == 6)
-					((unsigned char*)img->m_buffer)[pos + 3] = row_point[x][y + 3];//a
+					((unsigned char*)img->_buffer)[pos + 3] = row_point[x][y + 3];//a
 				else
-					((unsigned char*)img->m_buffer)[pos + 3] = 0xff;
+					((unsigned char*)img->_buffer)[pos + 3] = 0xff;
 				pos += 4;
 			}
 
@@ -328,15 +328,15 @@ namespace DND
 	Image* Image::Create(const Image* b)
 	{
 		Image* img = new Image;
-		img->m_size = b->m_size;
-		UINT32 len = img->m_size.w * img->m_size.h;
-		img->m_buffer = new DWORD[len];
-		memcpy_s(img->m_buffer, len*sizeof(DWORD), b->m_buffer, len*sizeof(DWORD));
+		img->_size = b->_size;
+		UINT32 len = img->_size.w * img->_size.h;
+		img->_buffer = new DWORD[len];
+		memcpy_s(img->_buffer, len*sizeof(DWORD), b->_buffer, len*sizeof(DWORD));
 
 		return img;
 	}
 
-	Image::Image() : m_buffer(0)
+	Image::Image() : _buffer(0)
 	{
 
 	}

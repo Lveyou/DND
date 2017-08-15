@@ -185,7 +185,7 @@ namespace DND
 
 	void DND::Vector3::Normalize()
 	{
-		float d = Math::Inv_Sqrt(Get_length_Squared());
+		float d = Math::InvSqrt(Get_length_Squared());
 		a *= d;
 		b *= d;
 		c *= d;

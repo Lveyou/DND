@@ -7,7 +7,7 @@
 
 namespace DND
 {
-	UINT32 Math::Get_Pow2_Large(UINT32 var)
+	UINT32 Math::GetPow2Large(UINT32 var)
 	{
 		UINT32 m = 1;
 		while (m < var)
@@ -15,7 +15,7 @@ namespace DND
 		return m;
 	}
 
-	UINT32 Math::Get_Unsigned_Length(UINT32 var)
+	UINT32 Math::GetUIntLength(UINT32 var)
 	{
 		if (var == 0)
 			return 1;
@@ -29,7 +29,7 @@ namespace DND
 		return l;
 	}
 
-	bool Math::Test_Collision_Rect_And_Rect(const Vector4& r0, const Vector4& r1)
+	bool Math::TestCollisionRectAndRect(const Vector4& r0, const Vector4& r1)
 	{
 		if ((r0.c < r1.a) || (r0.a > r1.c) || (r0.d < r1.b) || (r0.b > r1.d))
 			return false;
@@ -37,12 +37,12 @@ namespace DND
 			return true;
 	}
 
-	bool Math::Test_Collision_Dot_In_Rect(const Point& dot, const Rect& rect)
+	bool Math::TestCollisionDotInRect(const Point& dot, const Rect& rect)
 	{
 		return !((dot.x < rect.p1.x) || (dot.x > rect.p2.x) || (dot.y < rect.p1.y) || (dot.y > rect.p2.y));
 	}
 
-	UINT32 DND::Math::Get_Int_Length(int var)
+	UINT32 DND::Math::GetIntLength(int var)
 	{
 		if (var == 0)
 			return 1;
@@ -56,7 +56,7 @@ namespace DND
 		return var > 0 ? l : 1 + l;
 	}
 
-	bool DND::Math::Test_Collision_Rect_And_Rect(const Rect& r0, const Rect& r1)
+	bool DND::Math::TestCollisionRectAndRect(const Rect& r0, const Rect& r1)
 	{
 		if ((r0.p2.x < r1.p1.x) || (r0.p1.x > r1.p2.x) || (r0.p2.y < r1.p1.y) || (r0.p1.y > r1.p2.y))
 			return false;
@@ -64,18 +64,18 @@ namespace DND
 			return true;
 	}
 
-	bool DND::Math::Test_Collision_Dot_In_Rect(const Vector2& dot, const Vector4& rect)
+	bool DND::Math::TestCollisionDotInRect(const Vector2& dot, const Vector4& rect)
 	{
 		return !((dot.a < rect.a) || (dot.a > rect.c) || (dot.b < rect.b) || (dot.b > rect.d));
 	}
 
 
-	float DND::Math::Get_PI()
+	float DND::Math::GetPI()
 	{
 		return 3.1415926f;
 	}
 
-	float DND::Math::Inv_Sqrt(float x)
+	float DND::Math::InvSqrt(float x)
 	{
 		float xhalf = 0.5f * x;
 		int i = *(int *)& x;
@@ -85,7 +85,7 @@ namespace DND
 		return x;
 	}
 	UINT32 g_seed = 0;
-	int DND::Math::Get_Rand_Int(int min, int max)
+	int DND::Math::GetRandInt(int min, int max)
 	{
 		//随机数算法 copy 自 hge
 		if (min == max)
@@ -94,13 +94,13 @@ namespace DND
 		}
 		else if (min > max)//如果小值在后面
 		{
-			Swap_Int(min, max);
+			SwapInt(min, max);
 		}
 		g_seed = 214013 * g_seed + 2531011;
 		return min + (g_seed ^ g_seed >> 15) % (max - min + 1);
 	}
 
-	float DND::Math::Get_Rand_Float(float min, float max)
+	float DND::Math::GetRandFloat(float min, float max)
 	{
 		if (min == max)
 		{
@@ -108,33 +108,33 @@ namespace DND
 		}
 		else if (min > max)//如果小值在后面
 		{
-			Swap_Float(min, max);
+			SwapFloat(min, max);
 		}
 		g_seed = 214013 * g_seed + 2531011;
 		return min + (g_seed >> 16)*(1.0f / 65535.0f)*(max - min);
 	}
 
-	void DND::Math::Set_Seed(UINT32 seed)
+	void DND::Math::SetSeed(UINT32 seed)
 	{
 		if (!seed) g_seed = (UINT32)time(0);
 		else g_seed = seed;
 	}
 
-	void DND::Math::Swap_Int(int& a, int& b)
+	void DND::Math::SwapInt(int& a, int& b)
 	{
 		int temp = a;
 		a = b;
 		b = temp;
 	}
 
-	void DND::Math::Swap_Float(float& a, float& b)
+	void DND::Math::SwapFloat(float& a, float& b)
 	{
 		float temp = a;
 		a = b;
 		b = temp;
 	}
 
-	float DND::Math::Get_Between(float var, float min, float max)
+	float DND::Math::GetBetween(float var, float min, float max)
 	{
 		if (var < min)
 			return min;
@@ -144,7 +144,7 @@ namespace DND
 			return var;
 	}
 
-	bool DND::Math::Test_Collision_Ray_And_Triangle(const Vector3& orig, const Vector3& dir, const Vector3& v0, const Vector3& v1, const Vector3& v2, float& t, float& u, float& v)
+	bool DND::Math::TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir, const Vector3& v0, const Vector3& v1, const Vector3& v2, float& t, float& u, float& v)
 	{
 		Vector3 E1 = v1 - v0;
 		Vector3 E2 = v2 - v0;
@@ -189,12 +189,12 @@ namespace DND
 		return true;
 	}
 
-	float DND::Math::Get_Float_Min()
+	float DND::Math::GetFloatMin()
 	{
 		return FLT_MIN;
 	}
 
-	bool DND::Math::Test_Collision_Ray_And_Triangle(const Vector3& orig, const Vector3& dir, const Vector3& v0, const Vector3& v1, const Vector3& v2)
+	bool DND::Math::TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir, const Vector3& v0, const Vector3& v1, const Vector3& v2)
 	{
 		float t, u, v;
 		Vector3 E1 = v1 - v0;

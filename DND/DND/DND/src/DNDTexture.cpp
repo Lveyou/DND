@@ -9,7 +9,7 @@ namespace DND
 	Texture::Texture()
 	{
 		_texture = NULL;
-		_shader_resource_view = NULL;
+		_shaderResourceView = NULL;
 		_size = 1024;
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -18,17 +18,17 @@ namespace DND
 		//防止纹理超过一个像素
 		_img = Image::Create(Size(_size, _size), Color::NONE);
 #endif
-		_img_temp = Image::Create(Size(_size, _size), Color::WHITE);
+		_imgTemp = Image::Create(Size(_size, _size), Color::WHITE);
 
 		_create_texture2d();
 		_create_view();
 
-		_add_xy(_img_temp, Rect(XYWH(Point(), Size(32, 32))),Point(0, 0));
-		_image_rects[0] = Rect(XYWH(Point(), Size(32, 32)));
+		_add_xy(_imgTemp, Rect(XYWH(Point(), Size(32, 32))),Point(0, 0));
+		_imageRects[0] = Rect(XYWH(Point(), Size(32, 32)));
 		
 
-		delete _img_temp;
-		_img_temp = NULL;
+		delete _imgTemp;
+		_imgTemp = NULL;
 	}
 
 	void Texture::SetImage(const Image* img)
@@ -37,7 +37,7 @@ namespace DND
 		if (_size < size_img.w || _size < size_img.h)
 		{
 			int max = size_img.w > size_img.h ? size_img.w : size_img.h;
-			int new_size = Math::Get_Pow2_Large(max);
+			int new_size = Math::GetPow2Large(max);
 
 			_size = new_size;
 
@@ -50,15 +50,15 @@ namespace DND
 		delete _img;
 		_img = Image::Create(img);
 		_add_img(_img);
-		_image_rects[0] = Rect(XYWH(Point(), size_img));
+		_imageRects[0] = Rect(XYWH(Point(), size_img));
 	}
 
 	void Texture::AddImageRect(unsigned ID, const Image* img, const Rect& rect)
 	{
-		if (_image_rects.find(ID) != _image_rects.end())
+		if (_imageRects.find(ID) != _imageRects.end())
 		{
 			debug_err(L"Texture 插入图像区域时 使用了重复的ID！");
-			_image_rects.erase(ID);
+			_imageRects.erase(ID);
 		}
 		Point out;
 		Size add_size = rect.GetSize();
@@ -67,7 +67,7 @@ namespace DND
 		while (!_find_xy(add_size, out))
 		{
 			_release_view();
-			_img_temp = Image::Create(_img);
+			_imgTemp = Image::Create(_img);
 			delete _img;
 			_release_texture2d();
 			_size <<= 1;
@@ -80,7 +80,7 @@ namespace DND
 #endif
 			_create_view();
 			//插入以前的图像
-			_add_xy(_img_temp, Rect(XYWH(Point(), Size(_size >> 1,_size >> 1))), Point(0, 0));
+			_add_xy(_imgTemp, Rect(XYWH(Point(), Size(_size >> 1,_size >> 1))), Point(0, 0));
 
 		}
 		//直到找到了位置
@@ -90,34 +90,34 @@ namespace DND
 		_add_xy(img, rect, out); 
 		//_create_view();
 
-		_image_rects[ID] = out_rect;
+		_imageRects[ID] = out_rect;
 	}
 
 	void Texture::AddImageRect(unsigned register_ID, unsigned form_ID, const Rect& rect)
 	{
-		if (_image_rects.find(register_ID) != _image_rects.end())
+		if (_imageRects.find(register_ID) != _imageRects.end())
 		{
 			assert(0 && L"Texture 注册已有图像区域时 使用了重复的ID！");
 			return;
 		}
-		if (_image_rects.find(form_ID) == _image_rects.end())
+		if (_imageRects.find(form_ID) == _imageRects.end())
 		{
 			assert(0 && L"Texture 注册已有图像区域时 未找到来源ID！");
 			return;
 		}
-		Rect form = _image_rects[form_ID];
+		Rect form = _imageRects[form_ID];
 		Rect out = rect + form.p1;
 		/*if (out.c > form.c || out.d > form.d)
 		{
 		assert(0 && L"Texture 注册已有图像区域时 超过图像范围！");
 		return;
 		}*/
-		_image_rects[register_ID] = out;
+		_imageRects[register_ID] = out;
 	}
 
 	float Texture::GetTu(unsigned image_rect_ID, unsigned index)
 	{
-		Rect vector4 = _image_rects[image_rect_ID];
+		Rect vector4 = _imageRects[image_rect_ID];
 
 		if (index == 0 || index == 3)
 			return static_cast<float>(vector4.p1.x) / _size;
@@ -127,7 +127,7 @@ namespace DND
 
 	float Texture::GetTv(unsigned image_rect_ID, unsigned index)
 	{
-		Rect vector4 = _image_rects[image_rect_ID];
+		Rect vector4 = _imageRects[image_rect_ID];
 
 		if (index == 0 || index == 1)
 			return static_cast<float>(vector4.p1.y) / _size;
@@ -173,9 +173,9 @@ namespace DND
 
 			//如果test 不与现有的 相交，则返回
 			map<unsigned, Rect>::iterator itor;
-			for (itor = _image_rects.begin(); itor != _image_rects.end(); ++itor)
+			for (itor = _imageRects.begin(); itor != _imageRects.end(); ++itor)
 			{
-				if (Math::Test_Collision_Rect_And_Rect(rect_test, itor->second))
+				if (Math::TestCollisionRectAndRect(rect_test, itor->second))
 				{
 					//Debug::Instance()->Write_Line(String(L"相交了"));
 					goto next;
@@ -213,12 +213,12 @@ namespace DND
 		//unsigned len = D3D11CalcSubresource(0, 1, 8);
 		DirectX* directx = Game::Get()->_dx;
 
-		directx->m_device_context->UpdateSubresource(
+		directx->_deviceContext->UpdateSubresource(
 			_texture,
 			0, &destRegion,
 			(const void*)(buffer + offset), (size.w)*sizeof(DWORD), 0);
 
-		directx->m_device_context->GenerateMips(_shader_resource_view);
+		directx->_deviceContext->GenerateMips(_shaderResourceView);
 	}
 
 	//传入图像，和要插入的图像区域,插入的位置
@@ -262,12 +262,12 @@ namespace DND
 		const DWORD* buffer = img->GetBuffer();
 		unsigned offset = rect.p1.x + rect.p1.y * img->GetSize().w;
 
-		directx->m_device_context->UpdateSubresource(
+		directx->_deviceContext->UpdateSubresource(
 			_texture,
 			0, &destRegion,
 			(const void*)(buffer + offset), (img->GetSize().w)*sizeof(DWORD), 0);
 
-		directx->m_device_context->GenerateMips(_shader_resource_view);
+		directx->_deviceContext->GenerateMips(_shaderResourceView);
 		
 	}
 
@@ -286,10 +286,10 @@ namespace DND
 		desc.Height = _size;
 		desc.MipLevels = TEXTURE_MIPMAP_LEVELS;
 		desc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
-		desc.SampleDesc = directx->m_swap_chain_desc.SampleDesc;
+		desc.SampleDesc = directx->_swapChainDesc.SampleDesc;
 		desc.Usage = D3D11_USAGE_DEFAULT;
 		desc.Width = _size;
-		if (FAILED(directx->m_device->CreateTexture2D(
+		if (FAILED(directx->_device->CreateTexture2D(
 			&desc, NULL, &_texture)))
 		{
 			assert(0 && L"Texture 创建 texture2d 失败！");
@@ -318,8 +318,8 @@ namespace DND
 		desc.Texture2D.MostDetailedMip = 0;
 		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		if (FAILED(directx->m_device->CreateShaderResourceView(
-			_texture, &desc, &_shader_resource_view)))
+		if (FAILED(directx->_device->CreateShaderResourceView(
+			_texture, &desc, &_shaderResourceView)))
 		{
 			assert(0 && L"Texture 创建 m_shader_resource_view 失败！");
 			return;
@@ -329,10 +329,10 @@ namespace DND
 
 	void Texture::_release_view()
 	{
-		if (_shader_resource_view)
+		if (_shaderResourceView)
 		{
-			_shader_resource_view->Release();
-			_shader_resource_view = NULL;
+			_shaderResourceView->Release();
+			_shaderResourceView = NULL;
 		}
 	}
 
@@ -340,8 +340,8 @@ namespace DND
 	{
 		if (_img)
 			delete _img;
-		if (_img_temp)
-			delete _img_temp;
+		if (_imgTemp)
+			delete _imgTemp;
 		_release_view();
 		_release_texture2d();
 	}
