@@ -160,7 +160,7 @@ namespace DND
 
 	void Game::_init_engine()
 	{
-		sys = new System_imp;
+		sys = new System_imp;//sys负责创建和释放font
 		time = new Time_imp;
 		input = new Input_imp;
 	}

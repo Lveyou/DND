@@ -14,7 +14,7 @@ namespace DND
 	struct CharSpriteNode
 	{
 		Sprite* spr;
-		wchar_t ch;
+		WCHAR ch;
 		String name;
 		unsigned size;
 		bool operator==(const CharSpriteNode& b);
@@ -25,9 +25,13 @@ namespace DND
 		virtual Sprite* CreateSprite(const String& img_name) override;
 		virtual Sprite* CreateSprite(const Image* img) override;
 		virtual Sprite* CreateSprite(UINT32 img_ID,const Quad& quad, Color color = Color::WHITE) override;
+		virtual Sprite* GetCharSprite(const String& name, unsigned font_size, wchar_t ch) override;
+		virtual void DeleteSprite(Sprite* spr) override;
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) override;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) override;
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) override;
+		virtual void RegisterString(const String& name, unsigned font_size, const String& str) override;
+		virtual Text* CreateText(const String& name, unsigned font_size) override;
 
 		Canvas_imp(UINT32 order);
 		void _render();

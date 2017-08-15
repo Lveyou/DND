@@ -80,6 +80,7 @@ namespace DND
 	const String ERROR_00043 = L"Canvas Map ß∞‹";
 	const String ERROR_00044 = L"¥¥Ω®Canvas∂•µ„ª∫¥Ê ß∞‹";
 	const String ERROR_00045 = L"¥¥Ω®2d effect ß∞‹°£";
+	const String ERROR_00046 = L"≥ı ºªØfreetype ß∞‹°£";
 }
 
 

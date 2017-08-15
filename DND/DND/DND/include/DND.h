@@ -26,5 +26,6 @@
 #include "DNDCoor.h"					//Coor
 #include "DNDSprite.h"					//Sprite
 #include "DNDCanvas.h"					//Canvas
+#include "DNDText.h"					//Text
 
 #endif

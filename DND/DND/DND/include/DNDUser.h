@@ -82,6 +82,7 @@ namespace DND
 		Vector2(float ia, float ib);
 		Vector2(const String& value);
 		Vector2(const Point& point);
+		Vector2(const Size& size);
 
 		bool operator==(const Vector2& vb);
 		Vector2 operator+(const Vector2& vb);
@@ -129,10 +130,10 @@ namespace DND
 		Size GetSize() const;
 	};
 
-	Size Point_To_Size(const Point& p);
-	Point Size_To_Point(const Size& s);
-	Point operator+(const Point& p, const Size& size);
-	Rect operator+(const Rect& rect,const Point& p);
+	DLL_API Size Point_To_Size(const Point& p);
+	DLL_API Point Size_To_Point(const Size& s);
+	DLL_API Point operator+(const Point& p, const Size& size);
+	DLL_API Rect operator+(const Rect& rect,const Point& p);
 
 	//other: 左上角为 0 ，顺时针为 0，1，2，3
 	//构成的两个三角形为 ： 012 ， 023

@@ -17,6 +17,8 @@ private:
 	Image* img_bg1;
 	Sprite* spr_test;
 	Sprite* spr_bg1;
+	Text* txt_test;
+	Text* txt_simkai;
 	
 };
 

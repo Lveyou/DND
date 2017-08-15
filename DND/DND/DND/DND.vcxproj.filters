@@ -94,6 +94,15 @@
     <ClInclude Include="src\DNDTexture.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\DNDFont.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDText.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDText_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -142,6 +151,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDFont.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDText_imp.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

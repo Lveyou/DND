@@ -2,14 +2,24 @@
 #include "DNDSprite.h"
 #include "DNDDirectX.h"
 #include "DNDGame.h"
+#include "DNDSystem_imp.h"
 #include "DNDDebug.h"
+#include "DNDText_imp.h"
+#include "DNDFont.h"
+#include <algorithm>
 
 namespace DND
 {
+
 	Canvas* Canvas::Create(UINT32 order)
 	{
 		DirectX* directx = Game::Get()->_dx;
 		return directx->_create_canvas(order);
+	}
+
+	bool DND::CharSpriteNode::operator==(const CharSpriteNode& b)
+	{
+		return (ch == b.ch) && (name == b.name) && (size == b.size);
 	}
 
 	Sprite* Canvas_imp::CreateSprite(const String& imgName)
@@ -21,7 +31,7 @@ namespace DND
 	{
 		RegisterImageAll(_systemUseID++, img);
 		return CreateSprite(_systemUseID - 1,
-			Quad(Vector2(), Vector2(img->GetSize().w, img->GetSize().h),
+			Quad(Vector2(), img->GetSize(),
 			true));
 	}
 
@@ -40,7 +50,26 @@ namespace DND
 		_allSprite.push_back(spr);
 		return spr;
 	}
-void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
+	Sprite* Canvas_imp::GetCharSprite(const String& name, unsigned font_size, wchar_t ch)
+	{
+		vector<CharSpriteNode>::iterator itor;
+		for (itor = _charSprites.begin(); itor != _charSprites.end(); ++itor)
+		{
+			if (ch == itor->ch && font_size == itor->size && itor->name == name)
+			{
+				Sprite* spr2 = (itor->spr)->Clone(); 
+				return spr2;
+			}
+		}
+		return NULL;
+	}
+
+	void Canvas_imp::DeleteSprite(Sprite* spr)
+	{
+		spr->_dead = true;
+	}
+
+	void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 	{
 		_tex->AddImageRect(ID, img, Rect(XYWH(Point(), img->GetSize())));
 	}
@@ -53,6 +82,65 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 	void Canvas_imp::RegisterImageRect(unsigned register_ID, unsigned form_ID, const Rect& rect)
 	{
 		_tex->AddImageRect(register_ID, form_ID, rect);
+	}
+
+	void DND::Canvas_imp::RegisterString(const String& name, unsigned font_size, const String& str)
+	{
+		if (!str.GetLength())
+			return;
+
+		Font* font = ((System_imp*)(Game::Get()->sys))->_font;
+		const wchar_t *temp = str.GetWcs();
+		Image* img = NULL;
+		Point offset;
+		Rect rect;
+		Sprite* spr = NULL;
+
+		CharSpriteNode node;
+		node.name = name;
+		node.size = font_size;
+
+
+		for (int i = 0; temp[i]; ++i)
+		{
+			node.ch = temp[i];
+			//特殊字符跳过
+			if(node.ch == L' ' ||
+				node.ch == L'\n' || 
+				node.ch == L'\t')
+				continue;
+			//如果字符已添加则不注册，直接结束此次
+			vector<CharSpriteNode>::iterator itor = find(_charSprites.begin(), _charSprites.end(), node);
+			if (itor != _charSprites.end())
+			{
+				continue;
+			}
+			//////////////////////////////
+			font->_get_char(name, font_size, temp[i], img, offset);
+			RegisterImageAll(_systemUseID, img);
+			Size wh = img->GetSize();
+
+
+			spr = CreateSprite(_systemUseID++,
+				Quad(Point(0, font_size), wh, offset),
+				Color::WHITE);
+
+			node.spr = spr;
+			_charSprites.push_back(node);
+
+			//Debug::Instance()->Write_Line(String::Format(1024, L"ch:%c,img:%x",temp[i], img));
+		}
+
+
+	}
+
+	Text* Canvas_imp::CreateText(const String& name, unsigned font_size)
+	{
+		Text_imp* text = new Text_imp(name, font_size);
+		text->m_canvas = this;
+		text->m_coor = Coor::Create(_coor);
+
+		return text;
 	}
 
 	void Canvas_imp::_render()
@@ -213,5 +301,9 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 
 		_coor = Coor::Create();
 	}
+
+	
+
+	
 
 }

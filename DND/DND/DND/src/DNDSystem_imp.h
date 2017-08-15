@@ -17,11 +17,14 @@
 
 namespace DND
 {
+	class Font;
 	class System_imp : System
 	{	
 		friend class Input_imp;
 		friend class Game;
 		friend class DirectX;
+		friend class FontCharMap;
+		friend class Canvas_imp;
 	private:
 		virtual void SetWindowTitle(const String& title) override;
 		virtual void SetWindowCenter() override;
@@ -39,6 +42,8 @@ namespace DND
 		
 		virtual Size GetDesktopSize() override;
 		virtual void RenderDot(Vector2 pos, Color color = Color::WHITE) override;
+		virtual void RenderLine(Vector2 p1, Vector2 p2, Color color = Color::WHITE) override;
+		virtual void LoadFontFile(const String& name, const String& path) override;
 
 		String _windowTitle;
 		DWORD _windowStyle;
@@ -46,11 +51,14 @@ namespace DND
 		Point _windowPoint;
 	private:
 		System_imp();
+		~System_imp();
 		void _create_window();
 		
 		HWND _hWnd;
 		HINSTANCE _hInstance;
 		bool _foucs;
+	private:
+		Font* _font;
 	};
 
 	

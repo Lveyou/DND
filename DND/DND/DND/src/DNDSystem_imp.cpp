@@ -2,6 +2,7 @@
 #include "DNDError.h"
 #include "DNDGame.h"
 #include "DNDValue.h"
+#include "DNDFont.h"
 
 namespace DND
 {
@@ -53,7 +54,7 @@ namespace DND
 		_hWnd = 0;
 		_hInstance = GetModuleHandle(0);
 		_foucs = true;
-
+		_font = new Font;
 	}
 
 	void System_imp::SetWindowTitle(const String& title)
@@ -135,6 +136,24 @@ namespace DND
 	{
 		Game::Get()->_dx->_gfxSimple->_add_dot(XMFLOAT3(pos.a, pos.b, 0),
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
+	}
+
+	void System_imp::RenderLine(Vector2 p1, Vector2 p2, Color color /*= Color::WHITE*/)
+	{
+		Game::Get()->_dx->_gfxSimple->_add_line(
+			XMFLOAT3(p1.a, p1.b, 0),
+			XMFLOAT3(p2.a, p2.b, 0),
+			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
+	}
+
+	void System_imp::LoadFontFile(const String& name, const String& path)
+	{
+		_font->_load_font_file(name, path);
+	}
+
+	System_imp::~System_imp()
+	{
+		delete _font;
 	}
 
 	

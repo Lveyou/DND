@@ -70,6 +70,12 @@ namespace DND
 		b = static_cast<float>(point.y);
 	}
 
+	Vector2::Vector2(const Size& size)
+	{
+		a = static_cast<float>(size.w);
+		b = static_cast<float>(size.h);
+	}
+
 
 	bool Vector2::operator==(const Vector2& vb)
 	{
