@@ -5,7 +5,3 @@ A 2d game engine,base on DirectX11.
 IDE: Visual Studio 2010
 
 ////////////////////////////////////////////////////////////////////////////
-
-17-08-08 的测试效果：
-
-![image](https://github.com/Lveyou/DND/blob/master/测试截图/17-08-08_01.png)
