@@ -29,7 +29,7 @@ namespace DND
 	Sprite* Canvas_imp::CreateSprite(UINT32 imgID,const Quad& quad, Color color /*= Color::WHITE*/)
 	{
 		Sprite* spr = new Sprite();
-		spr->_image_rect_ID = imgID;
+		spr->_imageRectID = imgID;
 		spr->_quad = quad;
 		spr->_coor = Coor::Create(_coor);
 		spr->_color[0] = color;
@@ -148,8 +148,8 @@ void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 				_vertexs[i + j].color.y = spr->_color[j].g();
 				_vertexs[i + j].color.z = spr->_color[j].b();
 				_vertexs[i + j].color.w = spr->_color[j].a();
-				_vertexs[i + j].t.x = _tex->GetTu(spr->_image_rect_ID, j);
-				_vertexs[i + j].t.y = _tex->GetTv(spr->_image_rect_ID, j);
+				_vertexs[i + j].t.x = _tex->GetTu(spr->_imageRectID, j);
+				_vertexs[i + j].t.y = _tex->GetTv(spr->_imageRectID, j);
 				//int a = 0;
 			}
 

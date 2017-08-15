@@ -25,9 +25,9 @@ namespace DND
 		Texture();
 		void SetImage(const Image* img);
 		void AddImageRect(UINT32 ID, const Image* img, const Rect& rect);
-		void AddImageRect(UINT32 registerID, UINT32 formID, const Rect& rect);
-		float GetTu(UINT32 imageRectID, UINT32 index);
-		float GetTv(UINT32 imageRectID, UINT32 index);
+		void AddImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect);
+		float GetTu(UINT32 image_rect_ID, UINT32 index);
+		float GetTv(UINT32 image_rect_ID, UINT32 index);
 		ID3D11Texture2D* _texture;
 		ID3D11ShaderResourceView* _shaderResourceView;
 		UINT32 _size;
@@ -37,7 +37,7 @@ namespace DND
 		bool _find_xy(const Size& size, Point& xy);
 
 		void _add_img(const Image* img);
-		void _add_xy(const Image* img,const Rect& rect, const Point& tarXY);//先加入 m_img 再加入 tex
+		void _add_xy(const Image* img,const Rect& rect, const Point& tar_xy);//先加入 m_img 再加入 tex
 	
 		void _create_texture2d();
 		void _release_texture2d();

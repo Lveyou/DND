@@ -22,12 +22,12 @@ namespace DND
 	class Canvas_imp : public Canvas
 	{
 	public:
-		virtual Sprite* CreateSprite(const String& imgName) override;
+		virtual Sprite* CreateSprite(const String& img_name) override;
 		virtual Sprite* CreateSprite(const Image* img) override;
-		virtual Sprite* CreateSprite(UINT32 imgID,const Quad& quad, Color color = Color::WHITE) override;
-		virtual void RegisterImageAll(UINT32 imgID, const Image* img) override;
+		virtual Sprite* CreateSprite(UINT32 img_ID,const Quad& quad, Color color = Color::WHITE) override;
+		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) override;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) override;
-		virtual void RegisterImageRect(UINT32 registerID, UINT32 formID, const Rect& rect) override;
+		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) override;
 
 		Canvas_imp(UINT32 order);
 		void _render();

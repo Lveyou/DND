@@ -61,7 +61,7 @@ namespace DND
 	}
 	Sprite* Sprite::Clone()
 	{
-		Sprite* spr = _canvas->CreateSprite(_image_rect_ID, _quad, Color::WHITE);
+		Sprite* spr = _canvas->CreateSprite(_imageRectID, _quad, Color::WHITE);
 		spr->_order = _order;
 		//spr->m_canvas = b.m_canvas;
 		if (_coor)

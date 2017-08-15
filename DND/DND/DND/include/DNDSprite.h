@@ -45,7 +45,7 @@ namespace DND
 		Coor* _coor;
 		Quad _quad;
 		Color _color[4];
-		unsigned _image_rect_ID;
+		unsigned _imageRectID;
 		bool _show;
 		bool _dead;
 	};

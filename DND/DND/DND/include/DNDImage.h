@@ -31,8 +31,8 @@ namespace DND
 
 		Size GetSize() const;
 		const DWORD* GetBuffer() const;
-		void AddImage(const Image* img, const Point& tarXY);
-		void AddImageRect(const Image* img,const Rect& rect, const Point& tarXY);
+		void AddImage(const Image* img, const Point& tar_xy);
+		void AddImageRect(const Image* img,const Rect& rect, const Point& tar_xy);
 
 		void Render(Point pos);
 		Color GetDotColor(Point xy);
