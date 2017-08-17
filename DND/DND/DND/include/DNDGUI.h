@@ -15,18 +15,28 @@
 
 namespace DND
 {
-	enum ControlState
-	{
-		NORMAL,//普通
-		DISABLE,//不可用
-
-	};
+	
 
 	class DLL_API Control
 	{
 	public:
-
+		enum State
+		{
+			NORMAL,		//普通
+			OVER,		//经过（在上面）
+			DOWN,		//按下（状态）
+			DISABLE,	//不可用
+			CHOOSE,		//选择（tab选择）
+		};
+		bool IsRelease();
+		State GetState();
 	private:
+		int _state;
+		//子类控件需要重载
+		virtual bool _is_pickup() = 0;
+		virtual void _update(State state) = 0;
+		//////////////////////////////////////////////////////////////////////////
+		void _update();
 		
 	};
 

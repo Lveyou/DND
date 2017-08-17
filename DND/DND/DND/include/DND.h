@@ -27,5 +27,6 @@
 #include "DNDSprite.h"					//Sprite
 #include "DNDCanvas.h"					//Canvas
 #include "DNDText.h"					//Text
+#include "DNDGUI.h"						//GUI
 
 #endif

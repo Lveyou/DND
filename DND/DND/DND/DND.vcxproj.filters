@@ -106,6 +106,9 @@
     <ClInclude Include="include\DNDGUI.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUIButtonSpriteScale.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -160,6 +163,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDText_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
