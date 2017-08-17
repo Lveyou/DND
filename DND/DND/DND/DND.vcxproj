@@ -120,7 +120,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatDebug;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
     <ExcludePath>
     </ExcludePath>

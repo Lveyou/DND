@@ -11,9 +11,6 @@
 #ifndef _DND_DIRECTX_H_
 #define _DND_DIRECTX_H_
 
-
-
-
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <d3dcompiler.h>
