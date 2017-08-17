@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "..\libpng1630\proje
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "freetype", "..\freetype-2.8\builds\windows\vc2010\freetype.vcxproj", "{78B079BD-9FC7-4B9E-B4A6-96DA0F00248B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DNDBird", "DNDBird\DNDBird.vcxproj", "{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Library|Itanium = Debug Library|Itanium
@@ -310,6 +312,46 @@ Global
 		{78B079BD-9FC7-4B9E-B4A6-96DA0F00248B}.ReleaseWithoutAsm|Win32.ActiveCfg = Release Singlethreaded|x64
 		{78B079BD-9FC7-4B9E-B4A6-96DA0F00248B}.ReleaseWithoutAsm|x64.ActiveCfg = Release Singlethreaded|x64
 		{78B079BD-9FC7-4B9E-B4A6-96DA0F00248B}.ReleaseWithoutAsm|x64.Build.0 = Release Singlethreaded|x64
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Library|Itanium.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Library|Win32.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Library|Win32.Build.0 = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Library|x64.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Multithreaded|Itanium.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Multithreaded|Win32.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Multithreaded|Win32.Build.0 = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Multithreaded|x64.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Singlethreaded|Itanium.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Singlethreaded|Win32.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Singlethreaded|Win32.Build.0 = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug Singlethreaded|x64.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug|Itanium.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug|Win32.Build.0 = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Debug|x64.ActiveCfg = Debug|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Profile|Itanium.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Profile|Win32.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Profile|Win32.Build.0 = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Profile|x64.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Library|Itanium.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Library|Win32.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Library|Win32.Build.0 = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Library|x64.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Multithreaded|Itanium.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Multithreaded|Win32.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Multithreaded|Win32.Build.0 = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Multithreaded|x64.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Singlethreaded|Itanium.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Singlethreaded|Win32.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Singlethreaded|Win32.Build.0 = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release Singlethreaded|x64.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release|Itanium.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release|Win32.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release|Win32.Build.0 = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.Release|x64.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.ReleaseWithoutAsm|Itanium.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.ReleaseWithoutAsm|Win32.ActiveCfg = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.ReleaseWithoutAsm|Win32.Build.0 = Release|Win32
+		{DFD8895C-DF63-4FCA-B6B8-60EAB5838050}.ReleaseWithoutAsm|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

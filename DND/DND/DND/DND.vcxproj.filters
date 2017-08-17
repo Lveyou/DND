@@ -103,6 +103,9 @@
     <ClInclude Include="src\DNDText_imp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUI.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">

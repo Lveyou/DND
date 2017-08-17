@@ -41,13 +41,14 @@ namespace DND
 		Size(const String& value);
 		bool operator==(const Size& b);
 		Size operator-(const Size& b);
+
 		template <typename T>
-		Size operator/(T divisor)
+		Size operator/(T divisor) const
 		{
 			return Size(w / divisor, h / divisor);
 		}
 		template <typename T>
-		Size operator*(T divisor)
+		Size operator*(T divisor) const
 		{
 			return Size(w * divisor, h * divisor);
 		}
