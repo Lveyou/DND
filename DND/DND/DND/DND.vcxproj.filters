@@ -109,6 +109,15 @@
     <ClInclude Include="include\DNDGUIButtonSpriteScale.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDRigidBody.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDRigidBody_imp.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDBox2DDebugDraw.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -166,6 +175,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUI.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDRigidBody_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDBox2DDebugDraw.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

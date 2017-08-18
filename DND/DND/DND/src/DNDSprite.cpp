@@ -1,11 +1,29 @@
 #include "DNDSprite.h"
 #include "DNDCanvas_imp.h"
+#include "DNDGame.h"
+#include "DNDInput.h"
+#include "DNDMath.h"
+#include "DNDRigidBody_imp.h"
+#include "DNDDebug.h"
 
 namespace DND
 {
 	bool Sprite::IsPickup()
 	{
-		return true;
+		if(_rigidBody)
+		{
+			return _rigidBody->IsPickup();
+		}
+		///////////////////////否则使用默认方法检测/////////////////////////////////
+		Point mouse = Game::Get()->input->GetMousePosition();
+		//自身转世界
+		Vector2 v0 = _coor->ThisToWorld(_quad.v[0]);
+		Vector2 v1 = _coor->ThisToWorld(_quad.v[1]);
+		Vector2 v2 = _coor->ThisToWorld(_quad.v[2]);
+		Vector2 v3 = _coor->ThisToWorld(_quad.v[3]);
+
+		return Math::TestDotInTriangle(mouse, v0, v1, v2) ||
+			Math::TestDotInTriangle(mouse, v0, v2, v3);
 	}
 	void Sprite::Render()
 	{
@@ -58,6 +76,7 @@ namespace DND
 		_show = false;
 		_coor = NULL;
 		_dead = false;
+		_rigidBody = NULL;
 	}
 	Sprite* Sprite::Clone()
 	{
@@ -75,6 +94,36 @@ namespace DND
 		spr->_show = false;//07-04-27 改为了 false
 		spr->_dead = false;
 		return spr;
+	}
+
+	void Sprite::CreateRigidBody(float density, float friction, float restitution)
+	{
+		RigidBody_imp* rigidBody = new RigidBody_imp(density, friction, restitution);
+
+		Vector2 pos = GetCoor()->GetPosition();
+		float angle = GetCoor()->GetRotate();
+
+		rigidBody->_body->SetTransform(b2Vec2(pos.a, pos.b), angle);
+
+		_rigidBody = rigidBody;
+	}
+
+	RigidBody* Sprite::GetRigidBody()
+	{
+		if(!_rigidBody)
+			debug_warn(L"此精灵的RigidBody为NULL。");
+		return _rigidBody;
+	}
+
+	void Sprite::_update_rigidbody()
+	{
+		if(_rigidBody)
+		{
+			RigidBody_imp* rigidbody = (RigidBody_imp*)_rigidBody;
+			b2Vec2 pos = rigidbody->_body->GetPosition();
+			GetCoor()->SetPosition(Vector2(pos.x, pos.y));
+			GetCoor()->SetRotate(rigidbody->_body->GetAngle());
+		}
 	}
 
 }

@@ -87,7 +87,7 @@ namespace DND
 
 		bool operator==(const Vector2& vb);
 		Vector2 operator+(const Vector2& vb);
-		Vector2 operator-(const Vector2& vb);
+		Vector2 operator-(const Vector2& vb) const;
 		Vector2 operator/(float var);
 		Vector2 operator*(float var);
 		//不要问我为何返回 (a,vb.b) 因为我疯了 
@@ -96,6 +96,7 @@ namespace DND
 		Vector2& Scale(const Vector2& vb);
 		Vector2& Scale(float k);
 		Vector3 To_Vector3(float c = 0);
+		double CrossProduct(const Vector2& vb);//叉乘
 
 	};
 

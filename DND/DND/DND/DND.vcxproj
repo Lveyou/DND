@@ -33,6 +33,7 @@
     <ClInclude Include="include\DNDInput.h" />
     <ClInclude Include="include\DNDMain.h" />
     <ClInclude Include="include\DNDMath.h" />
+    <ClInclude Include="include\DNDRigidBody.h" />
     <ClInclude Include="include\DNDSingleton.h" />
     <ClInclude Include="include\DNDSprite.h" />
     <ClInclude Include="include\DNDString.h" />
@@ -42,17 +43,20 @@
     <ClInclude Include="include\DNDTypedef.h" />
     <ClInclude Include="include\DNDUser.h" />
     <ClInclude Include="include\DNDValue.h" />
+    <ClInclude Include="src\DNDBox2DDebugDraw.h" />
     <ClInclude Include="src\DNDCanvas_imp.h" />
     <ClInclude Include="src\DNDCoor_imp.h" />
     <ClInclude Include="src\DNDDirectX.h" />
     <ClInclude Include="src\DNDFont.h" />
     <ClInclude Include="src\DNDInput_imp.h" />
+    <ClInclude Include="src\DNDRigidBody_imp.h" />
     <ClInclude Include="src\DNDSystem_imp.h" />
     <ClInclude Include="src\DNDTexture.h" />
     <ClInclude Include="src\DNDText_imp.h" />
     <ClInclude Include="src\DNDTime_imp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DNDBox2DDebugDraw.cpp" />
     <ClCompile Include="src\DNDCanvas_imp.cpp" />
     <ClCompile Include="src\DNDColor.cpp" />
     <ClCompile Include="src\DNDCoor_imp.cpp" />
@@ -60,9 +64,11 @@
     <ClCompile Include="src\DNDDirectX.cpp" />
     <ClCompile Include="src\DNDFont.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />
+    <ClCompile Include="src\DNDGUI.cpp" />
     <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp" />
     <ClCompile Include="src\DNDImage.cpp" />
     <ClCompile Include="src\DNDInput_imp.cpp" />
+    <ClCompile Include="src\DNDRigidBody_imp.cpp" />
     <ClCompile Include="src\DNDSprite.cpp" />
     <ClCompile Include="src\DNDTexture.cpp" />
     <ClCompile Include="src\DNDText_imp.cpp" />
@@ -123,7 +129,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatDebug;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatDebug;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
     <ExcludePath>
     </ExcludePath>
   </PropertyGroup>
@@ -154,7 +160,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;zlib.lib;libpng16.lib;freetype28d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;zlib.lib;libpng16.lib;freetype28d.lib;box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

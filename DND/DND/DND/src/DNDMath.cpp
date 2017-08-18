@@ -42,6 +42,17 @@ namespace DND
 		return !((dot.x < rect.p1.x) || (dot.x > rect.p2.x) || (dot.y < rect.p1.y) || (dot.y > rect.p2.y));
 	}
 
+	bool Math::TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1,const Vector2& p2)
+	{
+		Vector2 pa = p0 - dot;
+		Vector2 pb = p1 - dot;
+		Vector2 pc = p2 - dot;
+		double t1 = pa.CrossProduct(pb);
+		double t2 = pb.CrossProduct(pc);
+		double t3 = pc.CrossProduct(pa);
+		return t1*t2 >= 0 && t1*t3 >= 0;
+	}
+
 	UINT32 DND::Math::GetIntLength(int var)
 	{
 		if (var == 0)

@@ -208,7 +208,7 @@ namespace DND
 		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter, i += 4)
 		{
 			spr = iter->second;
-
+			spr->_update_rigidbody();//根据rigidbody刷新位置
 			for (unsigned j = 0; j < 4; ++j)
 			{
 				Vector2 out;

@@ -41,6 +41,7 @@ namespace DND
 		static bool TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir,
 			const Vector3& v0, const Vector3& v1, const Vector3& v2);//射线与三角形相交(不返回参数)
 		static float GetFloatMin();
+		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1,const Vector2& p2);
 	
 	};
 }

@@ -21,12 +21,20 @@ namespace DND
 	class DLL_API ButtonSpriteScale : public Control
 	{
 	public:
+		//精灵，缩放最小值，缩放最大值，缩放速度
+		static ButtonSpriteScale* Create(Sprite* spr, float min, float max, float dt);
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;
 		virtual void _update(State state) override;
 		//////////////////////////////////////////////////////////////////////////
 		Sprite* _spr;
+		float _min;
+		float _max;
+		float _dt;
+		float _cur;
+
+		ButtonSpriteScale();
 
 	};
 

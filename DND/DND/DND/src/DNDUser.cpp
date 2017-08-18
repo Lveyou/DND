@@ -83,13 +83,18 @@ namespace DND
 		return (a - vb.a) < 0.001f && (b - vb.b) < 0.001f;
 	}
 
+	double Vector2::CrossProduct(const Vector2& vb)
+	{
+		return a*vb.b - b*vb.a;
+	}
+
 
 	DND::Vector2 DND::Vector2::operator+(const Vector2& vb)
 	{
 		return Vector2(a + vb.a, b + vb.b);
 	}
 
-	DND::Vector2 DND::Vector2::operator-(const Vector2& vb)
+	DND::Vector2 DND::Vector2::operator-(const Vector2& vb) const
 	{
 		return Vector2(a - vb.a, b - vb.b);
 	}

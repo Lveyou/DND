@@ -18,10 +18,12 @@
 namespace DND
 {
 	class Canvas;
+	class RigidBody;
 	class DLL_API Sprite
 	{
 		friend class Canvas_imp;
 		friend class Text_imp;
+		friend class RigidBody_imp;
 	public:
 		bool IsPickup();
 		void Render();
@@ -31,7 +33,9 @@ namespace DND
 		Size GetSize();
 		void SetColor(Color color);
 		Canvas* GetCanvas();
-		
+
+		void CreateRigidBody(float density, float friction, float restitution);
+		RigidBody* GetRigidBody();
 
 		Sprite* Clone();
 
@@ -40,6 +44,7 @@ namespace DND
 		Sprite();
 		Sprite(const Sprite& b);
 		~Sprite();
+		void _update_rigidbody();
 		INT32 _order;
 		Canvas* _canvas;
 		Coor* _coor;
@@ -48,6 +53,7 @@ namespace DND
 		unsigned _imageRectID;
 		bool _show;
 		bool _dead;
+		RigidBody* _rigidBody;
 	};
 }
 

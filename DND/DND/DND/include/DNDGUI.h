@@ -30,13 +30,16 @@ namespace DND
 		};
 		bool IsRelease();
 		State GetState();
+		void Run();
+		Control();
 	private:
-		int _state;
+		State _state;
 		//子类控件需要重载
 		virtual bool _is_pickup() = 0;
 		virtual void _update(State state) = 0;
 		//////////////////////////////////////////////////////////////////////////
-		void _update();
+		bool _disable;
+		State _last_state;
 		
 	};
 

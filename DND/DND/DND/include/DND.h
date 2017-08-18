@@ -27,6 +27,10 @@
 #include "DNDSprite.h"					//Sprite
 #include "DNDCanvas.h"					//Canvas
 #include "DNDText.h"					//Text
+#include "DNDRigidBody.h"
+///////////////////////////GUI///////////////////////////////////////////
 #include "DNDGUI.h"						//GUI
+#include "DNDGUIButtonSpriteScale.h"	//ButtonSpriteScale
+//////////////////////////////////////////////////////////////////////////
 
 #endif

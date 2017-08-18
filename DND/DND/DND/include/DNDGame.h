@@ -11,8 +11,11 @@
 #define _DND_GAME_H_
 
 #include "DNDDLL.h"
+#include "DNDUser.h"
 #include <windows.h>
 
+class b2World;
+class b2Draw;
 namespace DND
 {
 	class System;
@@ -20,6 +23,7 @@ namespace DND
 	class DirectX;
 	class Input;
 	class Canvas;
+	
 	class DLL_API Game
 	{	
 		friend class System_imp;
@@ -29,6 +33,7 @@ namespace DND
 		friend class Texture;
 		friend class Canvas;
 		friend class Canvas_imp;
+		friend class RigidBody_imp;
 	public:
 		void Init();							//init game
 		void EnterLoop();						//enter gameloop
@@ -43,6 +48,13 @@ namespace DND
 		Canvas* canvas;
 	private:
 		DirectX* _dx;
+		b2World* _b2World;
+		b2Draw* _b2Draw;
+		float _b2TimeStep;//时间步长 默认为1/60
+		UINT32 _b2VelocityIterations;//速度迭代次数 8
+		UINT32 _b2PositionIterations;//位置迭代次数 3
+	public://box2d
+		void SetGravity(Vector2 gray);
 	protected:
 		Game();
 	private:

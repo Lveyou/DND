@@ -156,6 +156,22 @@ namespace DND
 		delete _font;
 	}
 
+	void System_imp::RenderCircle(Vector2 pos, float radius, UINT32 count, Color color /*= Color::WHITE*/)
+	{
+		float rad_dt = 3.1415926f * 2 / count;
+		Vector2 p1 = Vector2(radius, 0);
+		for(UINT32 i = 1;i < count; ++i)
+		{
+			Vector2 p2;
+			p2.a = radius * cos(rad_dt * i);
+			p2.b = radius * sin(rad_dt * i);
+
+			RenderLine(p1 + pos, p2 + pos, color);
+			p1 = p2;
+		}
+		RenderLine(p1 + pos, Vector2(radius, 0) + pos, color);
+	}
+
 	
 
 	

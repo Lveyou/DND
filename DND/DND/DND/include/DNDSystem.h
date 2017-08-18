@@ -39,6 +39,7 @@ namespace DND
 		//render
 		virtual void RenderDot(Vector2 pos, Color color = Color::WHITE) = 0;
 		virtual void RenderLine(Vector2 p1, Vector2 p2, Color color = Color::WHITE) = 0;
+		virtual void RenderCircle(Vector2 pos, float radius, UINT32 count, Color color = Color::WHITE) = 0;
 		//font
 		virtual void LoadFontFile(const String& name, const String& path) = 0;
 	};

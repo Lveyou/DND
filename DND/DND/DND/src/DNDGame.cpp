@@ -6,6 +6,9 @@
 #include "DNDDirectX.h"
 #include "DNDInput_imp.h"
 #include "DNDCanvas_imp.h"
+#include "DNDBox2DDebugDraw.h"
+
+#include <Box2D/Box2D.h>
 
 namespace DND
 {
@@ -29,6 +32,15 @@ namespace DND
 		//init engine
 		_init_engine();
 		debug_notice(L"DND: init engine ok!");
+		//创建box2d世界
+		_b2World = new b2World(b2Vec2_zero);
+		_b2TimeStep = 1.0f/60.0f;
+		_b2VelocityIterations = 8;
+		_b2PositionIterations = 3;
+		_b2Draw = new Box2DDebugDraw;
+		_b2Draw->SetFlags(0x001f);
+		_b2World->SetDebugDraw(_b2Draw);
+		debug_notice(L"DND: init box2d ok!");
 		//init window （这个只是隐藏的窗口）
 		((System_imp*)sys)->_create_window();
 		debug_notice(L"DND: create window ok!");
@@ -76,6 +88,9 @@ namespace DND
 			t->_update_current();
 			t->_set_last();
 			///////////////////////////d1: HDD -> CPU////////////////////////////////
+			//box2d
+			_b2World->Step(_b2TimeStep, _b2VelocityIterations, _b2PositionIterations);
+			_b2World->DrawDebugData();
 			//用户逻辑片段
 			_fixed_update();
 			_update();
@@ -272,6 +287,11 @@ namespace DND
 		delete input;
 		delete time;
 		delete sys;
+	}
+
+	void Game::SetGravity(Vector2 gray)
+	{
+		_b2World->SetGravity(b2Vec2(gray.a, gray.b));
 	}
 
 }
