@@ -118,6 +118,9 @@
     <ClInclude Include="src\DNDBox2DDebugDraw.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDNet.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">

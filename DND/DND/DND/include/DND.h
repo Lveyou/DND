@@ -12,25 +12,27 @@
 #define _DND_DND_H_
 
 #define DND_IMPORT
-
-#include "DNDMain.h"					//DNDMain
-#include "DNDSingleton.h"				//singleton template class
-#include "DNDGame.h"					//Game base class
-#include "DNDString.h"					//String
-#include "DNDSystem.h"					//System
-#include "DNDDebug.h"					//Debug
-#include "DNDTime.h"					//Time
-#include "DNDColor.h"					//Color
-#include "DNDInput.h"					//Input
-#include "DNDImage.h"					//Image
-#include "DNDCoor.h"					//Coor
-#include "DNDSprite.h"					//Sprite
-#include "DNDCanvas.h"					//Canvas
-#include "DNDText.h"					//Text
-#include "DNDRigidBody.h"
+///////////////////////////CORE///////////////////////////////////////////
+#include "DNDMain.h"					//DNDMain					主函数
+#include "DNDGame.h"					//Game base class			游戏基类
+#include "DNDSystem.h"					//System					系统
+#include "DNDDebug.h"					//Debug						调试
+#include "DNDTime.h"					//Time						时间
+#include "DNDInput.h"					//Input						输入
+#include "DNDNet.h"						//Net						网络
+#include "DNDCoor.h"					//Coor						坐标系
+#include "DNDSprite.h"					//Sprite					精灵
+#include "DNDCanvas.h"					//Canvas					画布
+#include "DNDText.h"					//Text						文本
+#include "DNDRigidBody.h"				//2D Physics				物理
+//////////////////////////BASE//////////////////////////////////////////
+#include "DNDSingleton.h"				//singleton template class	单例模板
+#include "DNDString.h"					//String					字符串
+#include "DNDColor.h"					//Color						颜色
+#include "DNDImage.h"					//Image						图像
 ///////////////////////////GUI///////////////////////////////////////////
-#include "DNDGUI.h"						//GUI
-#include "DNDGUIButtonSpriteScale.h"	//ButtonSpriteScale
+#include "DNDGUI.h"						//GUI						控件基类
+#include "DNDGUIButtonSpriteScale.h"	//ButtonSpriteScale			精灵缩放按钮
 //////////////////////////////////////////////////////////////////////////
 
 #endif

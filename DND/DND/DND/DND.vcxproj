@@ -33,6 +33,7 @@
     <ClInclude Include="include\DNDInput.h" />
     <ClInclude Include="include\DNDMain.h" />
     <ClInclude Include="include\DNDMath.h" />
+    <ClInclude Include="include\DNDNet.h" />
     <ClInclude Include="include\DNDRigidBody.h" />
     <ClInclude Include="include\DNDSingleton.h" />
     <ClInclude Include="include\DNDSprite.h" />
