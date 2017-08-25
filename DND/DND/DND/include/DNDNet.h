@@ -85,7 +85,11 @@ namespace DND
 	public:
 		static Client* GetClient();
 		static Server* GetServer();
+	private:
+		static int _bClient;
 	};
+
+	
 
 }
 

@@ -25,6 +25,7 @@
 #include "DNDCanvas.h"					//Canvas					画布
 #include "DNDText.h"					//Text						文本
 #include "DNDRigidBody.h"				//2D Physics				物理
+#include "DNDThread.h"					//Thread					线程
 //////////////////////////BASE//////////////////////////////////////////
 #include "DNDSingleton.h"				//singleton template class	单例模板
 #include "DNDString.h"					//String					字符串

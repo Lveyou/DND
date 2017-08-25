@@ -68,19 +68,21 @@ namespace DND
 	const String ERROR_00031 = L"编译simple shader失败。";
 	const String ERROR_00032 = L"创建simple effect失败。";
 	const String ERROR_00033 = L"创建simple输入布局失败。";
-	const String ERROR_00034 = L"获取simple technique失败";
+	const String ERROR_00034 = L"获取simple technique失败。";
 	const String ERROR_00035 = L"获取simple pass失败";
 	const String ERROR_00036 = L"获取simple wvp失败";
 	const String ERROR_00037 = L"创建2d shader失败。";
-	const String ERROR_00038 = L"获取2d technique失败";
-	const String ERROR_00039 = L"获取2d pass失败";
-	const String ERROR_00040 = L"获取2d wvp失败";
-	const String ERROR_00041 = L"获取2d texture失败";
-	const String ERROR_00042 = L"转换2d texture失败";
-	const String ERROR_00043 = L"Canvas Map失败";
-	const String ERROR_00044 = L"创建Canvas顶点缓存失败";
+	const String ERROR_00038 = L"获取2d technique失败。";
+	const String ERROR_00039 = L"获取2d pass失败。";
+	const String ERROR_00040 = L"获取2d wvp失败。";
+	const String ERROR_00041 = L"获取2d texture失败。";
+	const String ERROR_00042 = L"转换2d texture失败。";
+	const String ERROR_00043 = L"Canvas Map失败。";
+	const String ERROR_00044 = L"创建Canvas顶点缓存失败。";
 	const String ERROR_00045 = L"创建2d effect失败。";
 	const String ERROR_00046 = L"初始化freetype失败。";
+	const String ERROR_00047 = L"获取Client失败，已是Server。";
+	const String ERROR_00048 = L"获取Server失败，已是Client。";
 }
 
 

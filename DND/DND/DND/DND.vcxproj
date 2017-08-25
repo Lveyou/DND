@@ -40,6 +40,7 @@
     <ClInclude Include="include\DNDString.h" />
     <ClInclude Include="include\DNDSystem.h" />
     <ClInclude Include="include\DNDText.h" />
+    <ClInclude Include="include\DNDThread.h" />
     <ClInclude Include="include\DNDTime.h" />
     <ClInclude Include="include\DNDTypedef.h" />
     <ClInclude Include="include\DNDUser.h" />
@@ -50,6 +51,7 @@
     <ClInclude Include="src\DNDDirectX.h" />
     <ClInclude Include="src\DNDFont.h" />
     <ClInclude Include="src\DNDInput_imp.h" />
+    <ClInclude Include="src\DNDNet_imp.h" />
     <ClInclude Include="src\DNDRigidBody_imp.h" />
     <ClInclude Include="src\DNDSystem_imp.h" />
     <ClInclude Include="src\DNDTexture.h" />
@@ -69,10 +71,12 @@
     <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp" />
     <ClCompile Include="src\DNDImage.cpp" />
     <ClCompile Include="src\DNDInput_imp.cpp" />
+    <ClCompile Include="src\DNDNet_imp.cpp" />
     <ClCompile Include="src\DNDRigidBody_imp.cpp" />
     <ClCompile Include="src\DNDSprite.cpp" />
     <ClCompile Include="src\DNDTexture.cpp" />
     <ClCompile Include="src\DNDText_imp.cpp" />
+    <ClCompile Include="src\DNDThread.cpp" />
     <ClCompile Include="src\DNDTime_imp.cpp" />
     <ClCompile Include="src\DNDUser.cpp" />
     <ClCompile Include="src\DNDMain.cpp" />
@@ -155,7 +159,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DND_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DND_EXPORTS;_WINSOCK2API_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

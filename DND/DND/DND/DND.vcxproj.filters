@@ -121,6 +121,12 @@
     <ClInclude Include="include\DNDNet.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="src\DNDNet_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DNDThread.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -187,6 +193,12 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDBox2DDebugDraw.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDNet_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDThread.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
