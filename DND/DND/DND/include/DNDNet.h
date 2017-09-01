@@ -110,6 +110,8 @@ namespace DND
 		virtual void SetProcEnd(void(*func)(UINT32 id)) = 0;
 		//发送给指定Client消息
 		virtual void Send(UINT32 id, NetMsg msg) = 0;
+		//返回头部格式字符串
+		virtual String GetClientInfo(UINT32 id) = 0;
 	};
 
 	class DLL_API Net

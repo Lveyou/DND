@@ -1,6 +1,6 @@
 @echo off
 echo 服务器并发测试
-set count=100
+set count=20
 echo 循环次数%count%
 
 for /l %%i in (1,1,%count%) do (

@@ -94,7 +94,7 @@ namespace DND
 		virtual void SetProcEnd(void(*func)(UINT32 id)) override;
 		//发送给指定Client消息
 		virtual void Send(UINT32 id, NetMsg msg) override;
-		
+		virtual String GetClientInfo(UINT32 id) override;
 
 		static void (*m_proc_func)(UINT32 id, NetMsg str);
 		static void(*m_proc_func_end)(UINT32 id);

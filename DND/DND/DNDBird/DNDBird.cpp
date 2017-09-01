@@ -44,7 +44,7 @@ void DNDBird::_update()
 				//发送一条消息
 				cs_Info info;
 				UINT32 code = typeid(info).hash_code();
-				wcscpy_s(info.wcsInfo, 256, L"我成功登陆了！");
+				wcscpy_s(info.wcsInfo, 256, L"我就随便发送了一串字！");
 				NetMsg msg;
 				msg.Build<cs_Info>(&info);
 

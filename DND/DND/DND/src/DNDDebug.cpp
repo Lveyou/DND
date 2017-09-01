@@ -5,6 +5,7 @@
 #include "DNDTime.h"
 #include <windows.h>
 #include <iostream>
+#include "DNDMutex.h"
 
 namespace DND
 {
@@ -13,8 +14,10 @@ namespace DND
 
 	void Debug::WriteLine(const String& str, int level)
 	{
+
 		assert(_debugger && L"ERROR_00008");
 		_debugger->WriteLine(str, level);
+
 	}
 
 	void Debug::Write(const String& str, int level)
@@ -56,6 +59,7 @@ namespace DND
 
 	void DebuggerConsole::WriteLine(const String& str, int level)
 	{
+		_mutex2.Lock();
 		if(_bTimeStamp)
 		{
 			Write(String(L"[") + Game::Get()->time->GetHMSString() + L"]", DebugLevel::TIME);
@@ -64,10 +68,13 @@ namespace DND
 			
 		Write(str, level);
 		WriteEndl(level);
+		_mutex2.UnLock();
 	}
 
 	void DebuggerConsole::Write(const String& str, int level)
 	{
+		_mutex.Lock();
+
 		switch(level)
 		{
 		case DebugLevel::BLANK:
@@ -112,7 +119,7 @@ namespace DND
 			break;
 		}
 		std::wcout << str.GetWcs();
-		
+		_mutex.UnLock();
 	}
 
 	void DebuggerConsole::WriteEndl(int level)

@@ -108,12 +108,12 @@ re:
 		{
 			state = -1;//失败
 			InterlockedExchange(&m_state, state);
-			debug_warn(L"DND:Clinet 连接服务器失败。");
+			debug_warn(L"DND: Clinet连接服务器失败。");
 			Sleep(3000);//3秒后重连
 			goto re;
 		}
 
-		debug_info(L"DND:Clinet 连接服务器成功。");
+		debug_notice(L"DND: Clinet连接服务器成功。");
 
 		//请求接受循环
 		while (true)
@@ -220,7 +220,7 @@ re:
 			if (ret == SOCKET_ERROR)
 			{
 				//调转到这里说明，对方已经断开了连接
-				debug_warn(L"DND:Server 接受客户端数据失败。");
+				debug_warn(((Server_imp*)(Net::GetServer()))->GetClientInfo(m_id) + L"断开了连接");
 				if (Server_imp::m_proc_func_end)
 					Server_imp::m_proc_func_end(m_id);
 				//结束线程，删除ClientInfo
@@ -268,7 +268,7 @@ re:
 				if (ret == SOCKET_ERROR)
 				{
 					//调转到这里说明，对方已经断开了连接
-					debug_warn(L"DND:Server 发送客户端数据失败。");
+					debug_warn(((Server_imp*)(Net::GetServer()))->GetClientInfo(m_id) + L"断开了连接");
 					if (Server_imp::m_proc_func_end)
 						Server_imp::m_proc_func_end(m_id);
 					//结束线程
@@ -358,6 +358,15 @@ re:
 		}
 	}
 
+
+	String Server_imp::GetClientInfo(UINT32 id)
+	{
+		return String::Format(300, L"[%s] - %05d: ",
+			GetClientIP(id).GetWcs(), id);
+	}
+
+
+
 	void Server_imp::_run()
 	{
 		//创建套接字
@@ -400,6 +409,8 @@ re:
 				return;
 			}
 
+			
+
 			ClientInfo* info = new ClientInfo;
 			info->socket = client_new;
 			/*char temp[32];
@@ -434,6 +445,8 @@ re:
 				m_clients[i] = info;
 				//创建独立recv线程
 				m_clients[i]->thread.Init(info->socket, i);
+
+				debug_notice(GetClientInfo(i) + L"接收到一个连接。");
 				break;
 			}
 		}

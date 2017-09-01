@@ -14,6 +14,7 @@
 #include "DNDString.h"
 #include "DNDError.h"
 #include <windows.h>
+#include "DNDMutex.h"
 
 #define debug_info(str)\
 	Debug::WriteLine(str, DebugLevel::INFO)
@@ -29,6 +30,7 @@
 
 #define debug_msg(str)\
 	Debug::WriteLine(str, DebugLevel::MSG)
+
 
 namespace DND
 {
@@ -73,7 +75,7 @@ namespace DND
 		virtual void WriteEndl(int level) override;	
 
 		//Temporary WriteLine
-		virtual void TempWrite(const String& str, int level);
+		void TempWrite(const String& str, int level);
 		void SetTimeStamp(bool open);
 
 		//Input ◊Ë»˚∑µªÿ ‰»Î¡˜
@@ -92,6 +94,8 @@ namespace DND
 		HANDLE _handleOutput;
 		HWND _consoleHwnd;
 		bool _bTimeStamp;
+		Mutex _mutex;
+		Mutex _mutex2;
 		void _get_console_hwnd();
 		
 	};

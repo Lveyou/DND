@@ -49,16 +49,15 @@ void BirdServer::MsgDispatcher(UINT32 id, NetMsg msg)
 	DND_SERVER_ON_MSG(cs_Info)
 	DND_SERVER_ON_MSG(cs_Beat)
 
-	debug_warn(L"收到了错误的消息。");
+	debug_warn(server->GetClientInfo(id) + L"收到了错误的消息。");
 
 }
 
 void BirdServer::OnMsg_cs_Info(UINT32 id, cs_Info* msg)
 {
-	String all = String::Format(300, L"[%s] - %05d: %s",
-		server->GetClientIP(id).GetWcs(), id, msg->wcsInfo);
+	
 
-	debug_msg(all);
+	debug_msg(server->GetClientInfo(id) + msg->wcsInfo);
 
 	sc_Ok msg_ok;
 	NetMsg net_msg;

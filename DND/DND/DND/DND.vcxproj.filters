@@ -127,6 +127,9 @@
     <ClInclude Include="include\DNDThread.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDMutex.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -199,6 +202,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDThread.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDMutex.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
