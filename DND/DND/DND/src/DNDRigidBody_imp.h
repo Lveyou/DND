@@ -31,6 +31,8 @@ namespace DND
 		virtual void SetType(BodyType type) override;
 
 		virtual void SetLinearVelocity(Vector2 v) override;
+		virtual void SetTransform(Vector2 pos, float angle) override;
+		virtual void SetScale(Vector2 scale) override;
 		virtual void SetActive(bool active) override;
 
 		RigidBody_imp(float density, float friction, float restitution);
@@ -38,6 +40,7 @@ namespace DND
 
 		b2FixtureDef _fixtureDef;
 		b2Body* _body;
+		Vector2 _scale;
 	};
 
 

@@ -67,7 +67,7 @@ void DNDBird::_init()
 {
 	//////////////////////////////////////////////////////////////////////////
 	client = Net::GetClient();
-	client->Connect(L"192.168.100.222", 4002);
+	client->Connect(L"192.168.1.12", 4002);
 
 	Size w_size = sys->GetWindowSize();
 	///////////////////////////font/////////////////////////////////////
@@ -86,8 +86,8 @@ void DNDBird::_init()
 	Image* img_bird = Image::Create("Data\\Image\\bird.png");
 	spr_bird = canvas->CreateSprite(img_bird);
 	delete img_bird;
-	spr_bird->GetCoor()->SetPosition(Vector2(300,300));
-	spr_bird->CreateRigidBody(1.0f, 0.2f, 0.5f);
+	spr_bird->GetCoor()->SetPosition(Vector2(w_size.w / 2,300));
+	spr_bird->CreateRigidBody(1.0f, 0.9f, 0.5f);
 	spr_bird->GetRigidBody()->AddShapeCircle(Vector2(), 56);
 	spr_bird->GetRigidBody()->SetType(RigidBody::DYNAMIC);
 	spr_bird->GetRigidBody()->SetActive(false);
@@ -98,7 +98,6 @@ void DNDBird::_init()
 	spr_start->GetCoor()->SetPosition(Vector2(w_size.w/2, w_size.h - 100));
 	spr_start->CreateRigidBody(1.0f, 0.2f, 0);
 	spr_start->GetRigidBody()->AddShapeSprite(spr_start);
-	
 	btn_start = ButtonSpriteScale::Create(spr_start, 1.0f, 1.2f, 2.0f);
 	///////////////////////////window///////////////////////////////////
 	sys->SetWindowStyle(WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);

@@ -3,6 +3,7 @@
 #include "DNDGame.h"
 #include "DNDTime.h"
 #include "DNDDebug.h"
+#include "DNDRigidBody.h"
 
 namespace DND
 {
@@ -47,7 +48,10 @@ namespace DND
 			break;
 		}
 		_cur = Math::GetBetween(_cur, _min, _max);
-		_spr->GetCoor()->SetScale(Vector2(_cur, _cur));
+		if (RigidBody* rigidbody = _spr->GetRigidBody())
+			rigidbody->SetScale(Vector2(_cur, _cur));
+		else
+			_spr->GetCoor()->SetScale(Vector2(_cur, _cur));
 		//debug_info(String::Format(64, L"%f", _cur));
 		_spr->Render();
 	}

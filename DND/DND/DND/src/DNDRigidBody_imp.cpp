@@ -10,10 +10,12 @@ namespace DND
 		_fixtureDef.density = density;
 		_fixtureDef.friction = friction;
 		_fixtureDef.restitution = restitution;
+		_scale = Vector2(1.0f, 1.0f);
 
 		b2World* world = Game::Get()->_b2World;
 		b2BodyDef body_def;
 		body_def.type = b2_staticBody;
+		body_def.allowSleep = false;//½ûÖ¹ÐÝÃß
 		_body = world->CreateBody(&body_def);
 	}
 
@@ -74,11 +76,41 @@ namespace DND
 		_body->SetLinearVelocity(b2Vec2(v.a, v.b));
 	}
 
+	void RigidBody_imp::SetTransform(Vector2 pos, float angle)
+	{
+		_body->SetTransform(b2Vec2(pos.a, pos.b), angle);
+	}
+
+	void RigidBody_imp::SetScale(Vector2 scale)
+	{
+		for (auto iter : _fixtures)
+		{
+			b2Fixture* fixture = iter;
+			b2Shape* shape = fixture->GetShape();
+			switch (shape->GetType())
+			{
+			case b2Shape::e_circle:
+				shape->m_radius *= scale.a / _scale.a;
+				break;
+			case b2Shape::e_polygon:
+				for (auto& p : ((b2PolygonShape*)shape)->m_vertices)
+				{
+					p.x *= scale.a / _scale.a;
+					p.y *= scale.b / _scale.b;
+				}
+				break;
+			}
+		}
+		
+		b2Transform t = _body->GetTransform();
+		_body->SetTransform(t.p, t.q.GetAngle());
+		_scale = scale;
+	}
+	
 	void RigidBody_imp::SetActive(bool active)
 	{
 		_body->SetActive(active);
 	}
-
 }
 
 

@@ -68,7 +68,8 @@ namespace DND
 		t->_set_last();
 		double sec_count = 0;
 		UINT32 sec_frame = 0;
-	
+		double b2_count = 0;
+
 		QueryPerformanceCounter(&(t->_loop_start));
 		do 
 		{
@@ -89,7 +90,12 @@ namespace DND
 			t->_set_last();
 			///////////////////////////d1: HDD -> CPU////////////////////////////////
 			//box2d
-			_b2World->Step(_b2TimeStep, _b2VelocityIterations, _b2PositionIterations);
+			b2_count += t->_real_delta;
+			if (b2_count >= _b2TimeStep)
+			{
+				_b2World->Step(_b2TimeStep, _b2VelocityIterations, _b2PositionIterations);
+				b2_count -= _b2TimeStep;
+			}
 			_b2World->DrawDebugData();
 			//用户逻辑片段
 			_fixed_update();

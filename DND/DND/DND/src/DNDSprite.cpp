@@ -100,10 +100,13 @@ namespace DND
 	{
 		RigidBody_imp* rigidBody = new RigidBody_imp(density, friction, restitution);
 
+		//通过精灵的Coor设定刚体，之后都是刚体控制精灵位置了。
 		Vector2 pos = GetCoor()->GetPosition();
 		float angle = GetCoor()->GetRotate();
+		Vector2 scale = GetCoor()->GetScale();
 
 		rigidBody->_body->SetTransform(b2Vec2(pos.a, pos.b), angle);
+		rigidBody->SetScale(scale);
 
 		_rigidBody = rigidBody;
 	}
@@ -123,6 +126,7 @@ namespace DND
 			b2Vec2 pos = rigidbody->_body->GetPosition();
 			GetCoor()->SetPosition(Vector2(pos.x, pos.y));
 			GetCoor()->SetRotate(rigidbody->_body->GetAngle());
+			GetCoor()->SetScale(rigidbody->_scale);
 		}
 	}
 
