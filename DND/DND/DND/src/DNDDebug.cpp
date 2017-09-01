@@ -104,6 +104,12 @@ namespace DND
 				BACKGROUND_RED |
 				FOREGROUND_INTENSITY);
 			break;
+		case DebugLevel::MSG:
+			SetConsoleTextAttribute(_handleOutput,
+				FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE |
+				BACKGROUND_RED | BACKGROUND_BLUE |
+				FOREGROUND_INTENSITY);
+			break;
 		}
 		std::wcout << str.GetWcs();
 		
@@ -156,6 +162,14 @@ namespace DND
 		UINT32 len = str.GetLength();
 		Write(str, level);
 		Write(String(L'\b', len), level);
+	}
+
+	String DebuggerConsole::Input()
+	{
+		wchar_t temp[256];
+		wcin >> temp;
+
+		return temp;
 	}
 
 }

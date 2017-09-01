@@ -27,6 +27,9 @@
 #define debug_err(str)\
 	Debug::WriteLine(str, DebugLevel::ERR)
 
+#define debug_msg(str)\
+	Debug::WriteLine(str, DebugLevel::MSG)
+
 namespace DND
 {
 	//debug level
@@ -39,7 +42,8 @@ namespace DND
 			INFO,
 			NOTICE,
 			WARN,
-			ERR
+			ERR,
+			MSG	//网络消息
 		};
 	};
 	//debugger
@@ -71,6 +75,9 @@ namespace DND
 		//Temporary WriteLine
 		virtual void TempWrite(const String& str, int level);
 		void SetTimeStamp(bool open);
+
+		//Input 阻塞返回输入流
+		String Input();
 		//enum Color
 		//{
 		//	WHITE,//info

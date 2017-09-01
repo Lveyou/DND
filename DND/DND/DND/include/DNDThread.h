@@ -13,7 +13,7 @@
 
 #include "DNDDLL.h"
 #include <process.h>
-
+#include "DNDTypedef.h"
 
 
 namespace DND
@@ -22,7 +22,7 @@ namespace DND
 
 	enum ThreadState
 	{
-		THREAD_START,
+		THREAD_START = 0,
 		THREAD_RUN,
 		THREAD_END
 	};
@@ -32,10 +32,10 @@ namespace DND
 	public:
 		friend void __cdecl _thread_func(void*);
 		Thread() { m_state = THREAD_START; _beginthread(_thread_func, 0, this); }
-		ThreadState Get_State();
+		UINT32 Get_State();
 		void Start();
 	private:
-		ThreadState m_state;
+		UINT32 m_state;
 		virtual void _run() = 0;
 	};
 }

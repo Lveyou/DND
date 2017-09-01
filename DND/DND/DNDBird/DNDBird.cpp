@@ -1,6 +1,27 @@
 #include "DNDBird.h"
+
 void DNDBird::_update()
 {
+	//这里处理网络消息
+
+	NetMsg net_msg;
+	net_msg = client->Recv();
+	OnMsg(net_msg);
+	//每隔一秒
+	static double time_count = 0;
+	if(time_count >= 3.0)
+	{
+		cs_Beat msg_beat;
+		NetMsg msg;
+		msg.Build<cs_Beat>(&msg_beat);
+		client->Send(msg);
+		time_count -= 3.0;
+		beat_send_time = time->GetCurrent();
+	}
+	time_count += time->GetRealDelta();
+	
+	
+	//////////////////////////////////////////////////////////////////////////
 	switch(game_state)
 	{
 	case GAME_STATE_MENU:
@@ -13,6 +34,22 @@ void DNDBird::_update()
 			{
 				spr_bird->GetRigidBody()->SetLinearVelocity(Vector2(0,-45));
 			}
+
+			//连接上的逻辑
+			static bool s1 = true;
+			if(s1 && client->GetState() == Client::FREE)
+			{
+				s1 = false;
+				spr_bird->GetRigidBody()->SetActive(true);
+				//发送一条消息
+				cs_Info info;
+				UINT32 code = typeid(info).hash_code();
+				wcscpy_s(info.wcsInfo, 256, L"我成功登陆了！");
+				NetMsg msg;
+				msg.Build<cs_Info>(&info);
+
+				client->Send(msg);
+			}
 		}
 		break;
 	case GAME_STATE_GAME:
@@ -21,13 +58,17 @@ void DNDBird::_update()
 	
 
 	txt_debug->SetString(String::Format(
-		128, L"FPS:%d\n",
-		time->GetRealFPS()));
+		128, L"FPS:%d\nPing:%d",
+		time->GetRealFPS(), ping));
 	txt_debug->Render();
 }
 
 void DNDBird::_init()
 {
+	//////////////////////////////////////////////////////////////////////////
+	client = Net::GetClient();
+	client->Connect(L"192.168.100.222", 4002);
+
 	Size w_size = sys->GetWindowSize();
 	///////////////////////////font/////////////////////////////////////
 	sys->LoadFontFile(FONT_NAME_DEBUG, L"C:\\Windows\\Fonts\\simsun.ttc");
@@ -49,6 +90,7 @@ void DNDBird::_init()
 	spr_bird->CreateRigidBody(1.0f, 0.2f, 0.5f);
 	spr_bird->GetRigidBody()->AddShapeCircle(Vector2(), 56);
 	spr_bird->GetRigidBody()->SetType(RigidBody::DYNAMIC);
+	spr_bird->GetRigidBody()->SetActive(false);
 	//////////////////////////btn////////////////////////////////////////////
 	Image* img_start = Image::Create(L"Data\\Image\\start.png");
 	spr_start = canvas->CreateSprite(img_start);
@@ -68,10 +110,33 @@ void DNDBird::_init()
 	//////////////////////////////////////////////////////////////////////////
 	game_state = GAME_STATE_MENU;
 	SetGravity(Vector2(0, 10));//设置重力
+	//////////////////////////////////////////////////////////////////////////
+	beat_send_time = 0;
+	beat_recv_time = 0;
+	ping = 0;
 }
 
 void DNDBird::_release()
 {
 
+}
+
+void DNDBird::OnMsg(NetMsg msg)
+{
+	DND_CLIENT_MSG_HEAD()
+	DND_CLIENT_ON_MSG(sc_Ok)
+	DND_CLIENT_ON_MSG(sc_Beat)
+}
+
+void DNDBird::OnMsg_sc_Ok(sc_Ok* msg)
+{
+	debug_msg(L"接收到一个空返回。");
+}
+
+void DNDBird::OnMsg_sc_Beat(sc_Beat* msg)
+{
+	beat_recv_time = time->GetCurrent();
+
+	ping = UINT32((beat_recv_time - beat_send_time) * 1000);
 }
 

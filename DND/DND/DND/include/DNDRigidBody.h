@@ -33,6 +33,7 @@ namespace DND
 		virtual void SetType(BodyType type) = 0;
 
 		virtual void SetLinearVelocity(Vector2 v) = 0;
+		virtual void SetActive(bool active) = 0;
 		
 	};
 

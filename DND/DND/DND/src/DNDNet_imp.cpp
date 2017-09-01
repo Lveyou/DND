@@ -1,18 +1,40 @@
 #include "DNDNet_imp.h"
 #include "DNDDebug.h"
 
+
 namespace DND
 {
+	const UINT32 BUFFER_SIZE = 8192;
+	void(*Server_imp::m_proc_func)(UINT32 id, NetMsg msg) = NULL;
+	void(*Server_imp::m_proc_func_end)(UINT32 id) = NULL;
+
+
 	Client* Net::GetClient()
 	{
-		dnd_assert(_bClient, ERROR_00047);
+		if(_bClient == -1)
+		{
+			WSADATA wsaData;
+			WORD scokVersion = MAKEWORD(2, 2);
+			dnd_assert(!WSAStartup(scokVersion, &wsaData), ERROR_00049);
+			debug_notice(L"DND: Net init ok!");
+		}
+		dnd_assert(_bClient != 0, ERROR_00047);
+		_bClient = 1;
 		static Client_imp* c = new Client_imp;
 		return c;
 	}
 
 	Server* Net::GetServer()
 	{
-		dnd_assert(!_bClient, ERROR_00048);
+		if(_bClient == -1)
+		{
+			WSADATA wsaData;
+			WORD scokVersion = MAKEWORD(2, 2);
+			dnd_assert(!WSAStartup(scokVersion, &wsaData), ERROR_00049);
+			debug_notice(L"DND: Net init ok!");
+		}
+		dnd_assert(_bClient != 1, ERROR_00048);
+		_bClient = 0;
 		static Server_imp* s = new Server_imp;
 		return s;
 	}
@@ -30,44 +52,55 @@ namespace DND
 
 	void Client_imp::Send(const NetMsg& msg)
 	{
-		m_sends.push_back(msg);
+		//这里复制msg的buffer数据在堆上，等发送给服务器后释放。
+		NetMsg temp = msg;
+		temp._data = new BYTE[msg._size];
+		memcpy(temp._data, msg._data, msg._size);
+		m_sends.push_back(temp);
 	}
 
 	NetMsg Client_imp::Recv()
 	{
-		NetMsg ret = m_sends.front();
-		m_sends.pop_front();
+		if(!m_recvs.size())
+		{
+			NetMsg ret;
+			ret._type = 0;
+			return ret;
+		}
+		NetMsg ret = m_recvs.front();
+		m_recvs.pop_front();
 		return ret;
 	}
 
-	Client::State Client_imp::GetState()
+	UINT32 Client_imp::GetState()
 	{
 		return m_state;
 	}
 
 	void Client_imp::_run()
 	{
-		unsigned state = 0;//开始
+		UINT32 state = 0;//开始
 		InterlockedExchange(&m_state, state);
 
 		char buffer[BUFFER_SIZE];
+re2://断线重连
 		//创建套接字
 		m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if (m_socket == INVALID_SOCKET)
 		{
-			Debug::Instance()->Write_Line(L"DND:Clinet 创建套接字失败！");
+			debug_err(L"DND:Client 创建套接字失败。");
+			return;
 		}
 
-
 		//连接服务器
-
 		SOCKADDR_IN server_ip;
 		server_ip.sin_family = AF_INET;
-		m_server_ip.Get_Multi_Byte_Str(buffer, BUFFER_SIZE);
-		inet_pton(AF_INET, buffer, (void*)&server_ip);
+		m_server_ip.GetMultiByteStr(buffer, BUFFER_SIZE);
+		//inet_pton(AF_INET, buffer, (void*)&server_ip);
+		server_ip.sin_addr.s_addr = inet_addr(buffer);
 		server_ip.sin_port = htons((short)m_port);
 
-	re:
+re:	
 		state = 1;//连接中
 		InterlockedExchange(&m_state, state);
 		int ret = connect(m_socket, (LPSOCKADDR)&server_ip, sizeof(server_ip));
@@ -75,18 +108,17 @@ namespace DND
 		{
 			state = -1;//失败
 			InterlockedExchange(&m_state, state);
-			Debug::Instance()->Write_Line(L"DND:Clinet 连接服务器失败！");
+			debug_warn(L"DND:Clinet 连接服务器失败。");
 			Sleep(3000);//3秒后重连
 			goto re;
 		}
 
-		Debug::Instance()->Write_Line(L"DND:Clinet 连接服务器成功！");
+		debug_info(L"DND:Clinet 连接服务器成功。");
 
 		//请求接受循环
 		while (true)
 		{
 			//如果没有消息发送 ，就sleep线程
-
 			if (m_sends.size() == 0)
 			{
 				state = 2;//空闲
@@ -98,82 +130,32 @@ namespace DND
 			unsigned lock_send = 1;//禁止Send函数写入
 			InterlockedExchange(&m_lock_send, lock_send);
 
-			m_buffer_send = m_sends.front();
-			m_sends.pop_front();
-
+			//从队列取出一个消息
+			NetMsg msg = m_sends.front();
+			
 			lock_send = 0;//
 			InterlockedExchange(&m_lock_send, lock_send);
 
 			state = 3;//发送
 
 			InterlockedExchange(&m_state, state);
-			m_buffer_send.Get_Multi_Byte_Str(buffer, BUFFER_SIZE);
+			memcpy(buffer, &msg._type, sizeof(msg._type));
+			memcpy(buffer + sizeof(msg._type), &msg._size, sizeof(msg._size));
+			memcpy(buffer + sizeof(msg._type) + sizeof(msg._size),
+				msg._data, msg._size);
 
-			//没有文件发送
-			if (!m_files.empty())
-			{
-				char temp[] = "_file";
-				FileBlock b = m_files.front();
-
-				char name[MAX_PATH];
-				char path[MAX_PATH];
-				b.name.Get_Multi_Byte_Str(name, MAX_PATH);
-				b.path.Get_Multi_Byte_Str(path, MAX_PATH);
-
-				send(m_socket, temp, strlen(temp) + 1, 0);
-				send(m_socket, name, strlen(name) + 1, 0);
-
-				/*int length = 0;
-				while ((length = send(m_socket, b.m_file_buffer, FILE_SIZE, 0)) > 0)
-				{*/
-				FILE * fp;
-				fopen_s(&fp, path, "rb");  //windows下是"rb",表示打开一个只读的二进制文件  
-				if (NULL == fp)
-				{
-					//printf("File: %s Not Found\n", file_name);
-				}
-				else
-				{
-					m_files.pop_front();
-					memset(buffer, 0, BUFFER_SIZE);
-					int length = 0;
-
-					while ((length = fread(buffer, sizeof(char), BUFFER_SIZE, fp)) > 0)
-					{
-						if (send(m_socket, buffer, length, 0) < 0)
-						{
-							//printf("Send File: %s Failed\n", file_name);
-							break;
-						}
-						memset(buffer, 0, BUFFER_SIZE);
-					}
-
-					fclose(fp);
-					Debug::Instance()->Write_Line(L"DND:Clinet 文件发送成功！");
-
-					Sleep(5000);//休息5s再发送
-
-					ret = send(m_socket, temp, strlen(temp) + 1, 0);
-
-
-				}
-
-				/*	strcpy_s(temp, "_fend");
-
-				send(m_socket, temp, strlen(temp) + 1, 0);
-				Debug::Instance()->Write_Line(L"DND:Clinet 文件发送成功2！");*/
-			}
-			//Debug::Instance()->Write_Line(L"DND:Clinet 文件发送成功3！");
-			ret = send(m_socket, buffer, strlen(buffer) + 1, 0);
+			ret = send(m_socket, buffer, sizeof(msg._type) + sizeof(msg._size) + msg._size, 0);
 
 
 			if (ret == SOCKET_ERROR)
 			{
-				Debug::Instance()->Write_Line(L"DND:Clinet 发送数据失败！");
-				goto re;
+				debug_err(L"DND:Clinet 发送数据失败。");
+				closesocket(m_socket);
+				goto re2;
 			}
-			////成功发送之后
-			m_buffer_send = L"";
+			//成功发送之后，释放堆内存，再移出msg
+			m_sends.pop_front();
+			delete[] msg._data;
 
 			state = 4;//接收
 			InterlockedExchange(&m_state, state);
@@ -182,32 +164,282 @@ namespace DND
 
 			if (ret == SOCKET_ERROR)
 			{
-				Debug::Instance()->Write_Line(L"DND:Clinet 接收数据失败！");
-				goto re;
+				debug_err(L"DND:Clinet 接收数据失败。");
+				closesocket(m_socket);
+				goto re2;
 			}
 
-			m_buffer_recv = buffer;
+			//根据收到的消息构造一个NetMsg，用户Unbuild后释放堆内存
+			NetMsg msg2;
+			memcpy(&msg2._type, buffer, sizeof(msg2._type));
+			memcpy(&msg2._size, buffer + sizeof(msg2._type), sizeof(msg2._size));
+			msg2._data = new BYTE[msg2._size];
+			memcpy(msg2._data, buffer + sizeof(msg2._type) + sizeof(msg2._size), msg2._size);
 
-			unsigned lock = 1;
+			UINT32 lock = 1;
 			InterlockedExchange(&m_lock_recv, lock);
 
-			m_recvs.push_back(m_buffer_recv);
-			m_buffer_recv = L"";
+			m_recvs.push_back(msg2);
 
 			lock = 0;
 			InterlockedExchange(&m_lock_recv, lock);
 
-
-
 			state = 2;//空闲，这时保证bufferrecv是正确的
 			InterlockedExchange(&m_state, state);
-
-			/*unsigned sending = 0;
-			InterlockedExchange(&m_sending, sending);*/
 		}
 	}
 
 	Client_imp::~Client_imp()
+	{
+		closesocket(m_socket);
+	}
+
+	ClientInfo::ClientInfo()
+	{
+		//ip = L"";
+	}
+
+
+
+	void ServerRecv::Init(SOCKET socket, UINT32 id)
+	{
+		m_id = id;
+		m_socket = socket;
+
+		
+		Start();
+	}
+
+	void ServerRecv::_run()
+	{
+		char buffer[BUFFER_SIZE];
+		while (true)
+		{
+			int ret = recv(m_socket, buffer, BUFFER_SIZE, 0);
+
+			if (ret == SOCKET_ERROR)
+			{
+				//调转到这里说明，对方已经断开了连接
+				debug_warn(L"DND:Server 接受客户端数据失败。");
+				if (Server_imp::m_proc_func_end)
+					Server_imp::m_proc_func_end(m_id);
+				//结束线程，删除ClientInfo
+				closesocket(m_socket);
+				((Server_imp*)(Net::GetServer()))->m_clients.erase(m_id);
+				//m_socket = INVALID_SOCKET;
+				return;
+			}
+			else
+			{
+				//进入到这里，就说明客户端请求数据了
+				unsigned lock_send = 0;
+				InterlockedExchange(&m_sending, lock_send);
+
+				//这里处理客户端发来的消息
+				if (Server_imp::m_proc_func)
+				{
+					//这里自己负责new，消息处理函数处理后delete
+					NetMsg msg2;
+					memcpy(&msg2._type, buffer, sizeof(msg2._type));
+					memcpy(&msg2._size, buffer + sizeof(msg2._type), sizeof(msg2._size));
+					msg2._data = new BYTE[msg2._size];
+					memcpy(msg2._data, buffer + sizeof(msg2._type) + sizeof(msg2._size), msg2._size);
+
+					Server_imp::m_proc_func(m_id, msg2);
+
+					delete[] msg2._data;
+				}
+
+				//这里会等待 m_msg被填充
+				while (m_sending == 0)//没有数据需要发送
+				{
+					Sleep(100);
+				}
+
+				//Send只是缓存内容，这里实际发送	
+				memcpy(buffer, &m_msg._type, sizeof(m_msg._type));
+				memcpy(buffer + sizeof(m_msg._type), &m_msg._size, sizeof(m_msg._size));
+				memcpy(buffer + sizeof(m_msg._type) + sizeof(m_msg._size),
+					m_msg._data, m_msg._size);
+
+				ret = send(m_socket, buffer, sizeof(m_msg._type) + sizeof(m_msg._size) + m_msg._size, 0);
+				
+
+				if (ret == SOCKET_ERROR)
+				{
+					//调转到这里说明，对方已经断开了连接
+					debug_warn(L"DND:Server 发送客户端数据失败。");
+					if (Server_imp::m_proc_func_end)
+						Server_imp::m_proc_func_end(m_id);
+					//结束线程
+					closesocket(m_socket);
+					((Server_imp*)(Net::GetServer()))->m_clients.erase(m_id);
+					//m_socket = INVALID_SOCKET;
+					return;
+				}
+				delete[] m_msg._data;
+			}
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////
+	void Server_imp::StartListen(UINT16 port)
+	{
+		m_port = port;
+		Start();
+	}
+
+	String Server_imp::GetClientIP(UINT32 id)
+	{
+		auto iter = m_clients.find(id);
+		if (iter == m_clients.end())
+		{
+			return L"no client!";
+		}
+		else
+		{
+			return iter->second->ip;
+		}
+	}
+
+	unsigned Server_imp::GetClientNum()
+	{
+		return m_clients.size();
+	}
+
+	void Server_imp::GetAllClient(ClientUser* users)
+	{
+		UINT32 i = 0;
+		auto iter = m_clients.begin();
+		for(;iter != m_clients.end(); ++iter)
+		{
+			users[i].id = iter->first;
+			users[i].ip = iter->second->ip;
+			i++;
+		}
+	}
+
+	void Server_imp::SetProc(void(*func)(UINT32 id, NetMsg msg))
+	{
+		m_proc_func = func;
+	}
+
+	void Server_imp::SetProcEnd(void(*func)(UINT32 id))
+	{
+		m_proc_func_end = func;
+	}
+
+	void Server_imp::Send(UINT32 id, NetMsg msg)
+	{
+		auto iter = m_clients.find(id);
+		if (iter == m_clients.end())
+		{
+			debug_err(L"DND: Server Send目标不存在。");
+			return;
+		}
+		else
+		{
+
+			if (iter->second->thread.m_sending == 1)
+			{
+				debug_err(L"DND: Server此时不该调用Send。");
+				return;
+			}
+
+			//这里深拷贝至m_msg
+			NetMsg temp = msg;
+			temp._data = new BYTE[msg._size];
+			memcpy(temp._data, msg._data, msg._size);
+
+			iter->second->thread.m_msg = temp;
+
+
+			unsigned send = 1;
+			InterlockedExchange(&iter->second->thread.m_sending, send);
+		}
+	}
+
+	void Server_imp::_run()
+	{
+		//创建套接字
+		m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (m_socket == INVALID_SOCKET)
+		{
+			debug_err(L"DND: Server创建套接字失败。");
+			return;
+		}
+
+
+		//绑定服务器地址
+		SOCKADDR_IN server_ip;
+		server_ip.sin_family = AF_INET;
+		server_ip.sin_addr.s_addr = INADDR_ANY;
+		server_ip.sin_port = htons((short)m_port);
+
+		int ret = bind(m_socket, (LPSOCKADDR)&server_ip, sizeof(server_ip));
+		if (ret == SOCKET_ERROR)
+		{
+			debug_err(L"DND: Server绑定地址失败。");
+			return;
+		}
+
+
+		//接受客户端连接循环
+		listen(m_socket, 1);
+		while (true)
+		{
+			//客户端信息
+			SOCKET client_new;
+			sockaddr_in client_addr;
+			int addr_len = sizeof(client_addr);
+
+			client_new = accept(m_socket, (sockaddr FAR*)&client_addr, &addr_len);
+
+			if (client_new == INVALID_SOCKET)
+			{
+				debug_err(L"DND: Server接受客户端连接失败。");
+				return;
+			}
+
+			ClientInfo* info = new ClientInfo;
+			info->socket = client_new;
+			/*char temp[32];
+			inet_ntop(AF_INET, (void*)&client_addr, temp, 32);*/
+			
+			info->ip = String(inet_ntoa(client_addr.sin_addr));
+
+
+			//线程加锁
+			unsigned lock = 1;
+			InterlockedExchange(&m_lock, lock);
+
+			_add_client(info);
+
+			lock = 0;
+			InterlockedExchange(&m_lock, lock);
+
+		}
+
+
+	}
+
+	void Server_imp::_add_client(ClientInfo* info)
+	{
+		//从1到max，0为保留值
+		for (unsigned i = 1; i < 200000; ++i)
+		{
+			auto iter = m_clients.find(i);
+			if (iter == m_clients.end())
+			{
+				//加入信息（浅拷贝）
+				m_clients[i] = info;
+				//创建独立recv线程
+				m_clients[i]->thread.Init(info->socket, i);
+				break;
+			}
+		}
+	}
+
+	Server_imp::~Server_imp()
 	{
 		closesocket(m_socket);
 	}

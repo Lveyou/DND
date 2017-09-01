@@ -12,7 +12,7 @@ namespace DND
 		thread->m_state = THREAD_END;
 	}
 
-	ThreadState Thread::Get_State()
+	UINT32 Thread::Get_State()
 	{
 		return m_state;
 	}

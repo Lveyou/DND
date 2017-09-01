@@ -2,6 +2,8 @@
 #include <DND.h>
 using namespace DND;
 
+#include "..\DNDBirdServer\NetMoulde.h"
+
 const String FONT_NAME_DEBUG = L"debug";
 const UINT32 FONT_SIZE_DEBUG = 24;
 const Size WINDOW_SIZE = Size(800, 600);
@@ -17,6 +19,7 @@ public:
 	virtual void _init() override;				//init
 	virtual void _release() override;
 
+	Client* client;
 	int game_state;
 
 	Text* txt_debug;//fpsµÈ
@@ -28,5 +31,13 @@ public:
 	Sprite* spr_start;
 
 	Sprite* spr_bird;
+
+	void OnMsg(NetMsg msg);
+	void OnMsg_sc_Ok(sc_Ok* msg);
+	void OnMsg_sc_Beat(sc_Beat* msg);
+
+	double beat_send_time;
+	double beat_recv_time;
+	UINT32 ping;
 
 };

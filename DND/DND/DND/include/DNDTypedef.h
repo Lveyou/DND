@@ -16,7 +16,7 @@
 
 namespace DND
 {
-	typedef wchar_t WCHAR;
+	//typedef wchar_t WCHAR;
 
 }
 

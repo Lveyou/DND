@@ -74,6 +74,11 @@ namespace DND
 		_body->SetLinearVelocity(b2Vec2(v.a, v.b));
 	}
 
+	void RigidBody_imp::SetActive(bool active)
+	{
+		_body->SetActive(active);
+	}
+
 }
 
 
