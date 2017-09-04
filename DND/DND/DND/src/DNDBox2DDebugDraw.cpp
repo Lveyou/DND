@@ -11,7 +11,7 @@ namespace DND
 	{
 		System* sys = Game::Get()->sys;
 
-		for(UINT32 i = 0; i < vertexCount - 1; ++i)
+		for(INT32 i = 0; i < vertexCount - 1; ++i)
 		{
 			sys->RenderLine(
 				Vector2(vertices[i].x, vertices[i].y),

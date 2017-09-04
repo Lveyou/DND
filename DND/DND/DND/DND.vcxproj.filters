@@ -127,8 +127,12 @@
     <ClInclude Include="include\DNDMutex.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="src\DNDBox2DDebugDraw.h" />
-    <ClInclude Include="src\DNDNet_imp.h" />
+    <ClInclude Include="src\DNDNet_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDBox2DDebugDraw.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">

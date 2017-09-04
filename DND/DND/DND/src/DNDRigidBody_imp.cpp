@@ -83,9 +83,9 @@ namespace DND
 
 	void RigidBody_imp::SetScale(Vector2 scale)
 	{
-		for (auto iter : _fixtures)
+		for (auto iter = _fixtures.begin(); iter != _fixtures.end(); ++iter)
 		{
-			b2Fixture* fixture = iter;
+			b2Fixture* fixture = *iter;
 			b2Shape* shape = fixture->GetShape();
 			switch (shape->GetType())
 			{
@@ -93,8 +93,9 @@ namespace DND
 				shape->m_radius *= scale.a / _scale.a;
 				break;
 			case b2Shape::e_polygon:
-				for (auto& p : ((b2PolygonShape*)shape)->m_vertices)
+				for (INT32 i = 0; i < ((b2PolygonShape*)shape)->m_count; ++i)
 				{
+					auto& p = ((b2PolygonShape*)shape)->m_vertices[i];
 					p.x *= scale.a / _scale.a;
 					p.y *= scale.b / _scale.b;
 				}

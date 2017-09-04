@@ -148,8 +148,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatRelease;..\Release;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Release;..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatRelease;..\Release;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -193,7 +193,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DND_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;DND_EXPORTS;_WINSOCK2API_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -201,7 +201,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;zlib.lib;libpng16.lib;freetype28.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;zlib.lib;libpng16.lib;freetype28.lib;box2D.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
