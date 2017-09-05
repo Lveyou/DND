@@ -20,7 +20,7 @@
 		return;
 
 #define DND_SERVER_ON_MSG(name) \
-	if(type == typeid(name).hash_code())\
+	if(type == GetClassType<name>())\
 		{OnMsg_##name(id, msg.UnBuild<name>());return;}
 
 #define DND_CLIENT_MSG_HEAD() \
@@ -29,13 +29,32 @@
 		return;
 
 #define DND_CLIENT_ON_MSG(name) \
-	if(type == typeid(name).hash_code())\
+	if(type == GetClassType<name>())\
 		{OnMsg_##name(msg.UnBuild<name>());return;}
 	
 
 
 namespace DND
 {
+	////////////////////////////////降低hash_code判断类型的开销///////////////////////////////
+	template<typename T>
+	class ClassType
+	{
+	public:
+		UINT32 _code;
+		ClassType()
+		{
+			_code = typeid(T).hash_code();
+		}
+	};
+
+	template<typename T>
+	inline UINT32 GetClassType()
+	{
+		static ClassType<T> type;
+		return type._code;
+	}
+	//////////////////////////////////////////////////////////////////////////
 	class DLL_API NetMsg
 	{
 		friend class Client_imp;
@@ -45,7 +64,7 @@ namespace DND
 		template<typename T>
 		void Build(T* p)
 		{
-			_type = typeid(T).hash_code();
+			_type = GetClassType<T>();
 			_data = (void*)p;
 			_size = sizeof(T);
 		}
@@ -56,6 +75,7 @@ namespace DND
 		template<typename T>
 		T* UnBuild()
 		{
+			dnd_assert(_type == GetClassType<T>(), ERROR_00050);
 			return (T*)_data;
 		}
 	private:
