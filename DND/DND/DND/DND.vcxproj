@@ -142,8 +142,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\effect11_sdk\include;..\..\dx11_sdk\include;..\DND\include;$(WindowsSdkDir)include;$(VCInstallDir)include</IncludePath>
-    <LibraryPath>..\..\effect11_sdk\lib\x86\Debug;..\..\dx11_sdk\lib\x86;$(WindowsSdkDir)lib;$(VCInstallDir)lib</LibraryPath>
+    <IncludePath>..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\x64;..\..\zlib-1.2.8\contrib\vstudio\vc10\x64\ZlibStatDebug;..\x64\Debug;..\..\dx11_sdk\lib\x64;$(LibraryPath)</LibraryPath>
     <ExcludePath />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -176,13 +176,13 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DND_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;DND_EXPORTS;_WINSOCK2API_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;zlib.lib;libpng16.lib;freetype28d.lib;box2D.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
