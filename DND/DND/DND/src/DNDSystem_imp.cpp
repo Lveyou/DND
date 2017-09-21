@@ -174,7 +174,13 @@ namespace DND
 
 	
 
-	
+
+	void System::SetShowCursor(bool show)
+	{
+		ShowCursor(show);
+	}
+
+
 
 
 

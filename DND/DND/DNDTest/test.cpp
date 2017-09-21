@@ -16,8 +16,9 @@ DNDMain()
 
 void Test::_update()
 {
+	Run_Cursor();
 	Run_Info();
-
+	Run_Menu();
 	Run_Out_Image_Canvas();
 }
 
@@ -25,7 +26,9 @@ void Test::_init()
 {
 	Init_Font();
 	Init_Window();
+	Init_Cursor();
 	Init_Info();
+	Init_Menu();
 }
 
 void Test::_release()
@@ -57,28 +60,92 @@ void Test::Run_Out_Image_Canvas()
 	}
 }
 
+void Test::Init_Cursor()
+{
+	//不显示默认光标
+	sys->SetShowCursor(false);
+
+	Image* img = Image::Create(L"Data\\Image\\cursor.png");
+	canvas->RegisterImageAll(1, img);
+	_sprCursor = canvas->CreateSprite(1, Quad(Vector2(),img->GetSize(), false));
+	_sprCursor->SetOrder(1);
+	//_sprCursor->SetColor(Color::GREEN);
+	delete img;
+}
+
+void Test::Run_Cursor()
+{
+	_sprCursor->GetCoor()->SetPosition(input->GetMousePosition());
+	_sprCursor->Render();
+}
+
 void Test::Init_Info()
 {
-	txt_fps_drawcall_time = canvas->CreateText(GAME_FONT_NAME_INFO, GAME_FONT_SIZE_INFO);
+	_txtFpsDrawcallTime = canvas->CreateText(GAME_FONT_NAME_INFO, GAME_FONT_SIZE_INFO);
 	//顶对齐
-	txt_fps_drawcall_time->SetAlignVertical(TEXT_ALIGN_TOP);
+	_txtFpsDrawcallTime->SetAlignVertical(TEXT_ALIGN_TOP);
 
 	//纯色背景
-	spr_bg = canvas->CreateSprite(0, Quad(Vector2(0,0),sys->GetWindowSize(),false), Color::BLACK);
+	_sprBg = canvas->CreateSprite(0, Quad(Vector2(0,0),sys->GetWindowSize(),false), Color::BLACK);
 }
 
 void Test::Run_Info()
 {
-	//分别绘制的是 帧数、一帧时间、Drawcall数、精灵数、时间
-	txt_fps_drawcall_time->SetString(String::Format(256,
+	Point mouse = input->GetMousePosition();
+	//分别绘制的是 帧数、一帧时间、Drawcall数、精灵数、时间、鼠标位置
+	_txtFpsDrawcallTime->SetString(String::Format(256,
 		L"%d/%.3lf\n"
 		"%d/%d\n"
-		"%ws",
+		"%ws\n"
+		"%d,%d",
 		time->GetRealFPS(), time->GetRealDelta(),
 		this->GetDrawCallNum(), this->GetSpriteNum(),
-		time->GetHMSString().GetWcs()));
+		time->GetHMSString().GetWcs(),
+		mouse.x, mouse.y));
 
-	txt_fps_drawcall_time->Render();
+	_txtFpsDrawcallTime->Render();
 
-	spr_bg->Render();
+	_sprBg->Render();
+}
+
+void Test::Init_Menu()
+{
+	_create_menu_btn(L"Image");
+	_create_menu_btn(L"Sprite");
+	_create_menu_btn(L"RigidBody");
+	_create_menu_btn(L"Coor");
+	_create_menu_btn(L"Text");
+	_create_menu_btn(L"Input");
+	_create_menu_btn(L"Sound");
+	_create_menu_btn(L"Net");
+	_create_menu_btn(L"GUI");
+}
+
+void Test::Run_Menu()
+{
+	const UINT32 xs = 20u;
+	const UINT32 ys = 100u;
+	const UINT32 y_dt = 42u;
+
+	UINT32 x = 0;
+	UINT32 y = 0;
+
+	for (auto& iter : _listBtnMenu)
+	{
+		iter->GetText()->GetCoor()->SetPosition(Vector2(xs + x, ys + y));
+		iter->Run();
+		y += y_dt;
+	}
+}
+
+void Test::_create_menu_btn(const String& str)
+{
+	Text* txt_temp = canvas->CreateText(GAME_FONT_NAME_MENU, GAME_FONT_SIZE_MENU);
+	txt_temp->SetString(str);
+	ButtonTextColor* temp = ButtonTextColor::Create(txt_temp,
+		GAME_BUTTON_COLOR_NORMAL,
+		GAME_BUTTON_COLOR_OVER,
+		GAME_BUTTON_COLOR_DOWN);
+
+	_listBtnMenu.push_back(temp);
 }

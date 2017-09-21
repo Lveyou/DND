@@ -133,6 +133,9 @@
     <ClInclude Include="src\DNDBox2DDebugDraw.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUIButtonTextColor.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -208,6 +211,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDMutex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUIButtonTextColor.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

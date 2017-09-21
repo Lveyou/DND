@@ -179,28 +179,25 @@ namespace DND
 
 	bool Text_imp::IsPickup()
 	{
-		Sprite* spr = NULL;
-		list<Sprite*>::iterator itor;
-		itor = m_sprites.begin();
-		if (itor == m_sprites.end())
-			return false;
-		spr = *itor;
-		if (!spr)
+		//计算文本围成的最大矩形，然后将鼠标转换到相应坐标系
+		if (m_sprites.size() == 0)
 			return false;
 		
-		unsigned h = m_font_size;
+		auto iter = m_sprites.begin();
+		UINT32 h = m_font_size;
 
-		Coor* coor = spr->GetCoor();
-		INT32 x1 = (INT32)((coor->GetPosition() - m_offset).a);
-		INT32 x2;
-		for (; itor != m_sprites.end(); ++itor)
+		Coor* coor = (*iter)->GetCoor();
+		float x1 = ((coor->GetPosition() - m_offset).a);
+		float x2 = x1;
+		for (; iter != m_sprites.end(); ++iter)
 		{
-			spr = *itor;
-			x2 = INT32((spr->GetCoor()->GetPosition() - m_offset).a + m_font_size);
+			Sprite* spr = *iter;
+			x2 = max(x2, (spr->GetCoor()->GetPosition() - m_offset).a + m_font_size);
 		}
 		Point mouse = Game::Get()->input->GetMousePosition();
-		
-		return Math::TestCollisionDotInRect(mouse, Rect(Point(x1, 0), Point(x2, h)));
+		Vector2 fmouse = m_coor->WorldToThis(mouse);
+
+		return Math::TestCollisionDotInRect(fmouse, Vector4(x1, 0, x2, h));
 	}
 
 	void Text_imp::SetAlignHorizontal(int align)
