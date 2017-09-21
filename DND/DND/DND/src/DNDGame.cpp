@@ -300,5 +300,20 @@ namespace DND
 		_b2World->SetGravity(b2Vec2(gray.a, gray.b));
 	}
 
+	UINT32 Game::GetDrawCallNum()
+	{
+		return _dx->_canvass.size() + 2;
+	}
+
+	UINT32 Game::GetSpriteNum()
+	{
+		UINT32 ret = 0;
+		for (auto& iter : _dx->_canvass)
+		{
+			ret += iter.second->_sprites.size();
+		}
+		return ret;
+	}
+
 }
 

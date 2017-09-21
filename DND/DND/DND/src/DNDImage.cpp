@@ -97,7 +97,7 @@ namespace DND
 		return Color(_buffer[xy.x + xy.y*_size.w]);
 	}
 
-	void Image::SaveToPNG(const String& path)
+	void Image::SaveToPNG(const String& path) const
 	{
 		FILE* fp;
 		

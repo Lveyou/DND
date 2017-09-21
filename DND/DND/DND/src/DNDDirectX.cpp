@@ -532,7 +532,7 @@ namespace DND
 		_swapChainDesc.SampleDesc.Count = 1;
 		_swapChainDesc.SampleDesc.Quality = 0;
 		_swapChainDesc.Windowed = true;
-		_swapChainDesc.Flags = 0;
+		_swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 			//DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 		dnd_assert(!FAILED(_factory->CreateSwapChain(_device, &_swapChainDesc, &_swapChain)),
 			ERROR_00016);

@@ -36,7 +36,7 @@ namespace DND
 
 		void Render(Point pos);
 		Color GetDotColor(Point xy);
-		void SaveToPNG(const String& path);
+		void SaveToPNG(const String& path) const;
 	private:
 		Image();
 		Image(const Image& b);

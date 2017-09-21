@@ -53,8 +53,12 @@ namespace DND
 		float _b2TimeStep;//时间步长 默认为1/60
 		UINT32 _b2VelocityIterations;//速度迭代次数 8
 		UINT32 _b2PositionIterations;//位置迭代次数 3
-	public://box2d
+	public:
+		//box2d
 		void SetGravity(Vector2 gray);
+		//Dx
+		UINT32 GetDrawCallNum();
+		UINT32 GetSpriteNum();
 	protected:
 		Game();
 	private:

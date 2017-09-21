@@ -30,6 +30,7 @@ namespace DND
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) override;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) override;
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) override;
+		virtual const Image* GetImage() override;
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) override;
 		virtual Text* CreateText(const String& name, unsigned font_size) override;
 
