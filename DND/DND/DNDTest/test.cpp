@@ -44,6 +44,8 @@ void Test::Init_Window()
 	sys->SetWindowSize(Size(800, 600));
 	sys->SetWindowCenter();
 	sys->ApplyWindow();
+	sys->SetVsync(false);
+	time->SetFPS(0);
 }
 
 void Test::Init_Font()
@@ -68,7 +70,7 @@ void Test::Init_Cursor()
 	Image* img = Image::Create(L"Data\\Image\\cursor.png");
 	canvas->RegisterImageAll(1, img);
 	_sprCursor = canvas->CreateSprite(1, Quad(Vector2(),img->GetSize(), false));
-	_sprCursor->SetOrder(1);
+	_sprCursor->SetOrder(2);
 	//_sprCursor->SetColor(Color::GREEN);
 	delete img;
 }
@@ -116,9 +118,9 @@ void Test::Init_Menu()
 	canvas->RegisterImageRect(2, img_btn, Rect(XYWH(Point(0, 0), Size(82, 30))));
 	canvas->RegisterImageRect(3, img_btn, Rect(XYWH(Point(0, 31), Size(82, 30))));
 	canvas->RegisterImageRect(4, img_btn, Rect(XYWH(Point(0, 61), Size(82, 30))));
-	_sprBtn01[0] = canvas->CreateSprite(2, Quad(Vector2(), Vector2(82, 30), true));
-	_sprBtn01[1] = canvas->CreateSprite(3, Quad(Vector2(), Vector2(82, 30), true));
-	_sprBtn01[2] = canvas->CreateSprite(4, Quad(Vector2(), Vector2(82, 30), true));
+	_sprBtn01[0] = canvas->CreateSprite(2, Quad(Vector2(), Vector2(180, 56), true));
+	_sprBtn01[1] = canvas->CreateSprite(3, Quad(Vector2(), Vector2(180, 56), true));
+	_sprBtn01[2] = canvas->CreateSprite(4, Quad(Vector2(), Vector2(180, 56), true));
 
 	_create_menu_btn(L"Image");
 	_create_menu_btn(L"Sprite");
@@ -133,16 +135,16 @@ void Test::Init_Menu()
 	Image* img = Image::Create(L"Data\\Image\\choose.png");
 	_sprChoose = canvas->CreateSprite(img);
 	_sprChoose->SetColor(GAME_BUTTON_COLOR_NORMAL);
-	_sprChoose->GetCoor()->SetPosition(Vector2(-8, 22));
+	_sprChoose->GetCoor()->SetPosition(Vector2(-100, 0));
 
 	
 }
 
 void Test::Run_Menu()
 {
-	const UINT32 xs = 20u;
-	const UINT32 ys = 100u;
-	const UINT32 y_dt = 42u;
+	const UINT32 xs = 120u;
+	const UINT32 ys = 150u;
+	const UINT32 y_dt = 65u;
 
 	UINT32 x = 0;
 	UINT32 y = 0;
@@ -170,6 +172,9 @@ void Test::_create_menu_btn(const String& str)
 {
 	Text* txt_temp = canvas->CreateText(GAME_FONT_NAME_MENU, GAME_FONT_SIZE_MENU);
 	txt_temp->SetString(str);
+	txt_temp->SetAlignHorizontal(TEXT_ALIGN_HCENTER);
+	txt_temp->SetAlignVertical(TEXT_ALIGN_VCENTER);
+	txt_temp->SetOrder(1);
 	ButtonSprite3Text1* temp = ButtonSprite3Text1::Create(
 		_sprBtn01[0]->Clone(),
 		_sprBtn01[1]->Clone(),
