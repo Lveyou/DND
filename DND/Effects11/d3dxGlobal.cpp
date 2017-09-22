@@ -112,6 +112,16 @@ HRESULT CMemoryStream::Seek(SIZE_T offset)
 
 }
 
+void* __cdecl operator new(size_t s, CDataBlockStore &pAllocator)
+{
+	D3DXASSERT(s <= 0xffffffff);
+	return pAllocator.Allocate((UINT)s);
+}
+
+void __cdecl operator delete(void* p, CDataBlockStore &pAllocator)
+{
+}
+
 //////////////////////////////////////////////////////////////////////////
 // CDataBlock - used to dynamically build up the effect file in memory
 //////////////////////////////////////////////////////////////////////////
