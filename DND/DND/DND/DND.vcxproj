@@ -28,6 +28,7 @@
     <ClInclude Include="include\DNDError.h" />
     <ClInclude Include="include\DNDGame.h" />
     <ClInclude Include="include\DNDGUI.h" />
+    <ClInclude Include="include\DNDGUIButtonSprite3Text1.h" />
     <ClInclude Include="include\DNDGUIButtonSpriteScale.h" />
     <ClInclude Include="include\DNDGUIButtonTextColor.h" />
     <ClInclude Include="include\DNDImage.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="src\DNDFont.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />
     <ClCompile Include="src\DNDGUI.cpp" />
+    <ClCompile Include="src\DNDGUIButtonSprite3Text1.cpp" />
     <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp" />
     <ClCompile Include="src\DNDGUIButtonTextColor.cpp" />
     <ClCompile Include="src\DNDImage.cpp" />

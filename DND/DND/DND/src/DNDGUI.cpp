@@ -7,6 +7,17 @@ namespace DND
 
 
 
+	bool Control::IsRelease()
+	{
+		//上一帧 按下 这一帧释放（均在内部）
+		return (_last_state == DOWN) && (_state == OVER);
+	}
+
+	Control::State Control::GetState()
+	{
+		return _state;
+	}
+
 	void Control::Run()
 	{
 		Input* input = Game::Get()->input;

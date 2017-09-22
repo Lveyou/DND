@@ -85,8 +85,10 @@ void Test::Init_Info()
 	//¶¥¶ÔÆë
 	_txtFpsDrawcallTime->SetAlignVertical(TEXT_ALIGN_TOP);
 
-	//´¿É«±³¾°
-	_sprBg = canvas->CreateSprite(0, Quad(Vector2(0,0),sys->GetWindowSize(),false), Color::BLACK);
+	//±³¾°
+	Image* bg = Image::Create(L"Data\\Image\\bg.png");
+	_sprBg = canvas->CreateSprite(bg);
+	_sprBg->GetCoor()->SetPosition(sys->GetWindowSize() / 2);
 }
 
 void Test::Run_Info()
@@ -110,6 +112,14 @@ void Test::Run_Info()
 
 void Test::Init_Menu()
 {
+	Image* img_btn = Image::Create(L"Data\\Image\\button_01.png");
+	canvas->RegisterImageRect(2, img_btn, Rect(XYWH(Point(0, 0), Size(82, 30))));
+	canvas->RegisterImageRect(3, img_btn, Rect(XYWH(Point(0, 31), Size(82, 30))));
+	canvas->RegisterImageRect(4, img_btn, Rect(XYWH(Point(0, 61), Size(82, 30))));
+	_sprBtn01[0] = canvas->CreateSprite(2, Quad(Vector2(), Vector2(82, 30), true));
+	_sprBtn01[1] = canvas->CreateSprite(3, Quad(Vector2(), Vector2(82, 30), true));
+	_sprBtn01[2] = canvas->CreateSprite(4, Quad(Vector2(), Vector2(82, 30), true));
+
 	_create_menu_btn(L"Image");
 	_create_menu_btn(L"Sprite");
 	_create_menu_btn(L"RigidBody");
@@ -119,6 +129,13 @@ void Test::Init_Menu()
 	_create_menu_btn(L"Sound");
 	_create_menu_btn(L"Net");
 	_create_menu_btn(L"GUI");
+
+	Image* img = Image::Create(L"Data\\Image\\choose.png");
+	_sprChoose = canvas->CreateSprite(img);
+	_sprChoose->SetColor(GAME_BUTTON_COLOR_NORMAL);
+	_sprChoose->GetCoor()->SetPosition(Vector2(-8, 22));
+
+	
 }
 
 void Test::Run_Menu()
@@ -132,9 +149,20 @@ void Test::Run_Menu()
 
 	for (auto& iter : _listBtnMenu)
 	{
-		iter->GetText()->GetCoor()->SetPosition(Vector2(xs + x, ys + y));
+		iter->GetCoor()->SetPosition(Vector2(xs + x, ys + y));
 		iter->Run();
 		y += y_dt;
+
+		if (iter->IsRelease())
+		{
+			_strChoose = iter->GetText()->GetString();
+			_sprChoose->GetCoor()->SetParent(iter->GetCoor());
+		}
+	}
+
+	if (_strChoose.GetLength() != 0)
+	{
+		_sprChoose->Render();
 	}
 }
 
@@ -142,10 +170,11 @@ void Test::_create_menu_btn(const String& str)
 {
 	Text* txt_temp = canvas->CreateText(GAME_FONT_NAME_MENU, GAME_FONT_SIZE_MENU);
 	txt_temp->SetString(str);
-	ButtonTextColor* temp = ButtonTextColor::Create(txt_temp,
-		GAME_BUTTON_COLOR_NORMAL,
-		GAME_BUTTON_COLOR_OVER,
-		GAME_BUTTON_COLOR_DOWN);
+	ButtonSprite3Text1* temp = ButtonSprite3Text1::Create(
+		_sprBtn01[0]->Clone(),
+		_sprBtn01[1]->Clone(),
+		_sprBtn01[2]->Clone(),
+		txt_temp);
 
 	_listBtnMenu.push_back(temp);
 }

@@ -52,6 +52,7 @@ public:
 	//鼠标光标相关
 	void Init_Cursor();
 	void Run_Cursor();
+	
 private:
 	//鼠标图案
 	Sprite* _sprCursor;
@@ -73,9 +74,13 @@ public:
 	void _create_menu_btn(const String& str);
 private:
 	//菜单按钮
-	list<ButtonTextColor*> _listBtnMenu;
+	list<ButtonSprite3Text1*> _listBtnMenu;
 	//左侧光标
 	Sprite* _sprChoose;
+	//当前选择内容
+	String _strChoose;
+	//按钮01
+	Sprite* _sprBtn01[3];
 //////////////////////////////////////////////////////////////////////////
 
 };

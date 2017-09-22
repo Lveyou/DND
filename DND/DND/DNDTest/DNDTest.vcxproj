@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SceneGUI.h" />
+    <ClInclude Include="SceneImage.h" />
     <ClInclude Include="test.h" />
   </ItemGroup>
   <ItemGroup>
