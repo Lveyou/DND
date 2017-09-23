@@ -85,6 +85,7 @@ namespace DND
 	const String ERROR_00048 = L"获取Server失败，已是Client。";
 	const String ERROR_00049 = L"初始化WinSock失败。";
 	const String ERROR_00050 = L"NetMsg::UnBuild失败，类型不匹配。";
+
 }
 
 

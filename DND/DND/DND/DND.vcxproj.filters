@@ -139,6 +139,12 @@
     <ClInclude Include="include\DNDGUIButtonSprite3Text1.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDFile.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDFile_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -220,6 +226,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGUIButtonSprite3Text1.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDFile_imp.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

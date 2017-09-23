@@ -132,10 +132,13 @@ namespace DND
 		Size GetSize() const;
 	};
 
-	DLL_API Size Point_To_Size(const Point& p);
-	DLL_API Point Size_To_Point(const Size& s);
+	DLL_API Size PointToSize(const Point& p);
+	DLL_API Point SizeToPoint(const Size& s);
 	DLL_API Point operator+(const Point& p, const Size& size);
 	DLL_API Rect operator+(const Rect& rect,const Point& p);
+
+	//字符串转换系列
+	DLL_API Size StringToSize(const String& str);
 
 	//other: 左上角为 0 ，顺时针为 0，1，2，3
 	//构成的两个三角形为 ： 012 ， 023

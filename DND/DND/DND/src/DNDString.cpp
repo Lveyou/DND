@@ -197,7 +197,7 @@ namespace DND
 		return s == p->end() ? -1 : s - p->begin();
 	}
 
-	UINT32 String::FindN(WCHAR wc, UINT32 N)
+	UINT32 String::FindN(WCHAR wc, UINT32 N) const
 	{
 		if (N == 0)
 			return -1;
@@ -218,12 +218,12 @@ namespace DND
 		}
 	}
 
-	UINT32 String::GetCharCount(WCHAR ch)
+	UINT32 String::GetCharCount(WCHAR ch) const
 	{
 		return count(p->begin(), p->end(), ch);
 	}
 
-	String String::GetStr(UINT32 begin, UINT32 end)
+	String String::GetStr(UINT32 begin, UINT32 end) const
 	{
 		return String(&StrVector(&vector<WCHAR>(p->begin() + begin, p->begin() + end)));
 	}

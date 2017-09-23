@@ -26,6 +26,7 @@
     <ClInclude Include="include\DNDDebug.h" />
     <ClInclude Include="include\DNDDLL.h" />
     <ClInclude Include="include\DNDError.h" />
+    <ClInclude Include="include\DNDFile.h" />
     <ClInclude Include="include\DNDGame.h" />
     <ClInclude Include="include\DNDGUI.h" />
     <ClInclude Include="include\DNDGUIButtonSprite3Text1.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="src\DNDCanvas_imp.h" />
     <ClInclude Include="src\DNDCoor_imp.h" />
     <ClInclude Include="src\DNDDirectX.h" />
+    <ClInclude Include="src\DNDFile_imp.h" />
     <ClInclude Include="src\DNDFont.h" />
     <ClInclude Include="src\DNDInput_imp.h" />
     <ClInclude Include="src\DNDNet_imp.h" />
@@ -68,6 +70,7 @@
     <ClCompile Include="src\DNDCoor_imp.cpp" />
     <ClCompile Include="src\DNDDebug.cpp" />
     <ClCompile Include="src\DNDDirectX.cpp" />
+    <ClCompile Include="src\DNDFile_imp.cpp" />
     <ClCompile Include="src\DNDFont.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />
     <ClCompile Include="src\DNDGUI.cpp" />

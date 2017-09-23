@@ -43,6 +43,7 @@ namespace DND
 		const WCHAR* GetWcs() const;
 		void GetWideCharStr(WCHAR* target, UINT32 max_len) const;//获得宽字符数组
 		void GetMultiByteStr(char* target, UINT32 max_len) const;//获取字符数组
+
 		int GetInt();//返回int
 
 		void Clear();//设为空串
@@ -51,9 +52,9 @@ namespace DND
 		//==================查找==================
 		UINT32 FindEnd(WCHAR wc);//查找最后一个
 		UINT32 FindStr(const String& str);//查找字符串位置，返回-1代表不存在
-		UINT32 FindN(WCHAR wc, UINT32 N);//查找第n个要查找的字符
-		UINT32 GetCharCount(WCHAR ch);//返回某字符出现的个数
-		String GetStr(UINT32 begin, UINT32 end);//返回区间内的字符串
+		UINT32 FindN(WCHAR wc, UINT32 N) const; //查找第n个要查找的字符
+		UINT32 GetCharCount(WCHAR ch) const;//返回某字符出现的个数
+		String GetStr(UINT32 begin, UINT32 end) const;//返回区间内的字符串
 		//==================删除==================
 		void Cut(UINT32 begin, UINT32 end);//去掉区间内的字符串 [b, e]
 		void CutTail(UINT32 i);//去掉i位置后的 包括i

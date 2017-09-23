@@ -282,7 +282,7 @@ namespace DND
 
 	Size Rect::GetSize() const
 	{
-		return Point_To_Size(p2 - p1);
+		return PointToSize(p2 - p1);
 	}
 
 	XYWH::XYWH(Point ip, Size isize) :
@@ -291,12 +291,12 @@ namespace DND
 
 	}
 
-	Size Point_To_Size(const Point& p)
+	Size PointToSize(const Point& p)
 	{
 		return Size(p.x, p.y);
 	}
 
-	Point Size_To_Point(const Size& s)
+	Point SizeToPoint(const Size& s)
 	{
 		return Point(s.w, s.h);
 	}
@@ -311,6 +311,15 @@ namespace DND
 		return Rect(rect.p1 + p, rect.p2 + p);
 	}
 
+
+	Size StringToSize(const String& str)
+	{
+		UINT32 pos = str.FindN(L',', 1);
+		String str1 = str.GetStr(0, pos);
+		String str2 = str.GetStr(pos + 1, str.GetLength());;
+
+		return Size(str1.GetInt(), str2.GetInt());
+	}
 
 	//quad
 	Quad::Quad(Vector2 xy, Vector2 wh, bool center)
