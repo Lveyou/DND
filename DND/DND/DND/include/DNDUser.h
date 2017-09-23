@@ -152,6 +152,7 @@ namespace DND
 		Quad(Vector2 xy, Vector2 wh, bool center);
 		Quad(Vector2 xy, Vector2 wh, Vector2 anchor);
 		Quad(Vector2 xy, Vector2 wh, Vector2 anchor, float angle);
+		Quad(Vector2 size);
 
 	public:
 		Vector2 v[4];

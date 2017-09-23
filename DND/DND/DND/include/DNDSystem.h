@@ -45,6 +45,7 @@ namespace DND
 		virtual void LoadFontFile(const String& name, const String& path) = 0;
 
 		void SetShowCursor(bool show);
+		
 	};
 }
 

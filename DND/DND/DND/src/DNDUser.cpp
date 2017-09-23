@@ -4,6 +4,8 @@
 #include "DNDError.h"
 #include "DNDMath.h"
 
+#include "DNDGame.h"
+#include "DNDSystem.h"
 
 
 //#include <cmath>
@@ -370,6 +372,27 @@ namespace DND
 		v[1] = p1;
 		v[2] = p2;
 		v[3] = p3;
+	}
+
+	Quad::Quad(Vector2 size)
+	{
+		Vector2 window = Game::Get()->sys->GetWindowSize();
+		float ratio2 = window.a / window.b;
+		float ratio1 = size.a / size.b;
+		Vector2 wh;
+		if(ratio1 >= ratio2)//¸ß¶ÔÆë
+		{
+			wh = Vector2(window.b * ratio1, window.b);
+		}
+		else//¿í¶ÔÆë
+		{
+			wh = Vector2(window.a, window.a / ratio1);
+		}
+		Vector2 wh2 = wh * 0.5f;
+		v[0] = window / 2 - wh2;
+		v[2] = window / 2 + wh2;
+		v[1] = Vector2(v[2].a, v[0].b);
+		v[3] = Vector2(v[0].a, v[2].b);
 	}
 
 }
