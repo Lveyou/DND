@@ -562,8 +562,9 @@ namespace DND
 		////三角形
 		_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		_deviceContext->IASetInputLayout(_gfx2d->_inputLayout);
-		_gfx2d->_pass->Apply(0, _deviceContext);
+		//_gfx2d->_pass->Apply(0, _deviceContext);
 		//设置顶点缓存 贴图就交给 canvas了
+		
 		_render_canvass();
 
 		//点线绘图
@@ -904,7 +905,7 @@ namespace DND
 	}
 
 
-	Canvas* DirectX::_create_canvas(UINT32 order)
+	DND::Canvas* DirectX::_create_canvas(INT32 order)
 	{
 		if (_canvass[order])
 		{

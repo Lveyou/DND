@@ -34,13 +34,13 @@ namespace DND
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) override;
 		virtual Text* CreateText(const String& name, unsigned font_size) override;
 
-		Canvas_imp(UINT32 order);
+		Canvas_imp(INT32 order);
 		void _render();
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
 		void _create_vertex_buffer();
 		void _release_vertex_buffer();
 
-		UINT32 _order;
+		INT32 _order;
 		//all_sprite
 		list<Sprite*> _allSprite;
 		//Sprites 按 绘制顺序（小的先画） 存所有 sprite

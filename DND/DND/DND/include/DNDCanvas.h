@@ -23,7 +23,7 @@ namespace DND
 	class DLL_API Canvas
 	{
 	public:
-		static Canvas* Create(UINT32 order);
+		static Canvas* Create(INT32 order);
 		//×Ô¶¯×¢²áÍ¼Ïñ
 		virtual Sprite* CreateSprite(const String& img_name) = 0;
 		virtual Sprite* CreateSprite(const Image* img) = 0;

@@ -11,7 +11,7 @@
 namespace DND
 {
 
-	Canvas* Canvas::Create(UINT32 order)
+	Canvas* Canvas::Create(INT32 order)
 	{
 		DirectX* directx = Game::Get()->_dx;
 		return directx->_create_canvas(order);
@@ -158,6 +158,7 @@ namespace DND
 		directx->_deviceContext->IASetVertexBuffers(0, 1, &_bufferVertex, &a, &b);
 		
 		gfx_2d->_colorTexture->SetResource(_tex->_shaderResourceView);
+		gfx_2d->_pass->Apply(0, directx->_deviceContext);
 
 		directx->_deviceContext->DrawIndexed(_sprites.size() * 6, 0, 0);
 	}
@@ -293,7 +294,7 @@ namespace DND
 		}
 	}
 	
-	Canvas_imp::Canvas_imp(UINT32 order)
+	Canvas_imp::Canvas_imp(INT32 order)
 	{
 		_order = order;
 		_tex = new Texture();//这一步会创建一个纹理
