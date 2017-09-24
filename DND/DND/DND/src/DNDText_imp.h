@@ -37,8 +37,11 @@ namespace DND
 		virtual unsigned GetH() override;
 		virtual Sprite* GetPickup(unsigned& n) override;
 		virtual Sprite* GetSprite(unsigned n) override;
+		virtual void SetOutLine(bool open) override;
+		virtual void SetOutLineSize(UINT32 size) override;
+		virtual void SetOutLineColor(Color color) override;
 		virtual Text* Clone() override;
-
+		
 		
 		Text_imp(const String& name, unsigned font_size);
 		~Text_imp();
@@ -64,6 +67,11 @@ namespace DND
 		unsigned m_h;
 		void _sprites_offset(Vector2 offset);
 		Vector2 m_offset;
+		//Ãè±ßµÄ8¸ö
+		bool _showOutLine;
+		Text* _txtOutline[8];
+		UINT32 _outlineSize;
+		Color _outlineColor;
 	};
 }
 

@@ -20,6 +20,14 @@ namespace DND
 			spr = *itor;
 			spr->Render();
 		}
+
+		if (_showOutLine)
+		{
+			for (auto& iter : _txtOutline)
+			{
+				iter->Render();
+			}
+		}
 	}
 
 	void Text_imp::RenderFrame()
@@ -328,6 +336,56 @@ namespace DND
 		return 0;
 	}
 
+
+	void Text_imp::SetOutLine(bool open)
+	{
+		_showOutLine = open;
+		if (!open)
+			return;
+		if (_txtOutline[0] == NULL)
+		{
+			//Ãè±ß
+			for (auto& iter : _txtOutline)
+			{
+				iter = this->Clone();
+				iter->SetOrder(m_order - 1);
+			}	
+		}
+		SetOutLineSize(_outlineSize);
+	}
+
+
+	void Text_imp::SetOutLineSize(UINT32 size)
+	{
+		_outlineSize = size;
+		int outline = size;
+		if (_txtOutline[0])
+		{
+			_txtOutline[0]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(outline, 0));
+			_txtOutline[1]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(-outline, 0));
+			_txtOutline[2]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(0, outline));
+			_txtOutline[3]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(0, -outline));
+			_txtOutline[4]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(outline, outline));
+			_txtOutline[5]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(outline, -outline));
+			_txtOutline[6]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(-outline, outline));
+			_txtOutline[7]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(-outline, -outline));
+		}
+		
+	}
+
+	void Text_imp::SetOutLineColor(Color color)
+	{
+		_outlineColor = color;
+		if (_txtOutline[0])
+		{
+			for (auto& iter : _txtOutline)
+			{
+				iter->SetColor(color);
+			}
+		}
+		
+	}
+
 	DND::Text* Text_imp::Clone()
 	{
 		if (m_canvas)
@@ -361,6 +419,13 @@ namespace DND
 		m_max_w = -1;
 		m_order = 0;
 		m_h = 0;
+		_showOutLine = false;
+		for (auto& iter : _txtOutline)
+		{
+			iter = NULL;
+		}
+		_outlineSize = 1;
+
 	}
 
 
