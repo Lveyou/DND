@@ -49,6 +49,7 @@ namespace DND
 		//警告：下面两个函数返回的精灵，可能会马上失效
 		virtual Sprite* GetPickup(unsigned& n) = 0;
 		virtual Sprite* GetSprite(unsigned n) = 0;//
+		virtual Vector2 GetEndPosition() = 0;//获取结束位置
 		//设置描边，比较耗时
 		virtual void SetOutLine(bool open) = 0;
 		virtual void SetOutLineSize(UINT32 size) = 0;

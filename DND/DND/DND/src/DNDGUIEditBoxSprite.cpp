@@ -4,9 +4,16 @@
 namespace DND
 {
 
-	DND::GUIEditBoxSprite::GUIEditBoxSprite(Sprite* spr)
+	GUIEditBoxSprite::GUIEditBoxSprite()
 	{
-		m_spr = spr;
+		
+	}
+
+	GUIEditBoxSprite* GUIEditBoxSprite::Create(Sprite* spr)
+	{
+		GUIEditBoxSprite* ret = new GUIEditBoxSprite;
+		ret->m_spr = spr;
+		return ret;
 	}
 
 	void GUIEditBoxSprite::RunRender()
@@ -27,7 +34,8 @@ namespace DND
 
 	void GUIEditBoxSprite::OnBack()
 	{
-		m_string.Pop();
+		if(m_string.GetLength())
+			m_string.Pop();
 	}
 
 }

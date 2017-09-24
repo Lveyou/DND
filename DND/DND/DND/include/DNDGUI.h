@@ -45,12 +45,15 @@ namespace DND
 		
 	};
 
+	class Sprite;
 	class DLL_API EditBox
 	{
 		friend class System_imp;
 	public:
 		void Run();
 
+		
+		
 		void SetFocus(bool focus);
 		bool IsFocus();
 		String GetString();
@@ -82,8 +85,11 @@ namespace DND
 		virtual void OnBack() = 0;
 	public:
 		static EditBox* focus;
-		
+
+
 		static void _process_input_char(wchar_t c);
+	private:
+
 	};
 
 	class DLL_API GUIPanel

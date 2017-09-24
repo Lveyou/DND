@@ -2,6 +2,8 @@
 #include "DNDGame.h"
 #include "DNDInput.h"
 #include "DNDDebug.h"
+#include "DNDSprite.h"
+
 namespace DND
 {
 
@@ -62,6 +64,7 @@ namespace DND
 
 
 	EditBox* EditBox::focus = NULL;
+
 
 	void EditBox::Run()
 	{

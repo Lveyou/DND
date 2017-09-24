@@ -153,6 +153,14 @@ namespace DND
 
 		SetAlignHorizontal(ah);
 		SetAlignVertical(av);
+
+		if (_txtOutline[0])
+		{
+			for (auto& iter : _txtOutline)
+			{
+				iter->SetString(m_string);
+			}
+		}
 	}
 
 	String Text_imp::GetString()
@@ -336,6 +344,14 @@ namespace DND
 		return 0;
 	}
 
+
+	Vector2 Text_imp::GetEndPosition()
+	{
+		if (m_sprites.empty())
+			return Vector2();
+		Sprite* spr = m_sprites.back();
+		return spr->GetCoor()->GetPosition() + spr->_quad.v[2];
+	}
 
 	void Text_imp::SetOutLine(bool open)
 	{

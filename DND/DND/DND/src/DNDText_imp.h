@@ -37,6 +37,7 @@ namespace DND
 		virtual unsigned GetH() override;
 		virtual Sprite* GetPickup(unsigned& n) override;
 		virtual Sprite* GetSprite(unsigned n) override;
+		virtual Vector2 GetEndPosition() override;
 		virtual void SetOutLine(bool open) override;
 		virtual void SetOutLineSize(UINT32 size) override;
 		virtual void SetOutLineColor(Color color) override;

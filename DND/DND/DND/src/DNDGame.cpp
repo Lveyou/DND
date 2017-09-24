@@ -7,6 +7,7 @@
 #include "DNDInput_imp.h"
 #include "DNDCanvas_imp.h"
 #include "DNDBox2DDebugDraw.h"
+#include "DNDGUI.h"
 
 #include <Box2D/Box2D.h>
 
@@ -197,6 +198,59 @@ namespace DND
 		_bEndLoop = true;
 	}
 
+	void EditBox::_process_input_char(wchar_t c)
+	{
+		if (EditBox::focus == NULL)
+			return;
+
+
+		//处理特殊字符
+		switch (c)
+		{
+		case KeyCode::BACK:
+			if (EditBox::focus)
+				EditBox::focus->OnBack();
+			break;
+			/*case KeyCode::RETURN:
+			case L'\x3':
+			case L'\t':
+			break;*/
+		default:
+
+			if (EditBox::focus)
+			{
+				if (EditBox::focus->m_string.GetLength() >= EditBox::focus->m_max_size)
+					break;
+				if (c < 33 && EditBox::focus->m_contrl)
+				{
+					if (c == KeyCode::RETURN)
+						EditBox::focus->OnChar(L'\n');
+					else if (c == L' ')
+						EditBox::focus->OnChar(L' ');
+					/*else
+					GUIInputBox::focus->On_Char(c);*/
+				}
+				else if (c > 47 && c < 58 && EditBox::focus->m_number)
+					EditBox::focus->OnChar(c);
+				else if (c > 64 && c < 91 && EditBox::focus->m_letter)
+					EditBox::focus->OnChar(c);
+				else if (c > 96 && c < 123 && EditBox::focus->m_letter)
+					EditBox::focus->OnChar(c);
+				else if (c > 32 && c < 128 && EditBox::focus->m_symbol)
+					EditBox::focus->OnChar(c);
+				else if (c > 128 && EditBox::focus->m_other)
+					EditBox::focus->OnChar(c);
+				else
+				{
+
+				}
+
+			}
+
+			break;
+		}
+	}
+
 	LRESULT CALLBACK Game::_on_wm_size(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
@@ -278,6 +332,110 @@ namespace DND
 		case WM_MOVE:
 			sys->_windowPoint.x = LOWORD(lParam);
 			sys->_windowPoint.y = HIWORD(lParam);
+			break;
+		case WM_CHAR:
+			EditBox::_process_input_char(wParam);
+			return 0;
+			break;
+		case WM_IME_CHAR:
+			EditBox::_process_input_char(wParam);
+			return 0;
+			break;
+			//IME 相关代码copy自 0xaa55论坛
+		case WM_IME_SETCONTEXT:
+			return DefWindowProc(sys->_hWnd, WM_IME_SETCONTEXT, wParam, lParam&(~ISC_SHOWUIALLCANDIDATEWINDOW));
+			//return DefWindowProc(hwnd, msg, wparam, lparam);
+			break;
+		case WM_IME_STARTCOMPOSITION:
+			//return DefWindowProc(hwnd, msg, wparam, lparam);
+			break;
+		case WM_IME_NOTIFY:
+			//return DefWindowProc(hwnd, msg, wparam, lparam);
+			switch (wParam)
+			{
+			case IMN_CLOSECANDIDATE://关闭选词窗口
+			case IMN_OPENCANDIDATE://开始选词
+			case IMN_SETCANDIDATEPOS://选词窗口移动
+			case IMN_CHANGECANDIDATE://改变选词
+
+									 //一起处理
+			{
+				if (EditBox::focus == NULL)
+					break;
+
+				HIMC himc;
+				unsigned buffer_length;
+				LPCANDIDATELIST pList;
+
+				himc = ImmGetContext(sys->_hWnd);
+				buffer_length = ImmGetCandidateList(himc, 0, NULL, 0);
+				if (!buffer_length)
+				{
+					ImmReleaseContext(sys->_hWnd, himc);
+					break;
+				}
+				pList = (LPCANDIDATELIST)malloc(buffer_length);//建立结构体
+				if (!pList)
+				{
+					ImmReleaseContext(sys->_hWnd, himc);
+					break;
+				}
+				ImmGetCandidateList(himc, 0, pList, buffer_length);//取得候选词列表
+				if (pList->dwStyle != IME_CAND_CODE)
+				{
+			
+					Get()->_imesLength = pList->dwCount;
+					for (unsigned i = 0; i < pList->dwCount; i++)
+					{
+
+						Get()->_imes[i] = (wchar_t*)((BYTE*)pList + pList->dwOffset[i]);
+					}
+
+					
+				}
+				free(pList);//释放结构体内存
+				ImmReleaseContext(sys->_hWnd, himc);//释放输入法句柄
+
+
+			}
+			}
+			break;
+		case WM_IME_COMPOSITION:
+			if (EditBox::focus == NULL)
+				break;
+			if (lParam & GCS_COMPSTR)//取得正在输入的字符串（拼音之类的）
+			{
+				HIMC himc = ImmGetContext(sys->_hWnd);
+				wchar_t buffer[1024] = { NULL };
+				//unsigned len = ImmGetCompositionString(himc, GCS_COMPSTR, NULL, 0);//取得正在输入的字符串大小
+
+
+				ImmGetCompositionString(himc, GCS_COMPSTR, buffer, 1024);//取得正在输入的字符串
+
+				
+
+				Get()->_imeInput = buffer;
+
+				ImmReleaseContext(sys->_hWnd, himc);
+
+			}
+			if (lParam & GCS_RESULTSTR)//取得结果字符串
+			{
+				HIMC himc = ImmGetContext(sys->_hWnd);
+				wchar_t buffer[1024] = { NULL };
+
+
+				ImmGetCompositionString(himc, GCS_RESULTSTR, buffer, 1024);//取得结果字符串
+																		   //将结果字符串给inputbox
+				for (unsigned i = 0; buffer[i]; ++i)
+					EditBox::_process_input_char(buffer[i]);
+
+
+				ImmReleaseContext(sys->_hWnd, himc);
+			}
+			return 0;
+			break;
+		case WM_IME_ENDCOMPOSITION://打完字
 			break;
 		default:
 			break;

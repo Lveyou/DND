@@ -21,8 +21,9 @@ namespace DND
 	class DLL_API GUIEditBoxSprite : public EditBox
 	{
 	public:
-		GUIEditBoxSprite(Sprite* spr);
+		static GUIEditBoxSprite* Create(Sprite* spr);
 	private:
+		GUIEditBoxSprite();
 		virtual void RunRender() override;
 		virtual bool TestCollision() override;
 		virtual void OnChar(wchar_t ch) override;
