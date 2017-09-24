@@ -349,6 +349,7 @@ namespace DND
 			{
 				iter = this->Clone();
 				iter->SetOrder(m_order - 1);
+				iter->GetCoor()->SetParent(m_coor);
 			}	
 		}
 		SetOutLineSize(_outlineSize);
@@ -361,14 +362,14 @@ namespace DND
 		int outline = size;
 		if (_txtOutline[0])
 		{
-			_txtOutline[0]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(outline, 0));
-			_txtOutline[1]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(-outline, 0));
-			_txtOutline[2]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(0, outline));
-			_txtOutline[3]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(0, -outline));
-			_txtOutline[4]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(outline, outline));
-			_txtOutline[5]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(outline, -outline));
-			_txtOutline[6]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(-outline, outline));
-			_txtOutline[7]->GetCoor()->SetPosition(this->GetCoor()->GetPosition() + Vector2(-outline, -outline));
+			_txtOutline[0]->GetCoor()->SetPosition(Vector2(outline, 0));
+			_txtOutline[1]->GetCoor()->SetPosition(Vector2(-outline, 0));
+			_txtOutline[2]->GetCoor()->SetPosition(Vector2(0, outline));
+			_txtOutline[3]->GetCoor()->SetPosition(Vector2(0, -outline));
+			_txtOutline[4]->GetCoor()->SetPosition(Vector2(outline, outline));
+			_txtOutline[5]->GetCoor()->SetPosition(Vector2(outline, -outline));
+			_txtOutline[6]->GetCoor()->SetPosition(Vector2(-outline, outline));
+			_txtOutline[7]->GetCoor()->SetPosition(Vector2(-outline, -outline));
 		}
 		
 	}

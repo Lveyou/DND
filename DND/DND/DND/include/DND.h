@@ -38,6 +38,7 @@
 #include "DNDGUIButtonSpriteScale.h"	//ButtonSpriteScale			精灵缩放按钮
 #include "DNDGUIButtonTextColor.h"		//ButtonTextColor			文本颜色按钮
 #include "DNDGUIButtonSprite3Text1.h"	//ButtonSprite3Text1		3精灵1文本
+#include "DNDGUIEditBoxSprite.h"		//EditBoxSprite				精灵背景输入框
 //////////////////////////////////////////////////////////////////////////
 
 #endif

@@ -32,6 +32,7 @@
     <ClInclude Include="include\DNDGUIButtonSprite3Text1.h" />
     <ClInclude Include="include\DNDGUIButtonSpriteScale.h" />
     <ClInclude Include="include\DNDGUIButtonTextColor.h" />
+    <ClInclude Include="include\DNDGUIEditBoxSprite.h" />
     <ClInclude Include="include\DNDImage.h" />
     <ClInclude Include="include\DNDInput.h" />
     <ClInclude Include="include\DNDMain.h" />
@@ -77,6 +78,7 @@
     <ClCompile Include="src\DNDGUIButtonSprite3Text1.cpp" />
     <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp" />
     <ClCompile Include="src\DNDGUIButtonTextColor.cpp" />
+    <ClCompile Include="src\DNDGUIEditBoxSprite.cpp" />
     <ClCompile Include="src\DNDImage.cpp" />
     <ClCompile Include="src\DNDInput_imp.cpp" />
     <ClCompile Include="src\DNDMutex.cpp" />
