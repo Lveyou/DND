@@ -90,6 +90,8 @@ namespace DND
 		virtual void GetAllClient(ClientUser* users) override;
 		//设置消息回调
 		virtual void SetProc(void (*func)(UINT32 id, NetMsg msg)) override;
+		//连线回调
+		virtual void SetProcBegin(void(*func)(UINT32 id)) override;
 		//断线回调
 		virtual void SetProcEnd(void(*func)(UINT32 id)) override;
 		//发送给指定Client消息
@@ -97,6 +99,7 @@ namespace DND
 		virtual String GetClientInfo(UINT32 id) override;
 
 		static void (*m_proc_func)(UINT32 id, NetMsg str);
+		static void(*m_proc_func_begin)(UINT32 id);
 		static void(*m_proc_func_end)(UINT32 id);
 
 		void _run();

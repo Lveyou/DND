@@ -126,6 +126,8 @@ namespace DND
 		virtual void GetAllClient(ClientUser* users) = 0;
 		//设置消息回调
 		virtual void SetProc(void (*func)(UINT32 id, NetMsg msg)) = 0;
+		//连线回调
+		virtual void SetProcBegin(void(*func)(UINT32 id)) = 0;
 		//断线回调
 		virtual void SetProcEnd(void(*func)(UINT32 id)) = 0;
 		//发送给指定Client消息

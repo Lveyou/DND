@@ -7,6 +7,7 @@ namespace DND
 	const UINT32 BUFFER_SIZE = 8192;
 	void(*Server_imp::m_proc_func)(UINT32 id, NetMsg msg) = NULL;
 	void(*Server_imp::m_proc_func_end)(UINT32 id) = NULL;
+	void(*Server_imp::m_proc_func_begin)(UINT32 id) = NULL;
 
 
 	Client* Net::GetClient()
@@ -323,6 +324,11 @@ re:
 		m_proc_func = func;
 	}
 
+	void Server_imp::SetProcBegin(void(*func)(UINT32 id))
+	{
+		m_proc_func_begin = func;
+	}
+
 	void Server_imp::SetProcEnd(void(*func)(UINT32 id))
 	{
 		m_proc_func_end = func;
@@ -447,6 +453,9 @@ re:
 				m_clients[i]->thread.Init(info->socket, i);
 
 				debug_notice(GetClientInfo(i) + L"接收到一个连接。");
+				//调用回调
+				if(m_proc_func_begin)
+					m_proc_func_begin(i);
 				break;
 			}
 		}
