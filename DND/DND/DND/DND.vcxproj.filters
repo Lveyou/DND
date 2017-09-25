@@ -148,6 +148,12 @@
     <ClInclude Include="include\DNDGUIEditBoxSprite.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDAnimation.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDAnimation_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -235,6 +241,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGUIEditBoxSprite.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDAnimation_imp.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

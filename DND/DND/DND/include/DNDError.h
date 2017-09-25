@@ -81,8 +81,8 @@ namespace DND
 	const String ERROR_00044 = L"创建Canvas顶点缓存失败。";
 	const String ERROR_00045 = L"创建2d effect失败。";
 	const String ERROR_00046 = L"初始化freetype失败。";
-	const String ERROR_00047 = L"获取Client失败，已是Server。";
-	const String ERROR_00048 = L"获取Server失败，已是Client。";
+	const String ERROR_00047 = L"暂无。";
+	const String ERROR_00048 = L"暂无。";
 	const String ERROR_00049 = L"初始化WinSock失败。";
 	const String ERROR_00050 = L"NetMsg::UnBuild失败，类型不匹配。";
 

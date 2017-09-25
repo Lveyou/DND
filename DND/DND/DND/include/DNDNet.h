@@ -100,11 +100,14 @@ namespace DND
 		};
 		//尝试向指定服务器地址和端口连接
 		virtual void Connect(const String& ip, const int port) = 0;
+		//断开连接并释放资源
+		virtual void DisConnect() = 0;
 		//发送一个消息
 		virtual void Send(const NetMsg& msg) = 0;
 		//取一个消息进行处理
 		virtual NetMsg Recv() = 0;
 		virtual UINT32 GetState() = 0;
+		virtual ~Client();
 	};
 
 	struct ClientUser
@@ -143,7 +146,7 @@ namespace DND
 		static Server* GetServer();
 
 	private:
-		static int _bClient;
+		static int _bInit;
 
 	};
 

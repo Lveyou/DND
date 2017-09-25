@@ -415,6 +415,10 @@ namespace DND
 			text->m_max_w = m_max_w;
 			text->m_pitch_row = m_pitch_row;
 			text->SetString(m_string);
+			text->SetOrder(m_order);
+			//描边属性不能复制，否则会造成递归
+			
+			
 			return text;
 		}
 		else

@@ -28,6 +28,8 @@ namespace DND
 	public:
 		//尝试向指定服务器地址和端口连接
 		virtual void Connect(const String& ip, const int port) override;
+		//断开连接并释放资源
+		virtual void DisConnect() override;
 		//发送一个消息
 		virtual void Send(const NetMsg& msg) override;
 		//取一个消息进行处理
@@ -54,6 +56,7 @@ namespace DND
 		SOCKET m_socket;//自己的SOCKET
 
 		volatile UINT32 m_state;
+		bool m_end;
 		~Client_imp();
 	};
 

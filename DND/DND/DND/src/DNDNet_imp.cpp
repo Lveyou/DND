@@ -9,38 +9,39 @@ namespace DND
 	void(*Server_imp::m_proc_func_end)(UINT32 id) = NULL;
 	void(*Server_imp::m_proc_func_begin)(UINT32 id) = NULL;
 
-
+	//static list<Client_imp*> listClient;
 	Client* Net::GetClient()
 	{
-		if(_bClient == -1)
+		if(_bInit == 0)
 		{
 			WSADATA wsaData;
 			WORD scokVersion = MAKEWORD(2, 2);
 			dnd_assert(!WSAStartup(scokVersion, &wsaData), ERROR_00049);
 			debug_notice(L"DND: Net init ok!");
+			_bInit = 1;
 		}
-		dnd_assert(_bClient != 0, ERROR_00047);
-		_bClient = 1;
-		static Client_imp* c = new Client_imp;
+			
+		Client_imp* c = new Client_imp;
+		//listClient.push_back(c);//程序结束时释放
 		return c;
 	}
 
 	Server* Net::GetServer()
 	{
-		if(_bClient == -1)
+		if(_bInit == 0)
 		{
 			WSADATA wsaData;
 			WORD scokVersion = MAKEWORD(2, 2);
 			dnd_assert(!WSAStartup(scokVersion, &wsaData), ERROR_00049);
 			debug_notice(L"DND: Net init ok!");
+			_bInit = 0;
 		}
-		dnd_assert(_bClient != 1, ERROR_00048);
-		_bClient = 0;
-		static Server_imp* s = new Server_imp;
+		
+		Server_imp* s = new Server_imp;
 		return s;
 	}
 
-	int Net::_bClient = -1;
+	int Net::_bInit = 0;
 
 	void Client_imp::Connect(const String& ip, const int port)
 	{
@@ -48,7 +49,13 @@ namespace DND
 		m_port = port;
 		m_lock_send = 0;
 		m_lock_recv = 0;
+		m_end = 0;
 		Start();
+	}
+
+	void Client_imp::DisConnect()
+	{
+		m_end = true;
 	}
 
 	void Client_imp::Send(const NetMsg& msg)
@@ -85,6 +92,8 @@ namespace DND
 
 		char buffer[BUFFER_SIZE];
 re2://断线重连
+		if (m_end)
+			return;
 		//创建套接字
 		m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if (m_socket == INVALID_SOCKET)
@@ -102,6 +111,8 @@ re2://断线重连
 		server_ip.sin_port = htons((short)m_port);
 
 re:	
+		if (m_end)
+			return;
 		state = 1;//连接中
 		InterlockedExchange(&m_state, state);
 		int ret = connect(m_socket, (LPSOCKADDR)&server_ip, sizeof(server_ip));
@@ -111,13 +122,15 @@ re:
 			InterlockedExchange(&m_state, state);
 			debug_warn(L"DND: Clinet连接服务器失败。");
 			Sleep(3000);//3秒后重连
+			
 			goto re;
+			
 		}
 
 		debug_notice(L"DND: Clinet连接服务器成功。");
 
 		//请求接受循环
-		while (true)
+		while (m_end)
 		{
 			//如果没有消息发送 ，就sleep线程
 			if (m_sends.size() == 0)
@@ -190,9 +203,16 @@ re:
 		}
 	}
 
+	Client::~Client()
+	{
+
+	}
+
+
 	Client_imp::~Client_imp()
 	{
 		closesocket(m_socket);
+		
 	}
 
 	ClientInfo::ClientInfo()

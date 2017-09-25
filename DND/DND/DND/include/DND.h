@@ -22,6 +22,7 @@
 #include "DNDNet.h"						//Net						网络
 #include "DNDCoor.h"					//Coor						坐标系
 #include "DNDSprite.h"					//Sprite					精灵
+#include "DNDAnimation.h"				//Animation					帧动画
 #include "DNDCanvas.h"					//Canvas					画布
 #include "DNDText.h"					//Text						文本
 #include "DNDRigidBody.h"				//2D Physics				物理

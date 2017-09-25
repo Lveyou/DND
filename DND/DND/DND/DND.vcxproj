@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\DND.h" />
+    <ClInclude Include="include\DNDAnimation.h" />
     <ClInclude Include="include\DNDCanvas.h" />
     <ClInclude Include="include\DNDColor.h" />
     <ClInclude Include="include\DNDCoor.h" />
@@ -50,6 +51,7 @@
     <ClInclude Include="include\DNDTypedef.h" />
     <ClInclude Include="include\DNDUser.h" />
     <ClInclude Include="include\DNDValue.h" />
+    <ClInclude Include="src\DNDAnimation_imp.h" />
     <ClInclude Include="src\DNDBox2DDebugDraw.h" />
     <ClInclude Include="src\DNDCanvas_imp.h" />
     <ClInclude Include="src\DNDCoor_imp.h" />
@@ -65,6 +67,7 @@
     <ClInclude Include="src\DNDTime_imp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DNDAnimation_imp.cpp" />
     <ClCompile Include="src\DNDBox2DDebugDraw.cpp" />
     <ClCompile Include="src\DNDCanvas_imp.cpp" />
     <ClCompile Include="src\DNDColor.cpp" />
