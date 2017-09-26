@@ -28,6 +28,7 @@
 #include "DNDRigidBody.h"				//2D Physics				物理
 #include "DNDThread.h"					//Thread					线程
 #include "DNDMutex.h"					//Mutex						互斥锁
+#include "DNDCycleLock.h"				//CycleLock					循环锁
 //////////////////////////BASE//////////////////////////////////////////
 #include "DNDSingleton.h"				//singleton template class	单例模板
 #include "DNDString.h"					//String					字符串

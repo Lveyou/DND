@@ -22,7 +22,6 @@ namespace DND
 		}
 			
 		Client_imp* c = new Client_imp;
-		//listClient.push_back(c);//程序结束时释放
 		return c;
 	}
 
@@ -34,10 +33,10 @@ namespace DND
 			WORD scokVersion = MAKEWORD(2, 2);
 			dnd_assert(!WSAStartup(scokVersion, &wsaData), ERROR_00049);
 			debug_notice(L"DND: Net init ok!");
-			_bInit = 0;
+			_bInit = 1;
 		}
-		
-		Server_imp* s = new Server_imp;
+		//Server只有一个
+		static Server_imp* s = new Server_imp;
 		return s;
 	}
 
@@ -56,6 +55,7 @@ namespace DND
 	void Client_imp::DisConnect()
 	{
 		m_end = true;
+		closesocket(m_socket);
 	}
 
 	void Client_imp::Send(const NetMsg& msg)
@@ -130,7 +130,7 @@ re:
 		debug_notice(L"DND: Clinet连接服务器成功。");
 
 		//请求接受循环
-		while (m_end)
+		while (!m_end)
 		{
 			//如果没有消息发送 ，就sleep线程
 			if (m_sends.size() == 0)
@@ -240,6 +240,7 @@ re:
 
 			if (ret == SOCKET_ERROR)
 			{
+end:
 				//调转到这里说明，对方已经断开了连接
 				debug_warn(((Server_imp*)(Net::GetServer()))->GetClientInfo(m_id) + L"断开了连接");
 				if (Server_imp::m_proc_func_end)
@@ -263,6 +264,11 @@ re:
 					NetMsg msg2;
 					memcpy(&msg2._type, buffer, sizeof(msg2._type));
 					memcpy(&msg2._size, buffer + sizeof(msg2._type), sizeof(msg2._size));
+					//发送的buffer过大，直接断开连接
+					if (msg2._size > BUFFER_SIZE - sizeof(msg2._type) - sizeof(msg2._size))
+					{
+						goto end;
+					}
 					msg2._data = new BYTE[msg2._size];
 					memcpy(msg2._data, buffer + sizeof(msg2._type) + sizeof(msg2._size), msg2._size);
 
@@ -288,15 +294,7 @@ re:
 
 				if (ret == SOCKET_ERROR)
 				{
-					//调转到这里说明，对方已经断开了连接
-					debug_warn(((Server_imp*)(Net::GetServer()))->GetClientInfo(m_id) + L"断开了连接");
-					if (Server_imp::m_proc_func_end)
-						Server_imp::m_proc_func_end(m_id);
-					//结束线程
-					closesocket(m_socket);
-					((Server_imp*)(Net::GetServer()))->m_clients.erase(m_id);
-					//m_socket = INVALID_SOCKET;
-					return;
+					goto end;
 				}
 				delete[] m_msg._data;
 			}

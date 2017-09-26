@@ -154,6 +154,9 @@
     <ClInclude Include="src\DNDAnimation_imp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDCycleLock.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -244,6 +247,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDAnimation_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDCycleLock.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

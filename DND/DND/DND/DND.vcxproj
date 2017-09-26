@@ -36,6 +36,7 @@
     <ClInclude Include="include\DNDGUIEditBoxSprite.h" />
     <ClInclude Include="include\DNDImage.h" />
     <ClInclude Include="include\DNDInput.h" />
+    <ClInclude Include="include\DNDCycleLock.h" />
     <ClInclude Include="include\DNDMain.h" />
     <ClInclude Include="include\DNDMath.h" />
     <ClInclude Include="include\DNDMutex.h" />
@@ -72,6 +73,7 @@
     <ClCompile Include="src\DNDCanvas_imp.cpp" />
     <ClCompile Include="src\DNDColor.cpp" />
     <ClCompile Include="src\DNDCoor_imp.cpp" />
+    <ClCompile Include="src\DNDCycleLock.cpp" />
     <ClCompile Include="src\DNDDebug.cpp" />
     <ClCompile Include="src\DNDDirectX.cpp" />
     <ClCompile Include="src\DNDFile_imp.cpp" />
