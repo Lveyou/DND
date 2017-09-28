@@ -29,11 +29,15 @@ const UINT32 GAME_FONT_SIZE_INFO = 24u;
 const String GAME_FONT_NAME_MENU = GAME_FONT_NAME_INFO;
 const UINT32 GAME_FONT_SIZE_MENU = 32u;
 
+const String GAME_FONT_NAME_TEXT = L"font_text";
+const UINT32 GAME_FONT_SIZE_TEXT = 22u;
+
 const Color GAME_BUTTON_COLOR_NORMAL = 0xff1fb218;
 const Color GAME_BUTTON_COLOR_OVER = 0xff00ff00;
 const Color GAME_BUTTON_COLOR_DOWN = 0xffffffff;
 //////////////////////////////////////////////////////////////////////////
 
+class SceneInput;
 //接着继承Game类，重写三个函数来特化自己的程序
 class Test : public Game
 {
@@ -81,6 +85,11 @@ private:
 	String _strChoose;
 	//按钮01
 	Sprite* _sprBtn01[3];
-//////////////////////////////////////////////////////////////////////////
+////////////////////Scene//////////////////////////////////////////////////
+public:
+	void Init_Scene();
+	void Run_Scene();
+private:
+	SceneInput* _sceneInput;
 
 };

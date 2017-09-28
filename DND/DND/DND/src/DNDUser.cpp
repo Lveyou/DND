@@ -314,6 +314,11 @@ namespace DND
 	}
 
 
+	DLL_API Point Vector2ToPoint(const Vector2& v)
+	{
+		return Point(INT32(v.a), INT32(v.b));
+	}
+
 	Size StringToSize(const String& str)
 	{
 		UINT32 pos = str.FindN(L',', 1);

@@ -135,6 +135,7 @@ namespace DND
 
 		};
 	};
+	class GamePad;
 	class DLL_API Input
 	{	
 	public:
@@ -146,7 +147,59 @@ namespace DND
 		virtual Point GetMousePositionDelta() = 0;//和上帧的鼠标位置变化
 		virtual int GetMouseWheelDelta() = 0;
 		virtual void SetRunBackground(bool run = false) = 0;//是否允许后台检测按键
+
+		virtual void OpenGamePad(bool open = true) = 0;
+		virtual GamePad* GetGamePad(UINT32 id) = 0;
 	};
+	
+	struct DLL_API PadCode
+	{
+	public:
+		enum NAME
+		{
+			UP			= 0x00000001,
+			DOWN		= 0x00000002,
+			LEFT		= 0x00000004,
+			RIGHT		= 0x00000008,
+			START		= 0x00000010,
+			BACK		= 0x00000020,
+			LS			= 0x00000040,
+			RS			= 0x00000080,
+			LB			= 0x0100,
+			RB			= 0x0200,
+			A			= 0x1000,
+			B			= 0x2000,
+			X			= 0x4000,
+			Y			= 0x8000
+		};
+	};
+
+	class Input_imp;
+	class DLL_API GamePad
+	{	
+		friend class Input_imp;
+	public:
+		bool KeyUp(int pad);
+		bool KeyDown(int pad);
+		bool KeyState(int pad);
+
+		float ForceLT();
+		float ForceRT();
+
+		Vector2 GetLS();
+		Vector2 GetRS();
+
+		float ForceLS();
+		float ForceRS();
+		//设置振动
+		void SetVibration(Vector2 lr);
+	private:
+		UINT32 _id;
+		Input_imp* _input;
+	};
+
+	
+
 }
 
 

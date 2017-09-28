@@ -4,11 +4,11 @@
 #include "DNDGame.h"
 #include "DNDTime.h"
 
-#define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code) < 0) ? 1 : 0) 
+
 
 namespace DND
 {
-
+	#define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code) < 0) ? 1 : 0) 
 	bool Input_imp::KeyUp(int vkey)
 	{
 		return !_key[vkey] && _keyPre[vkey];
@@ -33,7 +33,7 @@ namespace DND
 		point.y = p.y;
 		if (sys->_hWnd)
 			ClientToScreen(sys->_hWnd, &point);
-		SetCursorPos(point.x, point.y - 1);
+		SetCursorPos(point.x, point.y);
 		_mousePositionLast.x = p.x;
 		_mousePositionLast.y = p.x;
 	}
@@ -73,6 +73,16 @@ namespace DND
 		_mousePositionLast = Point(-1, -1);
 		_mouseWheelDelta = 0;
 		_runBackground = false;
+
+		_xinput_enable = false;
+		XInputEnable(_xinput_enable);
+
+		UINT32 i = 0;
+		for (auto& iter : _gamePad)
+		{
+			iter._id = i++;
+			iter._input = this;
+		}
 	}
 
 	void Input_imp::_calc_mouse()
@@ -92,9 +102,215 @@ namespace DND
 		}
 	}
 
+	void Input_imp::_xinput_run()
+	{
+		DWORD dwResult;
+		for (DWORD i = 0; i < MAX_CONTROLLERS; i++)
+		{
+			_xinputStatePre[i] = _xinputState[i];
+			ZeroMemory(&_xinputState[i], sizeof(XINPUT_STATE));
+
+			// Simply get the state of the controller from XInput.
+			dwResult = XInputGetState(i, &_xinputState[i]);
+
+			if (dwResult == ERROR_SUCCESS)
+			{
+				// Controller is connected 
+				_gamePadConnected[i] = true;
+			}
+			else
+			{
+				// Controller is not connected 
+				_gamePadConnected[i] = false;
+			}
+		}
+
+	}
+
 	void Input_imp::SetRunBackground(bool run /*= false*/)
 	{
 		_runBackground = run;
+	}
+
+	void Input_imp::OpenGamePad(bool open /*= true*/)
+	{
+		_xinput_enable = open;
+		XInputEnable(_xinput_enable);
+	}
+
+	GamePad* Input_imp::GetGamePad(UINT32 id)
+	{
+		if (_gamePadConnected[id])
+			return &_gamePad[id];
+		else
+			return NULL;
+	}
+
+
+	bool GamePad::KeyUp(int pad)
+	{
+		return !(_input->_xinputState[_id].Gamepad.wButtons & pad) && 
+			(_input->_xinputStatePre[_id].Gamepad.wButtons & pad);
+	}
+
+
+	bool GamePad::KeyDown(int pad)
+	{
+		return (_input->_xinputState[_id].Gamepad.wButtons & pad) &&
+			!(_input->_xinputStatePre[_id].Gamepad.wButtons & pad);
+	}
+
+	bool GamePad::KeyState(int pad)
+	{
+		return _input->_xinputState[_id].Gamepad.wButtons & pad;
+	}
+
+	float GamePad::ForceLT()
+	{
+		if (_input->_xinputState[_id].Gamepad.bLeftTrigger < XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+			return 0;
+		return _input->_xinputState[_id].Gamepad.bLeftTrigger / 255.0f;
+	}
+
+
+	float GamePad::ForceRT()
+	{
+		BYTE ret = _input->_xinputState[_id].Gamepad.bRightTrigger;
+		if (ret < XINPUT_GAMEPAD_TRIGGER_THRESHOLD)
+			return 0;
+		return ret / 255.0f;
+	}
+
+	Vector2 GamePad::GetLS()
+	{
+		float LX = _input->_xinputState[_id].Gamepad.sThumbLX;
+		float LY = -_input->_xinputState[_id].Gamepad.sThumbLY;
+
+		if (abs(LX) < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+			LX = 0;
+		if (abs(LY) < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+			LY = 0;
+		if (LX == 0 && LY == 0)
+			return Vector2();
+		//determine how far the controller is pushed
+		float magnitude = sqrt(LX*LX + LY*LY);
+
+		//determine the direction the controller is pushed
+		float normalizedLX = LX / magnitude;
+		float normalizedLY = LY / magnitude;
+
+		return Vector2(normalizedLX, normalizedLY);
+	}
+
+	Vector2 GamePad::GetRS()
+	{
+		float RX = _input->_xinputState[_id].Gamepad.sThumbRX;
+		float RY = -_input->_xinputState[_id].Gamepad.sThumbRY;
+
+		if (abs(RX) < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+			RX = 0;
+		if (abs(RY) < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+			RY = 0;	
+		if (RX == 0 && RY == 0)
+			return Vector2();
+		//determine how far the controller is pushed
+		float magnitude = sqrt(RX*RX + RY*RY);
+
+		//determine the direction the controller is pushed
+		float normalizedRX = RX / magnitude;
+		float normalizedRY = RY / magnitude;
+
+		return Vector2(normalizedRX, normalizedRY);
+	}
+
+
+	float GamePad::ForceLS()
+	{
+		//copy 自DirectX文档
+
+		float LX = _input->_xinputState[_id].Gamepad.sThumbLX;
+		float LY = _input->_xinputState[_id].Gamepad.sThumbLY;
+
+		//determine how far the controller is pushed
+		float magnitude = sqrt(LX*LX + LY*LY);
+
+		//determine the direction the controller is pushed
+		float normalizedLX = LX / magnitude;
+		float normalizedLY = LY / magnitude;
+
+		float normalizedMagnitude = 0;
+
+		//check if the controller is outside a circular dead zone
+		if (magnitude > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+		{
+			//clip the magnitude at its expected maximum value
+			if (magnitude > 32767) magnitude = 32767;
+
+			//adjust magnitude relative to the end of the dead zone
+			magnitude -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+
+			//optionally normalize the magnitude with respect to its expected range
+			//giving a magnitude value of 0.0 to 1.0
+			normalizedMagnitude = magnitude / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+		}
+		else //if the controller is in the deadzone zero out the magnitude
+		{
+			magnitude = 0.0f;
+			normalizedMagnitude = 0.0f;
+		}
+
+		return normalizedMagnitude;
+	}
+
+
+	float GamePad::ForceRS()
+	{
+		//copy 自DirectX文档
+
+		float RX = _input->_xinputState[_id].Gamepad.sThumbLX;
+		float RY = _input->_xinputState[_id].Gamepad.sThumbLY;
+
+		//determine how far the controller is pushed
+		float magnitude = sqrt(RX*RX + RY*RY);
+
+		//determine the direction the controller is pushed
+		float normalizedRX = RX / magnitude;
+		float normalizedRY = RY / magnitude;
+
+		float normalizedMagnitude = 0;
+
+		//check if the controller is outside a circular dead zone
+		if (magnitude > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
+		{
+			//clip the magnitude at its expected maximum value
+			if (magnitude > 32767) magnitude = 32767;
+
+			//adjust magnitude relative to the end of the dead zone
+			magnitude -= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+
+			//optionally normalize the magnitude with respect to its expected range
+			//giving a magnitude value of 0.0 to 1.0
+			normalizedMagnitude = magnitude / (32767 - XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+		}
+		else //if the controller is in the deadzone zero out the magnitude
+		{
+			magnitude = 0.0f;
+			normalizedMagnitude = 0.0f;
+		}
+
+		return normalizedMagnitude;
+	}
+
+
+	void GamePad::SetVibration(Vector2 lr)
+	{
+		XINPUT_VIBRATION vibration;
+		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+		vibration.wLeftMotorSpeed = lr.a * 65535; // use any value between 0-65535 here
+		vibration.wRightMotorSpeed = lr.b * 65535; // use any value between 0-65535 here
+		XInputSetState(_id, &vibration);
+
+
 	}
 
 }

@@ -1,5 +1,7 @@
 #include "test.h"
 
+#include "SceneInput.h"
+
 //DND的入口函数，可以假设程序从这里开始执行
 DNDMain()
 {
@@ -19,6 +21,7 @@ void Test::_update()
 	Run_Cursor();
 	Run_Info();
 	Run_Menu();
+	Run_Scene();
 	Run_Out_Image_Canvas();
 }
 
@@ -29,6 +32,7 @@ void Test::_init()
 	Init_Cursor();
 	Init_Info();
 	Init_Menu();
+	Init_Scene();
 }
 
 void Test::_release()
@@ -51,6 +55,7 @@ void Test::Init_Window()
 void Test::Init_Font()
 {
 	sys->LoadFontFile(GAME_FONT_NAME_INFO, L"Data\\Font\\cour.ttf");
+	sys->LoadFontFile(GAME_FONT_NAME_TEXT, L"C:\\Windows\\Fonts\\simkai.ttf");
 }
 
 void Test::Run_Out_Image_Canvas()
@@ -182,4 +187,24 @@ void Test::_create_menu_btn(const String& str)
 		txt_temp);
 
 	_listBtnMenu.push_back(temp);
+}
+
+void Test::Init_Scene()
+{
+	_sceneInput = NULL;
+}
+
+void Test::Run_Scene()
+{
+	if (_strChoose == L"Input")
+	{
+		if (_sceneInput == NULL)
+		{
+			_sceneInput = new SceneInput;
+			_sceneInput->Init(this);
+		}
+		_sceneInput->Run();
+
+		return;
+	}
 }

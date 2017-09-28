@@ -27,6 +27,7 @@ namespace DND
 		Point();
 		Point(INT32 x, INT32 y);
 
+
 		Point operator-(const Point& b) const;
 		Point operator+(const Point& b) const;
 	};
@@ -136,7 +137,7 @@ namespace DND
 	DLL_API Point SizeToPoint(const Size& s);
 	DLL_API Point operator+(const Point& p, const Size& size);
 	DLL_API Rect operator+(const Rect& rect,const Point& p);
-
+	DLL_API Point Vector2ToPoint(const Vector2& v);
 	//×Ö·û´®×ª»»ÏµÁÐ
 	DLL_API Size StringToSize(const String& str);
 
