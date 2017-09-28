@@ -49,7 +49,7 @@ void Test::Init_Window()
 	sys->SetWindowCenter();
 	sys->ApplyWindow();
 	sys->SetVsync(false);
-	time->SetFPS(0);
+	time->SetFPS(60);
 }
 
 void Test::Init_Font()

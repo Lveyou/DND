@@ -184,7 +184,7 @@ namespace DND
 	Vector2 GamePad::GetLS()
 	{
 		float LX = _input->_xinputState[_id].Gamepad.sThumbLX;
-		float LY = -_input->_xinputState[_id].Gamepad.sThumbLY;
+		float LY = -(_input->_xinputState[_id].Gamepad.sThumbLY);
 
 		if (abs(LX) < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 			LX = 0;
@@ -205,7 +205,7 @@ namespace DND
 	Vector2 GamePad::GetRS()
 	{
 		float RX = _input->_xinputState[_id].Gamepad.sThumbRX;
-		float RY = -_input->_xinputState[_id].Gamepad.sThumbRY;
+		float RY = -(_input->_xinputState[_id].Gamepad.sThumbRY);
 
 		if (abs(RX) < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 			RX = 0;
