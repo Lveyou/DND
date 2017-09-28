@@ -20,6 +20,7 @@ namespace DND
 	class Time_imp : public Time
 	{
 		friend class Game;
+		friend class GameServer;
 	public:
 		//example: "14:47:39"
 		virtual String GetHMSString() override;

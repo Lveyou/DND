@@ -157,6 +157,9 @@
     <ClInclude Include="include\DNDCycleLock.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGameServer.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -250,6 +253,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDCycleLock.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGameServer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

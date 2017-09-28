@@ -29,6 +29,7 @@
     <ClInclude Include="include\DNDError.h" />
     <ClInclude Include="include\DNDFile.h" />
     <ClInclude Include="include\DNDGame.h" />
+    <ClInclude Include="include\DNDGameServer.h" />
     <ClInclude Include="include\DNDGUI.h" />
     <ClInclude Include="include\DNDGUIButtonSprite3Text1.h" />
     <ClInclude Include="include\DNDGUIButtonSpriteScale.h" />
@@ -79,6 +80,7 @@
     <ClCompile Include="src\DNDFile_imp.cpp" />
     <ClCompile Include="src\DNDFont.cpp" />
     <ClCompile Include="src\DNDGame.cpp" />
+    <ClCompile Include="src\DNDGameServer.cpp" />
     <ClCompile Include="src\DNDGUI.cpp" />
     <ClCompile Include="src\DNDGUIButtonSprite3Text1.cpp" />
     <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp" />

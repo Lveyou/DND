@@ -456,11 +456,11 @@ namespace DND
 		dnd_assert(!FAILED(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&_factory)),
 			ERROR_00012);
 		//////////////////////取得默认显卡///////////////////////////////////
-		dnd_assert(_factory->EnumAdapters(0, &_adapter) != DXGI_ERROR_NOT_FOUND,
-			ERROR_00013);
+		dnd_assert(_factory->EnumAdapters(0, &_adapter) != DXGI_ERROR_NOT_FOUND, ERROR_00013);
+	
 		/////////////////////取得默认显示器//////////////////////////////////////////
-		dnd_assert(_adapter->EnumOutputs(0, &_output) != DXGI_ERROR_NOT_FOUND,
-			ERROR_00014);
+		dnd_assert(_adapter->EnumOutputs(0, &_output) != DXGI_ERROR_NOT_FOUND, ERROR_00014);
+
 		////////////////////获取显示器支持的全屏显示模式//////////////////////////
 		_displayModes = 0;
 		_displayModeLength = 0;

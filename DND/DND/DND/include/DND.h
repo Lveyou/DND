@@ -15,6 +15,7 @@
 ///////////////////////////CORE///////////////////////////////////////////
 #include "DNDMain.h"					//DNDMain					主函数
 #include "DNDGame.h"					//Game base class			游戏基类
+#include "DNDGameServer.h"				//GameServer				服务器
 #include "DNDSystem.h"					//System					系统
 #include "DNDDebug.h"					//Debug						调试
 #include "DNDTime.h"					//Time						时间

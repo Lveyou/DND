@@ -238,7 +238,7 @@ re:
 		{
 			int ret = recv(m_socket, buffer, BUFFER_SIZE, 0);
 
-			if (ret == SOCKET_ERROR)
+			if (ret <= 0)//0 ,-1
 			{
 end:
 				//调转到这里说明，对方已经断开了连接
@@ -280,7 +280,7 @@ end:
 				//这里会等待 m_msg被填充
 				while (m_sending == 0)//没有数据需要发送
 				{
-					Sleep(100);
+					Sleep(1);
 				}
 
 				//Send只是缓存内容，这里实际发送	
@@ -294,7 +294,8 @@ end:
 
 				if (ret == SOCKET_ERROR)
 				{
-					goto end;
+					delete[] m_msg._data;
+					goto end;	
 				}
 				delete[] m_msg._data;
 			}

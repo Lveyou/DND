@@ -2,6 +2,7 @@
 #include "DNDError.h"
 #include "DNDValue.h"
 #include "DNDGame.h"
+#include "DNDGameServer.h"
 #include "DNDTime.h"
 #include <windows.h>
 #include <iostream>
@@ -62,8 +63,17 @@ namespace DND
 		_mutex2.Lock();
 		if(_bTimeStamp)
 		{
-			Write(String(L"[") + Game::Get()->time->GetHMSString() + L"]", DebugLevel::TIME);
-			Write(L"=", DebugLevel::BLANK);
+			if (GameServer::Get())
+			{
+				Write(String(L"[") + GameServer::Get()->GetHMSString() + L"]", DebugLevel::TIME);
+				Write(L"=", DebugLevel::BLANK);
+			}
+			else
+			{
+				Write(String(L"[") + Game::Get()->time->GetHMSString() + L"]", DebugLevel::TIME);
+				Write(L"=", DebugLevel::BLANK);
+			}
+		
 		}
 			
 		Write(str, level);
