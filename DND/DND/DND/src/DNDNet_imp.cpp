@@ -2,6 +2,8 @@
 #include "DNDDebug.h"
 
 
+
+
 namespace DND
 {
 	const UINT32 BUFFER_SIZE = 8192;
@@ -38,6 +40,26 @@ namespace DND
 		//Server只有一个
 		static Server_imp* s = new Server_imp;
 		return s;
+	}
+
+	BYTE* Net::GetPhysicalAddress()
+	{
+		//TODO 暂时有问题
+		/*PIP_ADAPTER_ADDRESSES pAddresses = NULL;
+		ULONG outBufLen = 0;
+		DWORD ret;
+		GetAdaptersAddresses(AF_UNSPEC, 0, NULL, pAddresses, &outBufLen);
+
+		pAddresses = (IP_ADAPTER_ADDRESSES *)malloc(outBufLen);
+		if ((ret = GetAdaptersAddresses(AF_INET, GAA_FLAG_SKIP_ANYCAST, NULL, pAddresses, &outBufLen)) != NO_ERROR)
+			return NULL;
+
+		if (pAddresses->PhysicalAddressLength < 6)
+			return NULL;
+
+		return pAddresses->PhysicalAddress;*/
+
+		return NULL;
 	}
 
 	int Net::_bInit = 0;

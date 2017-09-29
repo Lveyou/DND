@@ -144,7 +144,7 @@ namespace DND
 	public:
 		static Client* GetClient();
 		static Server* GetServer();
-
+		static BYTE* GetPhysicalAddress();
 	private:
 		static int _bInit;
 
