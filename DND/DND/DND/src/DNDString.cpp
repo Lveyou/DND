@@ -268,6 +268,16 @@ namespace DND
 		replace(p->begin(), p->end(), source, target);
 	}
 
+	bool String::IsHaveLetter()
+	{
+		for (auto& iter : *p)
+		{
+			if (isalpha(iter))
+				return true;
+		}
+		return false;
+	}
+
 	UINT32 String::Split(WCHAR wc, String* strs, UINT32 max_size)
 	{
 		auto itor_begin = p->begin();

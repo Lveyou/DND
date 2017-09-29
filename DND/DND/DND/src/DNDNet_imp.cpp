@@ -106,7 +106,15 @@ re2://断线重连
 		SOCKADDR_IN server_ip;
 		server_ip.sin_family = AF_INET;
 		m_server_ip.GetMultiByteStr(buffer, BUFFER_SIZE);
-		//inet_pton(AF_INET, buffer, (void*)&server_ip);
+		//如果有字母说明是域名
+		hostent* host = NULL;
+		if (m_server_ip.IsHaveLetter())
+		{
+			host = gethostbyname(buffer);
+			if(host)
+				strcpy_s(buffer, inet_ntoa(*((struct in_addr*)host->h_addr_list[0])));
+		}
+		
 		server_ip.sin_addr.s_addr = inet_addr(buffer);
 		server_ip.sin_port = htons((short)m_port);
 

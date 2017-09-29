@@ -67,6 +67,9 @@ namespace DND
 		void InsertChar(UINT32 i, WCHAR ch);//i位置前插入一个字符,第一个字符位置为0
 		void ReplaceChar(WCHAR source, WCHAR target);//替换某个字符
 		
+		//==================工具==================
+		bool IsHaveLetter();//是否含有字母
+
 		UINT32 Split(WCHAR wc, String* strs, UINT32 max_size);//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
 		static String Format(UINT32 max_size, const WCHAR* format, ...);//max size 不包含结束符
 	private:
