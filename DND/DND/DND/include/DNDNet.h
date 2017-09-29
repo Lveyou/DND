@@ -62,11 +62,13 @@ namespace DND
 		friend class ServerRecv;
 	public:
 		template<typename T>
-		void Build(T* p)
+		static NetMsg Build(T* p)
 		{
-			_type = GetClassType<T>();
-			_data = (void*)p;
-			_size = sizeof(T);
+			NetMsg ret;
+			ret._type = GetClassType<T>();
+			ret._data = (void*)p;
+			ret._size = sizeof(T);
+			return ret;
 		}
 		UINT32 GetType()
 		{
