@@ -38,6 +38,8 @@ const Color GAME_BUTTON_COLOR_DOWN = 0xffffffff;
 //////////////////////////////////////////////////////////////////////////
 
 class SceneInput;
+class SceneImage;
+class SceneSprite;
 //接着继承Game类，重写三个函数来特化自己的程序
 class Test : public Game
 {
@@ -76,6 +78,7 @@ public:
 	void Init_Menu();
 	void Run_Menu();
 	void _create_menu_btn(const String& str);
+	ButtonSprite3Text1* _create_normal_btn(const String& str);
 private:
 	//菜单按钮
 	list<ButtonSprite3Text1*> _listBtnMenu;
@@ -91,5 +94,6 @@ public:
 	void Run_Scene();
 private:
 	SceneInput* _sceneInput;
-
+	SceneImage* _sceneImage;
+	SceneSprite* _sceneSprite;
 };

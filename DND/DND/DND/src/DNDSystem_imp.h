@@ -37,6 +37,7 @@ namespace DND
 
 		virtual Size GetWindowSize() override;
 		virtual HWND GetWindowHwnd() override;
+		virtual Point GetWindowPoint() override;
 		virtual bool IsFoucs() override;
 
 		

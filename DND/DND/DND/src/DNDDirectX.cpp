@@ -434,7 +434,6 @@ namespace DND
 		_deviceContext->OMSetBlendState(_blendState, blendFactor, 0xffffffff);
 		_deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-		
 
 		_gfxSimple = new GfxSimple;
 		_gfxSimple->_init();

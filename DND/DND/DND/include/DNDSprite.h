@@ -32,6 +32,7 @@ namespace DND
 		void SetOrder(INT32 order);
 		Size GetSize();
 		void SetColor(Color color);
+		void SetColor(Color* color);
 		Canvas* GetCanvas();
 
 		void CreateRigidBody(float density, float friction, float restitution);

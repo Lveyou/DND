@@ -1,6 +1,8 @@
 #include "test.h"
 
 #include "SceneInput.h"
+#include "SceneImage.h"
+#include "SceneSprite.h"
 
 //DND的入口函数，可以假设程序从这里开始执行
 DNDMain()
@@ -75,7 +77,7 @@ void Test::Init_Cursor()
 	Image* img = Image::Create(L"Data\\Image\\cursor.png");
 	canvas->RegisterImageAll(1, img);
 	_sprCursor = canvas->CreateSprite(1, Quad(Vector2(),img->GetSize(), false));
-	_sprCursor->SetOrder(2);
+	_sprCursor->SetOrder(20000000);
 	//_sprCursor->SetColor(Color::GREEN);
 	delete img;
 }
@@ -189,9 +191,27 @@ void Test::_create_menu_btn(const String& str)
 	_listBtnMenu.push_back(temp);
 }
 
+DND::ButtonSprite3Text1* Test::_create_normal_btn(const String& str)
+{
+	Text* txt_temp = canvas->CreateText(GAME_FONT_NAME_MENU, GAME_FONT_SIZE_MENU);
+	txt_temp->SetString(str);
+	txt_temp->SetAlignHorizontal(TEXT_ALIGN_HCENTER);
+	txt_temp->SetAlignVertical(TEXT_ALIGN_VCENTER);
+	txt_temp->SetOrder(1);
+	ButtonSprite3Text1* temp = ButtonSprite3Text1::Create(
+		_sprBtn01[0]->Clone(),
+		_sprBtn01[1]->Clone(),
+		_sprBtn01[2]->Clone(),
+		txt_temp);
+
+	return temp;
+}
+
 void Test::Init_Scene()
 {
 	_sceneInput = NULL;
+	_sceneImage = NULL;
+	_sceneSprite = NULL;
 }
 
 void Test::Run_Scene()
@@ -204,6 +224,30 @@ void Test::Run_Scene()
 			_sceneInput->Init(this);
 		}
 		_sceneInput->Run();
+
+		return;
+	}
+
+	if (_strChoose == L"Image")
+	{
+		if (_sceneImage == NULL)
+		{
+			_sceneImage = new SceneImage;
+			_sceneImage->Init(this);
+		}
+		_sceneImage->Run();
+
+		return;
+	}
+
+	if (_strChoose == L"Sprite")
+	{
+		if (_sceneSprite == NULL)
+		{
+			_sceneSprite = new SceneSprite;
+			_sceneSprite->Init(this);
+		}
+		_sceneSprite->Run();
 
 		return;
 	}

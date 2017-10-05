@@ -172,6 +172,10 @@ namespace DND
 		RenderLine(p1 + pos, Vector2(radius, 0) + pos, color);
 	}
 
+	Point System_imp::GetWindowPoint()
+	{
+		return _windowPoint;
+	}
 	
 
 

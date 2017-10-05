@@ -36,6 +36,11 @@ void SceneInput::Run()
 
 	if (GamePad* game_pad_01 = _test->input->GetGamePad(0))
 	{
+		//
+		if (game_pad_01->KeyState(PadCode::UP))
+		{
+			//Point window_pos = _test->sys->get
+		}
 		//RS¿ØÖÆÊó±ê
 		Vector2 rs = game_pad_01->GetRS();
 		Vector2 pos = _test->input->GetMousePosition();
