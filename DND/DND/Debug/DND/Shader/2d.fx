@@ -9,7 +9,7 @@ Texture2D ColorTexture;
 
 SamplerState ColorSampler
 {
-	Filter = MIN_MAG_MIP_POINT;
+	Filter = MIN_MAG_POINT_MIP_LINEAR;
 	AddressU = WRAP;
 	AddressV = WRAP;
 };

@@ -48,4 +48,5 @@ void SceneSprite::Run()
 	_sprScale->Render();
 	_sprRotate->Render();
 	_sprSetColor->Render();
+
 }

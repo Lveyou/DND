@@ -62,9 +62,9 @@ namespace DND
 	void Sprite::SetColor(Color* color)
 	{
 		_color[0] = color[0];
-		_color[1] = color[0];
-		_color[2] = color[0];
-		_color[3] = color[0];
+		_color[1] = color[1];
+		_color[2] = color[2];
+		_color[3] = color[3];
 	}
 
 	Canvas* Sprite::GetCanvas()
