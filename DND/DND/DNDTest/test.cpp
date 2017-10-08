@@ -125,9 +125,9 @@ void Test::Init_Menu()
 	canvas->RegisterImageRect(2, img_btn, Rect(XYWH(Point(0, 0), Size(82, 30))));
 	canvas->RegisterImageRect(3, img_btn, Rect(XYWH(Point(0, 31), Size(82, 30))));
 	canvas->RegisterImageRect(4, img_btn, Rect(XYWH(Point(0, 61), Size(82, 30))));
-	_sprBtn01[0] = canvas->CreateSprite(2, Quad(Vector2(), Vector2(180, 56), true));
-	_sprBtn01[1] = canvas->CreateSprite(3, Quad(Vector2(), Vector2(180, 56), true));
-	_sprBtn01[2] = canvas->CreateSprite(4, Quad(Vector2(), Vector2(180, 56), true));
+	_sprBtn01[0] = canvas->CreateSprite(2, Quad(Vector2(), Vector2(100, 30), true));
+	_sprBtn01[1] = canvas->CreateSprite(3, Quad(Vector2(), Vector2(100, 30), true));
+	_sprBtn01[2] = canvas->CreateSprite(4, Quad(Vector2(), Vector2(100, 30), true));
 
 	_create_menu_btn(L"Image");
 	_create_menu_btn(L"Sprite");
@@ -142,16 +142,16 @@ void Test::Init_Menu()
 	Image* img = Image::Create(L"Data\\Image\\choose.png");
 	_sprChoose = canvas->CreateSprite(img);
 	_sprChoose->SetColor(GAME_BUTTON_COLOR_NORMAL);
-	_sprChoose->GetCoor()->SetPosition(Vector2(-100, 0));
+	_sprChoose->GetCoor()->SetPosition(Vector2(-55, 0));
 
 	
 }
 
 void Test::Run_Menu()
 {
-	const UINT32 xs = 120u;
-	const UINT32 ys = 150u;
-	const UINT32 y_dt = 65u;
+	const UINT32 xs = 65u;
+	const UINT32 ys = 120u;
+	const UINT32 y_dt = 40u;
 
 	UINT32 x = 0;
 	UINT32 y = 0;

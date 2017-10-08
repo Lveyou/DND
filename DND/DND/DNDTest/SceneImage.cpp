@@ -12,7 +12,7 @@ void SceneImage::Init(Test* test)
 	_txtTitle->GetCoor()->SetPosition(Vector2(250, 20));
 
 	_btnOpenFile = _test->_create_normal_btn(L"choose");
-	_btnOpenFile->GetCoor()->SetPosition(Vector2(400, 150));
+	_btnOpenFile->GetCoor()->SetPosition(Vector2(180, 120));
 
 	_spr = NULL;
 }
@@ -52,12 +52,20 @@ void SceneImage::Run()
 			}
 
 			Image* img = Image::Create(openFileName.lpstrFile);
-			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, img);
-			float ratio = float(img->GetSize().h) / img->GetSize().w;
-			_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), Vector2(400, 400* ratio), false));
-			_spr->GetCoor()->SetPosition(Vector2(300, 200));
-			_spr->SetOrder(5);
-			_spr->GetSize();
+			if (img->GetSize().w <= 720)
+			{
+				_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, img);
+				float ratio = float(img->GetSize().h) / img->GetSize().w;
+				int width = img->GetSize().w > 400 ? 400 : img->GetSize().w;
+				_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), Vector2(width, width* ratio), false));
+				_spr->GetCoor()->SetPosition(Vector2(180, 160));
+				_spr->SetOrder(5);
+				_spr->GetSize();
+			}
+			else
+			{
+				_txtTitle->SetString(L"选择的图片太大，请选择width小于720的png图片。");
+			}
 			delete img;
 		}
 		_test->sys->SetShowCursor(false);

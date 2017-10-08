@@ -27,7 +27,7 @@ const String GAME_FONT_NAME_INFO = L"font_info";
 const UINT32 GAME_FONT_SIZE_INFO = 24u;
 
 const String GAME_FONT_NAME_MENU = GAME_FONT_NAME_INFO;
-const UINT32 GAME_FONT_SIZE_MENU = 32u;
+const UINT32 GAME_FONT_SIZE_MENU = 16u;
 
 const String GAME_FONT_NAME_TEXT = L"font_text";
 const UINT32 GAME_FONT_SIZE_TEXT = 22u;
