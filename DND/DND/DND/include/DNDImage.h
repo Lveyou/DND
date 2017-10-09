@@ -36,6 +36,9 @@ namespace DND
 
 		void Render(Point pos);
 		Color GetDotColor(Point xy);
+		void Discoloration(Color color);//去色，做除法
+		Color GetAvgColor();//获得平均颜色
+
 		void SaveToPNG(const String& path) const;
 	private:
 		Image();

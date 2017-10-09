@@ -64,6 +64,10 @@ namespace DND
 
 	DND::Color::Color(float a, float r, float g, float b)
 	{
+		a = Math::GetBetween(a, 0, 1.0f);
+		r = Math::GetBetween(r, 0, 1.0f);
+		g = Math::GetBetween(g, 0, 1.0f);
+		b = Math::GetBetween(b, 0, 1.0f);
 		m_color = int(a * 255) << 24 | int(r * 255) << 16 | int(g * 255) << 8 | int(b * 255);
 	}
 

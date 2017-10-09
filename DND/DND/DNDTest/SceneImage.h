@@ -26,4 +26,8 @@ private:
 
 	ButtonSprite3Text1* _btnOpenFile;
 	Sprite* _spr;
+	Image* _image;
+
+	ButtonSprite3Text1* _btnDiscoloration;
+	ButtonSprite3Text1* _btnSaveToPng;
 };

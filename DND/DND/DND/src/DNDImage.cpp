@@ -97,6 +97,35 @@ namespace DND
 		return Color(_buffer[xy.x + xy.y*_size.w]);
 	}
 
+	void Image::Discoloration(Color color)
+	{
+		float a, r, g, b;
+		float ca, cr, cg, cb;
+		color.GetArgb(ca, cr, cg, cb);
+
+		UINT32 size = _size.w * _size.h;
+		for (UINT i = 0; i < size; ++i)
+		{
+			Color(_buffer[i]).GetArgb(a, r, g, b);
+			_buffer[i] = Color(a,
+				r / cr,
+				g / cg,
+				b / cb).Get();
+		}
+	}
+
+	Color Image::GetAvgColor()
+	{
+		/*UINT64 color = ;
+
+		UINT32 size = _size.w * _size.h;
+		for (UINT i = 0; i < size; ++i)
+		{
+			color
+		}*/
+		return Color();
+	}
+
 	void Image::SaveToPNG(const String& path) const
 	{
 		FILE* fp;

@@ -14,7 +14,14 @@ void SceneImage::Init(Test* test)
 	_btnOpenFile = _test->_create_normal_btn(L"choose");
 	_btnOpenFile->GetCoor()->SetPosition(Vector2(180, 120));
 
+	_btnDiscoloration = _test->_create_normal_btn(L"discoloration");
+	_btnDiscoloration->GetCoor()->SetPosition(Vector2(280, 120));
+
+	_btnSaveToPng = _test->_create_normal_btn(L"save");
+	_btnSaveToPng->GetCoor()->SetPosition(Vector2(380, 120));
+
 	_spr = NULL;
+	_image = NULL;
 }
 
 void SceneImage::Run()
@@ -51,12 +58,17 @@ void SceneImage::Run()
 				_test->canvas->DeleteSprite(_spr);
 			}
 
-			Image* img = Image::Create(openFileName.lpstrFile);
-			if (img->GetSize().w <= 720)
+			if (_image)
+				delete _image;
+			_image = Image::Create(openFileName.lpstrFile);
+			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
+			_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), _image->GetSize(), false));
+			_spr->GetCoor()->SetPosition(Vector2(180, 160));
+			/*if (_image->GetSize().w <= 720)
 			{
-				_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, img);
-				float ratio = float(img->GetSize().h) / img->GetSize().w;
-				int width = img->GetSize().w > 400 ? 400 : img->GetSize().w;
+				_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
+				float ratio = float(_image->GetSize().h) / _image->GetSize().w;
+				int width = _image->GetSize().w > 400 ? 400 : _image->GetSize().w;
 				_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), Vector2(width, width* ratio), false));
 				_spr->GetCoor()->SetPosition(Vector2(180, 160));
 				_spr->SetOrder(5);
@@ -65,8 +77,7 @@ void SceneImage::Run()
 			else
 			{
 				_txtTitle->SetString(L"选择的图片太大，请选择width小于720的png图片。");
-			}
-			delete img;
+			}*/
 		}
 		_test->sys->SetShowCursor(false);
 	}
@@ -74,5 +85,21 @@ void SceneImage::Run()
 	if (_spr)
 	{
 		_spr->Render();
+		_btnDiscoloration->Run();
+		_btnSaveToPng->Run();
+
+		if (_btnDiscoloration->IsRelease())
+		{
+			_image->Discoloration(0xffef9243);
+			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
+			
+		}
+
+		if (_btnSaveToPng->IsRelease())
+		{
+			_image->SaveToPNG(L"Data\\Bin\\image.png");
+		}
 	}
+
+	
 }
