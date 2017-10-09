@@ -77,7 +77,7 @@ namespace DND
 		//Temporary WriteLine
 		void TempWrite(const String& str, int level);
 		void SetTimeStamp(bool open);
-
+		void DisableClose();
 		//Input ×èÈû·µ»ØÊäÈëÁ÷
 		String Input();
 		//enum Color

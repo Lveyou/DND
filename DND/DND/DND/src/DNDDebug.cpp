@@ -174,6 +174,12 @@ namespace DND
 		_bTimeStamp = open;
 	}
 
+	void DebuggerConsole::DisableClose()
+	{
+		DeleteMenu(GetSystemMenu(_consoleHwnd, FALSE), SC_CLOSE, MF_BYCOMMAND);
+		DrawMenuBar(_consoleHwnd);
+	}
+
 	void DebuggerConsole::TempWrite(const String& str, int level)
 	{
 		UINT32 len = str.GetLength();
