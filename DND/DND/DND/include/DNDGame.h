@@ -69,6 +69,7 @@ namespace DND
 		//choosable overload
 		virtual void _fixed_update();
 		virtual void _late_update();
+		virtual void _on_resize();
 	private:
 		void _init_engine();
 		void _release_engine();

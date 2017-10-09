@@ -139,6 +139,8 @@ namespace DND
 		virtual void Send(UINT32 id, NetMsg msg) = 0;
 		//返回头部格式字符串
 		virtual String GetClientInfo(UINT32 id) = 0;
+		//断开一个连接
+		virtual void CloseClient(UINT32 id) = 0;
 	};
 
 	class DLL_API Net

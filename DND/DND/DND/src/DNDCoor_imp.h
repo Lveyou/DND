@@ -15,6 +15,10 @@
 #include <windows.h>
 #pragma warning(disable:4838)
 #include <xnamath.h>// 关闭语句得加在头文件之前
+
+#include <map>
+using namespace std;
+
 namespace DND
 {
 	class Coor_imp : public Coor
@@ -58,6 +62,18 @@ namespace DND
 		Coor_imp();
 		Coor_imp(const Coor_imp& b);
 	};
+
+	class Locator_imp : public Locator
+	{
+	public:
+		virtual void AddCoor(Coor* coor) override;
+		virtual void SetCoor(Coor* coor, Vector2 pos) override;
+		virtual void RemoveCoor(Coor* coor) override;
+		virtual void Run(Size size) override;
+	private:
+		map<Coor*, Vector2> _mapCoor;
+	};
+
 }
 
 #endif

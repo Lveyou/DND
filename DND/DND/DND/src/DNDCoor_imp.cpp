@@ -4,6 +4,8 @@
 
 #include "DNDSystem_imp.h"
 
+#include "DNDDebug.h"
+
 namespace DND
 {
 	Coor* Coor::Create(Coor* parent /*= NULL*/)
@@ -146,6 +148,46 @@ namespace DND
 
 		XMStoreFloat4x4(&_mat, mat);
 		XMStoreFloat4x4(&_matInv, mat_inv);
+	}
+
+	///////////////////////////Locator////////////////////////////////////////
+
+	Locator* Locator::Create()
+	{
+		Locator_imp* ret = new Locator_imp;
+		return ret;
+	}
+
+
+	void Locator_imp::AddCoor(Coor* coor)
+	{
+		_mapCoor[coor] = Vector2(0.5f, 0.5f);
+	}
+
+	void Locator_imp::SetCoor(Coor* coor, Vector2 pos)
+	{
+		auto& iter = _mapCoor.find(coor);
+		if (iter == _mapCoor.end())
+		{
+			debug_warn(L"DND: Locator_imp::SetCoor所传Coor不存在！");
+			return;
+		}
+		_mapCoor[coor] = pos;
+	}
+
+	void Locator_imp::RemoveCoor(Coor* coor)
+	{
+		_mapCoor.erase(coor);
+	}
+
+	void Locator_imp::Run(Size size)
+	{
+		for (auto& iter : _mapCoor)
+		{
+			Coor* coor = iter.first;
+			coor->SetPosition(Vector2(size).Scale(iter.second));
+			
+		}
 	}
 
 }

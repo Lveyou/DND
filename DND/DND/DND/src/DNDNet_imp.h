@@ -102,6 +102,8 @@ namespace DND
 		virtual void Send(UINT32 id, NetMsg msg) override;
 		virtual String GetClientInfo(UINT32 id) override;
 
+		virtual void CloseClient(UINT32 id) override;
+
 		static void (*m_proc_func)(UINT32 id, NetMsg str);
 		static void(*m_proc_func_begin)(UINT32 id);
 		static void(*m_proc_func_end)(UINT32 id);

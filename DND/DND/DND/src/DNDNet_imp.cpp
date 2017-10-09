@@ -422,6 +422,18 @@ end:
 
 
 
+	void Server_imp::CloseClient(UINT32 id)
+	{
+		auto& iter = m_clients.find(id);
+		if (iter == m_clients.end())
+		{
+			debug_warn(L"DND: Server要关闭的Client不存在。");
+			return;
+		}
+
+		closesocket(iter->second->thread.m_socket);
+	}
+
 	void Server_imp::_run()
 	{
 		//创建套接字

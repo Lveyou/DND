@@ -5,6 +5,7 @@
 
 //other:
 //17-08-11: 坐标系 - Lveyou
+//17-10-09: 添加定位器 - Lveyou
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_COOR_H_
@@ -39,7 +40,15 @@ namespace DND
 		virtual ~Coor() {};
 	};
 
-	
+	class DLL_API Locator
+	{
+	public:
+		static Locator* Create();
+		virtual void AddCoor(Coor* coor) = 0;
+		virtual void SetCoor(Coor* coor, Vector2 pos) = 0;
+		virtual void RemoveCoor(Coor* coor) = 0;
+		virtual void Run(Size size) = 0;
+	};
 
 }
 

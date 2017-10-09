@@ -181,6 +181,11 @@ namespace DND
 
 	}
 
+	void Game::_on_resize()
+	{
+
+	}
+
 	void Game::_init_engine()
 	{
 		sys = new System_imp;//sys负责创建和释放font
@@ -274,7 +279,7 @@ namespace DND
 					break;
 				case SIZE_RESTORED:
 					{
-						if (SIZE_RESTORED != wparam_pre)
+						//if (SIZE_RESTORED != wparam_pre) 暂时取消判断
 						{
 							RECT rect;
 							GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
@@ -302,6 +307,7 @@ namespace DND
 				Get()->_dx->_sizeChange = true;
 			}		
 		}
+		Get()->_on_resize();//用户自定义
 		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 
