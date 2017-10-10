@@ -11,7 +11,7 @@ namespace DND
 		dnd_assert(!FT_Init_FreeType(&library) , ERROR_00046);
 	}
 
-	void Font::_load_font_file(const String& name, const String& path)
+	void Font::_load_font_file(const String& name, const String& path,int mode)
 	{
 
 		FontFace face;
@@ -26,6 +26,7 @@ namespace DND
 		}
 		
 		face.name = name;
+		face.mode = mode;
 		faces.push_back(face);
 	}
 
@@ -88,18 +89,31 @@ namespace DND
 
 				FT_Glyph glyph;
 				FT_BitmapGlyph glyph_bitmap;
-				FT_Load_Char(ft_face, ch, FT_LOAD_RENDER);
+				if(iter_face->mode)
+					FT_Load_Char(ft_face, ch, FT_LOAD_DEFAULT);
+				else
+					FT_Load_Char(ft_face, ch, FT_LOAD_RENDER);
 				FT_Get_Glyph(ft_face->glyph, &glyph);
 
-				if (glyph->format != FT_GLYPH_FORMAT_BITMAP)
+				
+				/*if (glyph->format != FT_GLYPH_FORMAT_BITMAP)
+				{
+					FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_MONO, 0, 1);
+				}
+				else
 				{
 					FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-				}
+				}*/
+				if (iter_face->mode)
+					FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_MONO, 0, 1);
+				else
+					FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
+
 				glyph_bitmap = (FT_BitmapGlyph)glyph;
 
-				FT_Bitmap bitmap = glyph_bitmap->bitmap;
-				//FT_Bitmap_New(&bitmap);
-				//FT_Bitmap_Convert(ft->library,&glyph_bitmap->bitmap,&bitmap,4);//这里应该是统一颜色格式
+				FT_Bitmap bitmap;
+				FT_Bitmap_New(&bitmap);
+				int ret = FT_Bitmap_Convert(ft_face->glyph->library, &(glyph_bitmap->bitmap), &bitmap, 1);//这里是统一位数到8
 
 
 
@@ -111,8 +125,8 @@ namespace DND
 					//bitmap.rows - glyph_bitmap->top;//这种就是顶对齐字体
 				Size size = Size(bitmap.width, bitmap.rows);
 				charmap_node.image = Image::Create(size, Color::YELLOW);
-
-
+				
+				
 
 				//这里强行取得image buffer指针来赋值
 				DWORD* p_lock = const_cast<DWORD*>(charmap_node.image->GetBuffer());
@@ -121,11 +135,13 @@ namespace DND
 				for (unsigned j = 0; j < size.h; j++)
 					for (unsigned i = 0; i < size.w; i++)
 					{
-
-						p_lock[j * size.w + i] =
-							(DWORD)(bitmap.buffer[j *(bitmap.pitch) + i]) << 24 | 0x00ffffff;
+						if(iter_face->mode)
+							p_lock[j * size.w + i] = bitmap.buffer[j * bitmap.pitch + i] ? 0xffffffff : 0x00ffffff;
+						else
+							p_lock[j * size.w + i] =
+								(DWORD)(bitmap.buffer[j *(bitmap.pitch) + i]) << 24 | 0x00ffffff;
+							
 					}
-
 
 
 
