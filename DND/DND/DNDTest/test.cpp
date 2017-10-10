@@ -58,7 +58,7 @@ void Test::Init_Window()
 void Test::Init_Font()
 {
 	sys->LoadFontFile(GAME_FONT_NAME_INFO, L"Data\\Font\\cour.ttf");
-	sys->LoadFontFile(GAME_FONT_NAME_TEXT, L"C:\\Windows\\Fonts\\simkai.ttf");
+	sys->LoadFontFile(GAME_FONT_NAME_TEXT, L"C:\\Windows\\Fonts\\simkai.ttf", 1);
 }
 
 void Test::Run_Out_Image_Canvas()
