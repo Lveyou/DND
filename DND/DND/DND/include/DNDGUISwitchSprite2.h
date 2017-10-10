@@ -1,14 +1,14 @@
 //////////////////////////////////////////////////////////////////////////
-//name:		DNDGUIButtonSprite3Text1
+//name:		DNDGUISwitchSprite3
 //author:	Lveyou
-//data:		17-09-22
+//data:		17-10-10
 
 //other:
-//17-09-22: 三精灵一文本，厉害吧
+//17-10-10: 两精灵的开关
 //////////////////////////////////////////////////////////////////////////
 
-#ifndef _DND_GUI_BUTTON_SPRITE_3_TEXT_1_H_
-#define _DND_GUI_BUTTON_SPRITE_3_TEXT_1_H_
+#ifndef _DND_GUI_SWITCH_SPRITE_2_H_
+#define _DND_GUI_SWITCH_SPRITE_2_H_
 
 #include "DNDDLL.h"
 #include "DNDGUI.h"
@@ -19,21 +19,20 @@ namespace DND
 {
 
 
-	class DLL_API ButtonSprite3Text1 : public Control
+	class DLL_API SwitchSprite2 : public Control
 	{
 	public:
-		static ButtonSprite3Text1* Create(Sprite* normal, Sprite* over, Sprite* down, Text* txt);
-		Text* GetText();
+		static SwitchSprite2* Create(Sprite* open, Sprite* close);
+
 		Coor* GetCoor();
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;
 		virtual void _update(State state) override;
 		//////////////////////////////////////////////////////////////////////////
-		Sprite* _spr[3];
-		Text* _txt;
+		Sprite* _spr[2];
 		Coor* _coor;
-		ButtonSprite3Text1();
+		SwitchSprite2();
 
 	};
 

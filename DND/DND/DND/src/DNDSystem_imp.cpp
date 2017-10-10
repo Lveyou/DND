@@ -146,9 +146,9 @@ namespace DND
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
 	}
 
-	void System_imp::LoadFontFile(const String& name, const String& path)
+	void System_imp::LoadFontFile(const String& name, const String& path, int mode)
 	{
-		_font->_load_font_file(name, path);
+		_font->_load_font_file(name, path, mode);
 	}
 
 	System_imp::~System_imp()

@@ -160,6 +160,9 @@
     <ClInclude Include="include\DNDGameServer.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUISwitchSprite2.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -256,6 +259,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGameServer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUISwitchSprite2.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

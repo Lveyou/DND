@@ -89,6 +89,11 @@ namespace DND
 		return _tex->_img;
 	}
 
+	DND::Coor* Canvas_imp::GetCoor()
+	{
+		return _coor;
+	}
+
 	void DND::Canvas_imp::RegisterString(const String& name, unsigned font_size, const String& str)
 	{
 		if (!str.GetLength())

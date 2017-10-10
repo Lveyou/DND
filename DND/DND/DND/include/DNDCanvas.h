@@ -20,6 +20,7 @@ namespace DND
 {
 	class Sprite;
 	class Text;
+	class Coor;
 	class DLL_API Canvas
 	{
 	public:
@@ -36,6 +37,7 @@ namespace DND
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) = 0;
 
 		virtual const Image* GetImage() = 0;
+		virtual Coor* GetCoor() = 0;
 		//Text
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) = 0;
 		virtual Text* CreateText(const String& name, unsigned font_size) = 0;

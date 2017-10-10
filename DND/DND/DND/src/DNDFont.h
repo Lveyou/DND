@@ -35,6 +35,7 @@ namespace DND
 	public:
 		FT_Face face;
 		String name;
+		int mode;
 
 		bool operator==(const FontFace& b)
 		{
@@ -83,7 +84,7 @@ namespace DND
 	{
 	public:
 		Font();
-		void _load_font_file(const String& name, const String& path);
+		void _load_font_file(const String& name, const String& path, int mode);
 		void _get_char(const String& name, unsigned int size, WCHAR ch, Image*& img, Point& offset);
 
 		FT_Library library;

@@ -42,8 +42,8 @@ namespace DND
 		virtual void RenderLine(Vector2 p1, Vector2 p2, Color color = Color::WHITE) = 0;
 		virtual void RenderCircle(Vector2 pos, float radius, UINT32 count, Color color = Color::WHITE) = 0;
 		
-		//font
-		virtual void LoadFontFile(const String& name, const String& path) = 0;
+		//font mode:0Æ½»¬£¬1ÏñËØ
+		virtual void LoadFontFile(const String& name, const String& path, int mode = 0) = 0;
 
 		void SetShowCursor(bool show);
 		

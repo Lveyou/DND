@@ -46,7 +46,7 @@ namespace DND
 		virtual void RenderLine(Vector2 p1, Vector2 p2, Color color = Color::WHITE) override;
 		virtual void RenderCircle(Vector2 pos, float radius, UINT32 count, Color color = Color::WHITE) override;
 		
-		virtual void LoadFontFile(const String& name, const String& path) override;
+		virtual void LoadFontFile(const String& name, const String& path, int mode = 0) override;
 
 		String _windowTitle;
 		DWORD _windowStyle;
