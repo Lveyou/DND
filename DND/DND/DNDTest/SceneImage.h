@@ -34,4 +34,6 @@ private:
 
 	Sprite* _sprColor;
 
+	String _imageName;
+
 };

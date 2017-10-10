@@ -68,6 +68,7 @@ void SceneImage::Run()
 			if (_image)
 				delete _image;
 			_image = Image::Create(openFileName.lpstrFile);
+			_imageName = openFileName.lpstrFileTitle;
 			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
 			_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), _image->GetSize(), false));
 			_spr->GetCoor()->SetPosition(Vector2(180, 160));
@@ -105,7 +106,7 @@ void SceneImage::Run()
 
 		if (_btnSaveToPng->IsRelease())
 		{
-			_image->SaveToPNG(L"Data\\Bin\\image.png");
+			_image->SaveToPNG(String(L"Data\\Bin\\") + _imageName);
 		}
 
 		//Êó±êÍÏ×§
