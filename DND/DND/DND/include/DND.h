@@ -36,6 +36,7 @@
 #include "DNDColor.h"					//Color						颜色
 #include "DNDImage.h"					//Image						图像
 #include "DNDFile.h"					//File						文件
+#include "DNDMath.h"					//Math						数学
 ///////////////////////////GUI///////////////////////////////////////////
 #include "DNDGUI.h"						//GUI						控件基类
 #include "DNDGUIButtonSpriteScale.h"	//ButtonSpriteScale			精灵缩放按钮

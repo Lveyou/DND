@@ -30,4 +30,8 @@ private:
 
 	ButtonSprite3Text1* _btnDiscoloration;
 	ButtonSprite3Text1* _btnSaveToPng;
+	ButtonSprite3Text1* _btnSelect;
+
+	Sprite* _sprColor;
+
 };

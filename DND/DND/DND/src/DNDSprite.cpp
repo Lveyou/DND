@@ -139,5 +139,10 @@ namespace DND
 		}
 	}
 
+	Color Sprite::GetColor(INT32 i /*= 0*/)
+	{
+		return _color[i];
+	}
+
 }
 

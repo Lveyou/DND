@@ -7,6 +7,7 @@
 //17-08-17: Control为控件基类
 //17-08-17: Panel为控件容器面板
 //17-09-24: EditBox为特殊的输入框控件基类
+//17-10-10: 引入Control Mode的概念
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_GUI_H_
@@ -30,9 +31,17 @@ namespace DND
 			DISABLE,	//不可用
 			CHOOSE,		//选择（tab选择）
 		};
+		enum Mode
+		{
+			BUTTON,
+			SWITCH
+		};
 		bool IsRelease();
 		State GetState();
 		void Run();
+		void SetMode(Mode mode);
+		bool IsOpen();
+		void SetOpen(bool open);
 		Control();
 	private:
 		State _state;
@@ -42,6 +51,11 @@ namespace DND
 		//////////////////////////////////////////////////////////////////////////
 		bool _disable;
 		State _last_state;
+		Mode _mode;
+		bool _open;
+
+		void _run_button();
+		void _run_switch();
 		
 	};
 

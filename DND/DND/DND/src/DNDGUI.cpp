@@ -22,6 +22,49 @@ namespace DND
 
 	void Control::Run()
 	{
+		switch (_mode)
+		{
+		case DND::Control::BUTTON:
+			_run_button();
+			break;
+		case DND::Control::SWITCH:
+			_run_switch();
+			break;
+		default:
+			break;
+		}
+		
+		
+	}
+
+	void Control::SetMode(Mode mode)
+	{
+		_mode = mode;
+	}
+
+	bool Control::IsOpen()
+	{
+		return _open;
+	}
+
+	void Control::SetOpen(bool open)
+	{
+		_open = open;
+	}
+
+	Control::Control() :
+		_disable(false),
+		_state(NORMAL),
+		_last_state(NORMAL),
+		_mode(Mode::BUTTON),
+		_open(false)
+	{
+
+	}
+
+
+	void Control::_run_button()
+	{
 		Input* input = Game::Get()->input;
 		_last_state = _state;
 		//如果激活为其他三种状态，否则为 第四种
@@ -51,17 +94,30 @@ namespace DND
 			_state = DISABLE;
 		}
 		_update(_state);
-		
 	}
 
-	Control::Control() :
-		_disable(false),
-		_state(NORMAL),
-		_last_state(NORMAL)
+	void Control::_run_switch()
 	{
+		Input* input = Game::Get()->input;
+		_last_state = _state;
+		//如果激活为其他三种状态，否则为 第四种
+		if (!_disable)
+		{
+			//如果在外面，为OUT状态
+			if (_is_pickup() && input->KeyUp(KeyCode::MOUSE_L))
+			{
+				_open = !_open;
+			}
+			
+			_state = _open ? DOWN:NORMAL;
 
+		}
+		else
+		{
+			_state = DISABLE;
+		}
+		_update(_state);
 	}
-
 
 	EditBox* EditBox::focus = NULL;
 

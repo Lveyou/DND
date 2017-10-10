@@ -2,6 +2,7 @@
 #include "DNDDebug.h"
 #include "DNDGame.h"
 #include "DNDSystem_imp.h"
+#include "DNDMath.h"
 #include <png.h>
 
 namespace DND
@@ -102,6 +103,14 @@ namespace DND
 		float a, r, g, b;
 		float ca, cr, cg, cb;
 		color.GetArgb(ca, cr, cg, cb);
+
+		if (cr == 0)
+			cr = Math::GetFloatMin();
+		if (cg == 0)
+			cg = Math::GetFloatMin();
+		if (cb == 0)
+			cb = Math::GetFloatMin();
+
 
 		UINT32 size = _size.w * _size.h;
 		for (UINT i = 0; i < size; ++i)

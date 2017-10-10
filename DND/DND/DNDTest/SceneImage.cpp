@@ -20,6 +20,13 @@ void SceneImage::Init(Test* test)
 	_btnSaveToPng = _test->_create_normal_btn(L"save");
 	_btnSaveToPng->GetCoor()->SetPosition(Vector2(380, 120));
 
+	_btnSelect = _test->_create_normal_btn(L"select");
+	_btnSelect->GetCoor()->SetPosition(Vector2(280, 120 + 40));
+	_btnSelect->SetMode(Control::SWITCH);
+
+	_sprColor = _test->canvas->CreateSprite(0, Quad(Vector2(), Vector2(50, 50), true));
+	_sprColor->GetCoor()->SetPosition(Vector2(180, 120 + 40));
+
 	_spr = NULL;
 	_image = NULL;
 }
@@ -87,10 +94,11 @@ void SceneImage::Run()
 		_spr->Render();
 		_btnDiscoloration->Run();
 		_btnSaveToPng->Run();
+		_btnSelect->Run();
 
 		if (_btnDiscoloration->IsRelease())
 		{
-			_image->Discoloration(0xffef9243);
+			_image->Discoloration(_sprColor->GetColor());
 			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
 			
 		}
@@ -101,12 +109,29 @@ void SceneImage::Run()
 		}
 
 		//Êó±êÍÏ×§
-		if (_test->input->KeyState(KeyCode::MOUSE_L))
+		if (_test->input->KeyState(KeyCode::MOUSE_L) && !_btnSelect->IsOpen())
 		{
 			Point mouse_dt = _test->input->GetMousePositionDelta();
 			_spr->GetCoor()->SetPosition(_spr->GetCoor()->GetPosition() + mouse_dt);
 			//debug_notice(String(L"dt:") + mouse_dt.x + mouse_dt.y);
 		}
+
+		//È¡É«
+		if (_btnSelect->IsOpen())
+		{
+			Point mouse = _test->input->GetMousePosition();
+			Vector2 pos = _spr->GetCoor()->WorldToThis(mouse);
+			
+			pos.a = Math::GetBetween(pos.a, 0, _image->GetSize().w - 1);
+			pos.b = Math::GetBetween(pos.b, 0, _image->GetSize().h - 1);
+
+			_sprColor->SetColor(_image->GetDotColor(Vector2ToPoint(pos)));
+
+			if (_test->input->KeyDown(KeyCode::MOUSE_L))
+				_btnSelect->SetOpen(false);
+		}
+
+		_sprColor->Render();
 	}
 		
 
