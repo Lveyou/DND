@@ -58,7 +58,7 @@ public:
 	//鼠标光标相关
 	void Init_Cursor();
 	void Run_Cursor();
-	
+	void RunWindowSize();
 private:
 	//鼠标图案
 	Sprite* _sprCursor;

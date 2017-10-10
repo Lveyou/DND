@@ -99,7 +99,16 @@ void SceneImage::Run()
 		{
 			_image->SaveToPNG(L"Data\\Bin\\image.png");
 		}
+
+		//Êó±êÍÏ×§
+		if (_test->input->KeyState(KeyCode::MOUSE_L))
+		{
+			Point mouse_dt = _test->input->GetMousePositionDelta();
+			_spr->GetCoor()->SetPosition(_spr->GetCoor()->GetPosition() + mouse_dt);
+			//debug_notice(String(L"dt:") + mouse_dt.x + mouse_dt.y);
+		}
 	}
+		
 
 	
 }

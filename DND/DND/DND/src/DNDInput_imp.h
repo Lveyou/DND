@@ -43,6 +43,7 @@ namespace DND
 		bool _keyPre[0xff];//иор╩ж║╣дв╢л╛
 
 		Point _mousePositionLast;
+		Point _mousePosition;
 		int _mouseWheelDelta;
 		bool _runBackground;
 

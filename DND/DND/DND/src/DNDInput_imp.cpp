@@ -40,23 +40,14 @@ namespace DND
 
 	Point Input_imp::GetMousePosition()
 	{
-		System_imp* sys = (System_imp*)(Game::Get()->sys);
-
-		
-		POINT point;
-		GetCursorPos(&point);
-
-		if (sys->_hWnd)
-			ScreenToClient(sys->_hWnd, &point);
-
-		return Point(point.x, point.y);
+		return _mousePosition;
 	}
 
 	Point Input_imp::GetMousePositionDelta()
 	{
 		if (_mousePositionLast.x == -1.0f)
 			return Point(0, 0);
-		return GetMousePosition() - _mousePositionLast;
+		return _mousePosition - _mousePositionLast;
 	}
 
 	int Input_imp::GetMouseWheelDelta()
@@ -87,7 +78,17 @@ namespace DND
 
 	void Input_imp::_calc_mouse()
 	{
-		_mousePositionLast = GetMousePosition();
+		_mousePositionLast = _mousePosition;
+
+		System_imp* sys = (System_imp*)(Game::Get()->sys);
+		POINT point;
+		GetCursorPos(&point);
+
+		if (sys->_hWnd)
+			ScreenToClient(sys->_hWnd, &point);
+
+		_mousePosition = Point(point.x, point.y);
+
 	}
 
 	void Input_imp::_input_run()

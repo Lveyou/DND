@@ -25,6 +25,7 @@ void Test::_update()
 	Run_Menu();
 	Run_Scene();
 	Run_Out_Image_Canvas();
+	RunWindowSize();
 }
 
 void Test::_init()
@@ -86,6 +87,41 @@ void Test::Run_Cursor()
 {
 	_sprCursor->GetCoor()->SetPosition(input->GetMousePosition());
 	_sprCursor->Render();
+}
+
+void Test::RunWindowSize()
+{
+	if (input->KeyUp(KeyCode::KEY1))
+	{
+		sys->SetWindowSize(Size(800, 600));
+		sys->SetWindowCenter();
+		sys->ApplyWindow();
+	}
+
+	if (input->KeyUp(KeyCode::KEY2))
+	{
+		sys->SetWindowSize(Size(1024, 768));
+		sys->SetWindowCenter();
+		sys->ApplyWindow();
+	}
+	if (input->KeyUp(KeyCode::KEY3))
+	{
+		sys->SetWindowSize(Size(1366, 768));
+		sys->SetWindowCenter();
+		sys->ApplyWindow();
+	}
+	if (input->KeyUp(KeyCode::KEY4))
+	{
+		sys->SetWindowSize(Size(1600, 900));
+		sys->SetWindowCenter();
+		sys->ApplyWindow();
+	}
+	if (input->KeyUp(KeyCode::KEY5))
+	{
+		sys->SetWindowSize(Size(1920, 1080));
+		sys->SetWindowCenter();
+		sys->ApplyWindow();
+	}
 }
 
 void Test::Init_Info()
