@@ -43,12 +43,15 @@ namespace DND
 
 	void Text_imp::SetString(const String& str)
 	{
+		if (m_string == str)
+			return;
 		RegisterString(str);
 		SetStringFast(str);
 	}
 
 	void Text_imp::SetStringFast(const String& str)
 	{
+		
 		//这个函数排好队形，对齐后面只是统一偏移坐标
 		/*if (!str.Get_Length())
 		{
@@ -67,15 +70,9 @@ namespace DND
 		unsigned x_max = 0;
 		unsigned y = 0;
 		//标记上次所有精灵 为 已废弃
-		Sprite* spr2 = NULL;
-		list<Sprite*>::iterator itor;
-		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor)
+		for (auto& iter : m_sprites)
 		{
-			spr2 = *itor;
-			if (spr2)
-			{
-				spr2->GetCanvas()->DeleteSprite(spr2);
-			}
+			iter->GetCanvas()->DeleteSprite(iter);
 		}
 		m_sprites.clear();
 		INT32 dw, dh;

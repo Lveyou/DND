@@ -11,8 +11,10 @@ namespace DND
 
 	bool Control::IsRelease()
 	{
-		//上一帧 按下 这一帧释放（均在内部）
-		return (_last_state == DOWN) && (_state == OVER);
+		if (_mode == BUTTON)
+			return (_last_state == DOWN) && (_state == OVER);
+		else
+			return (_last_state != _state);
 	}
 
 	Control::State Control::GetState()
@@ -29,6 +31,9 @@ namespace DND
 			break;
 		case DND::Control::SWITCH:
 			_run_switch();
+			break;
+		case DND::Control::RADIO:
+			_run_radio();
 			break;
 		default:
 			break;
@@ -50,6 +55,9 @@ namespace DND
 	void Control::SetOpen(bool open)
 	{
 		_open = open;
+		//放止Release事件
+		_state = _open ? DOWN : NORMAL;
+		_last_state = _state;
 	}
 
 	Control::Control() :
@@ -103,13 +111,37 @@ namespace DND
 		//如果激活为其他三种状态，否则为 第四种
 		if (!_disable)
 		{
-			//如果在外面，为OUT状态
+			//如果在外面，为NORMAL状态
 			if (_is_pickup() && input->KeyUp(KeyCode::MOUSE_L))
 			{
 				_open = !_open;
 			}
+
 			
 			_state = _open ? DOWN:NORMAL;
+
+		}
+		else
+		{
+			_state = DISABLE;
+		}
+		_update(_state);
+	}
+
+	void Control::_run_radio()
+	{
+		Input* input = Game::Get()->input;
+		_last_state = _state;
+		//如果激活为其他三种状态，否则为 第四种
+		if (!_disable)
+		{
+			//如果在外面，为OUT状态
+			if (_is_pickup() && input->KeyDown(KeyCode::MOUSE_L))
+			{
+				_open = true;
+			}
+
+			_state = _open ? DOWN : NORMAL;
 
 		}
 		else

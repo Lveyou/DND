@@ -36,6 +36,7 @@ namespace DND
 		virtual void SetParent(Coor* coor) = 0;
 
 		virtual Coor* Clone() = 0;
+		virtual void Copy(Coor* coor) = 0;
 
 		virtual ~Coor() {};
 	};

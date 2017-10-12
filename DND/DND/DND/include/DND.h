@@ -44,6 +44,7 @@
 #include "DNDGUIButtonSprite3Text1.h"	//ButtonSprite3Text1		3精灵1文本
 #include "DNDGUIEditBoxSprite.h"		//EditBoxSprite				精灵背景输入框
 #include "DNDGUISwitchSprite2.h"		//SwitchSprite				2精灵开关
+#include "DNDGUIButtonSprite3.h"		//ButtonSprite				3精灵按钮
 //////////////////////////////////////////////////////////////////////////
 
 #endif

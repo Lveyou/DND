@@ -38,6 +38,7 @@ namespace DND
 
 		virtual const Image* GetImage() = 0;
 		virtual Coor* GetCoor() = 0;
+		virtual Rect GetImageRect(UINT32 img_ID) = 0;
 		//Text
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) = 0;
 		virtual Text* CreateText(const String& name, unsigned font_size) = 0;

@@ -40,6 +40,7 @@ namespace DND
 		virtual void SetParent(Coor* coor) override;
 
 		virtual Coor* Clone() override;
+		virtual void Copy(Coor* coor) override;
 
 		Coor* _parent;//¸¸×ø±êÏµ
 		

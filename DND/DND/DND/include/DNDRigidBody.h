@@ -36,6 +36,7 @@ namespace DND
 		virtual void SetTransform(Vector2 pos, float angle) = 0;
 		virtual void SetScale(Vector2 scale) = 0;
 		virtual void SetActive(bool active) = 0;
+		virtual ~RigidBody();
 		
 	};
 

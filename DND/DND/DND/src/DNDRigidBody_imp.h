@@ -36,6 +36,7 @@ namespace DND
 		virtual void SetActive(bool active) override;
 
 		RigidBody_imp(float density, float friction, float restitution);
+		~RigidBody_imp();
 		list<b2Fixture*> _fixtures;
 
 		b2FixtureDef _fixtureDef;

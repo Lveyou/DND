@@ -72,11 +72,18 @@ namespace DND
 		return _canvas;
 	}
 
+	void Sprite::SetQuad(INT32 i, Vector2 pos)
+	{
+		_quad.v[i] = pos;
+	}
+
 	Sprite::~Sprite()
 	{
 		//调用 Delete 删除
 		if (_coor)
 			delete _coor;
+		if (_rigidBody)
+			delete _rigidBody;
 	}
 
 	Sprite::Sprite()
@@ -93,14 +100,17 @@ namespace DND
 		spr->_order = _order;
 		//spr->m_canvas = b.m_canvas;
 		if (_coor)
-			spr->_coor = _coor->Clone();
+			//spr->_coor = _coor->Clone(); 17-10-12 CreateSprite已经分配了coor
+			spr->_coor->Copy(_coor);
 		else
-			_coor = 0;
+			_coor = NULL;
+		if (_rigidBody)
+			;//TODO: clone
 		spr->_color[0] = _color[0];
 		spr->_color[1] = _color[1];
 		spr->_color[2] = _color[2];
 		spr->_color[3] = _color[3];
-		spr->_show = false;//07-04-27 改为了 false
+		spr->_show = false;//17-04-27 改为了 false
 		spr->_dead = false;
 		return spr;
 	}

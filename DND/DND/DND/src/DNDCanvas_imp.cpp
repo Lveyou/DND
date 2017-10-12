@@ -94,6 +94,18 @@ namespace DND
 		return _coor;
 	}
 
+	Rect Canvas_imp::GetImageRect(UINT32 img_ID)
+	{
+		auto& iter = _tex->_imageRects.find(img_ID);
+		if (iter == _tex->_imageRects.end())
+		{
+			debug_warn(L"DND: Canvas::GetImageRect指定的ID不存在。");
+			return Rect();
+		}
+
+		return iter->second;
+	}
+
 	void DND::Canvas_imp::RegisterString(const String& name, unsigned font_size, const String& str)
 	{
 		if (!str.GetLength())
@@ -182,8 +194,7 @@ namespace DND
 			if (spr1->_dead)
 			{
 				delete spr1;
-				spr1 = NULL;
-				(*iter1) = 0;
+				(*iter1) = NULL;
 			}
 			else
 			{

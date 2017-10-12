@@ -52,7 +52,7 @@ void Test::Init_Window()
 	sys->SetWindowCenter();
 	sys->ApplyWindow();
 	sys->SetVsync(false);
-	time->SetFPS(60);
+	time->SetFPS(0);
 }
 
 void Test::Init_Font()
@@ -139,6 +139,8 @@ void Test::Init_Info()
 void Test::Run_Info()
 {
 	Point mouse = input->GetMousePosition();
+
+	
 	//分别绘制的是 帧数、一帧时间、Drawcall数、精灵数、时间、鼠标位置
 	_txtFpsDrawcallTime->SetString(String::Format(256,
 		L"%d/%.3lf\n"

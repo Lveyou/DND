@@ -112,6 +112,18 @@ namespace DND
 	{
 		_body->SetActive(active);
 	}
+
+	RigidBody_imp::~RigidBody_imp()
+	{
+		b2World* world = Game::Get()->_b2World;
+		world->DestroyBody(_body);
+	}
+
+
+	RigidBody::~RigidBody()
+	{
+
+	}
 }
 
 

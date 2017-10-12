@@ -163,6 +163,9 @@
     <ClInclude Include="include\DNDGUISwitchSprite2.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUIButtonSprite3.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -262,6 +265,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGUISwitchSprite2.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUIButtonSprite3.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

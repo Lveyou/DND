@@ -35,6 +35,7 @@ namespace DND
 		void SetColor(Color* color);
 		Color GetColor(INT32 i = 0);
 		Canvas* GetCanvas();
+		void SetQuad(INT32 i, Vector2 pos);
 
 		void CreateRigidBody(float density, float friction, float restitution);
 		RigidBody* GetRigidBody();

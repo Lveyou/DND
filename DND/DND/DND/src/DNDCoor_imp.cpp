@@ -132,6 +132,16 @@ namespace DND
 		return coor;
 	}
 
+	void Coor_imp::Copy(Coor* coor)
+	{
+		Coor_imp* imp = (Coor_imp*)coor;
+		_parent = imp->_parent;//父坐标系
+		_position = imp->_position;//坐标
+		_rotate = imp->_rotate;//旋转
+		_scale = imp->_scale;//缩放
+		_changed = true;
+	}
+
 	void Coor_imp::_update_matrix()
 	{
 		//所有点先

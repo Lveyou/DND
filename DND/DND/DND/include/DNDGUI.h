@@ -34,7 +34,8 @@ namespace DND
 		enum Mode
 		{
 			BUTTON,
-			SWITCH
+			SWITCH,
+			RADIO
 		};
 		bool IsRelease();
 		State GetState();
@@ -56,6 +57,7 @@ namespace DND
 
 		void _run_button();
 		void _run_switch();
+		void _run_radio();
 		
 	};
 
