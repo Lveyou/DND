@@ -159,20 +159,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);..\..\dx11_sdk\include;..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\DND\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatDebug;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
     <ExcludePath>
     </ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\x64;..\..\zlib-1.2.8\contrib\vstudio\vc10\x64\ZlibStatDebug;..\x64\Debug;..\..\dx11_sdk\lib\x64;$(LibraryPath)</LibraryPath>
     <ExcludePath />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(WindowsSDK_IncludePath);..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Release;..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatRelease;..\Release;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

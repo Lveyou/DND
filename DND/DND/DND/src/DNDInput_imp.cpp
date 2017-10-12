@@ -163,7 +163,7 @@ namespace DND
 
 	bool GamePad::KeyState(int pad)
 	{
-		return _input->_xinputState[_id].Gamepad.wButtons & pad;
+		return (_input->_xinputState[_id].Gamepad.wButtons & pad) != 0;
 	}
 
 	float GamePad::ForceLT()
@@ -184,8 +184,8 @@ namespace DND
 
 	Vector2 GamePad::GetLS()
 	{
-		float LX = _input->_xinputState[_id].Gamepad.sThumbLX;
-		float LY = -(_input->_xinputState[_id].Gamepad.sThumbLY);
+		float LX = float(_input->_xinputState[_id].Gamepad.sThumbLX);
+		float LY = float(-(_input->_xinputState[_id].Gamepad.sThumbLY));
 
 		if (abs(LX) < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
 			LX = 0;
@@ -205,8 +205,8 @@ namespace DND
 
 	Vector2 GamePad::GetRS()
 	{
-		float RX = _input->_xinputState[_id].Gamepad.sThumbRX;
-		float RY = -(_input->_xinputState[_id].Gamepad.sThumbRY);
+		float RX = float(_input->_xinputState[_id].Gamepad.sThumbRX);
+		float RY = float(-(_input->_xinputState[_id].Gamepad.sThumbRY));
 
 		if (abs(RX) < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE)
 			RX = 0;
@@ -307,8 +307,8 @@ namespace DND
 	{
 		XINPUT_VIBRATION vibration;
 		ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-		vibration.wLeftMotorSpeed = lr.a * 65535; // use any value between 0-65535 here
-		vibration.wRightMotorSpeed = lr.b * 65535; // use any value between 0-65535 here
+		vibration.wLeftMotorSpeed = WORD(lr.a * 65535.0f); // use any value between 0-65535 here
+		vibration.wRightMotorSpeed = WORD(lr.b * 65535.0f); // use any value between 0-65535 here
 		XInputSetState(_id, &vibration);
 
 

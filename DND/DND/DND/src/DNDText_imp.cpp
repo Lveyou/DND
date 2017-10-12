@@ -197,7 +197,7 @@ namespace DND
 			return false;
 		
 		auto iter = m_sprites.begin();
-		UINT32 h = m_font_size;
+		float h = (float)m_font_size;
 
 		Coor* coor = (*iter)->GetCoor();
 		float x1 = ((coor->GetPosition() - m_offset).a);
@@ -210,7 +210,7 @@ namespace DND
 		Point mouse = Game::Get()->input->GetMousePosition();
 		Vector2 fmouse = m_coor->WorldToThis(mouse);
 
-		return Math::TestCollisionDotInRect(fmouse, Vector4(x1, 0, x2, h));
+		return Math::TestCollisionDotInRect(fmouse, Vector4(x1, 0.0f, x2, h));
 	}
 
 	void Text_imp::SetAlignHorizontal(int align)
@@ -372,7 +372,7 @@ namespace DND
 	void Text_imp::SetOutLineSize(UINT32 size)
 	{
 		_outlineSize = size;
-		int outline = size;
+		float outline = (float)size;
 		if (_txtOutline[0])
 		{
 			_txtOutline[0]->GetCoor()->SetPosition(Vector2(outline, 0));

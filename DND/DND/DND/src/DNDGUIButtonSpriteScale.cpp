@@ -28,7 +28,7 @@ namespace DND
 
 	void ButtonSpriteScale::_update(State state)
 	{
-		double dt = Game::Get()->time->GetRealDelta();
+		float dt = (float)(Game::Get()->time->GetRealDelta());
 		switch(state)
 		{
 		case Control::CHOOSE:

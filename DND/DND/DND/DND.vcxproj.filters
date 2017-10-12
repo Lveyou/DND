@@ -112,9 +112,6 @@
     <ClInclude Include="include\DNDRigidBody.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="src\DNDRigidBody_imp.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\DNDNet.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -165,6 +162,9 @@
     </ClInclude>
     <ClInclude Include="include\DNDGUIButtonSprite3.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DNDRigidBody_imp.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

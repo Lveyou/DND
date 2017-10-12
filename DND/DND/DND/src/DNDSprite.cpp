@@ -105,7 +105,7 @@ namespace DND
 		else
 			_coor = NULL;
 		if (_rigidBody)
-			;//TODO: clone
+			int i = 3;//TODO: clone
 		spr->_color[0] = _color[0];
 		spr->_color[1] = _color[1];
 		spr->_color[2] = _color[2];
