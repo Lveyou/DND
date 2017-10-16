@@ -77,6 +77,40 @@ namespace DND
 		_quad.v[i] = pos;
 	}
 
+	void Sprite::Clip(bool x, bool y)
+	{
+		/*if (x)
+		{
+			swap(_quad.v[0].a, _quad.v[1].a);
+			swap(_quad.v[0].b, _quad.v[1].b);
+			swap(_quad.v[3].a, _quad.v[2].a);
+			swap(_quad.v[3].b, _quad.v[2].b);
+		}
+
+		if (y)
+		{
+			swap(_quad.v[0].a, _quad.v[3].a);
+			swap(_quad.v[0].b, _quad.v[3].b);
+			swap(_quad.v[1].a, _quad.v[2].a);
+			swap(_quad.v[1].b, _quad.v[2].b);
+		}*/
+		if (x)
+		{
+			_quad.v[0].a = -_quad.v[0].a;
+			_quad.v[1].a = -_quad.v[1].a;
+			_quad.v[2].a = -_quad.v[2].a;
+			_quad.v[3].a = -_quad.v[3].a;
+		}
+
+		if (y)
+		{
+			_quad.v[0].b = -_quad.v[0].b;
+			_quad.v[1].b = -_quad.v[1].b;
+			_quad.v[2].b = -_quad.v[2].b;
+			_quad.v[3].b = -_quad.v[3].b;
+		}
+	}
+
 	Sprite::~Sprite()
 	{
 		//µ÷ÓÃ Delete É¾³ý
