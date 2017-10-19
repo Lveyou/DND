@@ -69,7 +69,6 @@ namespace DND
 		void Run();
 
 		
-		
 		void SetFocus(bool focus);
 		bool IsFocus();
 		String GetString();
@@ -95,6 +94,7 @@ namespace DND
 		bool m_symbol;
 		bool m_contrl;
 		bool m_other;
+
 	protected:
 		String m_string;
 		virtual void OnChar(wchar_t ch) = 0;

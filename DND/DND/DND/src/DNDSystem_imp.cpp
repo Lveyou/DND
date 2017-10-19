@@ -3,6 +3,10 @@
 #include "DNDGame.h"
 #include "DNDValue.h"
 #include "DNDFont.h"
+#include "DNDCoor.h"
+
+#include<Shlobj.h>
+#pragma comment(lib,"Shell32.lib")
 
 namespace DND
 {
@@ -151,6 +155,59 @@ namespace DND
 		_font->_load_font_file(name, path, mode);
 	}
 
+
+
+	String System_imp::GetChooseFolder(const String& title, String root)
+	{
+		wchar_t buffer[MAX_PATH] = { 0 };
+
+		BROWSEINFO bi = { 0 };
+		if (root == L"")
+		{
+			bi.pidlRoot = NULL;
+		}
+		else
+		{
+			//获取想要的根目录
+			LPSHELLFOLDER pShellFolder = NULL;
+			ULONG nCharsParsed = 0;
+
+			SHGetDesktopFolder(&pShellFolder);
+
+			wchar_t temp[MAX_PATH] = { 0 };
+			//root.Replace_Char(L'/', L'\\');
+			root.GetWideCharStr(temp, MAX_PATH);
+			//第三个参数
+			pShellFolder->ParseDisplayName(NULL, NULL, temp, &nCharsParsed, (LPITEMIDLIST*)&(bi.pidlRoot), NULL);
+
+
+			pShellFolder->Release();
+		}
+
+		bi.hwndOwner = _hWnd;//拥有着窗口句柄，为NULL表示对话框是非模态的，实际应用中一般都要有这个句柄
+		bi.pszDisplayName = buffer;//接收文件夹的缓冲区
+		bi.lpszTitle = title.GetWcs();//标题
+		bi.ulFlags = BIF_NEWDIALOGSTYLE;
+		LPITEMIDLIST idl = SHBrowseForFolder(&bi);
+
+
+		if (SHGetPathFromIDList(idl, buffer))
+		{
+			String ret = buffer;
+			return ret + L"\\";
+		}
+		else
+		{
+			return String();
+		}
+	}
+
+
+	void System_imp::SetShowCursor(bool show)
+	{
+		ShowCursor(show);
+	}
+
 	System_imp::~System_imp()
 	{
 		delete _font;
@@ -172,6 +229,19 @@ namespace DND
 		RenderLine(p1 + pos, Vector2(radius, 0) + pos, color);
 	}
 
+	void System_imp::RenderCoor(Coor* coor)
+	{
+		Vector2 p = Vector2();
+		Vector2 x = p + Vector2(32.0f, 0);
+		Vector2 y = p + Vector2(0, 32.0f);
+		p = coor->ThisToWorld(p);
+		x = coor->ThisToWorld(x);
+		y = coor->ThisToWorld(y);
+
+		RenderLine(p, x, Color::RED);
+		RenderLine(p, y, Color::GREEN);
+	}
+
 	Point System_imp::GetWindowPoint()
 	{
 		return _windowPoint;
@@ -179,10 +249,6 @@ namespace DND
 	
 
 
-	void System::SetShowCursor(bool show)
-	{
-		ShowCursor(show);
-	}
 
 
 

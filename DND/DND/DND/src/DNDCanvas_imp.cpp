@@ -315,7 +315,7 @@ namespace DND
 		_order = order;
 		_tex = new Texture();//这一步会创建一个纹理
 
-		_vertexSize = 1024;
+		_vertexSize = 1024;//
 		_vertexs = new Vertex2D[_vertexSize];
 
 		_systemUseID = CANVAS_SYS_ID_START;

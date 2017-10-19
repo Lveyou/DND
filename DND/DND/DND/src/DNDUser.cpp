@@ -85,6 +85,11 @@ namespace DND
 		return (a - vb.a) < 0.001f && (b - vb.b) < 0.001f;
 	}
 
+	DND::Vector2 Vector2::operator-()
+	{
+		return Vector2(-a, -b);
+	}
+
 	double Vector2::CrossProduct(const Vector2& vb)
 	{
 		return a*vb.b - b*vb.a;
@@ -326,6 +331,16 @@ namespace DND
 		String str2 = str.GetStr(pos + 1, str.GetLength());;
 
 		return Size(str1.GetInt(), str2.GetInt());
+	}
+
+	Rect StringToRect(const String& str)
+	{
+		Rect ret;
+
+		swscanf_s(str.GetWcs(), L"%d,%d,%d,%d",
+			&ret.p1.x, &ret.p1.y, &ret.p2.x, &ret.p2.y);
+
+		return ret;
 	}
 
 	//quad

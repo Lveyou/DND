@@ -70,7 +70,8 @@ namespace DND
 		//==================工具==================
 		bool IsHaveLetter();//是否含有字母
 
-		UINT32 Split(WCHAR wc, String* strs, UINT32 max_size);//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
+		//此函数有bug，17-10-17
+		UINT32 Split(WCHAR wc, String* strs, UINT32 max_size) const;//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
 		static String Format(UINT32 max_size, const WCHAR* format, ...);//max size 不包含结束符
 	private:
 		StrVector* p;

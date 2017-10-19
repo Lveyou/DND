@@ -50,7 +50,7 @@ namespace DND
 		double t1 = pa.CrossProduct(pb);
 		double t2 = pb.CrossProduct(pc);
 		double t3 = pc.CrossProduct(pa);
-		return t1*t2 >= 0 && t1*t3 >= 0;
+		return t1*t2 > 0 && t1*t3 > 0;//2017-10-19: 原本有判断=，但dot.y == p0.y时，均会返回真
 	}
 
 	UINT32 DND::Math::GetIntLength(int var)

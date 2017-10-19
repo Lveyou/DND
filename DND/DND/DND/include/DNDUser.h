@@ -91,6 +91,7 @@ namespace DND
 		Vector2 operator-(const Vector2& vb) const;
 		Vector2 operator/(float var);
 		Vector2 operator*(float var);
+		Vector2 operator-();
 		//不要问我为何返回 (a,vb.b) 因为我疯了 
 		Vector2 operator*(const Vector2& vb);
 		//此操作返回自己
@@ -140,7 +141,7 @@ namespace DND
 	DLL_API Point Vector2ToPoint(const Vector2& v);
 	//字符串转换系列
 	DLL_API Size StringToSize(const String& str);
-
+	DLL_API Rect StringToRect(const String& str);
 	//other: 左上角为 0 ，顺时针为 0，1，2，3
 	//构成的两个三角形为 ： 012 ， 023
 	//角度 为 弧度制，默认为顺时针

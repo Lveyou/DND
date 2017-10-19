@@ -24,6 +24,7 @@ namespace DND
 		_bEndLoop = false;
 		_dx = NULL;
 		canvas = NULL;
+		_imesLength = 0;
 	}
 
 	void Game::Init()
@@ -478,6 +479,21 @@ namespace DND
 			ret += iter.second->_sprites.size();
 		}
 		return ret;
+	}
+
+	UINT32 Game::GetImeLength()
+	{
+		return _imesLength;
+	}
+
+	DND::String Game::GetImeString(UINT32 i)
+	{
+		return _imes[i];
+	}
+
+	DND::String Game::GetImeInput()
+	{
+		return _imeInput;
 	}
 
 }

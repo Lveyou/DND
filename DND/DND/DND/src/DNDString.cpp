@@ -278,7 +278,7 @@ namespace DND
 		return false;
 	}
 
-	UINT32 String::Split(WCHAR wc, String* strs, UINT32 max_size)
+	UINT32 String::Split(WCHAR wc, String* strs, UINT32 max_size) const
 	{
 		auto itor_begin = p->begin();
 		auto itor_find = itor_begin;

@@ -21,14 +21,24 @@ namespace DND
 	public:
 		static Animation* Create(UINT32 fps);
 		virtual void PushBack(Sprite* spr) = 0;
+		virtual Sprite* GetSprite(UINT32 n) = 0;
+		virtual void Release() = 0;
 		virtual void Render() = 0;
+		virtual void RenderFrame() = 0;
 		virtual Coor* GetCoor() = 0;
 
+		virtual void SetQuadOffset(Vector2 offset) = 0;
+
+		virtual bool IsPickup() = 0;
 		virtual void Play() = 0;
+		virtual Animation* Clone() = 0;
+		virtual void Copy(Animation* b) = 0;
 	private:
 
 
 	};
+
+
 }
 
 #endif

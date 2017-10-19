@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SceneAnimation.h" />
     <ClInclude Include="SceneGUI.h" />
     <ClInclude Include="SceneImage.h" />
     <ClInclude Include="SceneInput.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="test.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SceneAnimation.cpp" />
     <ClCompile Include="SceneImage.cpp" />
     <ClCompile Include="SceneInput.cpp" />
     <ClCompile Include="SceneSprite.cpp" />

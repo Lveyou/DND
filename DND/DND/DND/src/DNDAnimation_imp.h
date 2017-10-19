@@ -21,11 +21,18 @@ namespace DND
 		friend class Animation;
 	public:
 		virtual void PushBack(Sprite* spr) override;
+		virtual Sprite* GetSprite(UINT32 n) override;
+		virtual void Release() override;
 		virtual void Render() override;
+		virtual void RenderFrame() override;
 		virtual Coor* GetCoor() override;
 
-		virtual void Play() override;
+		virtual void SetQuadOffset(Vector2 offset) override;
 
+		virtual bool IsPickup() override;
+		virtual void Play() override;
+		virtual Animation* Clone() override;
+		virtual void Copy(Animation* b) override;
 	private:
 		UINT32 _fps;
 		vector<Sprite*> _listSpr;

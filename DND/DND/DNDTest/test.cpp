@@ -3,7 +3,7 @@
 #include "SceneInput.h"
 #include "SceneImage.h"
 #include "SceneSprite.h"
-
+#include "SceneAnimation.h"
 //DND的入口函数，可以假设程序从这里开始执行
 DNDMain()
 {
@@ -169,6 +169,7 @@ void Test::Init_Menu()
 
 	_create_menu_btn(L"Image");
 	_create_menu_btn(L"Sprite");
+	_create_menu_btn(L"Animation");
 	_create_menu_btn(L"RigidBody");
 	_create_menu_btn(L"Coor");
 	_create_menu_btn(L"Text");
@@ -250,6 +251,7 @@ void Test::Init_Scene()
 	_sceneInput = NULL;
 	_sceneImage = NULL;
 	_sceneSprite = NULL;
+	_sceneAnimation = NULL;
 }
 
 void Test::Run_Scene()
@@ -286,6 +288,18 @@ void Test::Run_Scene()
 			_sceneSprite->Init(this);
 		}
 		_sceneSprite->Run();
+
+		return;
+	}
+
+	if (_strChoose == L"Animation")
+	{
+		if (_sceneAnimation == NULL)
+		{
+			_sceneAnimation = new SceneAnimation;
+			_sceneAnimation->Init(this);
+		}
+		_sceneAnimation->Run();
 
 		return;
 	}

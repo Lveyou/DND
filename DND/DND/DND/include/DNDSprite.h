@@ -36,13 +36,15 @@ namespace DND
 		Color GetColor(INT32 i = 0);
 		Canvas* GetCanvas();
 		void SetQuad(INT32 i, Vector2 pos);
+		void SetQuadOffset(Vector2 pos);
+		void FloorQuad();
 		void Clip(bool x, bool y);
 
 
 		void CreateRigidBody(float density, float friction, float restitution);
 		RigidBody* GetRigidBody();
 
-		Sprite* Clone();
+		Sprite* Clone(Canvas* canvas = NULL);
 
 	private:
 

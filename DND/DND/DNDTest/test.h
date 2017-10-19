@@ -10,6 +10,7 @@
 #pragma once
 
 #include <list>
+#include <map>
 using namespace std;
 ////////////////////////////引用DND库/////////////////////////////////////
 //在【项目属性】的【VC++目录】这样配置：
@@ -40,6 +41,7 @@ const Color GAME_BUTTON_COLOR_DOWN = 0xffffffff;
 class SceneInput;
 class SceneImage;
 class SceneSprite;
+class SceneAnimation;
 //接着继承Game类，重写三个函数来特化自己的程序
 class Test : public Game
 {
@@ -96,4 +98,5 @@ private:
 	SceneInput* _sceneInput;
 	SceneImage* _sceneImage;
 	SceneSprite* _sceneSprite;
+	SceneAnimation* _sceneAnimation;
 };

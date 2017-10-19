@@ -77,6 +77,10 @@ namespace DND
 		static LRESULT CALLBACK _on_wm_size(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK _window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		bool _bEndLoop;
+	public:
+		UINT32 GetImeLength();
+		String GetImeString(UINT32 i);
+		String GetImeInput();
 	private:
 		String _imes[12];
 		UINT32 _imesLength;

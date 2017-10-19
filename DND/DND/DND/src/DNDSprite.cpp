@@ -5,6 +5,7 @@
 #include "DNDMath.h"
 #include "DNDRigidBody_imp.h"
 #include "DNDDebug.h"
+#include "DNDSystem.h"
 
 namespace DND
 {
@@ -32,7 +33,18 @@ namespace DND
 	void Sprite::RenderFrame()
 	{
 		Render();
+		//自身转世界
+		Vector2 v0 = _coor->ThisToWorld(_quad.v[0]);
+		Vector2 v1 = _coor->ThisToWorld(_quad.v[1]);
+		Vector2 v2 = _coor->ThisToWorld(_quad.v[2]);
+		Vector2 v3 = _coor->ThisToWorld(_quad.v[3]);
 
+		Game::Get()->sys->RenderLine(v0, v1, Color::PURPLE);
+		Game::Get()->sys->RenderLine(v1, v2, Color::PURPLE);
+		Game::Get()->sys->RenderLine(v2, v3, Color::PURPLE);
+		Game::Get()->sys->RenderLine(v3, v0, Color::PURPLE);
+
+		Game::Get()->sys->RenderCoor(_coor);
 	}
 
 	Coor* Sprite::GetCoor()
@@ -75,6 +87,30 @@ namespace DND
 	void Sprite::SetQuad(INT32 i, Vector2 pos)
 	{
 		_quad.v[i] = pos;
+	}
+
+	void Sprite::SetQuadOffset(Vector2 pos)
+	{
+		_quad.v[0] = _quad.v[0] + pos;
+		_quad.v[1] = _quad.v[1] + pos;
+		_quad.v[2] = _quad.v[2] + pos;
+		_quad.v[3] = _quad.v[3] + pos;
+	}
+
+	void Sprite::FloorQuad()
+	{
+		/*Vector2 d = Vector2(
+			_quad.v[0].a - int(_quad.v[0].a),
+			_quad.v[0].b - int(_quad.v[0].b));
+
+		if (abs(d.a) < 0.1f)
+			d.a = 0;
+		if (abs(d.b) < 0.1f)
+			d.b = 0;
+		_quad.v[0] = _quad.v[0] + d;
+		_quad.v[1] = _quad.v[1] + d;
+		_quad.v[2] = _quad.v[2] + d;
+		_quad.v[3] = _quad.v[3] + d;*/
 	}
 
 	void Sprite::Clip(bool x, bool y)
@@ -128,9 +164,23 @@ namespace DND
 		_dead = false;
 		_rigidBody = NULL;
 	}
-	Sprite* Sprite::Clone()
+	Sprite* Sprite::Clone(Canvas* canvas)
 	{
-		Sprite* spr = _canvas->CreateSprite(_imageRectID, _quad, Color::WHITE);
+		Sprite* spr;
+		if (canvas)
+		{
+			UINT32 id = ((Canvas_imp*)canvas)->_systemUseID++;
+			canvas->RegisterImageRect(
+				id,
+				_canvas->GetImage(),
+				_canvas->GetImageRect(_imageRectID));
+			spr = canvas->CreateSprite(id, _quad, Color::WHITE);
+		}
+		else
+		{
+			spr = _canvas->CreateSprite(_imageRectID, _quad, Color::WHITE);
+		}
+		
 		spr->_order = _order;
 		//spr->m_canvas = b.m_canvas;
 		if (_coor)

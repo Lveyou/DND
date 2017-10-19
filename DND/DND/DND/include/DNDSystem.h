@@ -18,6 +18,7 @@
 
 namespace DND
 {
+	class Coor;
 	class DLL_API System
 	{	
 	public:
@@ -41,11 +42,13 @@ namespace DND
 		virtual void RenderDot(Vector2 pos, Color color = Color::WHITE) = 0;
 		virtual void RenderLine(Vector2 p1, Vector2 p2, Color color = Color::WHITE) = 0;
 		virtual void RenderCircle(Vector2 pos, float radius, UINT32 count, Color color = Color::WHITE) = 0;
-		
+		virtual void RenderCoor(Coor* coor) = 0;
 		//font mode:0Æ½»¬£¬1ÏñËØ
 		virtual void LoadFontFile(const String& name, const String& path, int mode = 0) = 0;
 
-		void SetShowCursor(bool show);
+		virtual String GetChooseFolder(const String& title, String root) = 0;
+
+		virtual void SetShowCursor(bool show) = 0;
 		
 	};
 }

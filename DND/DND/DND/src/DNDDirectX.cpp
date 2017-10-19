@@ -640,7 +640,7 @@ namespace DND
 		D3D11_BUFFER_DESC desc_index;
 		ZeroMemory(&desc_index, sizeof(desc_index));
 
-		const unsigned INDEX_BUFFER_LENGTH = 6 * 1024;
+		const unsigned INDEX_BUFFER_LENGTH = 6 * 10240;//2017-10-18: 此处会限制精灵数量上限
 		unsigned indices[INDEX_BUFFER_LENGTH];
 		unsigned n = 0;
 		for (unsigned i = 0; i < INDEX_BUFFER_LENGTH; i += 6)

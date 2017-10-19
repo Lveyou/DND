@@ -4,35 +4,40 @@
 namespace DND
 {
 
-	GUIEditBoxSprite::GUIEditBoxSprite()
+	EditBoxSprite::EditBoxSprite()
 	{
 		
 	}
 
-	GUIEditBoxSprite* GUIEditBoxSprite::Create(Sprite* spr)
+	EditBoxSprite* EditBoxSprite::Create(Sprite* spr)
 	{
-		GUIEditBoxSprite* ret = new GUIEditBoxSprite;
+		EditBoxSprite* ret = new EditBoxSprite;
 		ret->m_spr = spr;
 		return ret;
 	}
 
-	void GUIEditBoxSprite::RunRender()
+	void EditBoxSprite::Push(wchar_t ch)
+	{
+		OnChar(ch);
+	}
+
+	void EditBoxSprite::RunRender()
 	{
 		m_spr->Render();
 	}
 
-	bool GUIEditBoxSprite::TestCollision()
+	bool EditBoxSprite::TestCollision()
 	{
 		return m_spr->IsPickup();
 	}
 
-	void GUIEditBoxSprite::OnChar(wchar_t ch)
+	void EditBoxSprite::OnChar(wchar_t ch)
 	{
 
 		m_string = m_string + ch;
 	}
 
-	void GUIEditBoxSprite::OnBack()
+	void EditBoxSprite::OnBack()
 	{
 		if(m_string.GetLength())
 			m_string.Pop();

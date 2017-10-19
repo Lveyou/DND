@@ -345,7 +345,7 @@ namespace DND
 	Vector2 Text_imp::GetEndPosition()
 	{
 		if (m_sprites.empty())
-			return Vector2();
+			return Vector2(0, (float)(m_size.h));
 		Sprite* spr = m_sprites.back();
 		return spr->GetCoor()->GetPosition() + spr->_quad.v[2];
 	}
