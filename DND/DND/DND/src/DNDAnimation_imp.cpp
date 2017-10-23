@@ -35,28 +35,36 @@ namespace DND
 
 	void Animation_imp::Render()
 	{
-		//run
-		_cur += Game::Get()->time->GetRealDelta();
-
-		if (_cur > 100000000.0)
+		if (_fps)
 		{
+			if (_listSpr.size() == 0)
+				return;
+
+			_cur += Game::Get()->time->GetRealDelta();
+
+			if (_cur > 100000000.0)
+			{
+				unsigned frm = static_cast<unsigned>(_cur *  _fps);
+				frm %= _listSpr.size();
+
+				_cur = (double)frm / _fps;
+			}
+
+			//render
 			unsigned frm = static_cast<unsigned>(_cur *  _fps);
+
 			frm %= _listSpr.size();
 
-			_cur = (double)frm / _fps;
+			if (_listSpr[frm])
+				_listSpr[frm]->Render();
 		}
-	
-		//render
-		unsigned frm = static_cast<unsigned>(_cur *  _fps);
+		else
+		{
+			if (_listSpr[_cur])
+				_listSpr[_cur]->Render();
+		}
 
-		if (_listSpr.size() == 0)
-			return;
-
-		frm %= _listSpr.size();
-
-
-		if (_listSpr[frm])
-			_listSpr[frm]->Render();
+		
 		
 		
 	}
@@ -92,6 +100,25 @@ namespace DND
 	DND::Coor* Animation_imp::GetCoor()
 	{
 		return _coor;
+	}
+
+	UINT32 Animation_imp::GetLength()
+	{
+		return _listSpr.size();
+	}
+
+	void Animation_imp::SetCurrent(UINT32 n)
+	{
+		if (n >= _listSpr.size())
+		{
+			debug_warn(L"Animation::SetCurrent: nԽ�磡");
+			return;
+		}
+
+		if (_fps)
+			_cur = (double)n / _fps;
+		else
+			_cur = (double)n;
 	}
 
 	void Animation_imp::SetQuadOffset(Vector2 offset)

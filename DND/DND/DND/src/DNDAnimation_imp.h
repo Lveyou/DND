@@ -26,6 +26,9 @@ namespace DND
 		virtual void Render() override;
 		virtual void RenderFrame() override;
 		virtual Coor* GetCoor() override;
+		virtual UINT32 GetLength() override;
+		virtual void SetCurrent(UINT32 n) override;
+
 
 		virtual void SetQuadOffset(Vector2 offset) override;
 
