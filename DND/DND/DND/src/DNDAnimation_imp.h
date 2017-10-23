@@ -28,7 +28,7 @@ namespace DND
 		virtual Coor* GetCoor() override;
 		virtual UINT32 GetLength() override;
 		virtual void SetCurrent(UINT32 n) override;
-
+		virtual void SetOrder(INT32 n) override;
 
 		virtual void SetQuadOffset(Vector2 offset) override;
 

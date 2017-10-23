@@ -121,6 +121,14 @@ namespace DND
 			_cur = (double)n;
 	}
 
+	void Animation_imp::SetOrder(INT32 n)
+	{
+		for (auto& iter : _listSpr)
+		{
+			iter->SetOrder(n);
+		}
+	}
+
 	void Animation_imp::SetQuadOffset(Vector2 offset)
 	{
 		for (auto& iter : _listSpr)
