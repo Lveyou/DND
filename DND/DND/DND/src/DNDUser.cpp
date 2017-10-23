@@ -243,6 +243,28 @@ namespace DND
 		swscanf_s(value.GetWcs(), L"%f,%f,%f,%f", &a, &b, &c, &d);
 	}
 	
+	//Vector6
+	Vector6::Vector6()
+	{
+		a = b = c = d = e = f = 0;
+	}
+
+
+
+	Vector6::Vector6(float ia, float ib, float ic, float id, float ie, float f)
+	{
+		a = ia;
+		b = ib;
+		c = ic;
+		d = id;
+		e = ie;
+		this->f = f;
+	}
+
+	Vector6::Vector6(const String& value)
+	{
+		swscanf_s(value.GetWcs(), L"%f,%f,%f,%f,%f,%f", &a, &b, &c, &d, &e, &f);
+	}
 
 	//point
 	Point::Point(int ix, int iy) :x(ix), y(iy)
@@ -415,4 +437,4 @@ namespace DND
 		v[3] = Vector2(v[0].a, v[2].b);
 	}
 
-}
+	}

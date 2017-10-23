@@ -116,6 +116,15 @@ namespace DND
 		Vector4(const String& value);
 	};
 
+	class DLL_API Vector6
+	{
+	public:
+		float a, b, c, d, e, f;//
+		Vector6();
+		Vector6(float ia, float ib, float ic, float id, float ie, float f);
+		Vector6(const String& value);
+	};
+
 	class DLL_API XYWH
 	{
 	public:
