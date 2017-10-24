@@ -35,6 +35,7 @@ namespace DND
 		void SetColor(Color* color);
 		Color GetColor(INT32 i = 0);
 		Canvas* GetCanvas();
+		INT32 GetOrder();
 		void SetQuad(INT32 i, Vector2 pos);
 		void SetQuadOffset(Vector2 pos);
 		void FloorQuad();

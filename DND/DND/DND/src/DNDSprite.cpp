@@ -84,6 +84,11 @@ namespace DND
 		return _canvas;
 	}
 
+	INT32 Sprite::GetOrder()
+	{
+		return _order;
+	}
+
 	void Sprite::SetQuad(INT32 i, Vector2 pos)
 	{
 		_quad.v[i] = pos;
