@@ -96,6 +96,11 @@ namespace DND
 	}
 
 
+	float Vector2::GetlengthSquared()
+	{
+		return a*a + b*b;
+	}
+
 	DND::Vector2 DND::Vector2::operator+(const Vector2& vb)
 	{
 		return Vector2(a + vb.a, b + vb.b);

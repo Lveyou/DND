@@ -99,6 +99,7 @@ namespace DND
 		Vector2& Scale(float k);
 		Vector3 To_Vector3(float c = 0);
 		double CrossProduct(const Vector2& vb);//²æ³Ë
+		float GetlengthSquared();
 
 	};
 
