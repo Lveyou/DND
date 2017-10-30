@@ -30,6 +30,7 @@ namespace DND
 
 		Point operator-(const Point& b) const;
 		Point operator+(const Point& b) const;
+		Point operator*(INT32 k) const;
 	};
 
 	class DLL_API Size

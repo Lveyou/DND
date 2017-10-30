@@ -297,6 +297,11 @@ namespace DND
 
 
 
+	Point Point::operator*(INT32 k) const
+	{
+		return Point(x * k, y * k);
+	}
+
 	Rect::Rect(Point ip1, Point ip2) :
 		p1(ip1), p2(ip2)
 	{
