@@ -43,6 +43,7 @@ namespace DND
 		void SetMode(Mode mode);
 		bool IsOpen();
 		void SetOpen(bool open);
+		void SetDisable(bool disable);
 		Control();
 	private:
 		State _state;

@@ -60,6 +60,11 @@ namespace DND
 		_last_state = _state;
 	}
 
+	void Control::SetDisable(bool disable)
+	{
+		_disable = disable;
+	}
+
 	Control::Control() :
 		_disable(false),
 		_state(NORMAL),

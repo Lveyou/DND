@@ -277,6 +277,11 @@ namespace DND
 
 	}
 
+	bool Point::operator==(const Point& b)
+	{
+		return x == b.x && y == b.y;
+	}
+
 	Point Point::operator-(const Point& b) const
 	{
 		return Point(x - b.x, y - b.y);
