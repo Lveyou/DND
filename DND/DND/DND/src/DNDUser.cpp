@@ -277,9 +277,14 @@ namespace DND
 
 	}
 
+	bool Point::operator<(const Point& b) const
+	{
+		return (x + y * 1000000) < (b.x + b.y * 1000000);
+	}
+
 	bool Point::operator==(const Point& b)
 	{
-		return x == b.x && y == b.y;
+		return (x == b.x) && (y == b.y);
 	}
 
 	Point Point::operator-(const Point& b) const

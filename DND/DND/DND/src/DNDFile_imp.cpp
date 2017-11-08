@@ -49,7 +49,7 @@ namespace DND
 	{
 		m_path = path;
 		wifstream in;
-		in.imbue(locale(""));
+		//in.imbue(locale(""));
 		in.open(path.GetWcs(), ios::in);
 
 		if (!in)

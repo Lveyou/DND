@@ -27,6 +27,7 @@ namespace DND
 		Point();
 		Point(INT32 x, INT32 y);
 
+		bool operator<(const Point& b) const;
 		bool operator==(const Point& b);
 		Point operator-(const Point& b) const;
 		Point operator+(const Point& b) const;
