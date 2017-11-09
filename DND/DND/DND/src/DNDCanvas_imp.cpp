@@ -186,28 +186,25 @@ namespace DND
 		_sprites.clear();
 		//m_all_sprites => m_sprites
 		//这一步判断哪些 sprite需要 绘制 ，并按顺序插入下一步的 树中
-		Sprite* spr1;
-		for (auto iter1 = _allSprite.begin(); iter1 != _allSprite.end();)
+		list<Sprite*>::iterator iter = _allSprite.begin();
+		for (; iter != _allSprite.end();)
 		{
-			spr1 = *iter1;
-
-			if (spr1->_dead)
+			Sprite* spr = *(iter);
+			if (spr->_dead)
 			{
-				delete spr1;
-				(*iter1) = NULL;
+				delete spr;
+				iter = _allSprite.erase(iter);
 			}
 			else
 			{
-				if (spr1->_show)
+				if (spr->_show)
 				{
-					spr1->_show = false;
-					_sprites.insert(pair<int, Sprite*>(spr1->_order, spr1));
+					spr->_show = false;
+					_sprites.insert(pair<int, Sprite*>(spr->_order, spr));
 				}
+				iter++;
 			}
-			++iter1;
 		}
-		//
-		_allSprite.remove(NULL);
 		//m_sprites => m_vertexs
 		//这一步 将 sprite变化到内存顶点缓存，并判断缓存大小，适时扩大（包括显卡顶点缓存）
 		//其中需要 顶点坐标进行变换（软的，没办法）
