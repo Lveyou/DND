@@ -129,6 +129,14 @@ namespace DND
 		}
 	}
 
+	void Animation_imp::SetColor(Color color)
+	{
+		for (auto& iter : _listSpr)
+		{
+			iter->SetColor(color);
+		}
+	}
+
 	void Animation_imp::SetQuadOffset(Vector2 offset)
 	{
 		for (auto& iter : _listSpr)

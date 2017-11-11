@@ -166,6 +166,9 @@
     <ClInclude Include="src\DNDRigidBody_imp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDSound.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -268,6 +271,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGUIButtonSprite3.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDSound.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

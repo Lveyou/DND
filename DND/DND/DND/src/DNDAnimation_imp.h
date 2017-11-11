@@ -29,7 +29,7 @@ namespace DND
 		virtual UINT32 GetLength() override;
 		virtual void SetCurrent(UINT32 n) override;
 		virtual void SetOrder(INT32 n) override;
-
+		virtual void SetColor(Color color) override;
 		virtual void SetQuadOffset(Vector2 offset) override;
 
 		virtual bool IsPickup() override;
