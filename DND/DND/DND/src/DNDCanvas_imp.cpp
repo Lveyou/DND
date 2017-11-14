@@ -250,7 +250,8 @@ namespace DND
 				
 				
 				_vertexs[i + j].pos = 
-					XMFLOAT3(out.a + 0.5f, out.b + 0.5f, 0);//这里填0
+					//XMFLOAT3(out.a + 0.5f, out.b + 0.5f, 0);//这里填0
+					 XMFLOAT3(out.a - 0.5f , out.b - 0.5f, 0);//这里填0
 				_vertexs[i + j].color.x = spr->_color[j].r();
 				_vertexs[i + j].color.y = spr->_color[j].g();
 				_vertexs[i + j].color.z = spr->_color[j].b();

@@ -69,23 +69,16 @@ void SceneImage::Run()
 				delete _image;
 			_image = Image::Create(openFileName.lpstrFile);
 			_imageName = openFileName.lpstrFileTitle;
+
+			//test
+			/*Image* img_add = Image::Create(L"Data\\Image\\sprite.png");
+			_image->AddImageRect(img_add,Rect(XYWH(Point(10,10),Size(40,40))), Point(5,5));*/
+			//test end
 			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
 			_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), _image->GetSize(), false));
 			_spr->GetCoor()->SetPosition(Vector2(180, 160));
-			/*if (_image->GetSize().w <= 720)
-			{
-				_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
-				float ratio = float(_image->GetSize().h) / _image->GetSize().w;
-				int width = _image->GetSize().w > 400 ? 400 : _image->GetSize().w;
-				_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), Vector2(width, width* ratio), false));
-				_spr->GetCoor()->SetPosition(Vector2(180, 160));
-				_spr->SetOrder(5);
-				_spr->GetSize();
-			}
-			else
-			{
-				_txtTitle->SetString(L"选择的图片太大，请选择width小于720的png图片。");
-			}*/
+			
+			
 		}
 		_test->sys->SetShowCursor(false);
 	}

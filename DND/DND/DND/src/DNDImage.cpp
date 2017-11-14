@@ -48,6 +48,7 @@ namespace DND
 			debug_warn(L"DND: Image::AddImageRect传入了空指针！");
 			return;
 		}
+		Size img_size = img->GetSize();
 		Size s_size = rect.GetSize();
 
 		if ((tar_xy.x + s_size.w > _size.w) ||
@@ -65,7 +66,7 @@ namespace DND
 			m = 0;
 			for (int i = rect.p1.x; i < rect.p2.x; ++i, ++m)
 			{
-				_buffer[(tar_xy.y + n) * _size.w + tar_xy.x + m] = img->_buffer[j * s_size.w + i];
+				_buffer[(tar_xy.y + n) * _size.w + tar_xy.x + m] = img->_buffer[j * img_size.w + i];
 			}
 
 		}
