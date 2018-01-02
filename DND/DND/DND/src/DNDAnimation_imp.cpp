@@ -145,6 +145,11 @@ namespace DND
 		}
 	}
 
+	void Animation_imp::SetFPS(UINT32 fps /*= 0*/)
+	{
+		_fps = fps;
+	}
+
 	bool Animation_imp::IsPickup()
 	{
 		//render
