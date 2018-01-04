@@ -58,19 +58,28 @@ namespace DND
 			return;
 		}
 
-		unsigned m;
-		unsigned n = 0;
-		//copy
-		for (int j = rect.p1.y; j < rect.p2.y; ++j, ++n)
-		{
-			m = 0;
-			for (int i = rect.p1.x; i < rect.p2.x; ++i, ++m)
-			{
-				_buffer[(tar_xy.y + n) * _size.w + tar_xy.x + m] = img->_buffer[j * img_size.w + i];
-			}
+		//unsigned m;
+		//unsigned n = 0;
+		////copy
+		//for (int j = rect.p1.y; j < rect.p2.y; ++j, ++n)
+		//{
+		//	m = 0;
+		//	for (int i = rect.p1.x; i < rect.p2.x; ++i, ++m)
+		//	{
+		//		_buffer[(tar_xy.y + n) * _size.w + tar_xy.x + m] = img->_buffer[j * img_size.w + i];
+		//	}
 
+		//	
+
+		//}
+		//copy
+		for (UINT32 j = 0; j < s_size.h; ++j)
+		{
+			memcpy(&(_buffer[(tar_xy.y + j) * _size.w + tar_xy.x]),
+				&(img->_buffer[(rect.p1.y + j) * img_size.w + rect.p1.x]), s_size.w * sizeof(DWORD));
 		}
-			
+
+		
 
 	}
 
@@ -88,6 +97,15 @@ namespace DND
 		}
 	}
 
+	void Image::SetColor(Color color)
+	{
+		UINT32 size = _size.w * _size.h;
+		for (UINT i = 0; i < size; ++i)
+		{	
+			_buffer[i] = color.Get();
+		}
+	}
+
 	Color Image::GetDotColor(Point xy)
 	{
 		if ((UINT32)xy.x >= _size.w || (UINT32)xy.y >= _size.h)
@@ -97,6 +115,11 @@ namespace DND
 		}
 
 		return Color(_buffer[xy.x + xy.y*_size.w]);
+	}
+
+	void Image::SetDotColor(Point xy, Color color)
+	{
+		_buffer[xy.x + xy.y*_size.w] = color.Get();
 	}
 
 	void Image::Discoloration(Color color)

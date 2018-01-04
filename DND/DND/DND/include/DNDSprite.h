@@ -5,6 +5,7 @@
 
 //other:
 //17-08-11: 精灵 - Lveyou
+//18-01-04: Canvas不再管理精灵指针，效率更高了 - Lveyou
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_SPRITE_H_
@@ -46,12 +47,12 @@ namespace DND
 		RigidBody* GetRigidBody();
 
 		Sprite* Clone(Canvas* canvas = NULL);
-
+		~Sprite();
 	private:
 
 		Sprite();
 		Sprite(const Sprite& b);
-		~Sprite();
+		
 		void _update_rigidbody();
 		INT32 _order;
 		Canvas* _canvas;
@@ -59,8 +60,8 @@ namespace DND
 		Quad _quad;
 		Color _color[4];
 		unsigned _imageRectID;
-		bool _show;
-		bool _dead;
+		/*bool _show;
+		bool _dead;*/
 		RigidBody* _rigidBody;
 	};
 }

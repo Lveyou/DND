@@ -72,7 +72,7 @@ namespace DND
 		//标记上次所有精灵 为 已废弃
 		for (auto& iter : m_sprites)
 		{
-			iter->GetCanvas()->DeleteSprite(iter);
+			delete iter;
 		}
 		m_sprites.clear();
 		INT32 dw, dh;
@@ -461,7 +461,7 @@ namespace DND
 		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor)
 		{
 			spr = *itor;
-			spr->GetCanvas()->DeleteSprite(spr);
+			delete spr;
 		}
 	}
 

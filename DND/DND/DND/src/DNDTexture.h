@@ -25,6 +25,8 @@ namespace DND
 		Texture();
 		void SetImage(const Image* img);
 		void AddImageRect(UINT32 ID, const Image* img, const Rect& rect);
+		void ReplaceImageRect(UINT32 ID, const Image* img, const Rect& rect);
+		void ReplaceImageRectFast(UINT32 ID, const Image* img, const Rect& rect);
 		void AddImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect);
 		float GetTu(UINT32 image_rect_ID, UINT32 index);
 		float GetTv(UINT32 image_rect_ID, UINT32 index);

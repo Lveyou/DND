@@ -47,7 +47,7 @@ namespace DND
 		spr->_color[2] = color;
 		spr->_color[3] = color;
 		spr->_canvas = this;
-		_allSprite.push_back(spr);
+		//_allSprite.push_back(spr);
 		return spr;
 	}
 	Sprite* Canvas_imp::GetCharSprite(const String& name, unsigned font_size, wchar_t ch)
@@ -64,14 +64,21 @@ namespace DND
 		return NULL;
 	}
 
-	void Canvas_imp::DeleteSprite(Sprite* spr)
-	{
-		spr->_dead = true;
-	}
+
 
 	void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 	{
 		_tex->AddImageRect(ID, img, Rect(XYWH(Point(), img->GetSize())));
+	}
+
+	void Canvas_imp::ReplaceImageAll(UINT32 img_ID, const Image* img)
+	{
+		_tex->ReplaceImageRect(img_ID, img, Rect(XYWH(Point(), img->GetSize())));
+	}
+
+	void Canvas_imp::ReplaceImageAllFast(UINT32 img_ID, const Image* img)
+	{
+		_tex->ReplaceImageRectFast(img_ID, img, Rect(XYWH(Point(), img->GetSize())));
 	}
 
 	void Canvas_imp::RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect)
@@ -178,15 +185,17 @@ namespace DND
 		gfx_2d->_pass->Apply(0, directx->_deviceContext);
 
 		directx->_deviceContext->DrawIndexed(_sprites.size() * 6, 0, 0);
+
+		_sprites.clear();
 	}
 	void DND::Canvas_imp::_update()
 	{
 		DirectX* directx = Game::Get()->_dx;
 
-		_sprites.clear();
+		//_sprites.clear();
 		//m_all_sprites => m_sprites
 		//这一步判断哪些 sprite需要 绘制 ，并按顺序插入下一步的 树中
-		list<Sprite*>::iterator iter = _allSprite.begin();
+		/*list<Sprite*>::iterator iter = _allSprite.begin();
 		for (; iter != _allSprite.end();)
 		{
 			Sprite* spr = *(iter);
@@ -204,7 +213,7 @@ namespace DND
 				}
 				iter++;
 			}
-		}
+		}*/
 		//m_sprites => m_vertexs
 		//这一步 将 sprite变化到内存顶点缓存，并判断缓存大小，适时扩大（包括显卡顶点缓存）
 		//其中需要 顶点坐标进行变换（软的，没办法）
@@ -263,6 +272,8 @@ namespace DND
 
 		}
 		
+		
+
 		//m_vertexs => m_buffer_vertex
 		//从内存复制到 显存
 

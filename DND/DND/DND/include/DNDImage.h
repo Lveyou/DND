@@ -5,7 +5,7 @@
 
 //other:
 //17-08-10: 加载到内存的图像 - Lveyou
-
+//18-01-04: AddImageRect改为以行复制，效率更高了 - Lveyou
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_IMAGE_H_
@@ -35,7 +35,9 @@ namespace DND
 		void AddImageRect(const Image* img,const Rect& rect, const Point& tar_xy);
 
 		void Render(Point pos);
+		void SetColor(Color color);
 		Color GetDotColor(Point xy);
+		void SetDotColor(Point xy, Color color);
 		void Discoloration(Color color);//去色，做除法
 		Color GetAvgColor();//获得平均颜色
 

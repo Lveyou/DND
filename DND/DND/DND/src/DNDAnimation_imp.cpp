@@ -27,7 +27,7 @@ namespace DND
 	{
 		for (auto& iter : _listSpr)
 		{
-			iter->GetCanvas()->DeleteSprite(iter);
+			delete iter;
 		}
 
 		_listSpr.clear();
@@ -197,7 +197,7 @@ namespace DND
 
 		for (auto& iter : _listSpr)
 		{
-			iter->GetCanvas()->DeleteSprite(iter);
+			delete iter;
 		}
 		_listSpr.clear();
 

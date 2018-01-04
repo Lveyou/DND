@@ -28,7 +28,7 @@ namespace DND
 	}
 	void Sprite::Render()
 	{
-		_show = true;
+		((Canvas_imp*)_canvas)->_sprites.insert(pair<int, Sprite*>(this->_order, this));
 	}
 	void Sprite::RenderFrame()
 	{
@@ -164,9 +164,7 @@ namespace DND
 	Sprite::Sprite()
 	{
 		_order = 0;
-		_show = false;
 		_coor = NULL;
-		_dead = false;
 		_rigidBody = NULL;
 	}
 	Sprite* Sprite::Clone(Canvas* canvas)
@@ -199,8 +197,7 @@ namespace DND
 		spr->_color[1] = _color[1];
 		spr->_color[2] = _color[2];
 		spr->_color[3] = _color[3];
-		spr->_show = false;//17-04-27 ¸ÄÎªÁË false
-		spr->_dead = false;
+		
 		return spr;
 	}
 

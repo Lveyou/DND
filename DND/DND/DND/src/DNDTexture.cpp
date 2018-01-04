@@ -115,6 +115,62 @@ namespace DND
 		_imageRects[register_ID] = out;
 	}
 
+	void Texture::ReplaceImageRect(UINT32 ID, const Image* img, const Rect& rect)
+	{
+		if (_imageRects.find(ID) == _imageRects.end())
+		{
+			debug_err(L"Texture 插入图像区域时 未找到已有的ID！");
+			
+		}
+		_imageRects.erase(ID);
+
+		Point out;
+		Size add_size = rect.GetSize();
+		Rect out_rect;
+
+		while (!_find_xy(add_size, out))
+		{
+			_release_view();
+			_imgTemp = Image::Create(_img);
+			delete _img;
+			_release_texture2d();
+			_size <<= 1;
+			_create_texture2d();
+#if defined(DEBUG) || defined(_DEBUG)
+			_img = Image::Create(Size(_size, _size), Color::PURPLE);
+#else
+			//防止纹理超过一个像素
+			_img = Image::Create(Size(_size, _size), Color::NONE);
+#endif
+			_create_view();
+			//插入以前的图像
+			_add_xy(_imgTemp, Rect(XYWH(Point(), Size(_size >> 1, _size >> 1))), Point(0, 0));
+
+		}
+		//直到找到了位置
+		//out_rect = Vector4(out.a, out.b, rect.c - rect.a + out.a - 0.0039f, rect.d - rect.b + out.b - 0.0039f);
+		out_rect = Rect(XYWH(out, add_size));
+		//_release_view();
+		_add_xy(img, rect, out);
+		//_create_view();
+
+		_imageRects[ID] = out_rect;
+	}
+
+	void Texture::ReplaceImageRectFast(UINT32 ID, const Image* img, const Rect& rect)
+	{
+		auto iter = _imageRects.find(ID);
+		if (iter == _imageRects.end())
+		{
+			debug_err(L"Texture 插入图像区域时 未找到已有的ID！");
+		}
+
+		//Point out= iter->second.p1;
+
+		_add_xy(img, rect, iter->second.p1);
+
+	}
+
 	float Texture::GetTu(unsigned image_rect_ID, unsigned index)
 	{
 		Rect vector4 = _imageRects[image_rect_ID];

@@ -26,8 +26,10 @@ namespace DND
 		virtual Sprite* CreateSprite(const Image* img) override;
 		virtual Sprite* CreateSprite(UINT32 img_ID,const Quad& quad, Color color = Color::WHITE) override;
 		virtual Sprite* GetCharSprite(const String& name, unsigned font_size, wchar_t ch) override;
-		virtual void DeleteSprite(Sprite* spr) override;
+		
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) override;
+		virtual void ReplaceImageAll(UINT32 img_ID, const Image* img) override;
+		virtual void ReplaceImageAllFast(UINT32 img_ID, const Image* img) override;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) override;
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) override;
 		virtual const Image* GetImage() override;
@@ -44,7 +46,7 @@ namespace DND
 
 		INT32 _order;
 		//all_sprite
-		list<Sprite*> _allSprite;
+		//list<Sprite*> _allSprite;
 		//Sprites 按 绘制顺序（小的先画） 存所有 sprite
 		multimap<int, Sprite*> _sprites;
 
