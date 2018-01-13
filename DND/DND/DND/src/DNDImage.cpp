@@ -99,10 +99,12 @@ namespace DND
 
 	void Image::SetColor(Color color)
 	{
+		DWORD dw = color.Get();
 		UINT32 size = _size.w * _size.h;
+
 		for (UINT i = 0; i < size; ++i)
 		{	
-			_buffer[i] = color.Get();
+			_buffer[i] = dw;
 		}
 	}
 
