@@ -6,6 +6,7 @@
 //other:
 //17-08-11: 精灵 - Lveyou
 //18-01-04: Canvas不再管理精灵指针，效率更高了 - Lveyou
+//18-01-14: 效率起见，Render之后的精灵不能删除！ - Lveyou
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_SPRITE_H_
@@ -60,8 +61,8 @@ namespace DND
 		Quad _quad;
 		Color _color[4];
 		unsigned _imageRectID;
-		/*bool _show;
-		bool _dead;*/
+		//bool _show;
+		//bool _dead;
 		RigidBody* _rigidBody;
 	};
 }

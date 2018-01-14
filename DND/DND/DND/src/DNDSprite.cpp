@@ -28,7 +28,7 @@ namespace DND
 	}
 	void Sprite::Render()
 	{
-		((Canvas_imp*)_canvas)->_sprites.insert(pair<int, Sprite*>(this->_order, this));
+		((Canvas_imp*)_canvas)->_sprites.insert(make_pair(this->_order, this));
 	}
 	void Sprite::RenderFrame()
 	{
@@ -154,6 +154,8 @@ namespace DND
 
 	Sprite::~Sprite()
 	{
+
+
 		//µ÷ÓÃ Delete É¾³ý
 		if (_coor)
 			delete _coor;
