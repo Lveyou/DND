@@ -6,6 +6,7 @@
 #include "DNDDebug.h"
 #include "DNDText_imp.h"
 #include "DNDFont.h"
+#include "DNDMath.h"
 #include <algorithm>
 
 namespace DND
@@ -184,9 +185,9 @@ namespace DND
 		gfx_2d->_colorTexture->SetResource(_tex->_shaderResourceView);
 		gfx_2d->_pass->Apply(0, directx->_deviceContext);
 
-		directx->_deviceContext->DrawIndexed(_sprites.size() * 6, 0, 0);
+		directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 
-		_sprites.clear();
+		
 	}
 	void DND::Canvas_imp::_update()
 	{
@@ -231,16 +232,20 @@ namespace DND
 		/*float whk = static_cast<float>(System_imp::Get_Instance()->m_window_info.size.w) /
 			System_imp::Get_Instance()->m_window_info.size.h;*/
 
+		Rect window = Rect(XYWH(Point(),Game::Get()->sys->GetWindowSize()));
+
 		Sprite* spr = NULL;
-		unsigned i = 0;
-		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter, i += 4)
+		_renderSprNum = 0;
+		Vector2 out;
+		Point p;
+		bool in_eye;
+		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter)
 		{
 			spr = iter->second;
 			spr->_update_rigidbody();//根据rigidbody刷新位置
+			in_eye = false;
 			for (unsigned j = 0; j < 4; ++j)
 			{
-				Vector2 out;
-				
 				//顶点变换
 				//如果 spr 的 coor 为空 则不需要变换
 				if (spr->_coor)
@@ -255,24 +260,35 @@ namespace DND
 				{
 					out = spr->_quad.v[j];
 				}
-					
 				
+				p = Vector2ToPoint(out + Vector2(0.5f, 0.5f));
+				//任意一个点在视窗内
+				if (!in_eye)
+				{
+					if (Math::TestCollisionDotInRect(p, window))
+						in_eye = true;
+				}
 				
-				_vertexs[i + j].pos = 
+				_vertexs[_renderSprNum + j].pos =
 					//XMFLOAT3(out.a + 0.5f, out.b + 0.5f, 0);//这里填0
-					 XMFLOAT3(out.a - 0.5f , out.b - 0.5f, 0);//这里填0
-				_vertexs[i + j].color.x = spr->_color[j].r();
-				_vertexs[i + j].color.y = spr->_color[j].g();
-				_vertexs[i + j].color.z = spr->_color[j].b();
-				_vertexs[i + j].color.w = spr->_color[j].a();
-				_vertexs[i + j].t.x = _tex->GetTu(spr->_imageRectID, j);
-				_vertexs[i + j].t.y = _tex->GetTv(spr->_imageRectID, j);
+					// XMFLOAT3(out.a - 0.5f , out.b - 0.5f, 0);//这里填0
+					XMFLOAT3(p.x - 0.5f, p.y - 0.5f, 0);
+				_vertexs[_renderSprNum + j].color.x = spr->_color[j].r();
+				_vertexs[_renderSprNum + j].color.y = spr->_color[j].g();
+				_vertexs[_renderSprNum + j].color.z = spr->_color[j].b();
+				_vertexs[_renderSprNum + j].color.w = spr->_color[j].a();
+				_vertexs[_renderSprNum + j].t.x = _tex->GetTu(spr->_imageRectID, j);
+				_vertexs[_renderSprNum + j].t.y = _tex->GetTv(spr->_imageRectID, j);
 				//int a = 0;
 			}
 
+			if (in_eye)
+			{
+				_renderSprNum += 4;
+			}
 		}
 		
-		
+		_sprites.clear();
 
 		//m_vertexs => m_buffer_vertex
 		//从内存复制到 显存
@@ -284,7 +300,7 @@ namespace DND
 			&res)),
 			ERROR_00043);
 
-		memcpy(res.pData, _vertexs, i*sizeof(Vertex2D));
+		memcpy(res.pData, _vertexs, _renderSprNum*sizeof(Vertex2D));
 
 		directx->_deviceContext->Unmap(
 			(ID3D11Resource*)_bufferVertex, 0);

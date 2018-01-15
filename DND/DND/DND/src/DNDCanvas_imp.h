@@ -66,6 +66,10 @@ namespace DND
 		unsigned _systemUseID;
 		//字符精灵表
 		vector<CharSpriteNode> _charSprites;
+
+		//精灵绘制数*4
+		UINT32 _renderSprNum;
+
 	};
 
 }

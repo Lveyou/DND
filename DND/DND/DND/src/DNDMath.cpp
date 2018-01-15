@@ -37,7 +37,7 @@ namespace DND
 			return true;
 	}
 
-	bool Math::TestCollisionDotInRect(const Point& dot, const Rect& rect)
+	inline bool Math::TestCollisionDotInRect(const Point& dot, const Rect& rect)
 	{
 		return !((dot.x < rect.p1.x) || (dot.x > rect.p2.x) || (dot.y < rect.p1.y) || (dot.y > rect.p2.y));
 	}
