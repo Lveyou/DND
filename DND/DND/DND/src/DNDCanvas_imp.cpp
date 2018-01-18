@@ -178,6 +178,8 @@ namespace DND
 		DirectX* directx = Game::Get()->_dx;
 		Gfx2D* gfx_2d = directx->_gfx2d;
 
+		
+
 		UINT a = sizeof(Vertex2D);
 		UINT b = 0;
 		directx->_deviceContext->IASetVertexBuffers(0, 1, &_bufferVertex, &a, &b);
@@ -186,7 +188,7 @@ namespace DND
 		gfx_2d->_pass->Apply(0, directx->_deviceContext);
 
 		directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
-
+	//	directx->_deviceContext->DrawIndexedInstanced(,_renderSprNum * 6 / 4, 0, 0);
 		
 	}
 	void DND::Canvas_imp::_update()
@@ -238,12 +240,12 @@ namespace DND
 		_renderSprNum = 0;
 		Vector2 out;
 		Point p;
-		bool in_eye;
+		//bool in_eye;
 		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter)
 		{
 			spr = iter->second;
 			spr->_update_rigidbody();//根据rigidbody刷新位置
-			in_eye = false;
+			//in_eye = false;
 			for (unsigned j = 0; j < 4; ++j)
 			{
 				//顶点变换
@@ -263,11 +265,11 @@ namespace DND
 				
 				p = Vector2ToPoint(out + Vector2(0.5f, 0.5f));
 				//任意一个点在视窗内
-				if (!in_eye)
+				/*if (!in_eye)
 				{
 					if (Math::TestCollisionDotInRect(p, window))
 						in_eye = true;
-				}
+				}*/
 				
 				_vertexs[_renderSprNum + j].pos =
 					//XMFLOAT3(out.a + 0.5f, out.b + 0.5f, 0);//这里填0
@@ -281,11 +283,11 @@ namespace DND
 				_vertexs[_renderSprNum + j].t.y = _tex->GetTv(spr->_imageRectID, j);
 				//int a = 0;
 			}
-
-			if (in_eye)
-			{
-				_renderSprNum += 4;
-			}
+			_renderSprNum += 4;
+			/*	if (in_eye)
+				{
+					_renderSprNum += 4;
+				}*/
 		}
 		
 		_sprites.clear();

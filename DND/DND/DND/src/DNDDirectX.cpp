@@ -561,7 +561,8 @@ namespace DND
 		////三角形
 		_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		_deviceContext->IASetInputLayout(_gfx2d->_inputLayout);
-		//_gfx2d->_pass->Apply(0, _deviceContext);
+
+		
 		//设置顶点缓存 贴图就交给 canvas了
 		
 		_render_canvass();
@@ -906,14 +907,15 @@ namespace DND
 
 	DND::Canvas* DirectX::_create_canvas(INT32 order)
 	{
-		if (_canvass[order])
+		auto iter = _canvass.find(order);
+		if (iter != _canvass.end())
 		{
-			assert(0 && L"此order已经被某canvas使用，不能重复创建！");
+			debug_err(L"此order已经被某canvas使用，不能重复创建！");
 			return NULL;
 		}
 
-		Canvas * temp = new Canvas_imp(order);
-		_canvass[order] = (Canvas_imp*)temp;
+		Canvas_imp* temp = new Canvas_imp(order);
+		_canvass.insert(make_pair(order, temp));
 		return temp;
 	}
 
