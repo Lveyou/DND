@@ -238,8 +238,8 @@ namespace DND
 
 		Sprite* spr = NULL;
 		_renderSprNum = 0;
-		Vector2 out;
-		Point p;
+		//Vector2 out;
+		Point out;
 		//bool in_eye;
 		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter)
 		{
@@ -252,18 +252,16 @@ namespace DND
 				//如果 spr 的 coor 为空 则不需要变换
 				if (spr->_coor)
 				{
-					out = spr->_quad.v[j];
 					//直接 转换到世界坐标系
-					out = spr->_coor->ThisToWorld(
-						out);
+					out = Vector2ToPoint(spr->_coor->ThisToWorld(
+						spr->_quad.v[j]));
 					
 				}
 				else
 				{
-					out = spr->_quad.v[j];
+					out = Vector2ToPoint(spr->_quad.v[j]);
 				}
 				
-				p = Vector2ToPoint(out + Vector2(0.5f, 0.5f));
 				//任意一个点在视窗内
 				/*if (!in_eye)
 				{
@@ -273,8 +271,8 @@ namespace DND
 				
 				_vertexs[_renderSprNum + j].pos =
 					//XMFLOAT3(out.a + 0.5f, out.b + 0.5f, 0);//这里填0
-					// XMFLOAT3(out.a - 0.5f , out.b - 0.5f, 0);//这里填0
-					XMFLOAT3(p.x - 0.5f, p.y - 0.5f, 0);
+					XMFLOAT3(out.x - 0.5f , out.y - 0.5f, 0);//这里填0
+					
 				_vertexs[_renderSprNum + j].color.x = spr->_color[j].r();
 				_vertexs[_renderSprNum + j].color.y = spr->_color[j].g();
 				_vertexs[_renderSprNum + j].color.z = spr->_color[j].b();
