@@ -18,6 +18,7 @@ namespace DND
 {
 	#define dnd_argb(A,R,G,B) (A << 24 | R << 16 | G << 8 | B)
 	#define dnd_argb_a(A) (A << 24)
+	#define dnd_argb_a_rgb(A, DWRGB) (A << 24 | DWRGB << 8 >> 8)
 
 	class DLL_API Color
 	{
