@@ -59,6 +59,19 @@ namespace DND
 		_hInstance = GetModuleHandle(0);
 		_foucs = true;
 		_font = new Font;
+
+		//exe路径
+		wchar_t exe_path[MAX_PATH] = { 0 };
+		GetModuleFileName(0, exe_path, MAX_PATH);
+		_exePath = exe_path;
+		_exeName = exe_path;
+
+		int pos = _exePath.FindEnd(L'\\') + 1;
+
+		_exePath.CutTail(pos);//不去除/
+		_exeName.CutHead(pos);
+
+		
 	}
 
 	void System_imp::SetWindowTitle(const String& title)
@@ -150,9 +163,9 @@ namespace DND
 			XMFLOAT4(color.r(), color.g(), color.b(), color.a()));
 	}
 
-	void System_imp::LoadFontFile(const String& name, const String& path, int mode)
+	bool System_imp::LoadFontFile(const String& name, const String& path, int mode /*= 0*/)
 	{
-		_font->_load_font_file(name, path, mode);
+		return _font->_load_font_file(name, path, mode);
 	}
 
 
@@ -202,6 +215,82 @@ namespace DND
 		}
 	}
 
+
+	bool System_imp::GetChooseFile(const WCHAR* filter, String& ipath_name, String& iname)
+	{
+		
+		wchar_t path[MAX_PATH] = { 0 };
+		wchar_t name[MAX_PATH] = { 0 };
+		OPENFILENAME openFileName = { 0 };
+		openFileName.lStructSize = sizeof(OPENFILENAME);
+		openFileName.nMaxFile = MAX_PATH;  //这个必须设置，不设置的话不会出现打开文件对话框 
+		openFileName.lpstrFilter = filter;
+			//L"文本文件(*.png)\0*.png\0所有文件(*.*)\0*.*\0\0";
+		openFileName.lpstrFile = path;
+		openFileName.lpstrFileTitle = name;
+		openFileName.nMaxFileTitle = MAX_PATH;
+		openFileName.nFilterIndex = 1;
+		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+		
+		if (GetOpenFileName(&openFileName))
+		{
+			
+
+			SetCurrentDirectory(_exePath.GetWcs());
+
+			ipath_name = openFileName.lpstrFile;
+			iname = openFileName.lpstrFileTitle;
+			
+			
+
+			return true;
+		}
+
+	
+		return false;
+	}
+
+	void System_imp::CopyAFile(const String& source, const String& target)
+	{
+		CopyFile(source.GetWcs(), target.GetWcs(), FALSE);
+	}
+
+
+
+	bool System_imp::GetPathFileFirst(const String& path, String& name)
+	{
+
+		_find = ::FindFirstFile(path.GetWcs(), &_findData);
+
+		if (INVALID_HANDLE_VALUE == _find)
+		{
+			return false;
+		}
+
+		name = _findData.cFileName;
+		return true;
+	}
+
+	bool System_imp::GetPathFileNext(const String& path, String& name)
+	{
+		while (FindNextFile(_find, &_findData))
+		{
+			name = _findData.cFileName;
+			return true;
+		}
+		return false;
+	}
+
+	String System_imp::GetExePath()
+	{
+		return _exePath;
+	}
+
+	String System_imp::GetExeName()
+	{
+		return _exeName;
+	}
 
 	void System_imp::SetShowCursor(bool show)
 	{

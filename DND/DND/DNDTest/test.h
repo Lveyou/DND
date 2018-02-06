@@ -42,6 +42,7 @@ class SceneInput;
 class SceneImage;
 class SceneSprite;
 class SceneAnimation;
+class SceneText;
 //接着继承Game类，重写三个函数来特化自己的程序
 class Test : public Game
 {
@@ -99,4 +100,5 @@ private:
 	SceneImage* _sceneImage;
 	SceneSprite* _sceneSprite;
 	SceneAnimation* _sceneAnimation;
+	SceneText* _sceneText;
 };

@@ -21,12 +21,10 @@ namespace DND
 	class DLL_API File
 	{
 	public:
-		//复制文件
-		static void Copy(const String& source, const String& target);
+		
 		static File* Create();
 
-		static bool GetPathFileFirst(const String& path, String& name);
-		static bool GetPathFileNext(const String& path, String& name);
+		
 
 		virtual void OpenFile(const String& path) = 0;
 		virtual String GetValue(const String& name) = 0;
@@ -37,8 +35,7 @@ namespace DND
 		virtual void Save() = 0;//修改之后得保存
 
 	private:
-		static HANDLE m_find;
-		static WIN32_FIND_DATA m_find_data;
+		
 	};
 
 

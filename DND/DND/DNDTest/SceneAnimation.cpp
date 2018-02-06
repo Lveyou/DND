@@ -54,7 +54,8 @@ void SceneAnimation::Run()
 		_ani->Release();
 		for (auto& iter : _mapSpr)
 		{
-			iter.second->GetCanvas()->DeleteSprite(iter.second);
+			delete (iter.second);
+			iter.second = NULL;
 		}
 		_mapSpr.clear();
 

@@ -463,6 +463,19 @@ namespace DND
 			spr = *itor;
 			delete spr;
 		}
+
+		if (_txtOutline[0])
+		{
+			for (auto& iter : _txtOutline)
+			{
+				delete iter;
+			}
+		}
+
+		if (m_coor)
+		{
+			delete m_coor;
+		}
 	}
 
 	void Text_imp::_sprites_offset(Vector2 offset)

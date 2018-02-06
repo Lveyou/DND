@@ -33,6 +33,9 @@
     <ClInclude Include="SceneAnimation.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SceneText.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -48,6 +51,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="SceneAnimation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneText.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

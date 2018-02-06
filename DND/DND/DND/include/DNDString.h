@@ -48,6 +48,7 @@ namespace DND
 
 		void Clear();//设为空串
 		void Pop();//去掉结尾
+		void Push(WCHAR ch);//插入尾部
 		
 		//==================查找==================
 		UINT32 FindEnd(WCHAR wc);//查找最后一个

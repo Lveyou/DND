@@ -4,6 +4,7 @@
 #include "SceneImage.h"
 #include "SceneSprite.h"
 #include "SceneAnimation.h"
+#include "SceneText.h"
 //DND的入口函数，可以假设程序从这里开始执行
 DNDMain()
 {
@@ -58,7 +59,7 @@ void Test::Init_Window()
 void Test::Init_Font()
 {
 	sys->LoadFontFile(GAME_FONT_NAME_INFO, L"Data\\Font\\cour.ttf");
-	sys->LoadFontFile(GAME_FONT_NAME_TEXT, L"C:\\Windows\\Fonts\\simkai.ttf", 1);
+	sys->LoadFontFile(GAME_FONT_NAME_TEXT, L"C:\\Windows\\Fonts\\simkai.ttf", 0);
 }
 
 void Test::Run_Out_Image_Canvas()
@@ -96,6 +97,7 @@ void Test::RunWindowSize()
 		sys->SetWindowSize(Size(800, 600));
 		sys->SetWindowCenter();
 		sys->ApplyWindow();
+
 	}
 
 	if (input->KeyUp(KeyCode::KEY2))
@@ -129,11 +131,12 @@ void Test::Init_Info()
 	_txtFpsDrawcallTime = canvas->CreateText(GAME_FONT_NAME_INFO, GAME_FONT_SIZE_INFO);
 	//顶对齐
 	_txtFpsDrawcallTime->SetAlignVertical(TEXT_ALIGN_TOP);
-
+	_txtFpsDrawcallTime->SetOrder(1);
 	//背景
 	Image* bg = Image::Create(L"Data\\Image\\bg.png");
-	_sprBg = canvas->CreateSprite(bg);
-	_sprBg->GetCoor()->SetPosition(sys->GetWindowSize() / 2);
+	canvas->RegisterImageAll(1233, bg);
+	_sprBg = canvas->CreateSprite(1233, Quad(Vector2(), bg->GetSize(), false));
+	//_sprBg->GetCoor()->SetPosition(sys->GetWindowSize() / 2);
 }
 
 void Test::Run_Info()
@@ -252,6 +255,7 @@ void Test::Init_Scene()
 	_sceneImage = NULL;
 	_sceneSprite = NULL;
 	_sceneAnimation = NULL;
+	_sceneText = NULL;
 }
 
 void Test::Run_Scene()
@@ -300,6 +304,18 @@ void Test::Run_Scene()
 			_sceneAnimation->Init(this);
 		}
 		_sceneAnimation->Run();
+
+		return;
+	}
+
+	if (_strChoose == L"Text")
+	{
+		if (_sceneText == NULL)
+		{
+			_sceneText = new SceneText;
+			_sceneText->Init(this);
+		}
+		_sceneText->Run();
 
 		return;
 	}

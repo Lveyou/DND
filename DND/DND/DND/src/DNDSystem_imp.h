@@ -48,9 +48,18 @@ namespace DND
 		virtual void RenderCircle(Vector2 pos, float radius, UINT32 count, Color color = Color::WHITE) override;
 		virtual void RenderCoor(Coor* coor) override;
 
-		virtual void LoadFontFile(const String& name, const String& path, int mode = 0) override;
+		virtual bool LoadFontFile(const String& name, const String& path, int mode = 0) override;
 
 		virtual String GetChooseFolder(const String& title, String root) override;
+		virtual bool GetChooseFile(const WCHAR* filter, String& path, String& name) override;
+
+		virtual bool GetPathFileFirst(const String& path, String& name) override;
+		virtual bool GetPathFileNext(const String& path, String& name) override;
+
+		virtual void CopyAFile(const String& source, const String& target) override;
+
+		virtual String GetExePath() override;
+		virtual String GetExeName() override;
 
 		virtual void SetShowCursor(bool show) override;
 
@@ -66,6 +75,12 @@ namespace DND
 		HWND _hWnd;
 		HINSTANCE _hInstance;
 		bool _foucs;
+
+		String _exePath;
+		String _exeName;
+
+		HANDLE _find;
+		WIN32_FIND_DATA _findData;
 	private:
 		Font* _font;
 	};

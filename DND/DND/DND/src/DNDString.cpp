@@ -185,6 +185,11 @@ namespace DND
 		p->pop_back();
 	}
 
+	void String::Push(WCHAR ch)
+	{
+		p->push_back(ch);
+	}
+
 	UINT32 String::FindEnd(WCHAR ch)
 	{
 		return FindN(ch, GetCharCount(ch));

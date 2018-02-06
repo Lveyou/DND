@@ -11,8 +11,20 @@ namespace DND
 		dnd_assert(!FT_Init_FreeType(&library) , ERROR_00046);
 	}
 
-	void Font::_load_font_file(const String& name, const String& path,int mode)
+	bool Font::_load_font_file(const String& name, const String& path, int mode)
 	{
+		//由于Canvas的字符精灵表依赖 此名字，所以禁止覆盖名字（为了简单起见）
+		//重复加载先删除旧face
+		for (auto iter : faces)
+		{
+			if (iter.name == name)
+			{
+				//FT_Done_Face(iter.face);
+				debug_warn(String(L"DND: 字体命名重复: ") + name + L" 路径: " + path);
+				return false;
+			}
+		}
+
 
 		FontFace face;
 		char temp[1024];
@@ -21,13 +33,13 @@ namespace DND
 		
 		if(FT_New_Face(library, temp, 0, &face.face))
 		{
-			debug_warn(String(L"DND: 字体文件加载失败:") + path);
-			return;
+			debug_warn(String(L"DND: 字体文件加载失败: ") + path);
+			return false;
 		}
-		
 		face.name = name;
 		face.mode = mode;
 		faces.push_back(face);
+		return true;
 	}
 
 	void Font::_get_char(const String& name, unsigned int size, WCHAR ch, Image*& img, Point& offset)
@@ -75,7 +87,9 @@ namespace DND
 			FontFace face;
 			face.name = name;
 
-			vector<FontFace>::iterator iter_face = find(font->faces.begin(), font->faces.end(), face);
+			auto iter_face = find(font->faces.begin(), font->faces.end(), face);
+
+			
 			if (iter_face == font->faces.end())
 			{
 				assert(0 && L"请先加载相应字体文件！");

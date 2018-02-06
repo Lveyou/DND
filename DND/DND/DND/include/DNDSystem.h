@@ -44,9 +44,22 @@ namespace DND
 		virtual void RenderCircle(Vector2 pos, float radius, UINT32 count, Color color = Color::WHITE) = 0;
 		virtual void RenderCoor(Coor* coor) = 0;
 		//font mode:0平滑，1像素
-		virtual void LoadFontFile(const String& name, const String& path, int mode = 0) = 0;
+		virtual bool LoadFontFile(const String& name, const String& path, int mode = 0) = 0;
 
+		//file 文件操作
+		//选择文件夹
 		virtual String GetChooseFolder(const String& title, String root) = 0;
+		//选择文件
+		virtual bool GetChooseFile(const WCHAR* filter, String& path_name, String& name) = 0;
+		//遍历文件
+		virtual bool GetPathFileFirst(const String& path, String& name) = 0;
+		virtual bool GetPathFileNext(const String& path, String& name) = 0;
+		//复制文件
+		virtual void CopyAFile(const String& source, const String& target) = 0;
+
+		//获取exe执行路径
+		virtual String GetExePath() = 0;
+		virtual String GetExeName() = 0;
 
 		virtual void SetShowCursor(bool show) = 0;
 		

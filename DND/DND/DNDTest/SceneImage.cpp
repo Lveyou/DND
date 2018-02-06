@@ -27,8 +27,11 @@ void SceneImage::Init(Test* test)
 	_sprColor = _test->canvas->CreateSprite(0, Quad(Vector2(), Vector2(50, 50), true));
 	_sprColor->GetCoor()->SetPosition(Vector2(180, 120 + 40));
 
-	_spr = NULL;
-	_image = NULL;
+	_image = Image::Create(L"Data\\Image\\cat.png");
+	_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
+
+	_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), _image->GetSize(), false));
+	_spr->GetCoor()->SetPosition(Vector2(280, 260));
 }
 
 void SceneImage::Run()
@@ -44,7 +47,7 @@ void SceneImage::Run()
 		OPENFILENAME openFileName = { 0 };
 		openFileName.lStructSize = sizeof(OPENFILENAME);
 		openFileName.nMaxFile = MAX_PATH;  //这个必须设置，不设置的话不会出现打开文件对话框 
-		openFileName.lpstrFilter = L"文本文件(*.png)\0*.png\0所有文件(*.*)\0*.*\0\0";
+		openFileName.lpstrFilter = L"图像文件(*.png)\0*.png\0所有文件(*.*)\0*.*\0\0";
 		openFileName.lpstrFile = path;
 		openFileName.lpstrFileTitle = name;
 		openFileName.nMaxFileTitle = MAX_PATH;
@@ -62,7 +65,9 @@ void SceneImage::Run()
 
 			if (_spr)
 			{
-				_test->canvas->DeleteSprite(_spr);
+				delete _spr;
+				_spr = NULL;
+				
 			}
 
 			if (_image)
@@ -74,7 +79,7 @@ void SceneImage::Run()
 			/*Image* img_add = Image::Create(L"Data\\Image\\sprite.png");
 			_image->AddImageRect(img_add,Rect(XYWH(Point(10,10),Size(40,40))), Point(5,5));*/
 			//test end
-			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
+			_test->canvas->ReplaceImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
 			_spr = _test->canvas->CreateSprite(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, Quad(Vector2(), _image->GetSize(), false));
 			_spr->GetCoor()->SetPosition(Vector2(180, 160));
 			
@@ -93,7 +98,7 @@ void SceneImage::Run()
 		if (_btnDiscoloration->IsRelease())
 		{
 			_image->Discoloration(_sprColor->GetColor());
-			_test->canvas->RegisterImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
+			_test->canvas->ReplaceImageAll(GAME_SCENE_IMAGE_IMAGE_REG_ID + 1, _image);
 			
 		}
 

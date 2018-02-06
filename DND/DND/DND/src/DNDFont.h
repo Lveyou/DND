@@ -15,6 +15,7 @@
 #include "DNDImage.h"
 
 #include <map>
+#include <list>
 using namespace std;
 
 #pragma warning(disable:4819)
@@ -84,11 +85,11 @@ namespace DND
 	{
 	public:
 		Font();
-		void _load_font_file(const String& name, const String& path, int mode);
+		bool _load_font_file(const String& name, const String& path, int mode);
 		void _get_char(const String& name, unsigned int size, WCHAR ch, Image*& img, Point& offset);
 
 		FT_Library library;
-		vector<FontFace> faces;
+		list<FontFace> faces;
 		vector<FontCharMap*> maps;
 	};
 

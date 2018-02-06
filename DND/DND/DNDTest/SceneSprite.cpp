@@ -22,11 +22,11 @@ void SceneSprite::Init(Test* test)
 		Color::YELLOW, 
 		Color::RED };
 	//_sprScale = _test->canvas->CreateSprite(GAME_SCENE_SPRITE_IMAGE_REG_ID + 1, Quad(Vector2(), img->GetSize() *2 , false));
-	_sprScale = _test->canvas->CreateSprite(GAME_SCENE_SPRITE_IMAGE_REG_ID + 1, Quad(Vector2(0,0),Vector2(300,0),
-		Vector2(400,200), Vector2(0,300)));
+	_sprScale = _test->canvas->CreateSprite(GAME_SCENE_SPRITE_IMAGE_REG_ID + 1, Quad(Vector2(0,0),Vector2(100,-30),
+		Vector2(100,70), Vector2(0,100)));
 	_sprScale->SetColor(array_color);
 	_sprScale->GetCoor()->SetScale(Vector2(1.5f, 1.5f));
-	_sprScale->GetCoor()->SetPosition(Vector2(x - 200, y));
+	_sprScale->GetCoor()->SetPosition(Vector2(x + 200, y + 200));
 
 
 	_sprRotate = _test->canvas->CreateSprite(GAME_SCENE_SPRITE_IMAGE_REG_ID + 1, Quad(Vector2(), img->GetSize(), false));

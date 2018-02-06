@@ -11,39 +11,9 @@ namespace DND
 		return file;
 	}
 
-	void File::Copy(const String& source, const String& target)
-	{
-		CopyFile(source.GetWcs(), target.GetWcs(), FALSE);
-		
-	}
 
 
-	HANDLE File::m_find = NULL;
-	WIN32_FIND_DATA File::m_find_data;
 
-	bool File::GetPathFileFirst(const String& path, String& name)
-	{
-
-		m_find = ::FindFirstFile(path.GetWcs(), &m_find_data);
-
-		if (INVALID_HANDLE_VALUE == m_find)
-		{
-			return false;
-		}
-
-		name = m_find_data.cFileName;
-		return true;
-	}
-
-	bool File::GetPathFileNext(const String& path, String& name)
-	{
-		while (FindNextFile(m_find, &m_find_data))
-		{
-			name = m_find_data.cFileName;
-			return true;
-		}
-		return false;
-	}
 
 	void File_imp::OpenFile(const String& path)
 	{
