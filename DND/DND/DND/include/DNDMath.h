@@ -35,6 +35,7 @@ namespace DND
 		static void SwapInt(int& a, int& b);
 		static void SwapFloat(float& a, float& b);
 		static float GetBetween(float var, float min, float max);//取上界和下界，包含
+		
 		static bool TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir,
 			const Vector3& v0, const Vector3& v1, const Vector3& v2,
 			float& t, float& u, float& v);//射线与三角形相交
@@ -43,6 +44,17 @@ namespace DND
 		static float GetFloatMin();
 		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1,const Vector2& p2);
 	
+
+		template<typename T>
+		static T GetBetween(T var, T min, T max)//取上界和下界，包含
+		{
+			if (var < min)
+				return min;
+			else if (var > max)
+				return max;
+			else
+				return var;
+		}
 	};
 }
 

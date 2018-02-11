@@ -155,6 +155,11 @@ namespace DND
 			return var;
 	}
 
+
+
+
+
+
 	bool DND::Math::TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir, const Vector3& v0, const Vector3& v1, const Vector3& v2, float& t, float& u, float& v)
 	{
 		Vector3 E1 = v1 - v0;
