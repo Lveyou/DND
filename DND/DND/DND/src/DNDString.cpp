@@ -170,7 +170,7 @@ namespace DND
 	
 	int String::GetInt()
 	{
-		int var;
+		int var = 0;
 		swscanf_s(GetWcs(), L"%d", &var);
 		return var;
 	}
