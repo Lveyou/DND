@@ -186,6 +186,20 @@ namespace DND
 		return ret;
 	}
 
+	DND::Animation* Animation_imp::Clone(UINT32 begin, UINT32 end)
+	{
+		Animation_imp* ret = new Animation_imp;
+		ret->_fps = _fps;
+		ret->_coor = _coor->Clone();
+		ret->_cur = _cur;
+
+		for (int i = begin; i <= end; i++)
+		{
+			ret->PushBack(_listSpr[i - 1]->Clone());
+		}
+		return ret;
+	}
+
 	void Animation_imp::Copy(Animation* b)
 	{
 		Animation_imp* b2 = (Animation_imp*)b;

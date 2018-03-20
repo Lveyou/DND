@@ -36,6 +36,7 @@ namespace DND
 		virtual bool IsPickup() override;
 		virtual void Play() override;
 		virtual Animation* Clone() override;
+		virtual Animation* Clone(UINT32 begin, UINT32 end) override;
 		virtual void Copy(Animation* b) override;
 	private:
 		UINT32 _fps;
