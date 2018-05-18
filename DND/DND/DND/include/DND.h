@@ -46,6 +46,7 @@
 #include "DNDGUIEditBoxSprite.h"		//EditBoxSprite				精灵背景输入框
 #include "DNDGUISwitchSprite2.h"		//SwitchSprite				2精灵开关
 #include "DNDGUIButtonSprite3.h"		//ButtonSprite				3精灵按钮
+#include "DNDGUISprite9.h"				//Sprite9					9妹精灵
 //////////////////////////////////////////////////////////////////////////
 
 #endif

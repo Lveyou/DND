@@ -55,6 +55,10 @@ namespace DND
 		virtual void SetOutLineSize(UINT32 size) = 0;
 		virtual void SetOutLineColor(Color color) = 0;
 
+		//较为耗时操作
+		virtual void SetFontSize(UINT32 size) = 0;
+		virtual UINT32 GetFontSize() = 0;
+
 		virtual Text* Clone() = 0;
 		
 		virtual ~Text() = 0;

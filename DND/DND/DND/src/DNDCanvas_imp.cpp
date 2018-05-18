@@ -1,5 +1,6 @@
 #include "DNDCanvas_imp.h"
 #include "DNDSprite.h"
+#include "DNDGUISprite9.h"
 #include "DNDDirectX.h"
 #include "DNDGame.h"
 #include "DNDSystem_imp.h"
@@ -51,6 +52,62 @@ namespace DND
 		//_allSprite.push_back(spr);
 		return spr;
 	}
+
+	DND::Sprite* Canvas_imp::CreateSprite(UINT32 img_ID, bool center, Color color /*= Color::WHITE*/)
+	{
+		Sprite* spr = new Sprite();
+		spr->_imageRectID = img_ID;
+		auto iter = _tex->_imageRects.find(img_ID);
+		if (iter == _tex->_imageRects.end())
+		{
+			return NULL;
+		}
+
+		spr->_quad = Quad(Vector2(), iter->second.GetSize(), center);
+		spr->_coor = Coor::Create(_coor);
+		spr->_color[0] = color;
+		spr->_color[1] = color;
+		spr->_color[2] = color;
+		spr->_color[3] = color;
+		spr->_canvas = this;
+		//_allSprite.push_back(spr);
+		return spr;
+	}
+
+	DND::Sprite9* Canvas_imp::CreateSprite9(const Image* img, const Rect& xxyy, Color color /*= Color::WHITE*/)
+	{
+		Sprite9* spr9 = new Sprite9;
+		spr9->_coor = Coor::Create(_coor);
+
+		int id = _systemUseID++;
+		RegisterImageAll(id, img);
+
+		Size size = img->GetSize();
+		RegisterImageRect(_systemUseID++, id, Rect(Point(), Point(xxyy.p1.x, xxyy.p1.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p1.x, 0), Point(xxyy.p2.x, xxyy.p1.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p2.x, 0), Point(size.w, xxyy.p1.y)));
+
+		RegisterImageRect(_systemUseID++, id, Rect(Point(0, xxyy.p1.y), Point(xxyy.p1.x, xxyy.p2.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p1.x, xxyy.p1.y), Point(xxyy.p2.x, xxyy.p2.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p2.x, xxyy.p1.y), Point(size.w, xxyy.p2.y)));
+
+		RegisterImageRect(_systemUseID++, id, Rect(Point(0, xxyy.p2.y), Point(xxyy.p1.x, size.h)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p1.x, xxyy.p2.y), Point(xxyy.p2.x, size.h)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p2.x, xxyy.p2.y), Point(size.w, size.h)));
+
+		for (int i = 0; i != 9; ++i)
+		{
+			spr9->_spr[i] = CreateSprite(id + i + 1, false, color);
+			spr9->_spr[i]->GetCoor()->SetParent(spr9->_coor);
+		}
+		
+		spr9->_xxyy = xxyy;
+		spr9->_imgSize = size;
+		spr9->SetPosition(Vector4(0, 0, size.w, size.h));
+
+		return spr9;
+	}
+
 	Sprite* Canvas_imp::GetCharSprite(const String& name, unsigned font_size, wchar_t ch)
 	{
 		vector<CharSpriteNode>::iterator itor;

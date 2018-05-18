@@ -41,6 +41,8 @@ namespace DND
 		virtual void SetOutLine(bool open) override;
 		virtual void SetOutLineSize(UINT32 size) override;
 		virtual void SetOutLineColor(Color color) override;
+		virtual void SetFontSize(UINT32 size) override;
+		virtual UINT32 GetFontSize() override;
 		virtual Text* Clone() override;
 		
 		

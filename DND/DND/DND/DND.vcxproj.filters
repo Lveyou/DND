@@ -169,6 +169,9 @@
     <ClInclude Include="include\DNDSound.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUISprite9.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -274,6 +277,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDSound.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUISprite9.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

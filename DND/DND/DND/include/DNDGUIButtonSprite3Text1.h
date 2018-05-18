@@ -22,9 +22,12 @@ namespace DND
 	class DLL_API ButtonSprite3Text1 : public Control
 	{
 	public:
-		static ButtonSprite3Text1* Create(Sprite* normal, Sprite* over, Sprite* down, Text* txt);
+		static ButtonSprite3Text1* Create(Sprite* normal, Sprite* over, Sprite* down, Text* txt, Vector2 txt_offset = Vector2());
 		Text* GetText();
 		Coor* GetCoor();
+		ButtonSprite3Text1* Clone();
+		void ApplyUIScale(float scale);
+		void SetTxtOffset(Vector2 offset);
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;
@@ -32,6 +35,7 @@ namespace DND
 		//////////////////////////////////////////////////////////////////////////
 		Sprite* _spr[3];
 		Text* _txt;
+		Vector2 _offsetTxt;
 		Coor* _coor;
 		ButtonSprite3Text1();
 

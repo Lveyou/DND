@@ -3,7 +3,7 @@
 namespace DND
 {
 
-	ButtonSprite3Text1* ButtonSprite3Text1::Create(Sprite* normal, Sprite* over, Sprite* down, Text* txt)
+	ButtonSprite3Text1* ButtonSprite3Text1::Create(Sprite* normal, Sprite* over, Sprite* down, Text* txt, Vector2 txt_offset)
 	{
 		ButtonSprite3Text1* ret = new ButtonSprite3Text1;
 		ret->_spr[0] = normal;
@@ -14,7 +14,8 @@ namespace DND
 		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[2]->GetCoor()->SetParent(ret->_coor);
-		ret->_txt->GetCoor()->SetParent(ret->_coor);
+		ret->_txt->GetCoor()->SetParent(ret->_coor->GetParent());
+		ret->_offsetTxt = txt_offset;
 
 		return ret;
 	}
@@ -58,6 +59,7 @@ namespace DND
 			break;
 		}
 
+		_txt->GetCoor()->SetPosition(_coor->GetPosition() + _offsetTxt);
 		_txt->Render();
 	}
 
@@ -77,6 +79,35 @@ namespace DND
 	Coor* ButtonSprite3Text1::GetCoor()
 	{
 		return _coor;
+	}
+
+	DND::ButtonSprite3Text1* ButtonSprite3Text1::Clone()
+	{
+		ButtonSprite3Text1* ret = new ButtonSprite3Text1;
+		ret->_spr[0] = _spr[0]->Clone();
+		ret->_spr[1] = _spr[1]->Clone();
+		ret->_spr[2] = _spr[2]->Clone();
+		ret->_txt = _txt->Clone();
+		ret->_coor = _coor->Clone();
+		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
+		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
+		ret->_spr[2]->GetCoor()->SetParent(ret->_coor);
+		ret->_txt->GetCoor()->SetParent(ret->_coor->GetParent());
+		ret->_offsetTxt = _offsetTxt;
+		return ret;
+	}
+
+	void ButtonSprite3Text1::ApplyUIScale(float scale)
+	{
+		float scale_pre = _coor->GetScale().a;
+		_coor->SetScale(Vector2(scale, scale));
+
+		_txt->SetFontSize(scale * _txt->GetFontSize() / scale_pre);
+	}
+
+	void ButtonSprite3Text1::SetTxtOffset(Vector2 offset)
+	{
+		_offsetTxt = offset;
 	}
 
 }

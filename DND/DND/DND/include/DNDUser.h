@@ -143,6 +143,7 @@ namespace DND
 		Rect();
 		Rect(Point p1, Point p2);
 		Rect(XYWH xywh);
+		Rect(INT32 x1, INT32 y1, INT32 x2, INT32 y2);
 		Size GetSize() const;
 	};
 

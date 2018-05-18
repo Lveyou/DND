@@ -400,6 +400,21 @@ namespace DND
 		
 	}
 
+	void Text_imp::SetFontSize(UINT32 size)
+	{
+		String str = m_string;
+		m_font_size = size;
+		m_string = L"";
+		SetString(str);
+		SetOrder(m_order);
+		//描边属性不能复制，否则会造成递归
+	}
+
+	UINT32 Text_imp::GetFontSize()
+	{
+		return m_font_size;
+	}
+
 	DND::Text* Text_imp::Clone()
 	{
 		if (m_canvas)

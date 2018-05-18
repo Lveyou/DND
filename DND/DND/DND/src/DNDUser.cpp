@@ -329,6 +329,14 @@ namespace DND
 
 	}
 
+	Rect::Rect(INT32 x1, INT32 y1, INT32 x2, INT32 y2)
+	{
+		p1.x = x1;
+		p1.y = y1;
+		p2.x = x2;
+		p2.y = y2;
+	}
+
 	Size Rect::GetSize() const
 	{
 		return PointToSize(p2 - p1);
