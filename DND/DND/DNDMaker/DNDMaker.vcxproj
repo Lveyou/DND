@@ -146,10 +146,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DGame.cpp" />
+    <ClCompile Include="DSGameInfo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Maker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DCanvas.h" />
+    <ClInclude Include="DGame.h" />
+    <ClInclude Include="DSGameInfo.h" />
     <ClInclude Include="head.h" />
     <ClInclude Include="Maker.h" />
   </ItemGroup>

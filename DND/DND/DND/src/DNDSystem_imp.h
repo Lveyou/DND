@@ -19,6 +19,7 @@ namespace DND
 {
 	class Font;
 	class Coor;
+	class ZipFile;
 	class System_imp : System
 	{	
 		friend class Input_imp;
@@ -26,7 +27,10 @@ namespace DND
 		friend class DirectX;
 		friend class FontCharMap;
 		friend class Canvas_imp;
+		friend class Gfx2D;
+		friend class GfxSimple;
 	private:
+		virtual void MessageBox(const String& text) override;
 		virtual void SetWindowTitle(const String& title) override;
 		virtual void SetWindowCenter() override;
 		virtual void SetWindowStyle(DWORD style) override;
@@ -58,8 +62,13 @@ namespace DND
 
 		virtual void CopyAFile(const String& source, const String& target) override;
 
+		virtual bool IsFileExist(const String& path_name) override;
+
 		virtual String GetExePath() override;
 		virtual String GetExeName() override;
+
+		virtual void AttachZip(const String& path, const String& passkey) override;
+		
 
 		virtual void SetShowCursor(bool show) override;
 
@@ -81,6 +90,10 @@ namespace DND
 
 		HANDLE _find;
 		WIN32_FIND_DATA _findData;
+
+		void* _get_file_form_zip(const String& path, unsigned& size);
+		vector<ZipFile*> _zips;
+
 	private:
 		Font* _font;
 	};

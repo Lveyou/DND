@@ -11,15 +11,20 @@ namespace DND
 
 	bool Control::IsRelease()
 	{
-		if (_mode == BUTTON)
-			return (_last_state == DOWN) && (_state == OVER);
-		else
-			return (_last_state != _state);
+		bool ret = _isRelease;
+		_isRelease = false;
+		return ret;
 	}
 
 	Control::State Control::GetState()
 	{
 		return _state;
+	}
+
+	void Control::SetState(State state)
+	{
+		
+		_state = state;
 	}
 
 	void Control::Run()
@@ -57,7 +62,7 @@ namespace DND
 		_open = open;
 		//放止Release事件
 		_state = _open ? DOWN : NORMAL;
-		_last_state = _state;
+		
 	}
 
 	void Control::SetDisable(bool disable)
@@ -68,7 +73,7 @@ namespace DND
 	Control::Control() :
 		_disable(false),
 		_state(NORMAL),
-		_last_state(NORMAL),
+		_isRelease(false),
 		_mode(Mode::BUTTON),
 		_open(false)
 	{
@@ -76,29 +81,69 @@ namespace DND
 	}
 
 
+	Control* Control::_clickControl = NULL;
+
 	void Control::_run_button()
 	{
 		Input* input = Game::Get()->input;
-		_last_state = _state;
 		//如果激活为其他三种状态，否则为 第四种
 		if (!_disable)
 		{
-			//如果在外面，为OUT状态
-			if (_is_pickup())
+			if (_clickControl == this)
 			{
-				//如果左键按下 ，为DOWN状态，否则为 ON
-				if (input->KeyState(KeyCode::MOUSE_L))
+				if (_is_pickup())
 				{
-					_state = DOWN;
+					if (input->KeyState(KeyCode::MOUSE_L))
+					{
+						_state = DOWN;
+					}
+					else
+					{
+						_state = OVER;
+						_clickControl = NULL;
+						_isRelease = true;
+					}
 				}
 				else
 				{
-					_state = OVER;
+					if (input->KeyState(KeyCode::MOUSE_L))
+					{
+						
+					}
+					else
+					{
+						_clickControl = NULL;
+					}
+					_state = NORMAL;
 				}
+				
 			}
 			else
 			{
-				_state = NORMAL;
+				//捕捉一次按下，在里面才算点下
+				if (_is_pickup())
+				{
+					if (input->KeyDown(KeyCode::MOUSE_L))
+					{
+						_clickControl = this;
+						_state = DOWN;
+					}
+					else
+					{
+						if (_clickControl == NULL)
+						{
+							_state = OVER;
+						}
+						else
+						{
+							_state = NORMAL;
+						}
+					}
+					
+					
+				}
+				else
+					_state = NORMAL;
 			}
 
 		}
@@ -112,19 +157,31 @@ namespace DND
 	void Control::_run_switch()
 	{
 		Input* input = Game::Get()->input;
-		_last_state = _state;
+		
 		//如果激活为其他三种状态，否则为 第四种
 		if (!_disable)
 		{
-			//如果在外面，为NORMAL状态
-			if (_is_pickup() && input->KeyUp(KeyCode::MOUSE_L))
+			//关闭状态 才显示over
+			if (_is_pickup())
 			{
-				_open = !_open;
+				if (input->KeyUp(KeyCode::MOUSE_L))
+				{
+					_open = !_open;
+					_state = _open ? DOWN : NORMAL;
+				}
+				else if(input->KeyState(KeyCode::MOUSE_L))
+				{
+					_state = DOWN;
+				}
+				else if (_open == false)
+				{
+					_state = OVER;
+				}
 			}
-
-			
-			_state = _open ? DOWN:NORMAL;
-
+			else
+			{
+				_state = _open ? DOWN : NORMAL;
+			}
 		}
 		else
 		{
@@ -136,7 +193,7 @@ namespace DND
 	void Control::_run_radio()
 	{
 		Input* input = Game::Get()->input;
-		_last_state = _state;
+		
 		//如果激活为其他三种状态，否则为 第四种
 		if (!_disable)
 		{

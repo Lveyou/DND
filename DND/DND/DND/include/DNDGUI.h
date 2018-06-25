@@ -39,6 +39,7 @@ namespace DND
 		};
 		bool IsRelease();
 		State GetState();
+		void SetState(State state);
 		void Run();
 		void SetMode(Mode mode);
 		bool IsOpen();
@@ -52,9 +53,11 @@ namespace DND
 		virtual void _update(State state) = 0;
 		//////////////////////////////////////////////////////////////////////////
 		bool _disable;
-		State _last_state;
+		bool _isRelease;
 		Mode _mode;
 		bool _open;
+
+		static Control* _clickControl;
 
 		void _run_button();
 		void _run_switch();

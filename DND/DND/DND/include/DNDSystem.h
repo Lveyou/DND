@@ -22,6 +22,7 @@ namespace DND
 	class DLL_API System
 	{	
 	public:
+		virtual void MessageBox(const String& text) = 0;
 		virtual void SetWindowTitle(const String& title) = 0;
 		//need call ApplyWindow to apply
 		virtual void SetWindowCenter() = 0;
@@ -56,10 +57,15 @@ namespace DND
 		virtual bool GetPathFileNext(const String& path, String& name) = 0;
 		//复制文件
 		virtual void CopyAFile(const String& source, const String& target) = 0;
+		//文件是否存在
+		virtual bool IsFileExist(const String& path_name) = 0;
 
 		//获取exe执行路径
 		virtual String GetExePath() = 0;
 		virtual String GetExeName() = 0;
+
+		//zip
+		virtual void AttachZip(const String& path, const String& passkey) = 0;
 
 		virtual void SetShowCursor(bool show) = 0;
 		

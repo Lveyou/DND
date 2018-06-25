@@ -5,11 +5,26 @@
 #include "DNDFont.h"
 #include "DNDCoor.h"
 
+#include "../ZLIB/unzip.h"
+
+#include <fstream>
 #include<Shlobj.h>
 #pragma comment(lib,"Shell32.lib")
 
 namespace DND
 {
+	
+	class ZipFile
+	{
+	public:
+		char name[DEAULT_PATH_MAX_SIZE];
+		char passkey[DEAULT_PATH_MAX_SIZE];
+		ZipFile()
+		{
+			ZeroMemory(this, sizeof(ZipFile));
+		}
+	};
+
 
 	void System_imp::_create_window()
 	{
@@ -48,6 +63,81 @@ namespace DND
 
 	}
 
+	void* System_imp::_get_file_form_zip(const String& path, unsigned& size)
+	{
+		unzFile zip;
+		unz_file_info file_info;
+		char zip_name[DEAULT_PATH_MAX_SIZE] = { NULL };//返回的文件名
+		char path_name[DEAULT_PATH_MAX_SIZE] = { NULL };//需要取得的文件名
+		int done;
+		void* ptr = NULL;
+
+		path.GetMultiByteStr(path_name, DEAULT_PATH_MAX_SIZE);
+
+		for (auto& iter : _zips)
+		{
+			ZipFile* zip_file = iter;
+			zip = unzOpen(zip_file->name);
+			done = unzGoToFirstFile(zip);
+
+			while (done == UNZ_OK)
+			{
+				unzGetCurrentFileInfo(zip, &file_info, zip_name, sizeof(zip_name), NULL, 0, NULL, 0);
+
+				//unzip返回的是 右斜杠文件路径
+				for (UINT32 i = 0; path_name[i]; ++i)
+				{
+					if ('\\' == path_name[i])
+					{
+						path_name[i] = '/';
+					}
+				}
+
+				if (!strcmp(zip_name, path_name))
+				{
+					if (unzOpenCurrentFilePassword(zip, zip_file->passkey[0] ? zip_file->passkey : 0) != UNZ_OK)
+					{
+						unzClose(zip);
+						debug_warn(String(L"DND: 解压失败: ") + path);
+						size = 0;
+						return 0;
+					}
+					ptr = malloc(file_info.uncompressed_size);
+					if (!ptr)
+					{
+						unzCloseCurrentFile(zip);
+						unzClose(zip);
+						debug_warn(String(L"DND: 分配内存失败: ") + path);
+						size = 0;
+						return 0;
+					}
+					if (unzReadCurrentFile(zip, ptr, file_info.uncompressed_size) < 0)
+					{
+						unzCloseCurrentFile(zip);
+						unzClose(zip);
+						free(ptr);
+						debug_warn(String(L"DND: 读取解压文件失败: ") + path);
+						size = 0;
+						return 0;
+					}
+					unzCloseCurrentFile(zip);
+					unzClose(zip);
+					size = file_info.uncompressed_size;
+
+					debug_info(String(L"DND: 读取到压缩文件: ") + path);
+
+					return ptr;
+				}
+
+				done = unzGoToNextFile(zip);
+			}
+			unzClose(zip);
+		}
+		size = 0;
+		debug_warn(String(L"DND: 匹配解压文件失败: ") + path);
+		return NULL;
+	}
+
 	System_imp::System_imp()
 	{
 		_windowTitle = DEFAULT_WINDOW_TITLE;
@@ -71,7 +161,14 @@ namespace DND
 		_exePath.CutTail(pos);//不去除/
 		_exeName.CutHead(pos);
 
+		//attach zip
+		AttachZip(L"DND.zip", L"LveyouGame");
 		
+	}
+
+	void System_imp::MessageBox(const String& text)
+	{
+		::MessageBoxW(_hWnd, text.GetWcs(), L"DNDEngine", MB_OK | MB_ICONINFORMATION);
 	}
 
 	void System_imp::SetWindowTitle(const String& title)
@@ -258,6 +355,31 @@ namespace DND
 
 
 
+	bool System_imp::IsFileExist(const String& path_name)
+	{
+
+		//2017-06-18 此函数有问题！！
+		//return !_waccess_s(path.Get_Wcs(), 0);//mode 为0 只判断 文件是否存在
+
+
+		wfstream file;
+		file.open(path_name.GetWcs(), ios::in);
+
+		if (!file)
+		{
+			
+			file.close();
+			return false;
+		}
+		else
+		{
+			debug_warn(String(L"DND: 文件存在于: ") + path_name);
+			file.close();
+			return true;
+		}
+		
+	}
+
 	bool System_imp::GetPathFileFirst(const String& path, String& name)
 	{
 
@@ -290,6 +412,26 @@ namespace DND
 	String System_imp::GetExeName()
 	{
 		return _exeName;
+	}
+
+	void System_imp::AttachZip(const String& path, const String& passkey)
+	{
+		unzFile file;
+		char buffer[DEAULT_PATH_MAX_SIZE] = { 0 };
+		path.GetMultiByteStr(buffer, DEAULT_PATH_MAX_SIZE);
+		file = unzOpen(buffer);
+		if (!file)
+		{
+			debug_warn(String(L"DND: zip 包 attach失败！") + path);
+			return;
+		}
+
+		ZipFile* zip_file = new ZipFile();
+		strcpy_s(zip_file->name, buffer);
+		passkey.GetMultiByteStr(zip_file->passkey, DEAULT_PATH_MAX_SIZE);
+
+		_zips.push_back(zip_file);
+		unzClose(file);
 	}
 
 	void System_imp::SetShowCursor(bool show)

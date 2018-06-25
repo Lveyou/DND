@@ -4,11 +4,12 @@
 #include "DNDGame.h"
 #include "DNDColor.h"
 #include "DNDCanvas_imp.h"
+#include "DNDStreamOutput.h"
 
 namespace DND
 {
-	const String STRING_PATH_SHADER_SIMPLE = L"DND/Shader/simple.fx";
-	const String STRING_PATH_SHADER_2D = L"DND/Shader/2d.fx";
+	const String STRING_PATH_SHADER_SIMPLE = L"DND\\Shader\\simple.fx";
+	const String STRING_PATH_SHADER_2D = L"DND\\Shader\\2d.fx";
 
 
 	void Gfx2D::_init()
@@ -56,15 +57,40 @@ namespace DND
 		ID3D10Blob* compiled_shader = NULL;
 		ID3D10Blob* error_message = NULL;
 
+		System_imp* sys = (System_imp*)Game::Get()->sys;
 
-		if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_2D.GetWcs(),
-			NULL, NULL, NULL, "fx_5_0",
-			shader_flags, 0, NULL,
-			&compiled_shader, &error_message, NULL)))
+		if (sys->IsFileExist(STRING_PATH_SHADER_2D))
 		{
-			if (error_message)
-				debug_err(String((char*)error_message->GetBufferPointer()));
-			dnd_assert(0, ERROR_00037);
+			if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_2D.GetWcs(),
+				NULL, NULL, NULL, "fx_5_0",
+				shader_flags, 0, NULL,
+				&compiled_shader, &error_message, NULL)))
+			{
+				if (error_message)
+					debug_err(String((char*)error_message->GetBufferPointer()));
+				dnd_assert(0, ERROR_00037);
+			}
+		}
+		else
+		{
+			UINT32 size = 0;
+			LPCSTR buffer = (LPCSTR)sys->_get_file_form_zip(STRING_PATH_SHADER_2D, size);
+			if (size == 0)
+			{
+				dnd_assert(0, ERROR_00037);
+				return;
+			}
+			if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL,
+				NULL, NULL, NULL, "fx_5_0",
+				shader_flags, 0, NULL,
+				&compiled_shader, &error_message, NULL)))
+			{
+				if (error_message)
+					sys->MessageBox(String((char*)error_message->GetBufferPointer()));
+				dnd_assert(0, ERROR_00037);
+				return;
+			}
+			delete buffer;
 		}
 
 		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
@@ -350,16 +376,42 @@ namespace DND
 		ID3D10Blob* compiled_shader = NULL;
 		ID3D10Blob* error_message = NULL;
 
-		if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(),
-			NULL, NULL, NULL, "fx_5_0",
-			shader_flags, 0, NULL,
-			&compiled_shader, &error_message, NULL)))
-		{
-			if (error_message)
-				debug_err(String((char*)error_message->GetBufferPointer()));
-			dnd_assert(0, ERROR_00031);
-		}
+		System_imp* sys = (System_imp*)Game::Get()->sys;
 
+		if (sys->IsFileExist(STRING_PATH_SHADER_SIMPLE))
+		{
+			if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(),
+				NULL, NULL, NULL, "fx_5_0",
+				shader_flags, 0, NULL,
+				&compiled_shader, &error_message, NULL)))
+			{
+				if (error_message)
+					debug_err(String((char*)error_message->GetBufferPointer()));
+				dnd_assert(0, ERROR_00031);
+			}
+		}
+		else
+		{
+			unsigned size = 0;
+			LPCSTR buffer = (LPCSTR)sys->_get_file_form_zip(STRING_PATH_SHADER_SIMPLE, size);
+			if (size == 0)
+			{
+				dnd_assert(0, ERROR_00031);
+				return;
+			}
+
+			if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL,
+				NULL, NULL, NULL, "fx_5_0",
+				shader_flags, 0, NULL,
+				&compiled_shader, &error_message, NULL)))
+			{
+				if (error_message)
+					sys->MessageBox(String((char*)error_message->GetBufferPointer()));
+				dnd_assert(0, ERROR_00031);
+				return;
+			}
+			delete buffer;
+		}
 		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
 			compiled_shader->GetBufferPointer(),
 			compiled_shader->GetBufferSize(),

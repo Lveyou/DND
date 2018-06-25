@@ -49,6 +49,7 @@
     <ClInclude Include="include\DNDSingleton.h" />
     <ClInclude Include="include\DNDSound.h" />
     <ClInclude Include="include\DNDSprite.h" />
+    <ClInclude Include="include\DNDStreamOutput.h" />
     <ClInclude Include="include\DNDString.h" />
     <ClInclude Include="include\DNDSystem.h" />
     <ClInclude Include="include\DNDText.h" />
@@ -71,6 +72,21 @@
     <ClInclude Include="src\DNDTexture.h" />
     <ClInclude Include="src\DNDText_imp.h" />
     <ClInclude Include="src\DNDTime_imp.h" />
+    <ClInclude Include="ZLIB\crc32.h" />
+    <ClInclude Include="ZLIB\crypt.h" />
+    <ClInclude Include="ZLIB\deflate.h" />
+    <ClInclude Include="ZLIB\inffast.h" />
+    <ClInclude Include="ZLIB\inffixed.h" />
+    <ClInclude Include="ZLIB\inflate.h" />
+    <ClInclude Include="ZLIB\inftrees.h" />
+    <ClInclude Include="ZLIB\ioapi.h" />
+    <ClInclude Include="ZLIB\trees.h" />
+    <ClInclude Include="ZLIB\unzip.h" />
+    <ClInclude Include="ZLIB\zconf.h" />
+    <ClInclude Include="ZLIB\zconf.in.h" />
+    <ClInclude Include="ZLIB\zip.h" />
+    <ClInclude Include="ZLIB\zlib.h" />
+    <ClInclude Include="ZLIB\zutil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDAnimation_imp.cpp" />
@@ -100,6 +116,7 @@
     <ClCompile Include="src\DNDRigidBody_imp.cpp" />
     <ClCompile Include="src\DNDSound.cpp" />
     <ClCompile Include="src\DNDSprite.cpp" />
+    <ClCompile Include="src\DNDStreamOutput.cpp" />
     <ClCompile Include="src\DNDTexture.cpp" />
     <ClCompile Include="src\DNDText_imp.cpp" />
     <ClCompile Include="src\DNDThread.cpp" />
@@ -109,6 +126,16 @@
     <ClCompile Include="src\DNDMath.cpp" />
     <ClCompile Include="src\DNDString.cpp" />
     <ClCompile Include="src\DNDSystem_imp.cpp" />
+    <ClCompile Include="ZLIB\adler32.c" />
+    <ClCompile Include="ZLIB\crc32.c" />
+    <ClCompile Include="ZLIB\inffast.c" />
+    <ClCompile Include="ZLIB\inflate.c" />
+    <ClCompile Include="ZLIB\inftrees.c" />
+    <ClCompile Include="ZLIB\ioapi.c" />
+    <ClCompile Include="ZLIB\trees.c" />
+    <ClCompile Include="ZLIB\uncompr.c" />
+    <ClCompile Include="ZLIB\unzip.c" />
+    <ClCompile Include="ZLIB\zutil.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="export.def" />
