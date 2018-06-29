@@ -223,6 +223,9 @@
     <ClInclude Include="ZLIB\zutil.h">
       <Filter>ZLIB</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDStreamInput.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -365,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="ZLIB\zutil.c">
       <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDStreamInput.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -17,8 +17,9 @@ public:
 	//初始化基本信息
 	void Create(const String& path);
 
+	void Load(const String& path_name);
 	void Save();
-private:
+public:
 	String _name;		//游戏名字
 	String _workPath;	//工作路径
 };

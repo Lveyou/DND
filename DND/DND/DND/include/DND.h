@@ -32,6 +32,7 @@
 #include "DNDCycleLock.h"				//CycleLock					循环锁
 #include "DNDSound.h"					//Sound						音效
 #include "DNDStreamOutput.h"			//StreamOutput				内存输出流
+#include "DNDStreamInput.h"				//StreamInput				内存输入流
 //////////////////////////BASE//////////////////////////////////////////
 #include "DNDSingleton.h"				//singleton template class	单例模板
 #include "DNDString.h"					//String					字符串

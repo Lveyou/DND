@@ -17,8 +17,10 @@ public:
 	DGame();
 	//初始化项目
 	void Create(const String& path);
+	void Load(const String& path_name);
 	void Save();
 	void Run();
+	DSGameInfo* GetGameInfo();
 private:
 	//Canvas们
 	list<DCanvas*> _listCanvas;

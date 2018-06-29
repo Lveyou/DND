@@ -103,7 +103,7 @@ namespace DND
 		
 		spr9->_xxyy = xxyy;
 		spr9->_imgSize = size;
-		spr9->SetPosition(Vector4(0, 0, size.w, size.h));
+		spr9->SetPosition(Vector4(0, 0, (float)size.w, (float)size.h));
 
 		return spr9;
 	}

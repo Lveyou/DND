@@ -45,6 +45,7 @@ void Maker::_update()
 					{
 						_game = new DGame;
 						_game->Create(path);
+						sys->SetWindowTitle(_game->GetGameInfo()->_name);
 					}
 					else
 					{
@@ -68,7 +69,10 @@ void Maker::_update()
 				{
 					if (name == L"game.dnd")
 					{
+						_game = new DGame;
+						_game->Load(path_name);
 
+						sys->SetWindowTitle(_game->GetGameInfo()->_name);
 					}
 					else
 					{

@@ -67,7 +67,7 @@ namespace DND
 		virtual String GetExePath() override;
 		virtual String GetExeName() override;
 
-		virtual void AttachZip(const String& path, const String& passkey) override;
+		virtual bool AttachZip(const String& path, const String& passkey) override;
 		
 
 		virtual void SetShowCursor(bool show) override;

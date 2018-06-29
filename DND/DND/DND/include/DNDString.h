@@ -39,6 +39,8 @@ namespace DND
 		bool operator<(const String& b) const;//小于
 
 		UINT32 GetLength() const;//返回长度
+		BYTE* GetBuffer();
+		void SetBufferSize(UINT32 size);//设置缓存大小，会保留旧数据
 		//==================转化==================
 		const WCHAR* GetWcs() const;
 		void GetWideCharStr(WCHAR* target, UINT32 max_len) const;//获得宽字符数组

@@ -60,8 +60,8 @@ namespace DND
 		}
 		else
 		{
-			if (_listSpr[_cur])
-				_listSpr[_cur]->Render();
+			if (_listSpr[(UINT32)_cur])
+				_listSpr[(UINT32)_cur]->Render();
 		}
 
 		
@@ -188,12 +188,17 @@ namespace DND
 
 	DND::Animation* Animation_imp::Clone(UINT32 begin, UINT32 end)
 	{
+		if (begin == 0)
+		{
+			debug_err(L"DND: Animation::Clone: 下标从1开始。");
+		}
+
 		Animation_imp* ret = new Animation_imp;
 		ret->_fps = _fps;
 		ret->_coor = _coor->Clone();
 		ret->_cur = _cur;
 
-		for (int i = begin; i <= end; i++)
+		for (UINT32 i = begin; i <= end; i++)
 		{
 			ret->PushBack(_listSpr[i - 1]->Clone());
 		}

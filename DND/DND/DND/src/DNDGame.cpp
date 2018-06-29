@@ -10,6 +10,7 @@
 #include "DNDGUI.h"
 
 #include <Box2D/Box2D.h>
+#include <time.h>
 
 namespace DND
 {
@@ -25,6 +26,7 @@ namespace DND
 		_dx = NULL;
 		canvas = NULL;
 		_imesLength = 0;
+		_logoTime = true;
 	}
 
 	void Game::Init()
@@ -34,6 +36,11 @@ namespace DND
 		//init engine
 		_init_engine();
 		debug_notice(L"DND: init engine ok!");
+
+		//attach zip
+		if(sys->AttachZip(L"DND.zip", L"LveyouGame"))
+			debug_notice(L"DND: Load DND.zip ok!");
+
 		//创建box2d世界
 		_b2World = new b2World(b2Vec2_zero);
 		_b2TimeStep = 1.0f/60.0f;
@@ -73,8 +80,22 @@ namespace DND
 		double b2_count = 0;
 
 		QueryPerformanceCounter(&(t->_loop_start));
+		_logoTimeStart = ::time(0);
+		time_t time_cur;
 		do 
 		{
+			////////////////////////////LOGO显示////////////////////////////////////////
+			if(_logoTime)
+				time_cur = ::time(0);
+
+			if (_logoTime && (time_cur - _logoTimeStart < 1.0f))
+			{
+				continue;
+			}
+			else
+			{
+				_logoTime = false;
+			}
 			//如果消息循环阻塞，代表游戏世界停止
 			while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 			{

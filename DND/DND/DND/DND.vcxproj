@@ -49,6 +49,7 @@
     <ClInclude Include="include\DNDSingleton.h" />
     <ClInclude Include="include\DNDSound.h" />
     <ClInclude Include="include\DNDSprite.h" />
+    <ClInclude Include="include\DNDStreamInput.h" />
     <ClInclude Include="include\DNDStreamOutput.h" />
     <ClInclude Include="include\DNDString.h" />
     <ClInclude Include="include\DNDSystem.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="src\DNDRigidBody_imp.cpp" />
     <ClCompile Include="src\DNDSound.cpp" />
     <ClCompile Include="src\DNDSprite.cpp" />
+    <ClCompile Include="src\DNDStreamInput.cpp" />
     <ClCompile Include="src\DNDStreamOutput.cpp" />
     <ClCompile Include="src\DNDTexture.cpp" />
     <ClCompile Include="src\DNDText_imp.cpp" />

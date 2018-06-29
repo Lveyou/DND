@@ -109,6 +109,16 @@ namespace DND
 	}
 
 
+	BYTE* String::GetBuffer()
+	{
+		return (BYTE*)p->data();
+	}
+
+	void String::SetBufferSize(UINT32 size)
+	{
+		p->resize(size);
+	}
+
 	const WCHAR* String::GetWcs() const
 	{
 		p->push_back(0);

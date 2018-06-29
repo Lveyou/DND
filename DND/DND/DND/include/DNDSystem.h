@@ -65,7 +65,7 @@ namespace DND
 		virtual String GetExeName() = 0;
 
 		//zip
-		virtual void AttachZip(const String& path, const String& passkey) = 0;
+		virtual bool AttachZip(const String& path, const String& passkey) = 0;
 
 		virtual void SetShowCursor(bool show) = 0;
 		

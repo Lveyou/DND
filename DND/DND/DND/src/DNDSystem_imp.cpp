@@ -161,8 +161,7 @@ namespace DND
 		_exePath.CutTail(pos);//²»È¥³ý/
 		_exeName.CutHead(pos);
 
-		//attach zip
-		AttachZip(L"DND.zip", L"LveyouGame");
+		
 		
 	}
 
@@ -414,7 +413,7 @@ namespace DND
 		return _exeName;
 	}
 
-	void System_imp::AttachZip(const String& path, const String& passkey)
+	bool System_imp::AttachZip(const String& path, const String& passkey)
 	{
 		unzFile file;
 		char buffer[DEAULT_PATH_MAX_SIZE] = { 0 };
@@ -423,7 +422,7 @@ namespace DND
 		if (!file)
 		{
 			debug_warn(String(L"DND: zip °ü attachÊ§°Ü£¡") + path);
-			return;
+			return false;
 		}
 
 		ZipFile* zip_file = new ZipFile();
@@ -432,6 +431,8 @@ namespace DND
 
 		_zips.push_back(zip_file);
 		unzClose(file);
+
+		return true;
 	}
 
 	void System_imp::SetShowCursor(bool show)
