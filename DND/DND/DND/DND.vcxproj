@@ -76,15 +76,16 @@
     <ClInclude Include="ZLIB\crc32.h" />
     <ClInclude Include="ZLIB\crypt.h" />
     <ClInclude Include="ZLIB\deflate.h" />
+    <ClInclude Include="ZLIB\gzguts.h" />
     <ClInclude Include="ZLIB\inffast.h" />
     <ClInclude Include="ZLIB\inffixed.h" />
     <ClInclude Include="ZLIB\inflate.h" />
     <ClInclude Include="ZLIB\inftrees.h" />
     <ClInclude Include="ZLIB\ioapi.h" />
+    <ClInclude Include="ZLIB\mztools.h" />
     <ClInclude Include="ZLIB\trees.h" />
     <ClInclude Include="ZLIB\unzip.h" />
     <ClInclude Include="ZLIB\zconf.h" />
-    <ClInclude Include="ZLIB\zconf.in.h" />
     <ClInclude Include="ZLIB\zip.h" />
     <ClInclude Include="ZLIB\zlib.h" />
     <ClInclude Include="ZLIB\zutil.h" />
@@ -129,14 +130,23 @@
     <ClCompile Include="src\DNDString.cpp" />
     <ClCompile Include="src\DNDSystem_imp.cpp" />
     <ClCompile Include="ZLIB\adler32.c" />
+    <ClCompile Include="ZLIB\compress.c" />
     <ClCompile Include="ZLIB\crc32.c" />
+    <ClCompile Include="ZLIB\deflate.c" />
+    <ClCompile Include="ZLIB\gzclose.c" />
+    <ClCompile Include="ZLIB\gzlib.c" />
+    <ClCompile Include="ZLIB\gzread.c" />
+    <ClCompile Include="ZLIB\gzwrite.c" />
+    <ClCompile Include="ZLIB\infback.c" />
     <ClCompile Include="ZLIB\inffast.c" />
     <ClCompile Include="ZLIB\inflate.c" />
     <ClCompile Include="ZLIB\inftrees.c" />
     <ClCompile Include="ZLIB\ioapi.c" />
+    <ClCompile Include="ZLIB\mztools.c" />
     <ClCompile Include="ZLIB\trees.c" />
     <ClCompile Include="ZLIB\uncompr.c" />
     <ClCompile Include="ZLIB\unzip.c" />
+    <ClCompile Include="ZLIB\zip.c" />
     <ClCompile Include="ZLIB\zutil.c" />
   </ItemGroup>
   <ItemGroup>
@@ -192,8 +202,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(WindowsSDK_IncludePath);..\..\dx11_sdk\include;..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\libzplay-2.02_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatDebug;..\..\libzplay-2.02_sdk\lib;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\libpng1630\;$(WindowsSDK_IncludePath);..\..\dx11_sdk\include;..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\Effects11\Inc;..\..\libzplay-2.02_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\Win32;..\..\libzplay-2.02_sdk\lib;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
     <ExcludePath>
     </ExcludePath>
   </PropertyGroup>
@@ -224,7 +234,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;zlib.lib;libpng16.lib;freetype28d.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;libzplay.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;libpngd.lib;freetype28d.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;libzplay.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

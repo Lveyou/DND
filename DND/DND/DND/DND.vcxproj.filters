@@ -12,7 +12,7 @@
       <UniqueIdentifier>{3db7370d-efc7-4652-8a30-fe06b0505ab1}</UniqueIdentifier>
     </Filter>
     <Filter Include="ZLIB">
-      <UniqueIdentifier>{922bfe67-8421-49f2-b675-74edb0d697f9}</UniqueIdentifier>
+      <UniqueIdentifier>{f490f235-e755-4d5e-94de-550cd3aed674}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +178,9 @@
     <ClInclude Include="include\DNDStreamOutput.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDStreamInput.h">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="ZLIB\crc32.h">
       <Filter>ZLIB</Filter>
     </ClInclude>
@@ -185,6 +188,9 @@
       <Filter>ZLIB</Filter>
     </ClInclude>
     <ClInclude Include="ZLIB\deflate.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="ZLIB\gzguts.h">
       <Filter>ZLIB</Filter>
     </ClInclude>
     <ClInclude Include="ZLIB\inffast.h">
@@ -202,6 +208,9 @@
     <ClInclude Include="ZLIB\ioapi.h">
       <Filter>ZLIB</Filter>
     </ClInclude>
+    <ClInclude Include="ZLIB\mztools.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
     <ClInclude Include="ZLIB\trees.h">
       <Filter>ZLIB</Filter>
     </ClInclude>
@@ -209,9 +218,6 @@
       <Filter>ZLIB</Filter>
     </ClInclude>
     <ClInclude Include="ZLIB\zconf.h">
-      <Filter>ZLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="ZLIB\zconf.in.h">
       <Filter>ZLIB</Filter>
     </ClInclude>
     <ClInclude Include="ZLIB\zip.h">
@@ -222,9 +228,6 @@
     </ClInclude>
     <ClInclude Include="ZLIB\zutil.h">
       <Filter>ZLIB</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DNDStreamInput.h">
-      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -339,10 +342,34 @@
     <ClCompile Include="src\DNDStreamOutput.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\DNDStreamInput.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="ZLIB\adler32.c">
       <Filter>ZLIB</Filter>
     </ClCompile>
+    <ClCompile Include="ZLIB\compress.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
     <ClCompile Include="ZLIB\crc32.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLIB\deflate.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLIB\gzclose.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLIB\gzlib.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLIB\gzread.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLIB\gzwrite.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLIB\infback.c">
       <Filter>ZLIB</Filter>
     </ClCompile>
     <ClCompile Include="ZLIB\inffast.c">
@@ -357,6 +384,9 @@
     <ClCompile Include="ZLIB\ioapi.c">
       <Filter>ZLIB</Filter>
     </ClCompile>
+    <ClCompile Include="ZLIB\mztools.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
     <ClCompile Include="ZLIB\trees.c">
       <Filter>ZLIB</Filter>
     </ClCompile>
@@ -366,11 +396,11 @@
     <ClCompile Include="ZLIB\unzip.c">
       <Filter>ZLIB</Filter>
     </ClCompile>
-    <ClCompile Include="ZLIB\zutil.c">
+    <ClCompile Include="ZLIB\zip.c">
       <Filter>ZLIB</Filter>
     </ClCompile>
-    <ClCompile Include="src\DNDStreamInput.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="ZLIB\zutil.c">
+      <Filter>ZLIB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

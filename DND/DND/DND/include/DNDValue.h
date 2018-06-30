@@ -24,6 +24,7 @@ namespace DND
 	const String DEFAULT_CONSOLE_TITLE = L"DNDDebuggerConsole - author:Lveyou";
 	const UINT32 DEFAULT_STREAM_SIZE = 32;
 	const UINT32 DEAULT_PATH_MAX_SIZE = 256;
+	const String DEAULT_EMPTY_STRING = L"";
 }
 
 

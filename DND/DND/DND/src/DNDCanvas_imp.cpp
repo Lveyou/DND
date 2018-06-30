@@ -149,6 +149,13 @@ namespace DND
 		_tex->AddImageRect(register_ID, form_ID, rect);
 	}
 
+	UINT32 Canvas_imp::RegisterImageRect(const Image* img, const Rect& rect)
+	{
+		RegisterImageRect(_systemUseID++, img, rect);
+
+		return _systemUseID - 1;
+	}
+
 	const Image* Canvas_imp::GetImage()
 	{
 		return _tex->_img;

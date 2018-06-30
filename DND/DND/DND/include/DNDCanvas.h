@@ -43,6 +43,8 @@ namespace DND
 		virtual void ReplaceImageAllFast(UINT32 img_ID, const Image* img) = 0;
 		//注册图像部分
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) = 0;
+		//注册图像部分，自动分配id
+		virtual UINT32 RegisterImageRect(const Image* img, const Rect& rect) = 0;
 		//从已有图像注册图像部分
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) = 0;
 

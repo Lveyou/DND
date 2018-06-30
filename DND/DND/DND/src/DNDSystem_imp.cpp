@@ -5,10 +5,11 @@
 #include "DNDFont.h"
 #include "DNDCoor.h"
 
-#include "../ZLIB/unzip.h"
+#include "..\ZLIB\unzip.h"
 
 #include <fstream>
 #include<Shlobj.h>
+
 #pragma comment(lib,"Shell32.lib")
 
 namespace DND
@@ -424,6 +425,7 @@ namespace DND
 			debug_warn(String(L"DND: zip °ü attachÊ§°Ü£¡") + path);
 			return false;
 		}
+		
 
 		ZipFile* zip_file = new ZipFile();
 		strcpy_s(zip_file->name, buffer);

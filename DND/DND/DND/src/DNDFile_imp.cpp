@@ -2,6 +2,7 @@
 #include "DNDDebug.h"
 #include <fstream>
 #include "DNDDebug.h"
+#include "DNDValue.h"
 
 namespace DND
 {
@@ -15,7 +16,7 @@ namespace DND
 
 
 
-	void File_imp::OpenFile(const String& path)
+	bool File_imp::OpenFile(const String& path)
 	{
 		m_path = path;
 		wifstream in;
@@ -25,7 +26,7 @@ namespace DND
 		if (!in)
 		{
 			debug_warn(String(L"DND: 打开文件失败") + path);
-			return;
+			return false;
 		}
 		
 
@@ -47,14 +48,14 @@ namespace DND
 				{
 					//assert(0 && L"DNDFile 读取结束！");
 					in.close();
-					return;
+					return true;
 				}
 				else if (temp[0] != 0)
 					str_name = temp;
 				else
 				{
 					in.close();
-					return;
+					return false;
 				}
 
 				temp[0] = 0;
@@ -63,7 +64,7 @@ namespace DND
 				{
 					debug_warn(String(L"DND: File匹配等号失败: ") + path + L": 第" + String(i) + L"个值");
 					in.close();
-					return;
+					return false;
 				}
 
 				temp[0] = 0;
@@ -75,7 +76,7 @@ namespace DND
 					debug_warn(String(L"DND: File匹配值失败: ") + path + L": 第" + String(i) + L"个值");
 					in.close();
 
-					return;
+					return false;
 				}
 
 				m_strings[str_name] = str_value;
@@ -87,14 +88,30 @@ namespace DND
 		{
 			debug_warn(String(L"DND: File匹配首行失败: ") + path);
 			in.close();
+			return false;
 		}
 	}
 
-	String File_imp::GetValue(const String& name)
+	const String& File_imp::GetValue(const String& name)
 	{
 		if (m_strings.count(name) > 0)
 			return m_strings[name];
-		return L"";
+		return DEAULT_EMPTY_STRING;
+	}
+
+	const DND::String& File_imp::GetValue(UINT32 i)
+	{
+		auto& iter = m_strings.begin();
+
+		if (i == 0)
+			return iter->second;
+
+		while (i--)
+		{
+			iter++;
+		}
+
+		return iter->second;
 	}
 
 	void File_imp::CreateFile(const String& path)
@@ -134,6 +151,27 @@ namespace DND
 		out << L"[-]";
 	}
 
+
+	const DND::String& File_imp::GetKey(UINT32 i)
+	{
+		auto& iter = m_strings.begin();
+
+		if (i == 0)
+			return iter->first;
+
+		while (i--)
+		{
+			iter++;
+		}
+
+		return iter->first;
+
+	}
+
+	UINT32 File_imp::GetLength()
+	{
+		return m_strings.size();
+	}
 
 }
 

@@ -178,7 +178,7 @@ namespace DND
 	}
 
 	
-	int String::GetInt()
+	int String::GetInt() const
 	{
 		int var = 0;
 		swscanf_s(GetWcs(), L"%d", &var);

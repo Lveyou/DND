@@ -46,7 +46,7 @@ namespace DND
 		void GetWideCharStr(WCHAR* target, UINT32 max_len) const;//获得宽字符数组
 		void GetMultiByteStr(char* target, UINT32 max_len) const;//获取字符数组
 
-		int GetInt();//返回int
+		int GetInt() const;//返回int
 
 		void Clear();//设为空串
 		void Pop();//去掉结尾

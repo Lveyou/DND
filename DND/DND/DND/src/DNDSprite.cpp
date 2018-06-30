@@ -169,10 +169,10 @@ namespace DND
 		_coor = NULL;
 		_rigidBody = NULL;
 	}
-	Sprite* Sprite::Clone(Canvas* canvas)
+	Sprite* Sprite::Clone(Canvas* canvas /*= NULL*/)
 	{
 		Sprite* spr;
-		if (canvas)
+		if (canvas && (canvas != _canvas))
 		{
 			UINT32 id = ((Canvas_imp*)canvas)->_systemUseID++;
 			canvas->RegisterImageRect(
@@ -191,8 +191,7 @@ namespace DND
 		if (_coor)
 			//spr->_coor = _coor->Clone(); 17-10-12 CreateSprite已经分配了coor
 			spr->_coor->Copy(_coor);
-		else
-			_coor = NULL;
+		
 		if (_rigidBody)
 			int i = 3;//TODO: clone
 		spr->_color[0] = _color[0];

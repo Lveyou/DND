@@ -34,6 +34,7 @@ namespace DND
 		virtual void ReplaceImageAll(UINT32 img_ID, const Image* img) override;
 		virtual void ReplaceImageAllFast(UINT32 img_ID, const Image* img) override;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) override;
+		virtual UINT32 RegisterImageRect(const Image* img, const Rect& rect) override;
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) override;
 		virtual const Image* GetImage() override;
 		virtual Coor* GetCoor() override;

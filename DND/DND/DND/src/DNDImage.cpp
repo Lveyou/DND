@@ -312,10 +312,8 @@ namespace DND
 			return NULL;
 		}
 		//初始化pnglib 
-		static png_structp png_ptr = NULL;
-		if (!png_ptr)
-			png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
-				NULL, NULL, NULL);
+		png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
+			NULL, NULL, NULL);
 		if (!png_ptr)
 		{
 			fclose(fp);
@@ -338,11 +336,12 @@ namespace DND
 			debug_err(0 && L"DND: 加载Image时pnglib出现错误！");
 			return NULL;
 		}
+		
 		//设置数据源
 		png_init_io(png_ptr, fp);
+		
 		//表明文件头已处理
-		png_set_sig_bytes(png_ptr, 8);
-
+		png_set_sig_bytes(png_ptr, number);
 		//读png
 		png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_EXPAND, 0);
 			

@@ -25,15 +25,20 @@ namespace DND
 		static File* Create();
 
 		
-
-		virtual void OpenFile(const String& path) = 0;
-		virtual String GetValue(const String& name) = 0;
+		virtual ~File() {};
+		virtual bool OpenFile(const String& path) = 0;
+		virtual const String& GetValue(const String& name) = 0;
 
 		virtual void CreateFile(const String& path) = 0;
 		virtual void SetValue(const String& name, const String& value) = 0;
 
 		virtual void Save() = 0;//修改之后得保存
 
+		//获取第i个键值，用于遍历 下标从0开始
+		virtual const String& GetKey(UINT32 i) = 0;
+		virtual const String& GetValue(UINT32 i) = 0;
+
+		virtual UINT32 GetLength() = 0;
 	private:
 		
 	};
