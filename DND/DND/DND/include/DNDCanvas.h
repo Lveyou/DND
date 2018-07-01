@@ -22,6 +22,7 @@ namespace DND
 	class Text;
 	class Coor;
 	class Sprite9;
+	class Tile;
 	class DLL_API Canvas
 	{
 	public:
@@ -34,7 +35,7 @@ namespace DND
 		virtual Sprite9* CreateSprite9(const Image* img, const Rect& xxyy, Color color = Color::WHITE) = 0;
 		virtual Sprite* GetCharSprite(const String& name, unsigned font_size, wchar_t ch) = 0;
 		
-
+		virtual Tile* CreateTile(UINT32 img_ID, const Quad& quad, Color color = Color::WHITE) = 0;
 		//×¢²áÍ¼ÏñÈ«²¿
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) = 0;
 		//Ìæ»»Í¼ÏñÈ«²¿

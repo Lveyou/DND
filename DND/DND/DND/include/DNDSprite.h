@@ -21,6 +21,30 @@ namespace DND
 {
 	class Canvas;
 	class RigidBody;
+	//Clone时，不指明画布则为自己的画布
+
+
+	//Tile 先于Sprite绘制，但本身没有order，先调用Render的先绘制
+	class DLL_API Tile
+	{
+		friend class Canvas_imp;
+		friend class Text_imp;
+		friend class RigidBody_imp;
+
+	public:
+		void Render();
+		void Offset(Vector2 offset);
+		Tile* Clone(Canvas* canvas = NULL);
+	private:
+		Quad _quad;
+		Color _color;
+		Canvas* _canvas;
+		unsigned _imageRectID;
+		Vector2 _offset;
+
+	
+	};
+
 	class DLL_API Sprite
 	{
 		friend class Canvas_imp;

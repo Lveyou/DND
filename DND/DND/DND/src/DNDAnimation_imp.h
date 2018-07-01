@@ -35,9 +35,10 @@ namespace DND
 
 		virtual bool IsPickup() override;
 		virtual void Play() override;
-		virtual Animation* Clone() override;
-		virtual Animation* Clone(UINT32 begin, UINT32 end) override;
+		virtual Animation* Clone(Canvas* canvas = NULL) override;
+		virtual Animation* Clone(UINT32 begin, UINT32 end, Canvas* canvas = NULL) override;
 		virtual void Copy(Animation* b) override;
+		~Animation_imp();
 	private:
 		UINT32 _fps;
 		vector<Sprite*> _listSpr;

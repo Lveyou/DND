@@ -85,6 +85,13 @@ namespace DND
 		return (a - vb.a) < 0.001f && (b - vb.b) < 0.001f;
 	}
 
+	DND::Vector2 Vector2::operator+=(const Vector2& vb)
+	{
+		a += vb.a;
+		b += vb.b;
+		return *this;
+	}
+
 	DND::Vector2 Vector2::operator-()
 	{
 		return Vector2(-a, -b);

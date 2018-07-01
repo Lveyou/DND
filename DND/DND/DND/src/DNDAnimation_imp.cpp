@@ -172,7 +172,7 @@ namespace DND
 
 	}
 
-	DND::Animation* Animation_imp::Clone()
+	DND::Animation* Animation_imp::Clone(Canvas* canvas)
 	{
 		Animation_imp* ret = new Animation_imp;
 		ret->_fps = _fps;
@@ -181,12 +181,12 @@ namespace DND
 
 		for (auto& iter : _listSpr)
 		{
-			ret->PushBack(iter->Clone());
+			ret->PushBack(iter->Clone(canvas));
 		}
 		return ret;
 	}
 
-	DND::Animation* Animation_imp::Clone(UINT32 begin, UINT32 end)
+	DND::Animation* Animation_imp::Clone(UINT32 begin, UINT32 end, Canvas* canvas)
 	{
 		if (begin == 0)
 		{
@@ -200,7 +200,7 @@ namespace DND
 
 		for (UINT32 i = begin; i <= end; i++)
 		{
-			ret->PushBack(_listSpr[i - 1]->Clone());
+			ret->PushBack(_listSpr[i - 1]->Clone(canvas));
 		}
 		return ret;
 	}
@@ -224,6 +224,16 @@ namespace DND
 		{
 			PushBack(iter->Clone());
 		}
+	}
+
+	Animation_imp::~Animation_imp()
+	{
+		for (auto& iter : _listSpr)
+		{
+			delete iter;
+		}
+
+		delete _coor;
 	}
 
 	DND::Sprite* Animation_imp::GetSprite(UINT32 n)

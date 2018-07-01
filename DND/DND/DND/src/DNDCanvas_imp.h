@@ -12,6 +12,7 @@ namespace DND
 	const UINT32 CANVAS_SYS_ID_START = 1000000000;
 	struct Vertex2D;
 	class Sprite9;
+	class Tile;
 	struct CharSpriteNode
 	{
 		Sprite* spr;
@@ -30,6 +31,8 @@ namespace DND
 		virtual Sprite9* CreateSprite9(const Image* img, const Rect& xxyy, Color color = Color::WHITE) override;
 		virtual Sprite* GetCharSprite(const String& name, unsigned font_size, wchar_t ch) override;
 		
+		virtual Tile* CreateTile(UINT32 img_ID, const Quad& quad, Color color = Color::WHITE) override;
+
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) override;
 		virtual void ReplaceImageAll(UINT32 img_ID, const Image* img) override;
 		virtual void ReplaceImageAllFast(UINT32 img_ID, const Image* img) override;
@@ -54,7 +57,7 @@ namespace DND
 		//Sprites 按 绘制顺序（小的先画） 存所有 sprite
 		multimap<int, Sprite*> _sprites;
 
-		
+		list<Tile*> _tiles;
 		//顶点缓存
 		ID3D11Buffer* _bufferVertex;
 		//顶点缓存(内存区)大小
@@ -73,6 +76,9 @@ namespace DND
 
 		//精灵绘制数*4
 		UINT32 _renderSprNum;
+
+		//瓦片绘制数*4
+		UINT32 _renderTileNum;
 
 	};
 

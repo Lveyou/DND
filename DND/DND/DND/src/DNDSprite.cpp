@@ -241,5 +241,39 @@ namespace DND
 		return _color[i];
 	}
 
+	void Tile::Render()
+	{
+		((Canvas_imp*)_canvas)->_tiles.push_back(this);
+	}
+
+	void Tile::Offset(Vector2 offset)
+	{
+		_offset = offset;
+	}
+
+	DND::Tile* Tile::Clone(Canvas* canvas /*= NULL*/)
+	{
+		Tile* tile;
+		if (canvas && (canvas != _canvas))
+		{
+			UINT32 id = ((Canvas_imp*)canvas)->_systemUseID++;
+			canvas->RegisterImageRect(
+				id,
+				_canvas->GetImage(),
+				_canvas->GetImageRect(_imageRectID));
+			tile = canvas->CreateTile(id, _quad, Color::WHITE);
+		}
+		else
+		{
+			tile = _canvas->CreateTile(_imageRectID, _quad, Color::WHITE);
+		}
+
+		
+		tile->_color = _color;
+		tile->_offset = _offset;
+
+		return tile;
+	}
+
 }
 

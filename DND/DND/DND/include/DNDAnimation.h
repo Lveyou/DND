@@ -35,9 +35,10 @@ namespace DND
 
 		virtual bool IsPickup() = 0;
 		virtual void Play() = 0;
-		virtual Animation* Clone() = 0;
-		virtual Animation* Clone(UINT32 begin, UINT32 end) = 0;
+		virtual Animation* Clone(Canvas* canvas = NULL) = 0;
+		virtual Animation* Clone(UINT32 begin, UINT32 end, Canvas* canvas = NULL) = 0;
 		virtual void Copy(Animation* b) = 0;
+		virtual ~Animation() {}
 	private:
 
 

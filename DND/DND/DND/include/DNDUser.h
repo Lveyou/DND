@@ -90,6 +90,7 @@ namespace DND
 
 		bool operator==(const Vector2& vb);
 		Vector2 operator+(const Vector2& vb);
+		Vector2 operator+=(const Vector2& vb);
 		Vector2 operator-(const Vector2& vb) const;
 		Vector2 operator/(float var);
 		Vector2 operator*(float var);

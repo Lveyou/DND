@@ -44,6 +44,8 @@ namespace DND
 		static float GetFloatMin();
 		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1,const Vector2& p2);
 	
+		//从 -x轴 开始，编号为0-7，顺时针
+		static int GetLookAt(const Vector2& p);
 
 		template<typename T>
 		static T GetBetween(T var, T min, T max)//取上界和下界，包含

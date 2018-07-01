@@ -53,6 +53,28 @@ namespace DND
 		return t1*t2 > 0 && t1*t3 > 0;//2017-10-19: 原本有判断=，但dot.y == p0.y时，均会返回真
 	}
 
+	int Math::GetLookAt(const Vector2& p)
+	{
+		if (p.a == 0 && p.b == 0)
+			return -1;
+		const float pi = 3.1415926f;
+		const float pi_1_4 = pi * 0.25f;
+		const float pi_1_8 = pi_1_4 * 0.5f;
+
+		int look_at = -1;
+		float r = atan2(p.b, p.a);
+
+		//r += (pi + pi_1_8);
+
+		r += (pi + pi_1_8);
+
+		look_at = r / pi_1_4;
+
+		look_at %= 8;
+
+		return look_at;
+	}
+
 	UINT32 DND::Math::GetIntLength(int var)
 	{
 		if (var == 0)
