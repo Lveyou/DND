@@ -62,7 +62,7 @@ namespace DND
 			KEY6,
 			KEY7,
 			KEY8,
-			KEY9,//esc下面那个键
+			KEY9,
 
 			A = 0x41,
 			B,
@@ -132,6 +132,23 @@ namespace DND
 			RCTRL,
 			LALT,
 			RALT,
+
+			VOLUME_MUTE = 0xad,
+			VOLUME_DOWN,
+			VOLUME_UP,
+
+			SYMBOL_1 = 0xba,//;:
+			SYMBOL_2,//=+
+
+			SYMBOL_3 = 0xbd,//-_
+
+			SYMBOL_4 = 0xbf,// /?
+			SYMBOL_5,// `~
+
+			SYMBOL_6 = 0xdb,// [{
+			SYMBOL_7,// \|
+			SYMBOL_8,// ]}
+			SYMBOL_9,// \|
 
 		};
 	};

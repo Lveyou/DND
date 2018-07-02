@@ -18,6 +18,7 @@ using namespace std;
 
 namespace DND
 {
+	
 	class StrVector;
 	class DLL_API String
 	{
@@ -81,6 +82,8 @@ namespace DND
 		void _init();
 		void _copy(const WCHAR* wcs);
 	};
+
+	const String STRING_EMPTY = L"";
 }
 
 #endif

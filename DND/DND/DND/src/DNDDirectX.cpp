@@ -933,7 +933,7 @@ namespace DND
 		//Get()->_dx->_present();
 
 		//todo: 这里待改为截图后GDI显示
-		_swapChain->Present(0, 0);
+		//_swapChain->Present(_vsync, 0);
 	}
 
 

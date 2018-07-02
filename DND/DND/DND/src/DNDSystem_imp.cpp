@@ -39,7 +39,7 @@ namespace DND
 		wc.hInstance = _hInstance;//实例句柄
 		wc.hIcon = (HICON)::LoadImage(NULL, L"game.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 		wc.hCursor = LoadCursor(0, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);//背景白色
+		wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);//
 		wc.lpszMenuName = 0;
 		wc.lpszClassName = L"DNDWindowClass";//窗口类名
 
