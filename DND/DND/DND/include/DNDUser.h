@@ -31,6 +31,7 @@ namespace DND
 		bool operator==(const Point& b);
 		Point operator-(const Point& b) const;
 		Point operator+(const Point& b) const;
+		Point operator+=(const Point& b);
 		Point operator*(INT32 k) const;
 	};
 

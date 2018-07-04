@@ -314,6 +314,11 @@ namespace DND
 
 
 
+	DND::Point Point::operator+=(const Point& b)
+	{
+		return Point(x += b.x, y += b.y);
+	}
+
 	Point Point::operator*(INT32 k) const
 	{
 		return Point(x * k, y * k);
