@@ -174,16 +174,7 @@ namespace DND
 
 	DND::Animation* Animation_imp::Clone(Canvas* canvas)
 	{
-		Animation_imp* ret = new Animation_imp;
-		ret->_fps = _fps;
-		ret->_coor = _coor->Clone();
-		ret->_cur = _cur;
-
-		for (auto& iter : _listSpr)
-		{
-			ret->PushBack(iter->Clone(canvas));
-		}
-		return ret;
+		return Clone(1, 0, canvas);
 	}
 
 	DND::Animation* Animation_imp::Clone(UINT32 begin, UINT32 end, Canvas* canvas)
@@ -193,6 +184,11 @@ namespace DND
 			debug_err(L"DND: Animation::Clone: 下标从1开始。");
 		}
 
+		if (end == 0)
+		{
+			end = _listSpr.size();
+		}
+
 		Animation_imp* ret = new Animation_imp;
 		ret->_fps = _fps;
 		ret->_coor = _coor->Clone();
@@ -200,7 +196,10 @@ namespace DND
 
 		for (UINT32 i = begin; i <= end; i++)
 		{
-			ret->PushBack(_listSpr[i - 1]->Clone(canvas));
+			Sprite* spr = _listSpr[i - 1]->Clone(canvas);
+
+			ret->PushBack(spr);
+			
 		}
 		return ret;
 	}

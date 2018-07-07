@@ -16,6 +16,20 @@
 #include <windows.h>
 #include "DNDMutex.h"
 
+#ifdef DND_NO_DEBUG
+
+#define debug_info(str)
+
+#define debug_notice(str)
+
+#define debug_warn(str)
+
+#define debug_err(str)
+
+#define debug_msg(str)
+
+#else
+
 #define debug_info(str)\
 	Debug::WriteLine(str, DebugLevel::INFO)
 
@@ -30,6 +44,12 @@
 
 #define debug_msg(str)\
 	Debug::WriteLine(str, DebugLevel::MSG)
+	
+
+#endif // DEBUG
+
+
+
 
 
 namespace DND

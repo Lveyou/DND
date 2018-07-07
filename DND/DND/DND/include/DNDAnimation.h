@@ -36,6 +36,7 @@ namespace DND
 		virtual bool IsPickup() = 0;
 		virtual void Play() = 0;
 		virtual Animation* Clone(Canvas* canvas = NULL) = 0;
+		//end 等于 0 则复制所有
 		virtual Animation* Clone(UINT32 begin, UINT32 end, Canvas* canvas = NULL) = 0;
 		virtual void Copy(Animation* b) = 0;
 		virtual ~Animation() {}
