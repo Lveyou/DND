@@ -27,7 +27,13 @@ namespace DND
 		static bool TestCollisionRectAndRect(const Vector4& r0, const Vector4& r1);
 		static bool TestCollisionDotInRect(const Point& dot, const Rect& rect);
 		static bool TestCollisionDotInRect(const Vector2& dot, const Vector4& rect);
-		static float GetPI();
+
+		//分子 与 分母
+		template <int N = 1, int D = 1>
+		static float GetPI()
+		{
+			return 3.1415926f * N / D;
+		}
 		static float InvSqrt(float x);
 		static int GetRandInt(int min, int max);//返回[min,max]区间的随机数
 		static float GetRandFloat(float min, float max);//此函数尚未测试正确性

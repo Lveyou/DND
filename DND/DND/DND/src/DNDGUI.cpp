@@ -96,6 +96,7 @@ namespace DND
 					if (input->KeyState(KeyCode::MOUSE_L))
 					{
 						_state = DOWN;
+						
 					}
 					else
 					{
@@ -127,6 +128,7 @@ namespace DND
 					{
 						_clickControl = this;
 						_state = DOWN;
+						
 					}
 					else
 					{
@@ -201,6 +203,7 @@ namespace DND
 			if (_is_pickup() && input->KeyDown(KeyCode::MOUSE_L))
 			{
 				_open = true;
+				
 			}
 
 			_state = _open ? DOWN : NORMAL;

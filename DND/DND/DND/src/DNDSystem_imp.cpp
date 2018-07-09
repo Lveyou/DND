@@ -4,11 +4,13 @@
 #include "DNDValue.h"
 #include "DNDFont.h"
 #include "DNDCoor.h"
+#include "DNDGUI.h"
 
 #include "..\ZLIB\unzip.h"
 
 #include <fstream>
 #include<Shlobj.h>
+
 
 #pragma comment(lib,"Shell32.lib")
 
@@ -441,6 +443,7 @@ namespace DND
 	{
 		ShowCursor(show);
 	}
+
 
 	System_imp::~System_imp()
 	{

@@ -32,6 +32,8 @@ namespace DND
 		virtual void SetColor(Color color) = 0;
 		virtual void SetQuadOffset(Vector2 offset) = 0;
 		virtual void SetFPS(UINT32 fps) = 0;
+		virtual void Clip(bool x, bool y) = 0;
+
 
 		virtual bool IsPickup() = 0;
 		virtual void Play() = 0;

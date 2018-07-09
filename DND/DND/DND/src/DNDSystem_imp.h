@@ -72,6 +72,8 @@ namespace DND
 
 		virtual void SetShowCursor(bool show) override;
 
+		
+
 		String _windowTitle;
 		DWORD _windowStyle;
 		Size _windowSize;

@@ -45,6 +45,8 @@ namespace DND
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) override;
 		virtual Text* CreateText(const String& name, unsigned font_size) override;
 
+		virtual UINT32 GetOnGUISpriteNumber() override;
+
 		Canvas_imp(INT32 order);
 		void _render();
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
@@ -80,6 +82,8 @@ namespace DND
 		//瓦片绘制数*4
 		UINT32 _renderTileNum;
 
+		//触碰的UI精灵数
+		UINT32 _onGUISpr;
 	};
 
 }

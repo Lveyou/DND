@@ -22,6 +22,7 @@ namespace DND
 
 	class DLL_API Control
 	{
+		friend class System_imp;
 	public:
 		enum State
 		{

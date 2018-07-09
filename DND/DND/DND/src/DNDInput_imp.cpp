@@ -14,6 +14,7 @@ namespace DND
 		return !_key[vkey] && _keyPre[vkey];
 	}
 
+
 	bool Input_imp::KeyDown(int vkey)
 	{
 		return _key[vkey] && !_keyPre[vkey];

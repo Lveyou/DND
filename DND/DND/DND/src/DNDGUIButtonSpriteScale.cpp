@@ -17,6 +17,8 @@ namespace DND
 		ret->_max = max;
 		ret->_dt = dt;
 
+		ret->_spr->SetUI(true);
+
 		return ret;
 	}
 

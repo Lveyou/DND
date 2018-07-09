@@ -13,6 +13,8 @@ namespace DND
 	{
 		EditBoxSprite* ret = new EditBoxSprite;
 		ret->m_spr = spr;
+		ret->m_spr->SetUI(true);
+
 		return ret;
 	}
 

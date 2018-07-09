@@ -17,6 +17,10 @@ namespace DND
 		ret->_txt->GetCoor()->SetParent(ret->_coor->GetParent());
 		ret->_offsetTxt = txt_offset;
 
+		ret->_spr[0]->SetUI(true);
+		ret->_spr[1]->SetUI(true);
+		ret->_spr[2]->SetUI(true);
+
 		return ret;
 	}
 

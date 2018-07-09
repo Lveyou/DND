@@ -55,6 +55,9 @@ namespace DND
 		//Text
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) = 0;
 		virtual Text* CreateText(const String& name, unsigned font_size) = 0;
+
+
+		virtual UINT32 GetOnGUISpriteNumber() = 0;
 	};
 
 

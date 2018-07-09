@@ -64,9 +64,12 @@ namespace DND
 		INT32 GetOrder();
 		void SetQuad(INT32 i, Vector2 pos);
 		void SetQuadOffset(Vector2 pos);
+		//暂时无用
 		void FloorQuad();
+		//调用一次即生效，再调一次还原
 		void Clip(bool x, bool y);
 
+		void SetUI(bool open);
 
 		void CreateRigidBody(float density, float friction, float restitution);
 		RigidBody* GetRigidBody();
@@ -76,7 +79,6 @@ namespace DND
 	private:
 
 		Sprite();
-		Sprite(const Sprite& b);
 		
 		void _update_rigidbody();
 		INT32 _order;
@@ -88,6 +90,8 @@ namespace DND
 		//bool _show;
 		//bool _dead;
 		RigidBody* _rigidBody;
+		//开启后，会检测是否与鼠标重合
+		bool _ui;
 	};
 }
 

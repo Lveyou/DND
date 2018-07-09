@@ -13,6 +13,8 @@ namespace DND
 		ret->_color[3] = disable;
 		ret->_color[4] = choose;
 
+		//待改为SprUI，即添加背景spr来触发is_pickup
+
 		return ret;
 	}
 

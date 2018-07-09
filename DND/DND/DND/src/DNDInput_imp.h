@@ -32,15 +32,19 @@ namespace DND
 		virtual Point GetMousePositionDelta() override;//和上帧的鼠标位置变化
 		virtual int GetMouseWheelDelta() override;
 		virtual void SetRunBackground(bool run = false) override;
+		
 
 		virtual void OpenGamePad(bool open = true) override;
 		virtual GamePad* GetGamePad(UINT32 id) override;
+		
+
 		Input_imp();
 	private:
 		void _calc_mouse();
 		void _input_run();//键盘检测逻辑
 		bool _key[0xff];//键盘消息
 		bool _keyPre[0xff];//上一帧的状态
+
 
 		Point _mousePositionLast;
 		Point _mousePosition;

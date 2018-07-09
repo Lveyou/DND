@@ -121,6 +121,11 @@ namespace DND
 				b2_count -= _b2TimeStep;
 			}
 			_b2World->DrawDebugData();
+			//画布每帧初始化
+			for (auto& iter : _dx->_canvass)
+			{
+				iter.second->_onGUISpr = 0;
+			}
 			//用户逻辑片段
 			_fixed_update();
 			_update();

@@ -164,6 +164,7 @@ namespace DND
 		virtual Point GetMousePositionDelta() = 0;//和上帧的鼠标位置变化
 		virtual int GetMouseWheelDelta() = 0;
 		virtual void SetRunBackground(bool run = false) = 0;//是否允许后台检测按键
+		
 
 		virtual void OpenGamePad(bool open = true) = 0;
 		virtual GamePad* GetGamePad(UINT32 id) = 0;

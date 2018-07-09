@@ -249,6 +249,11 @@ namespace DND
 		return text;
 	}
 
+	UINT32 Canvas_imp::GetOnGUISpriteNumber()
+	{
+		return _onGUISpr;
+	}
+
 	void Canvas_imp::_render()
 	{
 		DirectX* directx = Game::Get()->_dx;
@@ -444,6 +449,8 @@ namespace DND
 		_create_vertex_buffer();
 
 		_coor = Coor::Create();
+
+		_onGUISpr = 0;
 	}
 
 	

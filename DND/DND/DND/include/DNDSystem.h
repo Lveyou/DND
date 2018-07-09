@@ -69,6 +69,7 @@ namespace DND
 
 		virtual void SetShowCursor(bool show) = 0;
 		
+		
 	};
 }
 

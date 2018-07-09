@@ -14,6 +14,10 @@ namespace DND
 		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[2]->GetCoor()->SetParent(ret->_coor);
 
+		ret->_spr[0]->SetUI(true);
+		ret->_spr[1]->SetUI(true);
+		ret->_spr[2]->SetUI(true);
+
 		return ret;
 	}
 

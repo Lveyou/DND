@@ -29,6 +29,10 @@ namespace DND
 	void Sprite::Render()
 	{
 		((Canvas_imp*)_canvas)->_sprites.insert(make_pair(this->_order, this));
+		if (_ui && IsPickup())
+		{
+			((Canvas_imp*)_canvas)->_onGUISpr++;
+		}
 	}
 	void Sprite::RenderFrame()
 	{
@@ -152,6 +156,11 @@ namespace DND
 		}
 	}
 
+	void Sprite::SetUI(bool open)
+	{
+		_ui = open;
+	}
+
 	Sprite::~Sprite()
 	{
 
@@ -168,6 +177,7 @@ namespace DND
 		_order = 0;
 		_coor = NULL;
 		_rigidBody = NULL;
+		_ui = false;
 	}
 	Sprite* Sprite::Clone(Canvas* canvas /*= NULL*/)
 	{
@@ -199,6 +209,8 @@ namespace DND
 		spr->_color[2] = _color[2];
 		spr->_color[3] = _color[3];
 		
+		spr->_ui = _ui;
+
 		return spr;
 	}
 

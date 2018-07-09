@@ -103,11 +103,6 @@ namespace DND
 	}
 
 
-	float DND::Math::GetPI()
-	{
-		return 3.1415926f;
-	}
-
 	float DND::Math::InvSqrt(float x)
 	{
 		float xhalf = 0.5f * x;
