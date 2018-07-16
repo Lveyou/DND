@@ -112,7 +112,7 @@ namespace DND
 
 	void Coor_imp::SetParent(Coor* coor)
 	{
-		_changed = true;
+		//_changed = true;
 		_parent = coor;
 	}
 

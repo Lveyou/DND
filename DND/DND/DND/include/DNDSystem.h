@@ -52,7 +52,7 @@ namespace DND
 		virtual String GetChooseFolder(const String& title, String root) = 0;
 		//选择文件
 		virtual bool GetChooseFile(const WCHAR* filter, String& path_name, String& name) = 0;
-		//遍历文件
+		//遍历文件（需手动加上通配符）
 		virtual bool GetPathFileFirst(const String& path, String& name) = 0;
 		virtual bool GetPathFileNext(const String& path, String& name) = 0;
 		//复制文件

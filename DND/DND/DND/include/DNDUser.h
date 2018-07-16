@@ -26,6 +26,7 @@ namespace DND
 		INT32 y;
 		Point();
 		Point(INT32 x, INT32 y);
+		Point(const String& str);
 
 		bool operator<(const Point& b) const;
 		bool operator==(const Point& b);
@@ -51,6 +52,12 @@ namespace DND
 		{
 			return Size(w / divisor, h / divisor);
 		}
+
+		Size operator/(const Point &divisor)
+		{
+			return Size(w / divisor.x, h / divisor.y);
+		}
+
 		template <typename T>
 		Size operator*(T divisor) const
 		{
@@ -146,6 +153,7 @@ namespace DND
 		Rect(Point p1, Point p2);
 		Rect(XYWH xywh);
 		Rect(INT32 x1, INT32 y1, INT32 x2, INT32 y2);
+		Rect(const String& value);
 		Size GetSize() const;
 	};
 

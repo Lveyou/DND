@@ -284,6 +284,11 @@ namespace DND
 
 	}
 
+	Point::Point(const String& str)
+	{
+		swscanf_s(str.GetWcs(), L"%d,%d", &x, &y);
+	}
+
 	bool Point::operator<(const Point& b) const
 	{
 		return (x + y * 1000000) < (b.x + b.y * 1000000);
@@ -347,6 +352,11 @@ namespace DND
 		p1.y = y1;
 		p2.x = x2;
 		p2.y = y2;
+	}
+
+	Rect::Rect(const String& value)
+	{
+		swscanf_s(value.GetWcs(), L"%d,%d,%d,%d", &p1.x, &p1.y, &p2.x, &p2.y);
 	}
 
 	Size Rect::GetSize() const

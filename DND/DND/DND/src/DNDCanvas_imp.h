@@ -34,11 +34,13 @@ namespace DND
 		virtual Tile* CreateTile(UINT32 img_ID, const Quad& quad, Color color = Color::WHITE) override;
 
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) override;
+		virtual UINT32 RegisterImageAll(const Image* img) override;
 		virtual void ReplaceImageAll(UINT32 img_ID, const Image* img) override;
 		virtual void ReplaceImageAllFast(UINT32 img_ID, const Image* img) override;
 		virtual void RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect) override;
 		virtual UINT32 RegisterImageRect(const Image* img, const Rect& rect) override;
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) override;
+		virtual UINT32 RegisterImageRect(unsigned form_ID, const Rect& rect) override;
 		virtual const Image* GetImage() override;
 		virtual Coor* GetCoor() override;
 		virtual Rect GetImageRect(UINT32 img_ID) override;
@@ -47,7 +49,9 @@ namespace DND
 
 		virtual UINT32 GetOnGUISpriteNumber() override;
 
-		Canvas_imp(INT32 order);
+		
+
+		Canvas_imp(INT32 order, bool mipmap = false);
 		void _render();
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
 		void _create_vertex_buffer();
@@ -84,6 +88,7 @@ namespace DND
 
 		//´¥ÅöµÄUI¾«ÁéÊı
 		UINT32 _onGUISpr;
+
 	};
 
 }

@@ -675,12 +675,12 @@ namespace DND
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
 		D3D11_VIEWPORT vp;
-		vp.Width = static_cast<float>(sys->_windowSize.w);
-		vp.Height = static_cast<float>(sys->_windowSize.h);
+		vp.Width = float(sys->_windowSize.w);
+		vp.Height = float(sys->_windowSize.h);
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
-		vp.TopLeftX = 0;
-		vp.TopLeftY = 0;
+		vp.TopLeftX = 0.0f;
+		vp.TopLeftY = 0.0f;
 
 		_deviceContext->RSSetViewports(1, &vp);
 	}
@@ -957,7 +957,7 @@ namespace DND
 	}
 
 
-	DND::Canvas* DirectX::_create_canvas(INT32 order)
+	DND::Canvas* DirectX::_create_canvas(INT32 order, bool mipmap)
 	{
 		auto iter = _canvass.find(order);
 		if (iter != _canvass.end())
@@ -966,7 +966,7 @@ namespace DND
 			return NULL;
 		}
 
-		Canvas_imp* temp = new Canvas_imp(order);
+		Canvas_imp* temp = new Canvas_imp(order, mipmap);
 		_canvass.insert(make_pair(order, temp));
 		return temp;
 	}

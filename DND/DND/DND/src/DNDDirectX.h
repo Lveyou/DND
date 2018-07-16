@@ -184,7 +184,7 @@ namespace DND
 		//深度模板视图
 		ID3D11DepthStencilView* _depthStencilView;
 		//Canvas 相关的内容
-		Canvas* _create_canvas(INT32 order);
+		Canvas* _create_canvas(INT32 order, bool mipmap);
 		map<INT32, Canvas_imp*> _canvass;
 		void _update_canvass();
 		void _render_canvass();

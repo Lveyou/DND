@@ -6,8 +6,9 @@
 
 namespace DND
 {
-	Texture::Texture()
+	Texture::Texture(bool mipmap)
 	{
+		_bMipmap = mipmap;
 		_texture = NULL;
 		_shaderResourceView = NULL;
 		_size = 1024;
@@ -176,9 +177,9 @@ namespace DND
 		Rect vector4 = _imageRects[image_rect_ID];
 
 		if (index == 0 || index == 3)
-			return static_cast<float>(vector4.p1.x) / _size;
+			return float(vector4.p1.x) / _size;
 		else
-			return static_cast<float>(vector4.p2.x) / _size;
+			return float(vector4.p2.x) / _size;
 	}
 
 	float Texture::GetTv(unsigned image_rect_ID, unsigned index)
@@ -186,9 +187,9 @@ namespace DND
 		Rect vector4 = _imageRects[image_rect_ID];
 
 		if (index == 0 || index == 1)
-			return static_cast<float>(vector4.p1.y) / _size;
+			return float(vector4.p1.y) / _size;
 		else
-			return static_cast<float>(vector4.p2.y) / _size;
+			return float(vector4.p2.y) / _size;
 	}
 	//于2017-06-10修改 吴泔游
 	//传入WH,返回XY
@@ -340,7 +341,7 @@ namespace DND
 		desc.CPUAccessFlags = 0;
 		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		desc.Height = _size;
-		desc.MipLevels = TEXTURE_MIPMAP_LEVELS;
+		desc.MipLevels = _bMipmap ? TEXTURE_MIPMAP_LEVELS : 1;
 		desc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 		desc.SampleDesc = directx->_swapChainDesc.SampleDesc;
 		desc.Usage = D3D11_USAGE_DEFAULT;
@@ -370,8 +371,8 @@ namespace DND
 	{
 		DirectX* directx = Game::Get()->_dx;
 		D3D11_SHADER_RESOURCE_VIEW_DESC desc;
-		desc.Texture2D.MipLevels = TEXTURE_MIPMAP_LEVELS;
-		desc.Texture2D.MostDetailedMip = 0;
+		desc.Texture2D.MipLevels = _bMipmap ? TEXTURE_MIPMAP_LEVELS : 1;
+		desc.Texture2D.MostDetailedMip = TEXTURE_MOST_DETAILED_MIP;
 		desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		if (FAILED(directx->_device->CreateShaderResourceView(

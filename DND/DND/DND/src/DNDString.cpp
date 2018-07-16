@@ -185,6 +185,13 @@ namespace DND
 		return var;
 	}
 
+	float String::GetFloat() const
+	{
+		float var = 0.0f;
+		swscanf_s(GetWcs(), L"%f", &var);
+		return var;
+	}
+
 	void String::Clear()
 	{
 		p->resize(1, 0);
@@ -295,20 +302,20 @@ namespace DND
 
 	UINT32 String::Split(WCHAR wc, String* strs, UINT32 max_size) const
 	{
-		auto itor_begin = p->begin();
-		auto itor_find = itor_begin;
+		auto iter_begin = p->begin();
+		auto iter_find = iter_begin;
 	
 		UINT32 i = 0;
 		while (i < max_size)
 		{
-			itor_find = find(itor_begin, p->end(), wc);
+			iter_find = find(iter_begin, p->end(), wc);
 
-			if (p->end() == itor_find)
+			if (p->end() == iter_find)
 				return i;
 			else
 			{
-				strs[i] = &StrVector(&vector<WCHAR>(itor_begin, itor_find));
-				itor_begin = itor_find;
+				strs[i] = &StrVector(&vector<WCHAR>(iter_begin, iter_find));
+				iter_begin = iter_find + 1;
 			}
 			++i;
 		}

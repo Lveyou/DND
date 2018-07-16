@@ -19,10 +19,11 @@ using namespace std;
 namespace DND
 {
 	const int TEXTURE_MIPMAP_LEVELS = 8;
+	const int TEXTURE_MOST_DETAILED_MIP = 0;
 	class Texture
 	{
 	public:
-		Texture();
+		Texture(bool mipmap);
 		void SetImage(const Image* img);
 		void AddImageRect(UINT32 ID, const Image* img, const Rect& rect);
 		void ReplaceImageRect(UINT32 ID, const Image* img, const Rect& rect);
@@ -49,6 +50,8 @@ namespace DND
 		~Texture();
 		Image* _img;
 		Image* _imgTemp;
+
+		bool _bMipmap;
 	};
 }
 

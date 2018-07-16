@@ -48,6 +48,7 @@ namespace DND
 		void GetMultiByteStr(char* target, UINT32 max_len) const;//获取字符数组
 
 		int GetInt() const;//返回int
+		float GetFloat() const;//返回float
 
 		void Clear();//设为空串
 		void Pop();//去掉结尾
@@ -74,9 +75,10 @@ namespace DND
 		//==================工具==================
 		bool IsHaveLetter();//是否含有字母
 
-		//此函数有bug，17-10-17
-		UINT32 Split(WCHAR wc, String* strs, UINT32 max_size) const;//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
+		//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
+		UINT32 Split(WCHAR wc, String* strs, UINT32 max_size) const;
 		static String Format(UINT32 max_size, const WCHAR* format, ...);//max size 不包含结束符
+
 	private:
 		StrVector* p;
 		void _init();

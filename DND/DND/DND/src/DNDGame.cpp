@@ -88,7 +88,7 @@ namespace DND
 			if(_logoTime)
 				time_cur = ::time(0);
 
-			if (_logoTime && (time_cur - _logoTimeStart < 1.0f))
+			if (_logoTime && (time_cur - _logoTimeStart < 0.5f))
 			{
 				continue;
 			}
@@ -141,6 +141,14 @@ namespace DND
 			{
 				debug_warn(L"DND: SKIP CPU -> GPU and Render!");
 				t->_except_render = 0;
+
+				//清除填充的 画布内容
+				for (auto& iter : _dx->_canvass)
+				{
+					Canvas_imp* temp = iter.second;
+					temp->_sprites.clear();
+					temp->_tiles.clear();
+				}
 			}
 			else
 			{

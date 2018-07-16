@@ -14,10 +14,10 @@
 namespace DND
 {
 
-	Canvas* Canvas::Create(INT32 order)
+	Canvas* Canvas::Create(INT32 order, bool mipmap)
 	{
 		DirectX* directx = Game::Get()->_dx;
-		return directx->_create_canvas(order);
+		return directx->_create_canvas(order, mipmap);
 	}
 
 	bool DND::CharSpriteNode::operator==(const CharSpriteNode& b)
@@ -141,6 +141,13 @@ namespace DND
 		_tex->AddImageRect(ID, img, Rect(XYWH(Point(), img->GetSize())));
 	}
 
+	UINT32 Canvas_imp::RegisterImageAll(const Image* img)
+	{
+		RegisterImageAll(_systemUseID++, img);
+
+		return _systemUseID - 1;
+	}
+
 	void Canvas_imp::ReplaceImageAll(UINT32 img_ID, const Image* img)
 	{
 		_tex->ReplaceImageRect(img_ID, img, Rect(XYWH(Point(), img->GetSize())));
@@ -159,6 +166,12 @@ namespace DND
 	void Canvas_imp::RegisterImageRect(unsigned register_ID, unsigned form_ID, const Rect& rect)
 	{
 		_tex->AddImageRect(register_ID, form_ID, rect);
+	}
+
+	UINT32 Canvas_imp::RegisterImageRect(unsigned form_ID, const Rect& rect)
+	{
+		RegisterImageRect(_systemUseID++, form_ID, rect);
+		return _systemUseID - 1;
 	}
 
 	UINT32 Canvas_imp::RegisterImageRect(const Image* img, const Rect& rect)
@@ -254,6 +267,8 @@ namespace DND
 		return _onGUISpr;
 	}
 
+
+
 	void Canvas_imp::_render()
 	{
 		DirectX* directx = Game::Get()->_dx;
@@ -325,6 +340,8 @@ namespace DND
 		//Vector2 out;
 		Point out;
 
+		const float PIXEL_OFFSET = 0.5f;
+
 		for (auto& iter : _tiles)
 		{
 			tile = iter;
@@ -333,9 +350,10 @@ namespace DND
 				//顶点变换
 				out = Vector2ToPoint(tile->_canvas->GetCoor()->ThisToWorld(tile->_quad.v[j] + tile->_offset));
 				
+				
 				_vertexs[_renderTileNum + j].pos =
-					//XMFLOAT3(out.a + 0.5f, out.b + 0.5f, 0);//这里填0
-					XMFLOAT3(out.x - 0.5f, out.y - 0.5f, 0);//这里填0
+					XMFLOAT3(out.x - PIXEL_OFFSET, out.y + PIXEL_OFFSET, 0);
+				
 
 				_vertexs[_renderTileNum + j].color.x = tile->_color.r();
 				_vertexs[_renderTileNum + j].color.y = tile->_color.g();
@@ -375,8 +393,8 @@ namespace DND
 				
 		
 				_vertexs[_renderTileNum + _renderSprNum + j].pos =
-					//XMFLOAT3(out.a + 0.5f, out.b + 0.5f, 0);//这里填0
-					XMFLOAT3(out.x - 0.5f , out.y - 0.5f, 0);//这里填0
+					XMFLOAT3(out.x - PIXEL_OFFSET, out.y + PIXEL_OFFSET, 0);
+
 					
 				_vertexs[_renderTileNum + _renderSprNum + j].color.x = spr->_color[j].r();
 				_vertexs[_renderTileNum + _renderSprNum + j].color.y = spr->_color[j].g();
@@ -437,10 +455,10 @@ namespace DND
 		}
 	}
 	
-	Canvas_imp::Canvas_imp(INT32 order)
+	Canvas_imp::Canvas_imp(INT32 order, bool mipmap)
 	{
 		_order = order;
-		_tex = new Texture();//这一步会创建一个纹理
+		_tex = new Texture(mipmap);//这一步会创建一个纹理
 
 		_vertexSize = 1024;//
 		_vertexs = new Vertex2D[_vertexSize];
@@ -451,6 +469,8 @@ namespace DND
 		_coor = Coor::Create();
 
 		_onGUISpr = 0;
+
+		
 	}
 
 	

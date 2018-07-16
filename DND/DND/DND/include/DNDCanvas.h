@@ -26,7 +26,7 @@ namespace DND
 	class DLL_API Canvas
 	{
 	public:
-		static Canvas* Create(INT32 order);
+		static Canvas* Create(INT32 order, bool mipmap = false);
 		//自动注册图像
 		virtual Sprite* CreateSprite(const String& img_name) = 0;
 		virtual Sprite* CreateSprite(const Image* img) = 0;
@@ -38,6 +38,8 @@ namespace DND
 		virtual Tile* CreateTile(UINT32 img_ID, const Quad& quad, Color color = Color::WHITE) = 0;
 		//注册图像全部
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) = 0;
+		//返回id
+		virtual UINT32 RegisterImageAll(const Image* img) = 0;
 		//替换图像全部
 		virtual void ReplaceImageAll(UINT32 img_ID, const Image* img) = 0;
 		//快速替换图像全部
@@ -48,6 +50,8 @@ namespace DND
 		virtual UINT32 RegisterImageRect(const Image* img, const Rect& rect) = 0;
 		//从已有图像注册图像部分
 		virtual void RegisterImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect) = 0;
+		//返回id
+		virtual UINT32 RegisterImageRect(unsigned form_ID, const Rect& rect) = 0;
 
 		virtual const Image* GetImage() = 0;
 		virtual Coor* GetCoor() = 0;
@@ -58,6 +62,8 @@ namespace DND
 
 
 		virtual UINT32 GetOnGUISpriteNumber() = 0;
+
+		
 	};
 
 
