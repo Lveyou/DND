@@ -27,6 +27,7 @@ namespace DND
 		virtual void RenderFrame() = 0;
 		virtual Coor* GetCoor() = 0;
 		virtual UINT32 GetLength() = 0;
+		virtual UINT32 GetOrder() = 0;
 		virtual void SetCurrent(UINT32 n) = 0;
 		virtual void SetOrder(INT32 n) = 0;
 		virtual void SetColor(Color color) = 0;

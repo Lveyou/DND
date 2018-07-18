@@ -27,6 +27,7 @@ namespace DND
 		virtual void RenderFrame() override;
 		virtual Coor* GetCoor() override;
 		virtual UINT32 GetLength() override;
+		virtual UINT32 GetOrder() override;
 		virtual void SetCurrent(UINT32 n) override;
 		virtual void SetOrder(INT32 n) override;
 		virtual void SetColor(Color color) override;

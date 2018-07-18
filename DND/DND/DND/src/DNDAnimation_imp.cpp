@@ -107,6 +107,15 @@ namespace DND
 		return _listSpr.size();
 	}
 
+	UINT32 Animation_imp::GetOrder()
+	{
+		if (_listSpr.empty())
+		{
+			return 0;
+		}
+		return _listSpr[0]->GetOrder();
+	}
+
 	void Animation_imp::SetCurrent(UINT32 n)
 	{
 		if (n >= _listSpr.size())
