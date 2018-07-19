@@ -222,10 +222,6 @@ namespace DND
 		return true;
 	}
 
-	float DND::Math::GetFloatMin()
-	{
-		return FLT_MIN;
-	}
 
 	bool DND::Math::TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir, const Vector3& v0, const Vector3& v1, const Vector3& v2)
 	{

@@ -131,11 +131,11 @@ namespace DND
 		color.GetArgb(ca, cr, cg, cb);
 
 		if (cr == 0)
-			cr = Math::GetFloatMin();
+			cr = Math::GetTypeEpsilon<float>();
 		if (cg == 0)
-			cg = Math::GetFloatMin();
+			cg = Math::GetTypeEpsilon<float>();
 		if (cb == 0)
-			cb = Math::GetFloatMin();
+			cb = Math::GetTypeEpsilon<float>();
 
 
 		UINT32 size = _size.w * _size.h;

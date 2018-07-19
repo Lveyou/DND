@@ -47,7 +47,25 @@ namespace DND
 			float& t, float& u, float& v);//射线与三角形相交
 		static bool TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir,
 			const Vector3& v0, const Vector3& v1, const Vector3& v2);//射线与三角形相交(不返回参数)
-		static float GetFloatMin();
+		//获取类型最小差值
+		template<typename T>
+		static T GetTypeEpsilon()
+		{
+			return numeric_limits<T>::epsilon();
+		}
+		//获取类型最小值
+		template<typename T>
+		static T GetTypeMax()
+		{
+			//括号可屏蔽宏
+			return (std::numeric_limits<T>::max)();
+		}
+		//获取类型最大值
+		template<typename T>
+		static T GetTypeMin()
+		{
+			return (std::numeric_limits<T>::min)();
+		}
 		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1,const Vector2& p2);
 	
 		//从 -x轴 开始，编号为0-7，顺时针
