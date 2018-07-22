@@ -40,7 +40,6 @@ namespace DND
 		static void SetSeed(UINT32 seed);//设置种子
 		static void SwapInt(int& a, int& b);
 		static void SwapFloat(float& a, float& b);
-		static float GetBetween(float var, float min, float max);//取上界和下界，包含
 		
 		static bool TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir,
 			const Vector3& v0, const Vector3& v1, const Vector3& v2,

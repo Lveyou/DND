@@ -162,15 +162,7 @@ namespace DND
 		b = temp;
 	}
 
-	float DND::Math::GetBetween(float var, float min, float max)
-	{
-		if (var < min)
-			return min;
-		else if (var > max)
-			return max;
-		else
-			return var;
-	}
+
 
 
 
