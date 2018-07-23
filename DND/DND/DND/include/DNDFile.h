@@ -27,6 +27,7 @@ namespace DND
 		
 		virtual ~File() {};
 		virtual bool OpenFile(const String& path) = 0;
+		
 		virtual const String& GetValue(const String& name) = 0;
 
 		virtual void CreateFile(const String& path) = 0;

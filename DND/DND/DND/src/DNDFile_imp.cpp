@@ -92,6 +92,8 @@ namespace DND
 		}
 	}
 
+
+
 	const String& File_imp::GetValue(const String& name)
 	{
 		if (m_strings.count(name) > 0)
@@ -118,8 +120,8 @@ namespace DND
 	{
 		m_path = path;
 		wofstream out;
-		out.imbue(locale(""));
-		out.open(path.GetWcs(), ios::out);
+		//out.imbue(locale(""));
+		out.open(path.GetWcs(), ios::out | ios::trunc);
 
 		if (!out)
 		{

@@ -235,6 +235,8 @@ namespace DND
 		d = id;
 	}
 
+
+
 	float DND::Vector4::operator[](UINT32 index)
 	{
 		return *((float*)this + index);
@@ -362,6 +364,11 @@ namespace DND
 	Size Rect::GetSize() const
 	{
 		return PointToSize(p2 - p1);
+	}
+
+	DND::String Rect::GetString() const
+	{
+		return String::Format(64, L"%d,%d,%d,%d", p1.x, p1.y, p2.x, p2.y);
 	}
 
 	XYWH::XYWH(Point ip, Size isize) :

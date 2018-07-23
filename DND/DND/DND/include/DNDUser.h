@@ -126,6 +126,7 @@ namespace DND
 		Vector4 operator-(const Vector2& v2) const;
 		Vector4 operator+(const Vector2& v2) const;
 		Vector4(const String& value);
+		
 	};
 
 	class DLL_API Vector6
@@ -155,6 +156,7 @@ namespace DND
 		Rect(INT32 x1, INT32 y1, INT32 x2, INT32 y2);
 		Rect(const String& value);
 		Size GetSize() const;
+		String GetString() const;
 	};
 
 	DLL_API Size PointToSize(const Point& p);

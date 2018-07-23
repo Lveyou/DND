@@ -49,7 +49,8 @@ namespace DND
 
 		virtual UINT32 GetOnGUISpriteNumber() override;
 
-		
+		virtual void SetImage(const String& img_name, const String& rects) override;
+		virtual void SaveImageRects(const String& rects) override;
 
 		Canvas_imp(INT32 order, bool mipmap = false);
 		void _render();
@@ -88,6 +89,9 @@ namespace DND
 
 		//触碰的UI精灵数
 		UINT32 _onGUISpr;
+
+		//自定义纹理
+		bool _bSetImage;
 
 	};
 

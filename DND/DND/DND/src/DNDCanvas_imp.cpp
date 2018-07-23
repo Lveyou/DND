@@ -8,6 +8,7 @@
 #include "DNDText_imp.h"
 #include "DNDFont.h"
 #include "DNDMath.h"
+#include "DNDFile.h"
 #include <algorithm>
 
 
@@ -138,6 +139,8 @@ namespace DND
 
 	void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 	{
+		if (_bSetImage)
+			return;
 		_tex->AddImageRect(ID, img, Rect(XYWH(Point(), img->GetSize())));
 	}
 
@@ -150,21 +153,29 @@ namespace DND
 
 	void Canvas_imp::ReplaceImageAll(UINT32 img_ID, const Image* img)
 	{
+		if (_bSetImage)
+			return;
 		_tex->ReplaceImageRect(img_ID, img, Rect(XYWH(Point(), img->GetSize())));
 	}
 
 	void Canvas_imp::ReplaceImageAllFast(UINT32 img_ID, const Image* img)
 	{
+		if (_bSetImage)
+			return;
 		_tex->ReplaceImageRectFast(img_ID, img, Rect(XYWH(Point(), img->GetSize())));
 	}
 
 	void Canvas_imp::RegisterImageRect(UINT32 ID, const Image* img, const Rect& rect)
 	{
+		if (_bSetImage)
+			return;
 		_tex->AddImageRect(ID, img, rect);
 	}
 
 	void Canvas_imp::RegisterImageRect(unsigned register_ID, unsigned form_ID, const Rect& rect)
 	{
+		if (_bSetImage)
+			return;
 		_tex->AddImageRect(register_ID, form_ID, rect);
 	}
 
@@ -236,7 +247,10 @@ namespace DND
 			}
 			//////////////////////////////
 			font->_get_char(name, font_size, temp[i], img, offset);
-			RegisterImageAll(_systemUseID, img);
+			//RegisterImageAll(_systemUseID, img);
+			//×ÖÌå±ØÐëÖØ×¢²á
+			_tex->AddImageRect(_systemUseID, img, Rect(XYWH(Point(), img->GetSize())));
+
 			Size wh = img->GetSize();
 
 
@@ -268,6 +282,61 @@ namespace DND
 	}
 
 
+
+	void Canvas_imp::SetImage(const String& img_name, const String& rects)
+	{
+		
+		Image* img = Image::Create(img_name);
+		File* file = File::Create();
+
+		if (img == NULL)
+		{
+			debug_warn(String(L"DND: Canvas_imp::SetImage: Í¼Ïñ¼ÓÔØÊ§°Ü") + img_name);
+			return;
+		}
+		if (!file->OpenFile(rects))
+		{
+			debug_warn(String(L"DND: Canvas_imp::SetImage: Í¼ÏñÇøÓòÅäÖÃ¼ÓÔØÊ§°Ü") + rects);
+			return;
+		}
+
+		_tex->SetImage(img);
+		delete img;
+
+		for (int i = 0; i < file->GetLength(); ++i)
+		{
+			_tex->_imageRects[file->GetKey(i).GetInt()] = Rect(file->GetValue(i));
+		}
+
+		_bSetImage = true;
+	}
+
+	void Canvas_imp::SaveImageRects(const String& rects)
+	{
+		File* file = File::Create();
+		file->CreateFile(rects);
+
+
+		for (auto& iter : _tex->_imageRects)
+		{
+			int id = iter.first;
+			//×ÖÌåµÄ id²»µ¼³ö
+			bool out = true;
+			for (auto& iter2 : _charSprites)
+			{
+				if (id == iter2.spr->_imageRectID)
+				{
+					out = false;
+					break;
+				}
+			}
+			if(out)
+				file->SetValue(String(id), iter.second.GetString());
+		}
+
+		file->Save();
+		delete file;
+	}
 
 	void Canvas_imp::_render()
 	{
@@ -470,6 +539,7 @@ namespace DND
 
 		_onGUISpr = 0;
 
+		_bSetImage = false;
 		
 	}
 
