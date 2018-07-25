@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DNDGUISliderSprite2.h" />
     <ClInclude Include="include\DND.h" />
     <ClInclude Include="include\DNDAnimation.h" />
     <ClInclude Include="include\DNDCanvas.h" />

@@ -58,7 +58,7 @@ namespace DND
 	{
 		if (_imageRects.find(ID) != _imageRects.end())
 		{
-			debug_err(L"Texture 插入图像区域时 使用了重复的ID！");
+			debug_err(String(L"Texture 插入图像区域时 使用了重复的ID: ") + (int)ID);
 			_imageRects.erase(ID);
 		}
 		Point out;
@@ -98,12 +98,12 @@ namespace DND
 	{
 		if (_imageRects.find(register_ID) != _imageRects.end())
 		{
-			assert(0 && L"Texture 注册已有图像区域时 使用了重复的ID！");
+			debug_err(String(L"Texture 插入图像区域时 使用了重复的ID: ") + (int)register_ID);
 			return;
 		}
 		if (_imageRects.find(form_ID) == _imageRects.end())
 		{
-			assert(0 && L"Texture 注册已有图像区域时 未找到来源ID！");
+			debug_err(String(L"Texture 插入图像区域时 未找到来源ID: ") + (int)form_ID);
 			return;
 		}
 		Rect form = _imageRects[form_ID];
@@ -120,7 +120,7 @@ namespace DND
 	{
 		if (_imageRects.find(ID) == _imageRects.end())
 		{
-			debug_err(L"Texture 插入图像区域时 未找到已有的ID！");
+			debug_err(String(L"Texture 插入图像区域时 未找到已有的ID: ") + (int)ID);
 			
 		}
 		_imageRects.erase(ID);
@@ -163,7 +163,7 @@ namespace DND
 		auto iter = _imageRects.find(ID);
 		if (iter == _imageRects.end())
 		{
-			debug_err(L"Texture 插入图像区域时 未找到已有的ID！");
+			debug_err(String(L"Texture 插入图像区域时 未找到已有的ID: ") + (int)ID);
 		}
 
 		//Point out= iter->second.p1;
@@ -212,6 +212,9 @@ namespace DND
 		while (true)
 		{
 		next:
+			//大于整图，直接返回false
+			if (size.w > _size)
+				return false;
 			//变化测试
 			if (dx + size.w + d > _size)
 			{
@@ -324,7 +327,8 @@ namespace DND
 			0, &destRegion,
 			(const void*)(buffer + offset), (img->GetSize().w)*sizeof(DWORD), 0);
 
-		directx->_deviceContext->GenerateMips(_shaderResourceView);
+		if(_bMipmap)
+			directx->_deviceContext->GenerateMips(_shaderResourceView);
 		
 	}
 

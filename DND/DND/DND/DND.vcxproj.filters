@@ -229,6 +229,9 @@
     <ClInclude Include="ZLIB\zutil.h">
       <Filter>ZLIB</Filter>
     </ClInclude>
+    <ClInclude Include="DNDGUISliderSprite2.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
