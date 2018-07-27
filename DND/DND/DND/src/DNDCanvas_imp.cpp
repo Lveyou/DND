@@ -421,7 +421,7 @@ namespace DND
 				
 				
 				_vertexs[_renderTileNum + j].pos =
-					XMFLOAT3(out.x - PIXEL_OFFSET, out.y + PIXEL_OFFSET, 0);
+					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET, 0);
 				
 
 				_vertexs[_renderTileNum + j].color.x = tile->_color.r();
@@ -462,7 +462,7 @@ namespace DND
 				
 		
 				_vertexs[_renderTileNum + _renderSprNum + j].pos =
-					XMFLOAT3(out.x - PIXEL_OFFSET, out.y + PIXEL_OFFSET, 0);
+					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET, 0);
 
 					
 				_vertexs[_renderTileNum + _renderSprNum + j].color.x = spr->_color[j].r();
