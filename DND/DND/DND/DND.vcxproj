@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DNDGUISliderSprite2.h" />
     <ClInclude Include="include\DND.h" />
     <ClInclude Include="include\DNDAnimation.h" />
     <ClInclude Include="include\DNDCanvas.h" />
@@ -37,6 +36,7 @@
     <ClInclude Include="include\DNDGUIButtonSpriteScale.h" />
     <ClInclude Include="include\DNDGUIButtonTextColor.h" />
     <ClInclude Include="include\DNDGUIEditBoxSprite.h" />
+    <ClInclude Include="include\DNDGUISliderSprite2.h" />
     <ClInclude Include="include\DNDGUISprite9.h" />
     <ClInclude Include="include\DNDGUISwitchSprite2.h" />
     <ClInclude Include="include\DNDImage.h" />
@@ -110,6 +110,7 @@
     <ClCompile Include="src\DNDGUIButtonSpriteScale.cpp" />
     <ClCompile Include="src\DNDGUIButtonTextColor.cpp" />
     <ClCompile Include="src\DNDGUIEditBoxSprite.cpp" />
+    <ClCompile Include="src\DNDGUISliderSprite2.cpp" />
     <ClCompile Include="src\DNDGUISprite9.cpp" />
     <ClCompile Include="src\DNDGUISwitchSprite2.cpp" />
     <ClCompile Include="src\DNDImage.cpp" />

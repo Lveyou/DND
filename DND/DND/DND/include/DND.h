@@ -49,6 +49,7 @@
 #include "DNDGUISwitchSprite2.h"		//SwitchSprite				2精灵开关
 #include "DNDGUIButtonSprite3.h"		//ButtonSprite				3精灵按钮
 #include "DNDGUISprite9.h"				//Sprite9					9妹精灵
+#include "DNDGUISliderSprite2.h"		//SliderSprite2				2精灵滚动条
 //////////////////////////////////////////////////////////////////////////
 
 #endif
