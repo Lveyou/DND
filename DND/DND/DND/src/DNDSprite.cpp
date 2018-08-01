@@ -163,7 +163,7 @@ namespace DND
 
 	Sprite::~Sprite()
 	{
-
+		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
 
 		//调用 Delete 删除
 		if (_coor)

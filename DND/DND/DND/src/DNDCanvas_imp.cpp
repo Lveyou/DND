@@ -247,9 +247,9 @@ namespace DND
 			}
 			//////////////////////////////
 			font->_get_char(name, font_size, temp[i], img, offset);
-			//RegisterImageAll(_systemUseID, img);
+			RegisterImageAll(_systemUseID, img);
 			//字体必须重注册
-			_tex->AddImageRect(_systemUseID, img, Rect(XYWH(Point(), img->GetSize())));
+			//_tex->AddImageRect(_systemUseID, img, Rect(XYWH(Point(), img->GetSize())));
 
 			Size wh = img->GetSize();
 
@@ -320,8 +320,8 @@ namespace DND
 		for (auto& iter : _tex->_imageRects)
 		{
 			int id = iter.first;
-			//字体的 id不导出
-			bool out = true;
+			//字体的 id导出
+			/*bool out = true;
 			for (auto& iter2 : _charSprites)
 			{
 				if (id == iter2.spr->_imageRectID)
@@ -330,8 +330,8 @@ namespace DND
 					break;
 				}
 			}
-			if(out)
-				file->SetValue(String(id), iter.second.GetString());
+			if(out)*/
+			file->SetValue(String(id), iter.second.GetString());
 		}
 
 		file->Save();
