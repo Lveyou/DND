@@ -23,6 +23,7 @@ namespace DND
 	public:
 		//精灵，缩放最小值，缩放最大值，缩放速度
 		static ButtonSpriteScale* Create(Sprite* spr, float min, float max, float dt);
+		Sprite* GetSprite();
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;

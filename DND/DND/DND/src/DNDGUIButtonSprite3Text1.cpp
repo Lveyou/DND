@@ -14,7 +14,7 @@ namespace DND
 		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[2]->GetCoor()->SetParent(ret->_coor);
-		ret->_txt->GetCoor()->SetParent(ret->_coor->GetParent());
+		ret->_txt->GetCoor()->SetParent(ret->_coor);
 		ret->_offsetTxt = txt_offset;
 
 		ret->_spr[0]->SetUI(true);
@@ -63,7 +63,7 @@ namespace DND
 			break;
 		}
 
-		_txt->GetCoor()->SetPosition(_coor->GetPosition() + _offsetTxt);
+		_txt->GetCoor()->SetPosition(_offsetTxt);
 		_txt->Render();
 	}
 
@@ -96,7 +96,7 @@ namespace DND
 		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[2]->GetCoor()->SetParent(ret->_coor);
-		ret->_txt->GetCoor()->SetParent(ret->_coor->GetParent());
+		ret->_txt->GetCoor()->SetParent(ret->_coor);
 		ret->_offsetTxt = _offsetTxt;
 		return ret;
 	}

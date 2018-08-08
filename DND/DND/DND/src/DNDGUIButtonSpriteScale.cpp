@@ -23,6 +23,11 @@ namespace DND
 	}
 
 
+	DND::Sprite* ButtonSpriteScale::GetSprite()
+	{
+		return _spr;
+	}
+
 	bool ButtonSpriteScale::_is_pickup()
 	{
 		return _spr->IsPickup();
@@ -50,10 +55,10 @@ namespace DND
 			break;
 		}
 		_cur = Math::GetBetween(_cur, _min, _max);
-		if (RigidBody* rigidbody = _spr->GetRigidBody())
+		/*if (RigidBody* rigidbody = _spr->GetRigidBody())
 			rigidbody->SetScale(Vector2(_cur, _cur));
-		else
-			_spr->GetCoor()->SetScale(Vector2(_cur, _cur));
+		else*/
+		_spr->GetCoor()->SetScale(Vector2(_cur, _cur));
 		//debug_info(String::Format(64, L"%f", _cur));
 		_spr->Render();
 	}
