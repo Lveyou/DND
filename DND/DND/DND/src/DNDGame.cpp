@@ -8,6 +8,7 @@
 #include "DNDCanvas_imp.h"
 #include "DNDBox2DDebugDraw.h"
 #include "DNDGUI.h"
+#include "DNDSound_imp.h"
 
 #include <Box2D/Box2D.h>
 #include <time.h>
@@ -59,8 +60,12 @@ namespace DND
 		canvas = Canvas::Create(0);
 		debug_notice(L"DND: init default canvas ok!");
 		//init user
+		sound = new Sound_imp;
 		_init();
 		debug_notice(L"DND: user init ok!");
+		//init sound（用户可设置是否初始化音效TODO）
+		((Sound_imp*)sound)->_init();
+		debug_notice(L"DND: sound init ok!");
 		debug_notice(L"DND: game init ok!");
 	}
 

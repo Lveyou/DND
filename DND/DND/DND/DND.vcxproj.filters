@@ -232,6 +232,9 @@
     <ClInclude Include="include\DNDGUISliderSprite2.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="src\DNDSound_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -336,9 +339,6 @@
     <ClCompile Include="src\DNDGUIButtonSprite3.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\DNDSound.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\DNDGUISprite9.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -406,6 +406,9 @@
       <Filter>ZLIB</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGUISliderSprite2.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDSound_imp.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

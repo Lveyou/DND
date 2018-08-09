@@ -11,13 +11,13 @@
 #ifndef _DND_DIRECTX_H_
 #define _DND_DIRECTX_H_
 
-#include <D3D11.h>
-#include <D3DX11.h>
-#include <d3dcompiler.h>
+#include <..\dx11_sdk\include\D3D11.h>
+#include <..\dx11_sdk\include\D3DX11.h>
+#include <..\dx11_sdk\include\d3dcompiler.h>
 #include <d3dx11effect.h>
 
 #pragma warning(disable:4838)
-#include <xnamath.h>// 关闭语句得加在头文件之前
+#include <..\dx11_sdk\include\xnamath.h>// 关闭语句得加在头文件之前
 
 #include <map>
 using namespace std;

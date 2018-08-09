@@ -70,6 +70,7 @@
     <ClInclude Include="src\DNDInput_imp.h" />
     <ClInclude Include="src\DNDNet_imp.h" />
     <ClInclude Include="src\DNDRigidBody_imp.h" />
+    <ClInclude Include="src\DNDSound_imp.h" />
     <ClInclude Include="src\DNDSystem_imp.h" />
     <ClInclude Include="src\DNDTexture.h" />
     <ClInclude Include="src\DNDText_imp.h" />
@@ -118,7 +119,7 @@
     <ClCompile Include="src\DNDMutex.cpp" />
     <ClCompile Include="src\DNDNet_imp.cpp" />
     <ClCompile Include="src\DNDRigidBody_imp.cpp" />
-    <ClCompile Include="src\DNDSound.cpp" />
+    <ClCompile Include="src\DNDSound_imp.cpp" />
     <ClCompile Include="src\DNDSprite.cpp" />
     <ClCompile Include="src\DNDStreamInput.cpp" />
     <ClCompile Include="src\DNDStreamOutput.cpp" />
@@ -236,7 +237,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;libpngd.lib;freetype28d.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;libzplay.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;libpngd.lib;freetype28d.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -270,7 +271,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;libpng.lib;freetype28.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;libzplay.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;libpng.lib;freetype28.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

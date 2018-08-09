@@ -23,7 +23,8 @@ namespace DND
 	class DirectX;
 	class Input;
 	class Canvas;
-	
+	class Sound;
+
 	class DLL_API Game
 	{	
 		friend class System_imp;
@@ -46,6 +47,7 @@ namespace DND
 		Time* time;
 		Input* input;
 		Canvas* canvas;
+		Sound* sound;
 	private:
 		DirectX* _dx;
 		b2World* _b2World;
