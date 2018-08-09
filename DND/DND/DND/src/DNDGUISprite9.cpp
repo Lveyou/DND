@@ -45,6 +45,8 @@ namespace DND
 			_spr[i]->SetQuad(2, p[cur + 5]);
 			_spr[i]->SetQuad(3, p[cur + 4]);
 		}
+
+		_putSize = put_size;
 	}
 
 	void Sprite9::Render()
@@ -64,6 +66,11 @@ namespace DND
 		{
 			iter->SetOrder(order);
 		}
+	}
+
+	DND::Size Sprite9::GetSize()
+	{
+		return _putSize;
 	}
 
 	Sprite9::Sprite9()

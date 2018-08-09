@@ -23,15 +23,18 @@ namespace DND
 		friend class Canvas_imp;
 	public:
 		Coor* GetCoor();
+		//ว๋สน p2 > p1
 		void SetPosition(const Vector4& p1p2);
 		void Render();
 		void SetOrder(int order);
+		Size GetSize();
 	private:
 		Sprite* _spr[9];
 		Coor* _coor;
 		Sprite9();
 		Rect _xxyy;
 		Size _imgSize;
+		Size _putSize;
 	};
 
 }
