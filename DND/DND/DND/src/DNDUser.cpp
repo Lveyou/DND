@@ -291,14 +291,22 @@ namespace DND
 		swscanf_s(str.GetWcs(), L"%d,%d", &x, &y);
 	}
 
-	bool Point::operator<(const Point& b) const
+
+
+	Point::Point(const PointU& b)
 	{
-		return (x + y * 1000000) < (b.x + b.y * 1000000);
+		x = b.x;
+		y = b.y;
 	}
 
 	bool Point::operator==(const Point& b)
 	{
 		return (x == b.x) && (y == b.y);
+	}
+
+	bool Point::operator!=(const Point& b)
+	{
+		return (x != b.x) || (y != b.y);
 	}
 
 	Point Point::operator-(const Point& b) const
@@ -329,6 +337,11 @@ namespace DND
 	Point Point::operator*(INT32 k) const
 	{
 		return Point(x * k, y * k);
+	}
+
+	DND::Point Point::operator/(INT32 k) const
+	{
+		return Point(x / k, y / k);
 	}
 
 	Rect::Rect(Point ip1, Point ip2) :
@@ -401,6 +414,11 @@ namespace DND
 	DLL_API Point Vector2ToPoint(const Vector2& v)
 	{
 		return Point(INT32(v.a), INT32(v.b));
+	}
+
+	DLL_API PointU PointToPointU(const Point& p)
+	{
+		return PointU(p.x, p.y);
 	}
 
 	Size StringToSize(const String& str)
@@ -494,4 +512,44 @@ namespace DND
 		v[3] = Vector2(v[0].a, v[2].b);
 	}
 
+	PointU::PointU() : x(0), y(0)
+	{
+
 	}
+
+	PointU::PointU(UINT32 ix, UINT32 iy) : x(ix), y(iy)
+	{
+
+	}
+
+	UINT32 PointU::ToIndex()
+	{
+		return (x + y * 65535);
+	}
+
+	bool PointU::operator==(const PointU& b) const
+	{
+		return (x == b.x) && (y == b.y);
+	}
+
+	bool PointU::operator!=(const PointU& b) const
+	{
+		return (x != b.x) || (y != b.y);
+	}
+
+	bool PointU::operator<(const PointU& b) const
+	{
+		return (x + y * 65535) < (b.x + b.y * 65535);
+	}
+
+	DND::PointU PointU::operator-(const PointU& b) const
+	{
+		return PointU(x >= b.x ? x - b.x : b.x - x, y >= b.y ? y - b.y : b.y - y);
+	}
+
+	DND::PointU PointU::operator+(const PointU& b) const
+	{
+		return PointU(x + b.x, y + b.y);
+	}
+
+}

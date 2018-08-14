@@ -17,7 +17,20 @@
 
 namespace DND
 {
-	
+	class DLL_API PointU
+	{
+	public:
+		//使用 ToIndex 和 < 时 x,y 范围需要限制到[0, 65535]
+		UINT32 x, y;
+		PointU();
+		PointU(UINT32 ix, UINT32 iy);
+		UINT32 ToIndex();
+		bool operator==(const PointU& b) const;
+		bool operator!=(const PointU& b) const;
+		bool operator<(const PointU& b) const;
+		PointU operator-(const PointU& b) const;
+		PointU operator+(const PointU& b) const;
+	};
 
 	class DLL_API Point
 	{
@@ -26,14 +39,18 @@ namespace DND
 		INT32 y;
 		Point();
 		Point(INT32 x, INT32 y);
+		Point(const PointU& b);
 		Point(const String& str);
-
-		bool operator<(const Point& b) const;
+		
+		//UINT32 ToUINT32();
+		//bool operator<(const Point& b) const;
 		bool operator==(const Point& b);
+		bool operator!=(const Point& b);
 		Point operator-(const Point& b) const;
 		Point operator+(const Point& b) const;
 		Point operator+=(const Point& b);
 		Point operator*(INT32 k) const;
+		Point operator/(INT32 k) const;
 	};
 
 	class DLL_API Size
@@ -164,6 +181,7 @@ namespace DND
 	DLL_API Point operator+(const Point& p, const Size& size);
 	DLL_API Rect operator+(const Rect& rect,const Point& p);
 	DLL_API Point Vector2ToPoint(const Vector2& v);
+	DLL_API PointU PointToPointU(const Point& p);
 	//字符串转换系列
 	DLL_API Size StringToSize(const String& str);
 	DLL_API Rect StringToRect(const String& str);
