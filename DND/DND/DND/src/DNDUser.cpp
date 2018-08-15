@@ -81,8 +81,8 @@ namespace DND
 
 	bool Vector2::operator==(const Vector2& vb)
 	{
-		//这里待改为std的一个方法
-		return (a - vb.a) < 0.001f && (b - vb.b) < 0.001f;
+		//浮点数判断相等
+		return Math::IsFloatEqual(a, vb.a) && Math::IsFloatEqual(b, vb.b);
 	}
 
 	DND::Vector2 Vector2::operator+=(const Vector2& vb)

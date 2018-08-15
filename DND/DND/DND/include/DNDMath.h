@@ -23,6 +23,10 @@ namespace DND
 		static UINT32 GetPow2Large(UINT32 var);
 		static UINT32 GetUIntLength(UINT32 var);
 		static UINT32 GetIntLength(int var);
+		static inline bool IsFloatEqual(float a, float b)
+		{
+			return abs(a - b) < 1e-6;
+		}
 		static bool TestCollisionRectAndRect(const Rect& r0, const Rect& r1);
 		static bool TestCollisionRectAndRect(const Vector4& r0, const Vector4& r1);
 		static bool TestCollisionDotInRect(const Point& dot, const Rect& rect);
