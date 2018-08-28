@@ -21,6 +21,21 @@ namespace DND
 		return ret;
 	}
 
+	ButtonSprite3* ButtonSprite3::Clone()
+	{
+		ButtonSprite3* ret = new ButtonSprite3;
+		ret->_spr[0] = _spr[0]->Clone();
+		ret->_spr[1] = _spr[1]->Clone();
+		ret->_spr[2] = _spr[2]->Clone();
+		
+		ret->_coor = _coor->Clone();
+		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
+		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
+		ret->_spr[2]->GetCoor()->SetParent(ret->_coor);
+	
+		return ret;
+	}
+
 	DND::Coor* ButtonSprite3::GetCoor()
 	{
 		return _coor;
