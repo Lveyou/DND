@@ -98,6 +98,11 @@ namespace DND
 		return str;
 	}
 
+	bool String::operator!=(const String& b) const
+	{
+		return wcscmp(GetWcs(), b.GetWcs()) != 0;
+	}
+
 	bool String::operator<(const String& b) const
 	{
 		return wcscmp(GetWcs(), b.GetWcs()) < 0;

@@ -37,6 +37,7 @@ namespace DND
 		String& operator=(const String& b);//=号重载
 		String operator+(const String& b) const;//连接
 		bool operator==(const String& b) const;//相同
+		bool operator!=(const String& b) const;//不相同
 		bool operator<(const String& b) const;//小于
 
 		UINT32 GetLength() const;//返回长度
