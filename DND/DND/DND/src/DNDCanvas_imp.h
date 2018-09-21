@@ -10,6 +10,7 @@ using namespace std;
 namespace DND
 {
 	const UINT32 CANVAS_SYS_ID_START = 1000000000;
+	const UINT32 CANVAS_TEXT_ID_START = 2000000000;//文本ID起始
 	struct Vertex2D;
 	class Sprite9;
 	class Tile;
@@ -51,6 +52,7 @@ namespace DND
 
 		virtual void SetImage(const String& img_name, const String& rects) override;
 		virtual void SaveImageRects(const String& rects) override;
+		virtual bool IsSetImage() override;
 
 		Canvas_imp(INT32 order, bool mipmap = false);
 		void _render();

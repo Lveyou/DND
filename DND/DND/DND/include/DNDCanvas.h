@@ -54,6 +54,7 @@ namespace DND
 		virtual UINT32 RegisterImageRect(unsigned form_ID, const Rect& rect) = 0;
 
 		virtual const Image* GetImage() = 0;
+		virtual bool IsSetImage() = 0;
 		virtual Coor* GetCoor() = 0;
 		virtual Rect GetImageRect(UINT32 img_ID) = 0;
 		//Text
@@ -67,6 +68,7 @@ namespace DND
 		virtual void SetImage(const String& img_name, const String& rects) = 0;
 		virtual void SaveImageRects(const String& rects) = 0;
 	};
+
 
 
 }

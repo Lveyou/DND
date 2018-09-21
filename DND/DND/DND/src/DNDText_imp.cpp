@@ -110,9 +110,7 @@ namespace DND
 				break;
 			default:
 
-
-
-				//这里返回的是复制的spr，同时也会添加到 画布 的 all中
+				//这里返回的是复制的spr
 				spr = m_canvas->GetCharSprite(m_font_name, m_font_size, buffer[i]);
 				if (spr == NULL)
 				{

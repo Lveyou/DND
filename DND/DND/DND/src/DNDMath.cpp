@@ -50,7 +50,11 @@ namespace DND
 		double t1 = pa.CrossProduct(pb);
 		double t2 = pb.CrossProduct(pc);
 		double t3 = pc.CrossProduct(pa);
-		return t1*t2 > 0 && t1*t3 > 0;//2017-10-19: 原本有判断=，但dot.y == p0.y时，均会返回真
+		return t1*t2 >= 0 &&
+			t1*t3 >= 0 &&
+			t2*t3 >= 0;
+		//2017-10-19: 原本有判断=，但dot.y == p0.y时，均会返回真
+		//2018-09-22: 加入t2*t3判断后有效
 	}
 
 	int Math::GetLookAt(const Vector2& p)

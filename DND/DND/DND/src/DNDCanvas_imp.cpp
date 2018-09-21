@@ -247,14 +247,14 @@ namespace DND
 			}
 			//////////////////////////////
 			font->_get_char(name, font_size, temp[i], img, offset);
-			RegisterImageAll(_systemUseID, img);
-			//字体必须重注册
-			//_tex->AddImageRect(_systemUseID, img, Rect(XYWH(Point(), img->GetSize())));
+			//字符的注册id为 起始 + 100000 * size + 加值
+			RegisterImageAll(CANVAS_TEXT_ID_START + 100000 * font_size + node.ch, img);
+			
 
 			Size wh = img->GetSize();
 
 
-			spr = CreateSprite(_systemUseID++,
+			spr = CreateSprite(CANVAS_TEXT_ID_START + 100000 * font_size + node.ch,
 				Quad(Point(0, font_size), wh, offset),
 				Color::WHITE);
 
@@ -336,6 +336,11 @@ namespace DND
 
 		file->Save();
 		delete file;
+	}
+
+	bool Canvas_imp::IsSetImage()
+	{
+		return _bSetImage;
 	}
 
 	void Canvas_imp::_render()
