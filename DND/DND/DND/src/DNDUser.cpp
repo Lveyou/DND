@@ -108,6 +108,11 @@ namespace DND
 		return a*a + b*b;
 	}
 
+	float Vector2::Angle()
+	{
+		return atan2f(b, a);
+	}
+
 	DND::Vector2 DND::Vector2::operator+(const Vector2& vb)
 	{
 		return Vector2(a + vb.a, b + vb.b);

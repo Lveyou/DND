@@ -128,6 +128,7 @@ namespace DND
 		Vector3 To_Vector3(float c = 0);
 		double CrossProduct(const Vector2& vb);//≤Ê≥À
 		float GetlengthSquared();
+		float Angle();//∑µªÿ”ÎX÷·º–Ω«
 
 	};
 
