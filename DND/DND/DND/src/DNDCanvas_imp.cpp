@@ -349,17 +349,47 @@ namespace DND
 		Gfx2D* gfx_2d = directx->_gfx2d;
 
 		
-
 		UINT a = sizeof(Vertex2D);
 		UINT b = 0;
 		directx->_deviceContext->IASetVertexBuffers(0, 1, &_bufferVertex, &a, &b);
-		
-		gfx_2d->_colorTexture->SetResource(_tex->_shaderResourceView);
-		gfx_2d->_pass->Apply(0, directx->_deviceContext);
 
-		directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
-	//	directx->_deviceContext->DrawIndexedInstanced(,_renderSprNum * 6 / 4, 0, 0);
 		
+		
+		if (_shaderType == DND_SHADER_NORMAL)
+		{
+			//tex -> 1
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+
+
+			Shader* shader = gfx_2d->_get_shader(0);
+			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
+			shader->_pass->Apply(0, directx->_deviceContext);
+
+			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+
+			//tex -> main
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+		}
+		else if(_shaderType == DND_SHADER_OVERLAY ||
+			_shaderType == DND_SHADER_DARKEN || 
+			_shaderType == DND_SHADER_CLOLOR_DODGE)
+		{
+			//tex£¬1 -> main
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+
+			Shader* shader = gfx_2d->_get_shader(_shaderType);
+
+			shader->_colorTextureBg->SetResource(directx->_rtt.mShaderResourceView);
+			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
+			shader->_pass->Apply(0, directx->_deviceContext);
+
+			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+
+			//tex£¬1 -> 1
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+		}
 	}
 	void DND::Canvas_imp::_update()
 	{
@@ -545,9 +575,14 @@ namespace DND
 		_onGUISpr = 0;
 
 		_bSetImage = false;
+		_shaderType = DND_SHADER_NORMAL;
 		
 	}
 
+	void Canvas_imp::SetShader(UINT32 type /*= 0*/)
+	{
+		_shaderType = type;
+	}
 	
 
 	

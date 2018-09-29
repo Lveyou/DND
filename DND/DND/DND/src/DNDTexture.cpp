@@ -337,7 +337,7 @@ namespace DND
 	void Texture::_create_texture2d()
 	{
 		DirectX* directx = Game::Get()->_dx;
-		//创建1024 * 1024 纹理
+		//创建纹理
 		D3D11_TEXTURE2D_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
 		desc.ArraySize = 1;

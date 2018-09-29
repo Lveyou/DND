@@ -10,11 +10,14 @@ namespace DND
 {
 	const String STRING_PATH_SHADER_SIMPLE = L"DND\\Shader\\simple.fx";
 	const String STRING_PATH_SHADER_2D = L"DND\\Shader\\2d.fx";
+	const String STRING_PATH_SHADER_2D_OVERLAY = L"DND\\Shader\\2d_overlay.fx";//叠加
+	const String STRING_PATH_SHADER_2D_DARKEN = L"DND\\Shader\\2d_darken.fx";//变暗
+	const String STRING_PATH_SHADER_2D_CLOLOR_DODGE = L"DND\\Shader\\2d_clolor_dodge.fx";//颜色减淡
 
 
 	void Gfx2D::_init()
 	{
-		_init_shader();
+		_init_all_shader();
 		debug_notice(L"DND: Gfx2D init shader ok!");
 		_create_input_layout();
 		debug_notice(L"DND: Gfx2D create input layout ok!");
@@ -33,7 +36,7 @@ namespace DND
 
 		unsigned len = ARRAYSIZE(layout);
 		D3DX11_PASS_DESC pass_desc;
-		_pass->GetDesc(&pass_desc);
+		_shader[0]._pass->GetDesc(&pass_desc);
 
 		if (FAILED(directx->_device->CreateInputLayout(
 			layout, len,
@@ -46,7 +49,17 @@ namespace DND
 		}
 	}
 
-	void Gfx2D::_init_shader()
+	void Gfx2D::_init_all_shader()
+	{
+		_init_shader(DND_SHADER_NORMAL, STRING_PATH_SHADER_2D);
+		_init_shader(DND_SHADER_OVERLAY, STRING_PATH_SHADER_2D_OVERLAY);
+		_init_shader(DND_SHADER_DARKEN, STRING_PATH_SHADER_2D_DARKEN);
+		_init_shader(DND_SHADER_CLOLOR_DODGE, STRING_PATH_SHADER_2D_CLOLOR_DODGE);
+	}
+
+	
+
+	void Gfx2D::_init_shader(UINT32 type, String path_name)
 	{
 		UINT shader_flags = 0;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -59,9 +72,9 @@ namespace DND
 
 		System_imp* sys = (System_imp*)Game::Get()->sys;
 
-		if (sys->IsFileExist(STRING_PATH_SHADER_2D))
+		if (sys->IsFileExist(path_name))
 		{
-			if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_2D.GetWcs(),
+			if (FAILED(D3DX11CompileFromFile(path_name.GetWcs(),
 				NULL, NULL, NULL, "fx_5_0",
 				shader_flags, 0, NULL,
 				&compiled_shader, &error_message, NULL)))
@@ -70,11 +83,12 @@ namespace DND
 					debug_err(String((char*)error_message->GetBufferPointer()));
 				dnd_assert(0, ERROR_00037);
 			}
+
 		}
 		else
 		{
 			UINT32 size = 0;
-			LPCSTR buffer = (LPCSTR)sys->_get_file_form_zip(STRING_PATH_SHADER_2D, size);
+			LPCSTR buffer = (LPCSTR)sys->_get_file_form_zip(path_name, size);
 			if (size == 0)
 			{
 				dnd_assert(0, ERROR_00037);
@@ -93,10 +107,10 @@ namespace DND
 			delete buffer;
 		}
 
-		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
+		dnd_assert(!FAILED(D3DX11CreateEffectFromMemory(
 			compiled_shader->GetBufferPointer(),
 			compiled_shader->GetBufferSize(),
-			0, directx->_device, &_effect)),
+			0, directx->_device, &_shader[type]._effect)),
 			ERROR_00045);
 
 		if (compiled_shader)
@@ -104,44 +118,65 @@ namespace DND
 		if (error_message)
 			error_message->Release();
 
-		_technique = _effect->GetTechniqueByName("main11");
-		dnd_assert(_technique, ERROR_00038);
+		_shader[type]._technique = _shader[type]._effect->GetTechniqueByName("main11");
+		dnd_assert(_shader[type]._technique, ERROR_00038);
 
-		_pass = _technique->GetPassByName("p0");
-		dnd_assert(_pass, ERROR_00039);
-
-
-		ID3DX11EffectVariable* variable = _effect->GetVariableByName("wvp");
-		_wvpVariable = variable->AsMatrix();
-		dnd_assert(_wvpVariable->IsValid(), ERROR_00040);
-		_reset_wvp();
+		_shader[type]._pass = _shader[type]._technique->GetPassByName("p0");
+		dnd_assert(_shader[type]._pass, ERROR_00039);
 
 
+		ID3DX11EffectVariable* variable = _shader[type]._effect->GetVariableByName("wvp");
+		_shader[type]._wvpVariable = variable->AsMatrix();
+		dnd_assert(_shader[type]._wvpVariable->IsValid(), ERROR_00040);
+		_reset_wvp(type);
+
+		//ColorTexture
 		variable = NULL;
-		variable = _effect->GetVariableByName("ColorTexture");
+		variable = _shader[type]._effect->GetVariableByName("ColorTexture");
 		dnd_assert(variable, ERROR_00041);
-		
-		_colorTexture = variable->AsShaderResource();
-		dnd_assert(_colorTexture, ERROR_00042);
-			
-		
+
+		_shader[type]._colorTexture = variable->AsShaderResource();
+		dnd_assert(_shader[type]._colorTexture, ERROR_00042);
+
+		//ColorTextureBg
+		if (type == DND_SHADER_OVERLAY ||
+			type == DND_SHADER_DARKEN ||
+			type == DND_SHADER_CLOLOR_DODGE)
+		{
+			variable = NULL;
+			variable = _shader[type]._effect->GetVariableByName("ColorTextureBg");
+			dnd_assert(variable, ERROR_00041);
+
+			_shader[type]._colorTextureBg = variable->AsShaderResource();
+			dnd_assert(_shader[type]._colorTextureBg, ERROR_00042);
+		}
+
 	}
 
-	void Gfx2D::_reset_wvp()
+	void Gfx2D::_reset_wvp(UINT32 type)
 	{
 		XMMATRIX wvp = XMLoadFloat4x4(&directx->_wvp);
-		_wvpVariable->SetMatrix((float*)&wvp);
-		//m_pass->Apply(0, directx->m_device_context);
+		_shader[type]._wvpVariable->SetMatrix((float*)&wvp);
+	}
+
+	void Gfx2D::_reset_all_wvp()
+	{
+		XMMATRIX wvp = XMLoadFloat4x4(&directx->_wvp);
+		for (auto& iter : _shader)
+		{
+			iter._wvpVariable->SetMatrix((float*)&wvp);
+		}
+	}
+
+	DND::Shader* Gfx2D::_get_shader(UINT32 type)
+	{
+		return &_shader[type];
 	}
 
 	Gfx2D::Gfx2D()
 	{
 		_inputLayout = NULL;
-		_effect = NULL;
-		_technique = NULL;
-		_pass = NULL;
-		_wvpVariable = NULL;
-		_colorTexture = NULL;
+
 		//此类只在dx初始化后使用
 		directx = Game::Get()->_dx; 
 	}
@@ -149,7 +184,10 @@ namespace DND
 	void Gfx2D::_release_all()
 	{
 		_inputLayout->Release();
-		_effect->Release();	
+		for (auto& iter : _shader)
+		{
+			iter._effect->Release();
+		}
 	}
 
 	void GfxSimple::_create_vertex_buffer_dot()
@@ -495,10 +533,13 @@ namespace DND
 		_gfx2d->_init();
 		debug_notice(L"DND: Gfx2D init all ok!");
 
+		_init_rtt();//后于wvp初始化
+		debug_notice(L"DND: directx init rtt ok!");
 		/*Gfx2D* gfx_2d = Gfx2D::Get_Instance();
 		gfx_2d->_init_2d_shader();
 		gfx_2d->_create_input_layout();*/
 		debug_notice(L"DND: directx init all ok!");
+
 		
 	}
 
@@ -600,15 +641,15 @@ namespace DND
 			c.b(),
 			c.a() };//RGBA
 
-		
-		
+		//清除 主
+		_deviceContext->ClearRenderTargetView(_mainRenderTargetView, clear_color);
+		_deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		
 		_update_canvass();
 		_gfxSimple->_update();
 
-		_deviceContext->ClearRenderTargetView(_mainRenderTargetView, clear_color);
-		_deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		
 
 		////三角形
 		_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -616,8 +657,11 @@ namespace DND
 
 		
 		//设置顶点缓存 贴图就交给 canvas了
-		
 		_render_canvass();
+
+		//清除 1
+		_deviceContext->ClearRenderTargetView(_rtt.mRenderTargetView, clear_color);
+
 
 		//点线绘图
 		_gfxSimple->_pass->Apply(0, _deviceContext);
@@ -637,6 +681,8 @@ namespace DND
 		dnd_assert(!FAILED(_device->CreateRenderTargetView(back_buffer, NULL, &_mainRenderTargetView)),
 		ERROR_00020);
 		
+		
+
 		back_buffer->Release();
 
 	}
@@ -753,7 +799,7 @@ namespace DND
 		D3D11_DEPTH_STENCIL_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
 
-		desc.DepthEnable = true;
+		desc.DepthEnable = false;
 		desc.StencilEnable = true;
 		//深度测试： 小于时 成功
 		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
@@ -778,6 +824,119 @@ namespace DND
 			ERROR_00024);
 		
 		
+	}
+
+	void DirectX::_init_rtt()
+	{
+		System_imp* sys = (System_imp*)(Game::Get()->sys);
+		Size window_size = sys->GetWindowSize();
+		//第一,填充2D纹理形容结构体,并创建2D渲染纹理
+		D3D11_TEXTURE2D_DESC textureDesc;
+		ZeroMemory(&textureDesc, sizeof(textureDesc));
+
+		textureDesc.Width = window_size.w;
+		textureDesc.Height = window_size.h;
+		textureDesc.MipLevels = 1;
+		textureDesc.ArraySize = 1;
+		textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; 
+		textureDesc.SampleDesc.Count = 1;
+		textureDesc.Usage = D3D11_USAGE_DEFAULT;
+		textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+		textureDesc.CPUAccessFlags = 0;
+		textureDesc.MiscFlags = 0;
+
+		if (FAILED(_device->CreateTexture2D(&textureDesc, NULL, &_rtt.mRenderTargetTexture)))
+		{
+			dnd_assert(0, L"DND: rtt 1");
+		}
+		
+
+		//第二，填充渲染目标视图形容体,并进行创建目标渲染视图
+		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+
+		renderTargetViewDesc.Format = textureDesc.Format;
+		renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+		renderTargetViewDesc.Texture2D.MipSlice = 0;
+		if (FAILED(_device->CreateRenderTargetView(_rtt.mRenderTargetTexture, &renderTargetViewDesc, &_rtt.mRenderTargetView)))
+		{
+			dnd_assert(0, L"DND: rtt 2");
+		}
+		
+			
+		//第三,填充着色器资源视图形容体,并进行创建着色器资源视图
+		D3D11_SHADER_RESOURCE_VIEW_DESC shaderResourceViewDesc;
+		shaderResourceViewDesc.Format = textureDesc.Format;
+		shaderResourceViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		shaderResourceViewDesc.Texture2D.MostDetailedMip = 0;
+		shaderResourceViewDesc.Texture2D.MipLevels = 1;
+
+		if (FAILED(_device->CreateShaderResourceView(_rtt.mRenderTargetTexture, &shaderResourceViewDesc, &_rtt.mShaderResourceView)))
+		{
+			dnd_assert(0, L"DND: rtt 3");
+		}
+		
+
+		//创建顶点缓存
+		D3D11_BUFFER_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+
+		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		desc.ByteWidth = sizeof(Vertex2D) * 4;
+		desc.MiscFlags = 0;
+		desc.StructureByteStride = 0;
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA data;
+		Vertex2D _vertexs[4];
+
+		_vertexs[0].pos = XMFLOAT3(0, 0, 0);
+		_vertexs[0].color.x = 1.0f;
+		_vertexs[0].color.y = 1.0f;
+		_vertexs[0].color.z = 1.0f;
+		_vertexs[0].color.w = 1.0f;
+		_vertexs[0].t.x = 0;
+		_vertexs[0].t.y = 0;
+
+		_vertexs[1].pos = XMFLOAT3(window_size.w, 0, 0);
+		_vertexs[1].color.x = 1.0f;
+		_vertexs[1].color.y = 1.0f;
+		_vertexs[1].color.z = 1.0f;
+		_vertexs[1].color.w = 1.0f;
+		_vertexs[1].t.x = 1.0f;
+		_vertexs[1].t.y = 0;
+
+		_vertexs[2].pos = XMFLOAT3(window_size.w, window_size.h, 0);
+		_vertexs[2].color.x = 1.0f;
+		_vertexs[2].color.y = 1.0f;
+		_vertexs[2].color.z = 1.0f;
+		_vertexs[2].color.w = 1.0f;
+		_vertexs[2].t.x = 1.0f;
+		_vertexs[2].t.y = 1.0f;
+
+		_vertexs[3].pos = XMFLOAT3(0, window_size.h, 0);
+		_vertexs[3].color.x = 1.0f;
+		_vertexs[3].color.y = 1.0f;
+		_vertexs[3].color.z = 1.0f;
+		_vertexs[3].color.w = 1.0f;
+		_vertexs[3].t.x = 0;
+		_vertexs[3].t.y = 1.0f;
+
+		data.pSysMem = _vertexs;
+		data.SysMemPitch = 0;
+		data.SysMemSlicePitch = 0;
+
+		dnd_assert(!FAILED(_device->CreateBuffer(&desc, &data, &_rtt._bufferVertex))
+			, ERROR_00044);
+
+	}
+
+	void DirectX::_release_rtt()
+	{
+		_rtt._bufferVertex->Release();
+		_rtt.mShaderResourceView->Release();
+		_rtt.mRenderTargetView->Release();
+		_rtt.mRenderTargetTexture->Release();
 	}
 
 	void DirectX::_reset_wvp()
@@ -889,12 +1048,15 @@ namespace DND
 		_init_render_target_view();
 		_init_depth_stencil_view();
 
-		_deviceContext->OMSetRenderTargets(1, &_mainRenderTargetView, _depthStencilView);
+		//_deviceContext->OMSetRenderTargets(1, &_mainRenderTargetView, _depthStencilView);
 		_deviceContext->OMSetDepthStencilState(_depthStencilState, 0);
 		_reset_viewport();
 		_reset_wvp();
 		_gfxSimple->_reset_wvp();
-		_gfx2d->_reset_wvp();
+		_gfx2d->_reset_all_wvp();
+
+		_release_rtt();
+		_init_rtt();
 
 	}
 

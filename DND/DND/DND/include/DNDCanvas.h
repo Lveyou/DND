@@ -16,6 +16,11 @@
 #include "DNDDLL.h"
 #include "DNDImage.h"
 
+const UINT32 DND_SHADER_NORMAL = 0;
+const UINT32 DND_SHADER_OVERLAY = 1;//叠加
+const UINT32 DND_SHADER_DARKEN = 2;//变暗
+const UINT32 DND_SHADER_CLOLOR_DODGE = 3;//颜色减淡
+
 namespace DND
 {
 	class Sprite;
@@ -61,6 +66,8 @@ namespace DND
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) = 0;
 		virtual Text* CreateText(const String& name, unsigned font_size) = 0;
 
+		//设置shader
+		virtual void SetShader(UINT32 type = DND_SHADER_NORMAL) = 0;
 
 		virtual UINT32 GetOnGUISpriteNumber() = 0;
 

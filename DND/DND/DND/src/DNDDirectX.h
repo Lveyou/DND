@@ -22,6 +22,8 @@
 #include <map>
 using namespace std;
 
+#include "DNDString.h"
+
 namespace DND
 {
 	class DirectX;
@@ -33,6 +35,43 @@ namespace DND
 		XMFLOAT4 color;
 		XMFLOAT2 t;
 	};
+	//Shader 一个编译好的 Shader结构
+	class Shader
+	{
+	public:
+		//pass
+		ID3DX11EffectPass* _pass;
+		//贴图
+		ID3DX11EffectShaderResourceVariable* _colorTexture;
+		//缓存贴图
+		ID3DX11EffectShaderResourceVariable* _colorTextureBg;
+		//effect
+		ID3DX11Effect* _effect;
+		//technique
+		ID3DX11EffectTechnique* _technique;
+		//wvp
+		ID3DX11EffectMatrixVariable* _wvpVariable;
+		Shader()
+		{
+			_pass = NULL;
+			_colorTexture = NULL;
+			_colorTextureBg = NULL;
+			_effect = NULL;
+			_technique = NULL;
+			_wvpVariable = NULL;
+		}
+	};
+	//RTT
+	class RTT
+	{
+	public:
+		ID3D11Texture2D* mRenderTargetTexture;
+		ID3D11RenderTargetView* mRenderTargetView;
+		ID3D11ShaderResourceView* mShaderResourceView;
+
+		//顶点缓存
+		ID3D11Buffer* _bufferVertex;//仅仅用于绘制最后一个矩形
+	};
 	class Gfx2D
 	{
 	public:
@@ -40,27 +79,26 @@ namespace DND
 		//创建输入布局
 		void _create_input_layout();
 		//编译 2d.fx 和初始化 2d shader
-		void _init_shader();
+		void _init_all_shader();
+
+		void _init_shader(UINT32 type, String path_name);
 		//重设wvp
-		void _reset_wvp();
+		void _reset_wvp(UINT32 type);
+		void _reset_all_wvp();
+
+		Shader* _get_shader(UINT32 type);
+
 		Gfx2D();
 
 		//input_layout
 		ID3D11InputLayout* _inputLayout;
-		//effect
-		ID3DX11Effect* _effect;
-		//technique
-		ID3DX11EffectTechnique* _technique;
-		//pass
-		ID3DX11EffectPass* _pass;
-		//wvp
-		ID3DX11EffectMatrixVariable* _wvpVariable;
-		//贴图
-		ID3DX11EffectShaderResourceVariable* _colorTexture;
+	
+		
 
 		void _release_all();
 
 		DirectX* directx;
+		Shader _shader[4];
 	};
 	class GfxSimple
 	{
@@ -135,6 +173,10 @@ namespace DND
 		void _init_blend_state();			//初始化绑定状态
 		void _init_depth_stencil_state();	//初始化深度模板缓存
 		
+		//多次释放和建立
+		void _init_rtt();
+		void _release_rtt();
+
 		void _release_all();
 		//多次释放和建立
 		void _init_render_target_view();	//创建显示表面视图
@@ -198,6 +240,9 @@ namespace DND
 		GfxSimple* _gfxSimple;
 		Gfx2D* _gfx2d;
 
+
+		//RTT
+		RTT _rtt;
 	private:
 	};
 

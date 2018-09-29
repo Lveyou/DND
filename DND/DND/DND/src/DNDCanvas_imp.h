@@ -48,6 +48,8 @@ namespace DND
 		virtual void RegisterString(const String& name, unsigned font_size, const String& str) override;
 		virtual Text* CreateText(const String& name, unsigned font_size) override;
 
+		virtual void SetShader(UINT32 type = DND_SHADER_NORMAL) override;
+
 		virtual UINT32 GetOnGUISpriteNumber() override;
 
 		virtual void SetImage(const String& img_name, const String& rects) override;
@@ -95,6 +97,8 @@ namespace DND
 		//自定义纹理
 		bool _bSetImage;
 
+		//Shader
+		UINT32 _shaderType;
 	};
 
 }
