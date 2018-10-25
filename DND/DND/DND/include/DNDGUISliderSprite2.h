@@ -26,6 +26,8 @@ namespace DND
 		void Run();
 		float GetCur();
 		void SetCur(float k);
+
+		SliderSprite2* Clone();
 	private:
 		Sprite* _spr[2];
 		Coor* _coor;

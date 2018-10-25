@@ -13,6 +13,8 @@
 #include <Box2D/Box2D.h>
 #include <time.h>
 
+#include <set>
+
 namespace DND
 {
 	Game* Game::_game = 0;
@@ -28,15 +30,20 @@ namespace DND
 		canvas = NULL;
 		_imesLength = 0;
 		_logoTime = true;
+		_setFullScreen = NULL;
+		
 	}
 
 	void Game::Init()
 	{
+		
 		//创建窗口后才能初始化dx
 
 		//init engine
 		_init_engine();
 		debug_notice(L"DND: init engine ok!");
+
+		_preDestopSize = sys->GetDesktopSize();
 
 		//attach zip
 		if(sys->AttachZip(L"DND.zip", L"LveyouGame"))
@@ -56,6 +63,7 @@ namespace DND
 		debug_notice(L"DND: create window ok!");
 		_dx = new DirectX;
 		_dx->_init();
+		
 		debug_notice(L"DND: init directx ok!");
 		canvas = Canvas::Create(0);
 		debug_notice(L"DND: init default canvas ok!");
@@ -356,6 +364,7 @@ namespace DND
 		PAINTSTRUCT ps;
 		HDC hdc;
 		System_imp* sys = (System_imp*)(Get()->sys);
+		DirectX* dx = Get()->_dx;
 		switch (msg)
 		{
 		case WM_CREATE:
@@ -365,10 +374,26 @@ namespace DND
 			Get()->EndLoop();
 			break;
 		case WM_PAINT:
-			Get()->_dx->_on_wm_paint();
+			dx->_on_wm_paint();
 			break;
 		case WM_ACTIVATE:
 			sys->_foucs = (LOWORD(wParam) != WA_INACTIVE);
+			{		
+				//全屏模式 处理
+				if (dx->_full)
+				{
+					if (sys->_foucs)
+					{
+						ShowWindow(hWnd, SW_RESTORE);
+						dx->_swapChain->SetFullscreenState(TRUE, dx->_output);
+					}
+					else
+					{
+						ShowWindow(hWnd, SW_MINIMIZE);
+					}
+				}
+				
+			}
 			break;
 		case WM_MOUSEWHEEL:
 			((Input_imp*)(Get()->input))->_mouseWheelDelta += (short)HIWORD(wParam);
@@ -533,6 +558,68 @@ namespace DND
 	DND::String Game::GetImeInput()
 	{
 		return _imeInput;
+	}
+
+	UINT32 Game::GetFullScreenSize()
+	{
+		if (_setFullScreen == NULL)
+		{
+			auto p = new std::set<Size>;
+			_setFullScreen = p;
+
+			for (UINT32 i = 0; i < _dx->_displayModeLength; ++i)
+			{
+				if (_dx->_displayModes[i].Format == DXGI_FORMAT_B8G8R8A8_UNORM)
+				{
+					p->insert(Size(_dx->_displayModes[i].Width, _dx->_displayModes[i].Height));
+				}
+			}
+		}
+		return ((set<Size>*)_setFullScreen)->size();
+	}
+
+
+
+	DND::Size Game::GetFullScreen(UINT32 i)
+	{
+		auto iter = ((set<Size>*)_setFullScreen)->begin();
+		advance(iter, i);
+
+		return *iter;
+	}
+
+	void Game::SetFullScreen(Size size)
+	{	
+		if (_dx->_check_support_full_screen_size(size.w, size.h))
+		{
+			_dx->_swapChain->SetFullscreenState(TRUE, _dx->_output);
+
+			DXGI_SWAP_CHAIN_DESC desc2;
+			_dx->_swapChain->GetDesc(&desc2);
+
+			DXGI_MODE_DESC desc;
+			desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			desc.Width = size.w;
+			desc.Height = size.h;
+			desc.RefreshRate = desc2.BufferDesc.RefreshRate;
+			desc.Scaling = desc2.BufferDesc.Scaling;
+			desc.ScanlineOrdering = desc2.BufferDesc.ScanlineOrdering;
+
+			_dx->_swapChain->ResizeTarget(&desc);
+
+			_dx->_full = true;
+		}
+		else
+		{
+			debug_warn(String::Format(128, L"DND: 不支持的全屏分辨率: %dx%d", size.w, size.h));
+		}
+	}
+
+	void Game::NotFullScreen()
+	{
+		_dx->_full = false;
+		_dx->_swapChain->SetFullscreenState(FALSE, NULL);
+		
 	}
 
 }

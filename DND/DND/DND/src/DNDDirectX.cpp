@@ -624,11 +624,15 @@ namespace DND
 		_swapChainDesc.SampleDesc.Count = 1;
 		_swapChainDesc.SampleDesc.Quality = 0;
 		_swapChainDesc.Windowed = true;
-		_swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+		_swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;//;
 			//DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+
+		
+
 		dnd_assert(!FAILED(_factory->CreateSwapChain(_device, &_swapChainDesc, &_swapChain)),
 			ERROR_00016);
 		
+		_factory->MakeWindowAssociation(sys->_hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
 	}
 
@@ -1081,7 +1085,7 @@ namespace DND
 		_vsync = false;
 		_gfxSimple = NULL;
 		//m_wvp = 
-
+		_full = false;
 	}
 
 	void DirectX::_on_wm_paint()

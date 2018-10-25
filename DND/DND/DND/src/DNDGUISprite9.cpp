@@ -17,23 +17,23 @@ namespace DND
 		Vector2 p[16] =
 		{
 			{ p1p2.a + 0, p1p2.b + 0 },
-			{ p1p2.a + _xxyy.p1.x, p1p2.b + 0 },
-			{ p1p2.a + put_size.w - (_imgSize.w - _xxyy.p2.x), p1p2.b + 0 },
+			{ p1p2.a + _xyxy.p1.x, p1p2.b + 0 },
+			{ p1p2.a + put_size.w - (_imgSize.w - _xyxy.p2.x), p1p2.b + 0 },
 			{ p1p2.a + put_size.w, p1p2.b + 0 },
 
-			{ p1p2.a + 0, p1p2.b + _xxyy.p1.y },
-			{ p1p2.a + _xxyy.p1.x, p1p2.b + _xxyy.p1.y },
-			{ p1p2.a + put_size.w - (_imgSize.w - _xxyy.p2.x), p1p2.b + _xxyy.p1.y },
-			{ p1p2.a + put_size.w, p1p2.b + _xxyy.p1.y },
+			{ p1p2.a + 0, p1p2.b + _xyxy.p1.y },
+			{ p1p2.a + _xyxy.p1.x, p1p2.b + _xyxy.p1.y },
+			{ p1p2.a + put_size.w - (_imgSize.w - _xyxy.p2.x), p1p2.b + _xyxy.p1.y },
+			{ p1p2.a + put_size.w, p1p2.b + _xyxy.p1.y },
 
-			{ p1p2.a + 0, p1p2.b + put_size.h - (_imgSize.h - _xxyy.p2.y) },
-			{ p1p2.a + _xxyy.p1.x, p1p2.b + put_size.h - (_imgSize.h - _xxyy.p2.y) },
-			{ p1p2.a + put_size.w - (_imgSize.w - _xxyy.p2.x), p1p2.b + put_size.h - (_imgSize.h - _xxyy.p2.y) },
-			{ p1p2.a + put_size.w, p1p2.b + put_size.h - (_imgSize.h - _xxyy.p2.y) },
+			{ p1p2.a + 0, p1p2.b + put_size.h - (_imgSize.h - _xyxy.p2.y) },
+			{ p1p2.a + _xyxy.p1.x, p1p2.b + put_size.h - (_imgSize.h - _xyxy.p2.y) },
+			{ p1p2.a + put_size.w - (_imgSize.w - _xyxy.p2.x), p1p2.b + put_size.h - (_imgSize.h - _xyxy.p2.y) },
+			{ p1p2.a + put_size.w, p1p2.b + put_size.h - (_imgSize.h - _xyxy.p2.y) },
 
 			{ p1p2.a + 0, p1p2.b + put_size.h },
-			{ p1p2.a + _xxyy.p1.x, p1p2.b + put_size.h },
-			{ p1p2.a + put_size.w - (_imgSize.w - _xxyy.p2.x), p1p2.b + put_size.h },
+			{ p1p2.a + _xyxy.p1.x, p1p2.b + put_size.h },
+			{ p1p2.a + put_size.w - (_imgSize.w - _xyxy.p2.x), p1p2.b + put_size.h },
 			{ p1p2.a + put_size.w, p1p2.b + put_size.h }
 		};
 
@@ -71,6 +71,22 @@ namespace DND
 	DND::Size Sprite9::GetSize()
 	{
 		return _putSize;
+	}
+
+	DND::Sprite9* Sprite9::Clone()
+	{
+		Sprite9* ret = new Sprite9;
+		ret->_coor = _coor->Clone();
+		for (UINT32 i = 0; i < 9; ++i)
+		{
+			ret->_spr[i] = _spr[i]->Clone();
+			ret->_spr[i]->GetCoor()->SetParent(ret->_coor);
+		}
+		ret->_xyxy = _xyxy;
+		ret->_imgSize = _imgSize;
+		ret->_putSize = _putSize;
+		
+		return ret;
 	}
 
 	Sprite9::Sprite9()

@@ -44,6 +44,7 @@ namespace DND
 		void SetState(State state);
 		void Run();
 		void SetMode(Mode mode);
+		Mode GetMode();
 		bool IsOpen();
 		void SetOpen(bool open);
 		void SetDisable(bool disable);

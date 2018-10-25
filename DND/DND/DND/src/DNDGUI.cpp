@@ -52,6 +52,11 @@ namespace DND
 		_mode = mode;
 	}
 
+	Control::Mode Control::GetMode()
+	{
+		return _mode;
+	}
+
 	bool Control::IsOpen()
 	{
 		return _open;

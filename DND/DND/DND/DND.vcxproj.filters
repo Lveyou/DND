@@ -235,6 +235,9 @@
     <ClInclude Include="src\DNDSound_imp.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUIComboBox.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -409,6 +412,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDSound_imp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUIComboBox.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

@@ -29,7 +29,7 @@ namespace DND
 		virtual Sprite* CreateSprite(const Image* img) override;
 		virtual Sprite* CreateSprite(UINT32 img_ID,const Quad& quad, Color color = Color::WHITE) override;
 		virtual Sprite* CreateSprite(UINT32 img_ID, bool center = true, Color color = Color::WHITE) override;
-		virtual Sprite9* CreateSprite9(const Image* img, const Rect& xxyy, Color color = Color::WHITE) override;
+		virtual Sprite9* CreateSprite9(const Image* img, const Rect& xyxy, Color color = Color::WHITE) override;
 		virtual Sprite* GetCharSprite(const String& name, unsigned font_size, wchar_t ch) override;
 		
 		virtual Tile* CreateTile(UINT32 img_ID, const Quad& quad, Color color = Color::WHITE) override;

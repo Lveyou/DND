@@ -30,6 +30,11 @@ namespace DND
 		swscanf_s(value.GetWcs(), L"%d,%d", &w, &h);
 	}
 
+	bool Size::operator<(const Size& b)
+	{
+		return w < b.w;
+	}
+
 	Size Size::operator-(const Size& b)
 	{
 		return Size(w - b.w, h - b.h);
@@ -393,6 +398,11 @@ namespace DND
 		p(ip), size(isize)
 	{
 
+	}
+
+	bool operator<(const Size& a, const Size& b)
+	{
+		return a.w < b.w;
 	}
 
 	Size PointToSize(const Point& p)

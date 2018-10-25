@@ -82,6 +82,22 @@ namespace DND
 		_spr[0]->GetCoor()->SetPosition(Vector2(_cur * _max, _offset.b));
 	}
 
+	DND::SliderSprite2* SliderSprite2::Clone()
+	{
+		SliderSprite2* ret = new SliderSprite2;
+		ret->_coor = _coor->Clone();
+		ret->_spr[0] = _spr[0]->Clone();
+		ret->_spr[1] = _spr[1]->Clone();
+		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
+		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
+		ret->_cur = _cur;
+		ret->_max = _max;
+		ret->_seleted = _seleted;
+		ret->_offset = _offset;
+
+		return ret;
+	}
+
 	SliderSprite2::SliderSprite2()
 	{
 		_spr[0] = NULL;

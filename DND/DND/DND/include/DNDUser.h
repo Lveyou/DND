@@ -62,6 +62,7 @@ namespace DND
 		Size(UINT32 w, UINT32 h);
 		Size(const String& value);
 		bool operator==(const Size& b);
+		bool operator<(const Size& b);
 		Size operator-(const Size& b);
 
 		template <typename T>
@@ -82,7 +83,7 @@ namespace DND
 		}
 
 	};
-
+	bool operator<(const Size& a, const Size& b);
 
 
 	class DLL_API Vector3

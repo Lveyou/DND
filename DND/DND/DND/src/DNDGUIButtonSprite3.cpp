@@ -32,6 +32,8 @@ namespace DND
 		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[2]->GetCoor()->SetParent(ret->_coor);
+
+		ret->SetMode(GetMode());
 	
 		return ret;
 	}

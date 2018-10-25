@@ -62,6 +62,7 @@ namespace DND
 		auto iter = _tex->_imageRects.find(img_ID);
 		if (iter == _tex->_imageRects.end())
 		{
+			debug_err(String(L"DND: 创建精灵时未找到id: ") + (int)img_ID);
 			return NULL;
 		}
 
@@ -76,7 +77,7 @@ namespace DND
 		return spr;
 	}
 
-	DND::Sprite9* Canvas_imp::CreateSprite9(const Image* img, const Rect& xxyy, Color color /*= Color::WHITE*/)
+	DND::Sprite9* Canvas_imp::CreateSprite9(const Image* img, const Rect& xyxy, Color color /*= Color::WHITE*/)
 	{
 		Sprite9* spr9 = new Sprite9;
 		spr9->_coor = Coor::Create(_coor);
@@ -85,17 +86,17 @@ namespace DND
 		RegisterImageAll(id, img);
 
 		Size size = img->GetSize();
-		RegisterImageRect(_systemUseID++, id, Rect(Point(), Point(xxyy.p1.x, xxyy.p1.y)));
-		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p1.x, 0), Point(xxyy.p2.x, xxyy.p1.y)));
-		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p2.x, 0), Point(size.w, xxyy.p1.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(), Point(xyxy.p1.x, xyxy.p1.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xyxy.p1.x, 0), Point(xyxy.p2.x, xyxy.p1.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xyxy.p2.x, 0), Point(size.w, xyxy.p1.y)));
 
-		RegisterImageRect(_systemUseID++, id, Rect(Point(0, xxyy.p1.y), Point(xxyy.p1.x, xxyy.p2.y)));
-		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p1.x, xxyy.p1.y), Point(xxyy.p2.x, xxyy.p2.y)));
-		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p2.x, xxyy.p1.y), Point(size.w, xxyy.p2.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(0, xyxy.p1.y), Point(xyxy.p1.x, xyxy.p2.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xyxy.p1.x, xyxy.p1.y), Point(xyxy.p2.x, xyxy.p2.y)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xyxy.p2.x, xyxy.p1.y), Point(size.w, xyxy.p2.y)));
 
-		RegisterImageRect(_systemUseID++, id, Rect(Point(0, xxyy.p2.y), Point(xxyy.p1.x, size.h)));
-		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p1.x, xxyy.p2.y), Point(xxyy.p2.x, size.h)));
-		RegisterImageRect(_systemUseID++, id, Rect(Point(xxyy.p2.x, xxyy.p2.y), Point(size.w, size.h)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(0, xyxy.p2.y), Point(xyxy.p1.x, size.h)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xyxy.p1.x, xyxy.p2.y), Point(xyxy.p2.x, size.h)));
+		RegisterImageRect(_systemUseID++, id, Rect(Point(xyxy.p2.x, xyxy.p2.y), Point(size.w, size.h)));
 
 		for (int i = 0; i != 9; ++i)
 		{
@@ -103,7 +104,7 @@ namespace DND
 			spr9->_spr[i]->GetCoor()->SetParent(spr9->_coor);
 		}
 		
-		spr9->_xxyy = xxyy;
+		spr9->_xyxy = xyxy;
 		spr9->_imgSize = size;
 		spr9->SetPosition(Vector4(0, 0, (float)size.w, (float)size.h));
 
@@ -303,7 +304,7 @@ namespace DND
 		_tex->SetImage(img);
 		delete img;
 
-		for (int i = 0; i < file->GetLength(); ++i)
+		for (UINT32 i = 0; i < file->GetLength(); ++i)
 		{
 			_tex->_imageRects[file->GetKey(i).GetInt()] = Rect(file->GetValue(i));
 		}

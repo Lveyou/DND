@@ -31,9 +31,11 @@ namespace DND
 	{
 	public:
 		virtual void SetOpen(bool open = true) = 0;
+		virtual bool IsOpen() = 0;
 		virtual void Load(const String& name, const String& path) = 0;
 		virtual Voice* Create(const String& name) = 0;
 		virtual void SetVolume(float v) = 0;
+		virtual float GetVolume() = 0;
 	};
 }
 

@@ -93,6 +93,11 @@ namespace DND
 		_open = open;
 	}
 
+	bool Sound_imp::IsOpen()
+	{
+		return _open;
+	}
+
 	//////////////////////////////////////////////////////////////////////////
 	//以上代码copy自dx sdk文档
 
@@ -193,6 +198,13 @@ namespace DND
 		if (!_open)
 			return;
 		_masterVoice->SetVolume(v);
+	}
+
+	float Sound_imp::GetVolume()
+	{
+		float ret;
+		_masterVoice->GetVolume(&ret);
+		return ret;
 	}
 
 	void Sound_imp::_init()

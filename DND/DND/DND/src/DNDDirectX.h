@@ -234,6 +234,7 @@ namespace DND
 		//´¹Ö±Í¬²½
 		bool _vsync;
 
+		bool _full;
 		
 		//Camera
 	//	Camera* m_camera;

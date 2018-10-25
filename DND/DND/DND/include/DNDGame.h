@@ -89,6 +89,14 @@ namespace DND
 		String _imes[12];
 		UINT32 _imesLength;
 		String _imeInput;
+	public:
+		UINT32 GetFullScreenSize();
+		Size GetFullScreen(UINT32 i);
+		void SetFullScreen(Size size);
+		void NotFullScreen();
+	private:
+		void* _setFullScreen;
+		Size _preDestopSize;
 	};
 }
 

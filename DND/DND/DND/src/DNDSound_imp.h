@@ -48,10 +48,11 @@ namespace DND
 	{
 	public:
 		virtual void SetOpen(bool open = true) override;
+		virtual bool IsOpen() override;
 		virtual void Load(const String& name, const String& path) override;
 		virtual Voice* Create(const String& name) override;
 		virtual void SetVolume(float v) override;
-
+		virtual float GetVolume() override;
 		void _init();
 		Sound_imp()
 		{

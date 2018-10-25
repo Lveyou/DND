@@ -46,4 +46,18 @@ namespace DND
 		return _coor;
 	}
 
+	DND::SwitchSprite2* SwitchSprite2::Clone()
+	{
+		SwitchSprite2* ret = new SwitchSprite2;
+		ret->_coor = _coor->Clone();
+		ret->_spr[0] = _spr[0]->Clone();
+		ret->_spr[1] = _spr[1]->Clone();
+		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
+		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
+		
+		ret->SetMode(GetMode());
+
+		return ret;
+	}
+
 }

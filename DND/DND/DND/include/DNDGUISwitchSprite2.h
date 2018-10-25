@@ -25,6 +25,8 @@ namespace DND
 		static SwitchSprite2* Create(Sprite* open, Sprite* close);
 
 		Coor* GetCoor();
+
+		SwitchSprite2* Clone();
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;

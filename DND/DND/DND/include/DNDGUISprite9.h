@@ -28,11 +28,13 @@ namespace DND
 		void Render();
 		void SetOrder(int order);
 		Size GetSize();
+
+		Sprite9* Clone();
 	private:
 		Sprite* _spr[9];
 		Coor* _coor;
 		Sprite9();
-		Rect _xxyy;
+		Rect _xyxy;
 		Size _imgSize;
 		Size _putSize;
 	};
