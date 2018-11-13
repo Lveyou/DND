@@ -64,6 +64,7 @@ namespace DND
 		bool operator==(const Size& b);
 		bool operator<(const Size& b);
 		Size operator-(const Size& b);
+		Size operator+(const Size& b);
 
 		template <typename T>
 		Size operator/(T divisor) const

@@ -40,6 +40,11 @@ namespace DND
 		return Size(w - b.w, h - b.h);
 	}
 
+	DND::Size Size::operator+(const Size& b)
+	{
+		return Size(w + b.w, h + b.h);
+	}
+
 	bool Size::operator==(const Size& b)
 	{
 		return w == b.w && h == b.h;

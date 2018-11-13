@@ -202,6 +202,8 @@ namespace DND
 
 	float Sound_imp::GetVolume()
 	{
+		if (!_open)
+			return 0;
 		float ret;
 		_masterVoice->GetVolume(&ret);
 		return ret;
