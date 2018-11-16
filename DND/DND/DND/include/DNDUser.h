@@ -42,6 +42,7 @@ namespace DND
 		Point(const PointU& b);
 		Point(const String& str);
 		
+		UINT32 GetIndex(UINT32 w);
 		//UINT32 ToUINT32();
 		//bool operator<(const Point& b) const;
 		bool operator==(const Point& b);

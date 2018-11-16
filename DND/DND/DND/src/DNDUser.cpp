@@ -314,6 +314,11 @@ namespace DND
 		y = b.y;
 	}
 
+	UINT32 Point::GetIndex(UINT32 w)
+	{
+		return x + y * w;
+	}
+
 	bool Point::operator==(const Point& b)
 	{
 		return (x == b.x) && (y == b.y);
