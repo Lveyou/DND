@@ -56,6 +56,22 @@ namespace DND
 		return _coor;
 	}
 
+	void Sprite::SetCoor(Coor* coor)
+	{
+		if (_coor == coor)
+			return;
+		if (_noCoor)
+		{
+			_coor = coor;
+		}
+		else
+		{
+			if(_coor)
+				delete _coor;
+			_coor = coor;
+		}
+	}
+
 	void Sprite::SetOrder(INT32 order)
 	{
 		_order = order;
@@ -124,21 +140,6 @@ namespace DND
 
 	void Sprite::Clip(bool x, bool y)
 	{
-		/*if (x)
-		{
-			swap(_quad.v[0].a, _quad.v[1].a);
-			swap(_quad.v[0].b, _quad.v[1].b);
-			swap(_quad.v[3].a, _quad.v[2].a);
-			swap(_quad.v[3].b, _quad.v[2].b);
-		}
-
-		if (y)
-		{
-			swap(_quad.v[0].a, _quad.v[3].a);
-			swap(_quad.v[0].b, _quad.v[3].b);
-			swap(_quad.v[1].a, _quad.v[2].a);
-			swap(_quad.v[1].b, _quad.v[2].b);
-		}*/
 		if (x)
 		{
 			_quad.v[0].a = -_quad.v[0].a;
@@ -166,7 +167,7 @@ namespace DND
 		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
 
 		//调用 Delete 删除
-		if (_coor)
+		if (_coor && !_noCoor)
 			delete _coor;
 		if (_rigidBody)
 			delete _rigidBody;
@@ -178,6 +179,7 @@ namespace DND
 		_coor = NULL;
 		_rigidBody = NULL;
 		_ui = false;
+		_noCoor = false;
 	}
 	Sprite* Sprite::Clone(Canvas* canvas /*= NULL*/)
 	{
@@ -197,10 +199,19 @@ namespace DND
 		}
 		
 		spr->_order = _order;
-		//spr->m_canvas = b.m_canvas;
+		
 		if (_coor)
-			//spr->_coor = _coor->Clone(); 17-10-12 CreateSprite已经分配了coor
-			spr->_coor->Copy(_coor);
+		{
+			if (_noCoor)
+			{
+				delete (spr->_coor);
+			}
+			else
+			{
+				spr->_coor->Copy(_coor);
+			}	
+		}
+			
 		
 		if (_rigidBody)
 			int i = 3;//TODO: clone
@@ -253,39 +264,8 @@ namespace DND
 		return _color[i];
 	}
 
-	void Tile::Render()
-	{
-		((Canvas_imp*)_canvas)->_tiles.push_back(this);
-	}
 
-	void Tile::Offset(Vector2 offset)
-	{
-		_offset = offset;
-	}
 
-	DND::Tile* Tile::Clone(Canvas* canvas /*= NULL*/)
-	{
-		Tile* tile;
-		if (canvas && (canvas != _canvas))
-		{
-			UINT32 id = ((Canvas_imp*)canvas)->_systemUseID++;
-			canvas->RegisterImageRect(
-				id,
-				_canvas->GetImage(),
-				_canvas->GetImageRect(_imageRectID));
-			tile = canvas->CreateTile(id, _quad, Color::WHITE);
-		}
-		else
-		{
-			tile = _canvas->CreateTile(_imageRectID, _quad, Color::WHITE);
-		}
-
-		
-		tile->_color = _color;
-		tile->_offset = _offset;
-
-		return tile;
-	}
-
+	
 }
 

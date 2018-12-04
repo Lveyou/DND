@@ -7,6 +7,7 @@
 //17-08-11: 精灵 - Lveyou
 //18-01-04: Canvas不再管理精灵指针，效率更高了 - Lveyou
 //18-01-14: 效率起见，Render之后的精灵不能删除！ - Lveyou
+//18-12-04: 节省内存起见，可以不创建自己的Coor，而是指定一个Coor - Lveyou
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_SPRITE_H_
@@ -23,28 +24,6 @@ namespace DND
 	class RigidBody;
 	//Clone时，不指明画布则为自己的画布
 
-
-	//Tile 先于Sprite绘制，但本身没有order，先调用Render的先绘制
-	class DLL_API Tile
-	{
-		friend class Canvas_imp;
-		friend class Text_imp;
-		friend class RigidBody_imp;
-
-	public:
-		void Render();
-		void Offset(Vector2 offset);
-		Tile* Clone(Canvas* canvas = NULL);
-	private:
-		Quad _quad;
-		Color _color;
-		Canvas* _canvas;
-		unsigned _imageRectID;
-		Vector2 _offset;
-
-	
-	};
-
 	class DLL_API Sprite
 	{
 		friend class Canvas_imp;
@@ -55,6 +34,7 @@ namespace DND
 		void Render();
 		void RenderFrame();
 		Coor* GetCoor();
+		void SetCoor(Coor* coor);//会删除自己的Coor，然后设置传入的Coor为坐标系
 		void SetOrder(INT32 order);
 		Size GetSize();
 		void SetColor(Color color);
@@ -92,6 +72,7 @@ namespace DND
 		RigidBody* _rigidBody;
 		//开启后，会检测是否与鼠标重合
 		bool _ui;
+		bool _noCoor;
 	};
 }
 

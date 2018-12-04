@@ -40,7 +40,6 @@ namespace DND
 		virtual Sprite9* CreateSprite9(const Image* img, const Rect& xyxy, Color color = Color::WHITE) = 0;
 		virtual Sprite* GetCharSprite(const String& name, unsigned font_size, wchar_t ch) = 0;
 		
-		virtual Tile* CreateTile(UINT32 img_ID, const Quad& quad, Color color = Color::WHITE) = 0;
 		//注册图像全部
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) = 0;
 		//返回id
@@ -74,6 +73,9 @@ namespace DND
 		//直接设置 纹理（之后会省略注册中实际注册步骤，因为同样的代码顺序，返回的id号始终相同）
 		virtual void SetImage(const String& img_name, const String& rects) = 0;
 		virtual void SaveImageRects(const String& rects) = 0;
+
+		//设置是否跳过图像注册（警告：不清楚底层实现，请勿调用）
+		virtual void SetSkipRegister(bool skip) = 0;
 	};
 
 

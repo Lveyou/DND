@@ -28,7 +28,7 @@ namespace DND
 		static Image* Create(const Image* b);
 		static Image* Create(const String& path);
 		~Image();
-
+		DWORD& operator[](UINT32 index);
 		Size GetSize() const;
 		const DWORD* GetBuffer() const;
 		void AddImage(const Image* img, const Point& tar_xy);
@@ -45,6 +45,7 @@ namespace DND
 	private:
 		Image();
 		Image(const Image& b);
+		
 		Size _size;
 		DWORD* _buffer;
 	};

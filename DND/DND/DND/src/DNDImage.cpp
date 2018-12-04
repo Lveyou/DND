@@ -404,6 +404,12 @@ namespace DND
 
 	}
 
+	DWORD& Image::operator[](UINT32 index)
+	{
+		//有些时候，数组越界这种东西还是要自己把管
+		return _buffer[index];
+	}
+
 	Image* Image::Create(void* texture, Size size)
 	{
 		//Image* img = new Image;

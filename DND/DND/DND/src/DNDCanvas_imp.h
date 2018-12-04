@@ -32,7 +32,7 @@ namespace DND
 		virtual Sprite9* CreateSprite9(const Image* img, const Rect& xyxy, Color color = Color::WHITE) override;
 		virtual Sprite* GetCharSprite(const String& name, unsigned font_size, wchar_t ch) override;
 		
-		virtual Tile* CreateTile(UINT32 img_ID, const Quad& quad, Color color = Color::WHITE) override;
+	
 
 		virtual void RegisterImageAll(UINT32 img_ID, const Image* img) override;
 		virtual UINT32 RegisterImageAll(const Image* img) override;
@@ -56,6 +56,8 @@ namespace DND
 		virtual void SaveImageRects(const String& rects) override;
 		virtual bool IsSetImage() override;
 
+		virtual void SetSkipRegister(bool skip) override;
+
 		Canvas_imp(INT32 order, bool mipmap = false);
 		void _render();
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
@@ -67,8 +69,6 @@ namespace DND
 		//list<Sprite*> _allSprite;
 		//Sprites 按 绘制顺序（小的先画） 存所有 sprite
 		multimap<int, Sprite*> _sprites;
-
-		list<Tile*> _tiles;
 		//顶点缓存
 		ID3D11Buffer* _bufferVertex;
 		//顶点缓存(内存区)大小
@@ -87,9 +87,6 @@ namespace DND
 
 		//精灵绘制数*4
 		UINT32 _renderSprNum;
-
-		//瓦片绘制数*4
-		UINT32 _renderTileNum;
 
 		//触碰的UI精灵数
 		UINT32 _onGUISpr;

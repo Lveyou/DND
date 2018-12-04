@@ -127,17 +127,6 @@ namespace DND
 
 
 
-	DND::Tile* Canvas_imp::CreateTile(UINT32 img_ID, const Quad& quad, Color color /*= Color::WHITE*/)
-	{
-		Tile* tile = new Tile();
-		tile->_imageRectID = img_ID;
-		tile->_quad = quad;
-		tile->_color = color;
-		tile->_canvas = this;
-
-		return tile;
-	}
-
 	void Canvas_imp::RegisterImageAll(UINT32 ID, const Image* img)
 	{
 		if (_bSetImage)
@@ -344,6 +333,11 @@ namespace DND
 		return _bSetImage;
 	}
 
+	void Canvas_imp::SetSkipRegister(bool skip)
+	{
+		_bSetImage = skip;
+	}
+
 	void Canvas_imp::_render()
 	{
 		DirectX* directx = Game::Get()->_dx;
@@ -366,11 +360,11 @@ namespace DND
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			shader->_pass->Apply(0, directx->_deviceContext);
 
-			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 
 			//tex -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
-			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 		}
 		else if(_shaderType == DND_SHADER_OVERLAY ||
 			_shaderType == DND_SHADER_DARKEN || 
@@ -385,43 +379,21 @@ namespace DND
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			shader->_pass->Apply(0, directx->_deviceContext);
 
-			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 
 			//tex，1 -> 1
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
-			directx->_deviceContext->DrawIndexed((_renderSprNum + _renderTileNum) * 6 / 4, 0, 0);
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 		}
 	}
 	void DND::Canvas_imp::_update()
 	{
 		DirectX* directx = Game::Get()->_dx;
 
-		//_sprites.clear();
-		//m_all_sprites => m_sprites
-		//这一步判断哪些 sprite需要 绘制 ，并按顺序插入下一步的 树中
-		/*list<Sprite*>::iterator iter = _allSprite.begin();
-		for (; iter != _allSprite.end();)
-		{
-			Sprite* spr = *(iter);
-			if (spr->_dead)
-			{
-				delete spr;
-				iter = _allSprite.erase(iter);
-			}
-			else
-			{
-				if (spr->_show)
-				{
-					spr->_show = false;
-					_sprites.insert(pair<int, Sprite*>(spr->_order, spr));
-				}
-				iter++;
-			}
-		}*/
 		//m_sprites => m_vertexs
 		//这一步 将 sprite变化到内存顶点缓存，并判断缓存大小，适时扩大（包括显卡顶点缓存）
 		//其中需要 顶点坐标进行变换（软的，没办法）
-		while ((_sprites.size() + _tiles.size()) * 4 > _vertexSize)
+		while (_sprites.size() * 4 > _vertexSize)
 		{
 			_release_vertex_buffer();
 			delete[] _vertexs;
@@ -437,40 +409,12 @@ namespace DND
 
 		Rect window = Rect(XYWH(Point(),Game::Get()->sys->GetWindowSize()));
 
-		///////////////////////Tile//////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////
 		Sprite* spr = NULL;
-		Tile* tile = NULL;
 		_renderSprNum = 0;
-		_renderTileNum = 0;
-		//Vector2 out;
 		Point out;
 
 		const float PIXEL_OFFSET = 0.5f;
-
-		for (auto& iter : _tiles)
-		{
-			tile = iter;
-			for (unsigned j = 0; j < 4; ++j)
-			{
-				//顶点变换
-				out = Vector2ToPoint(tile->_canvas->GetCoor()->ThisToWorld(tile->_quad.v[j] + tile->_offset));
-				
-				
-				_vertexs[_renderTileNum + j].pos =
-					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET, 0);
-				
-
-				_vertexs[_renderTileNum + j].color.x = tile->_color.r();
-				_vertexs[_renderTileNum + j].color.y = tile->_color.g();
-				_vertexs[_renderTileNum + j].color.z = tile->_color.b();
-				_vertexs[_renderTileNum + j].color.w = tile->_color.a();
-				_vertexs[_renderTileNum + j].t.x = _tex->GetTu(tile->_imageRectID, j);
-				_vertexs[_renderTileNum + j].t.y = _tex->GetTv(tile->_imageRectID, j);
-				
-			}
-			_renderTileNum += 4;
-		}
-		_tiles.clear();
 		///////////////////////Sprite//////////////////////////////////////////////
 		
 		
@@ -497,16 +441,16 @@ namespace DND
 				}
 				
 		
-				_vertexs[_renderTileNum + _renderSprNum + j].pos =
+				_vertexs[_renderSprNum + j].pos =
 					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET, 0);
 
 					
-				_vertexs[_renderTileNum + _renderSprNum + j].color.x = spr->_color[j].r();
-				_vertexs[_renderTileNum + _renderSprNum + j].color.y = spr->_color[j].g();
-				_vertexs[_renderTileNum + _renderSprNum + j].color.z = spr->_color[j].b();
-				_vertexs[_renderTileNum + _renderSprNum + j].color.w = spr->_color[j].a();
-				_vertexs[_renderTileNum + _renderSprNum + j].t.x = _tex->GetTu(spr->_imageRectID, j);
-				_vertexs[_renderTileNum + _renderSprNum + j].t.y = _tex->GetTv(spr->_imageRectID, j);
+				_vertexs[_renderSprNum + j].color.x = spr->_color[j].r();
+				_vertexs[_renderSprNum + j].color.y = spr->_color[j].g();
+				_vertexs[_renderSprNum + j].color.z = spr->_color[j].b();
+				_vertexs[_renderSprNum + j].color.w = spr->_color[j].a();
+				_vertexs[_renderSprNum + j].t.x = _tex->GetTu(spr->_imageRectID, j);
+				_vertexs[_renderSprNum + j].t.y = _tex->GetTv(spr->_imageRectID, j);
 				//int a = 0;
 			}
 			_renderSprNum += 4;
@@ -525,7 +469,7 @@ namespace DND
 			&res)),
 			ERROR_00043);
 
-		memcpy(res.pData, _vertexs, (_renderSprNum + _renderTileNum)*sizeof(Vertex2D));
+		memcpy(res.pData, _vertexs, _renderSprNum * sizeof(Vertex2D));
 
 		directx->_deviceContext->Unmap(
 			(ID3D11Resource*)_bufferVertex, 0);

@@ -160,7 +160,6 @@ namespace DND
 				{
 					Canvas_imp* temp = iter.second;
 					temp->_sprites.clear();
-					temp->_tiles.clear();
 				}
 			}
 			else
