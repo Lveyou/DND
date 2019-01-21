@@ -52,7 +52,7 @@ namespace DND
 
 		virtual UINT32 GetOnGUISpriteNumber() override;
 
-		virtual void SetImage(const String& img_name, const String& rects) override;
+		virtual bool SetImage(const String& img_name, const String& rects) override;
 		virtual void SaveImageRects(const String& rects) override;
 		virtual bool IsSetImage() override;
 

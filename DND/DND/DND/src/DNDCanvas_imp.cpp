@@ -273,7 +273,7 @@ namespace DND
 
 
 
-	void Canvas_imp::SetImage(const String& img_name, const String& rects)
+	bool Canvas_imp::SetImage(const String& img_name, const String& rects)
 	{
 		
 		Image* img = Image::Create(img_name);
@@ -282,12 +282,12 @@ namespace DND
 		if (img == NULL)
 		{
 			debug_warn(String(L"DND: Canvas_imp::SetImage: Í¼Ïñ¼ÓÔØÊ§°Ü") + img_name);
-			return;
+			return false;
 		}
 		if (!file->OpenFile(rects))
 		{
 			debug_warn(String(L"DND: Canvas_imp::SetImage: Í¼ÏñÇøÓòÅäÖÃ¼ÓÔØÊ§°Ü") + rects);
-			return;
+			return false;
 		}
 
 		_tex->SetImage(img);
@@ -299,6 +299,7 @@ namespace DND
 		}
 
 		_bSetImage = true;
+		return true;
 	}
 
 	void Canvas_imp::SaveImageRects(const String& rects)

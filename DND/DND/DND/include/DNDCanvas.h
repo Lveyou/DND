@@ -71,7 +71,7 @@ namespace DND
 		virtual UINT32 GetOnGUISpriteNumber() = 0;
 
 		//直接设置 纹理（之后会省略注册中实际注册步骤，因为同样的代码顺序，返回的id号始终相同）
-		virtual void SetImage(const String& img_name, const String& rects) = 0;
+		virtual bool SetImage(const String& img_name, const String& rects) = 0;
 		virtual void SaveImageRects(const String& rects) = 0;
 
 		//设置是否跳过图像注册（警告：不清楚底层实现，请勿调用）
