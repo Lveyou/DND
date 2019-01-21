@@ -121,8 +121,8 @@ void SceneImage::Run()
 			Point mouse = _test->input->GetMousePosition();
 			Vector2 pos = _spr->GetCoor()->WorldToThis(mouse);
 			
-			pos.a = Math::GetBetween(pos.a, 0, _image->GetSize().w - 1);
-			pos.b = Math::GetBetween(pos.b, 0, _image->GetSize().h - 1);
+			pos.a = Math::GetBetween<float>(pos.a, 0, _image->GetSize().w - 1);
+			pos.b = Math::GetBetween<float>(pos.b, 0, _image->GetSize().h - 1);
 
 			_sprColor->SetColor(_image->GetDotColor(Vector2ToPoint(pos)));
 
