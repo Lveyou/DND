@@ -204,15 +204,28 @@ namespace DND
 		//如果激活为其他三种状态，否则为 第四种
 		if (!_disable)
 		{
-			//如果在外面，为OUT状态
-			if (_is_pickup() && input->KeyDown(KeyCode::MOUSE_L))
+			//点击了里面，变为open（并不能撤销）
+			if (_is_pickup())
 			{
-				_open = true;
+				if (input->KeyUp(KeyCode::MOUSE_L))
+				{
+					_open = true;
+					_state = DOWN;
+				}
+				else if (input->KeyState(KeyCode::MOUSE_L))
+				{
+					_state = DOWN;
+				}
+				else if (_open == false)
+				{
+					_state = OVER;
+				}
 				
 			}
-
-			_state = _open ? DOWN : NORMAL;
-
+			else
+			{
+				_state = _open ? DOWN : NORMAL;
+			}
 		}
 		else
 		{
