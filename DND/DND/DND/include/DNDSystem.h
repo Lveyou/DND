@@ -53,8 +53,8 @@ namespace DND
 		//选择文件
 		virtual bool GetChooseFile(const WCHAR* filter, String& path_name, String& name) = 0;
 		//遍历文件（需手动加上通配符）
-		virtual bool GetPathFileFirst(const String& path, String& name) = 0;
-		virtual bool GetPathFileNext(const String& path, String& name) = 0;
+		virtual bool GetPathFileFirst(const String& path, String& name, bool& is_path) = 0;
+		virtual bool GetPathFileNext(const String& path, String& name, bool& is_path) = 0;
 		//复制文件
 		virtual void CopyAFile(const String& source, const String& target) = 0;
 		//文件是否存在

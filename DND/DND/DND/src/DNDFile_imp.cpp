@@ -41,7 +41,7 @@ namespace DND
 
 			for (int i = 0;; i++)
 			{
-
+			first:
 				temp[0] = 0;
 				in >> temp;
 				if (wcscmp(temp, L"[-]") == 0)
@@ -51,7 +51,14 @@ namespace DND
 					return true;
 				}
 				else if (temp[0] != 0)
+				{
 					str_name = temp;
+					//Æ¥Åäµ½×¢ÊÍÐÐ
+					if (str_name.FindStr(L"//") != -1)
+					{
+						goto first;
+					}
+				}		
 				else
 				{
 					in.close();

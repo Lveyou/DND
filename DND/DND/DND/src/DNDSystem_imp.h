@@ -57,8 +57,8 @@ namespace DND
 		virtual String GetChooseFolder(const String& title, String root) override;
 		virtual bool GetChooseFile(const WCHAR* filter, String& path, String& name) override;
 
-		virtual bool GetPathFileFirst(const String& path, String& name) override;
-		virtual bool GetPathFileNext(const String& path, String& name) override;
+		virtual bool GetPathFileFirst(const String& path, String& name, bool& is_path) override;
+		virtual bool GetPathFileNext(const String& path, String& name, bool& is_path) override;
 
 		virtual void CopyAFile(const String& source, const String& target) override;
 

@@ -382,7 +382,7 @@ namespace DND
 		
 	}
 
-	bool System_imp::GetPathFileFirst(const String& path, String& name)
+	bool System_imp::GetPathFileFirst(const String& path, String& name, bool& is_path)
 	{
 
 		_find = ::FindFirstFile(path.GetWcs(), &_findData);
@@ -393,14 +393,16 @@ namespace DND
 		}
 
 		name = _findData.cFileName;
+		is_path = (_findData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY);
 		return true;
 	}
 
-	bool System_imp::GetPathFileNext(const String& path, String& name)
+	bool System_imp::GetPathFileNext(const String& path, String& name, bool& is_path)
 	{
 		while (FindNextFile(_find, &_findData))
 		{
 			name = _findData.cFileName;
+			is_path = (_findData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY);
 			return true;
 		}
 		return false;

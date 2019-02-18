@@ -11,7 +11,6 @@ namespace DND
 		ret->_coor = Coor::Create(open->GetCoor()->GetParent());
 		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[1]->GetCoor()->SetParent(ret->_coor);
-		ret->_spr[0]->GetCoor()->SetParent(ret->_coor);
 		ret->_spr[0]->SetUI(true);
 		ret->_spr[1]->SetUI(true);
 		ret->SetMode(Control::SWITCH);

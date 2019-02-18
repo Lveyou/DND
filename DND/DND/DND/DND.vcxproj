@@ -40,6 +40,7 @@
     <ClInclude Include="include\DNDGUISliderSprite2.h" />
     <ClInclude Include="include\DNDGUISprite9.h" />
     <ClInclude Include="include\DNDGUISwitchSprite2.h" />
+    <ClInclude Include="include\DNDGUISwitchSprite3Color2.h" />
     <ClInclude Include="include\DNDImage.h" />
     <ClInclude Include="include\DNDInput.h" />
     <ClInclude Include="include\DNDCycleLock.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="src\DNDGUISliderSprite2.cpp" />
     <ClCompile Include="src\DNDGUISprite9.cpp" />
     <ClCompile Include="src\DNDGUISwitchSprite2.cpp" />
+    <ClCompile Include="src\DNDGUISwitchSprite3Color2.cpp" />
     <ClCompile Include="src\DNDImage.cpp" />
     <ClCompile Include="src\DNDInput_imp.cpp" />
     <ClCompile Include="src\DNDMutex.cpp" />
