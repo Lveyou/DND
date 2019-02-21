@@ -51,6 +51,7 @@
 #include "DNDGUIButtonSprite3.h"		//ButtonSprite				3精灵按钮
 #include "DNDGUISprite9.h"				//Sprite9					9妹精灵
 #include "DNDGUISliderSprite2.h"		//SliderSprite2				2精灵滚动条
+#include "DNDGUISliderSprite5.h"		//SliderSprite5				5精灵滚动条
 #include "DNDGUIComboBox.h"				//ComboBox					下拉框
 //////////////////////////////////////////////////////////////////////////
 

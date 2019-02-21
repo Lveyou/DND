@@ -101,6 +101,10 @@ namespace DND
 		for (int i = 0; i != 9; ++i)
 		{
 			spr9->_spr[i] = CreateSprite(id + i + 1, false, color);
+			if (spr9->_spr[i] == NULL) // 这里容易报错
+			{
+				spr9->_spr[i] = CreateSprite(0, false, color);
+			}
 			spr9->_spr[i]->GetCoor()->SetParent(spr9->_coor);
 		}
 		

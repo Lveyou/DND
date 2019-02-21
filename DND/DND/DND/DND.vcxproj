@@ -38,6 +38,7 @@
     <ClInclude Include="include\DNDGUIComboBox.h" />
     <ClInclude Include="include\DNDGUIEditBoxSprite.h" />
     <ClInclude Include="include\DNDGUISliderSprite2.h" />
+    <ClInclude Include="include\DNDGUISliderSprite5.h" />
     <ClInclude Include="include\DNDGUISprite9.h" />
     <ClInclude Include="include\DNDGUISwitchSprite2.h" />
     <ClInclude Include="include\DNDGUISwitchSprite3Color2.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="src\DNDGUIComboBox.cpp" />
     <ClCompile Include="src\DNDGUIEditBoxSprite.cpp" />
     <ClCompile Include="src\DNDGUISliderSprite2.cpp" />
+    <ClCompile Include="src\DNDGUISliderSprite5.cpp" />
     <ClCompile Include="src\DNDGUISprite9.cpp" />
     <ClCompile Include="src\DNDGUISwitchSprite2.cpp" />
     <ClCompile Include="src\DNDGUISwitchSprite3Color2.cpp" />
