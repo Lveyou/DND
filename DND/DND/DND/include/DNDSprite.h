@@ -44,6 +44,8 @@ namespace DND
 		INT32 GetOrder();
 		void SetQuad(INT32 i, Vector2 pos);
 		void SetQuadOffset(Vector2 pos);
+		void SetQuadScale(Vector2 s);
+		void SetQuadScale(float s);
 		//暂时无用
 		void FloorQuad();
 		//调用一次即生效，再调一次还原

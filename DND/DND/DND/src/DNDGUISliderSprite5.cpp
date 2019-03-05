@@ -93,6 +93,7 @@ namespace DND
 			(_spr[1]->IsPickup() || _spr[4]->IsPickup()))
 		{
 			_seleted = true;
+			_focus = this;
 		}
 		else if (input->KeyUp(KeyCode::MOUSE_L))
 		{
@@ -127,6 +128,34 @@ namespace DND
 				_cur = y / _max;
 			}
 
+			
+		}
+
+		if (_n != 0 && IsFocus())
+		{
+			int dt = input->GetMouseWheelDelta();
+			if (dt != 0)
+			{
+				_cur = float(int(_cur * _n) - dt) / _n;
+				_cur = Math::GetBetween<float>(_cur, 0, 1.0f);
+				if (_r)
+				{
+					float x = _max * _cur;// Math::GetBetween<float>(_max * _cur, _offset.a, _max + _offset.a);
+					_spr[4]->GetCoor()->SetPosition(Vector2(x, _offset.b));
+					_spr[3]->SetQuad(1, Vector2(x - _offset.a, -_underSize));
+					_spr[3]->SetQuad(2, Vector2(x - _offset.a, _underSize));
+				}
+				else
+				{
+					float y = _max * _cur;//Math::GetBetween<float>(_max * _cur, _offset.b, _max + _offset.b);
+					_spr[4]->GetCoor()->SetPosition(Vector2(_offset.a, y));
+					_spr[3]->SetQuad(2, Vector2(_underSize, y - _offset.b));
+					_spr[3]->SetQuad(3, Vector2(-_underSize, y - _offset.b));
+				}
+				
+
+			}
+
 		}
 	}
 
@@ -143,6 +172,11 @@ namespace DND
 			_spr[4]->GetCoor()->SetPosition(Vector2(_cur * _max, _offset.b));
 		else
 			_spr[4]->GetCoor()->SetPosition(Vector2(_offset.a, _cur * _max));
+	}
+
+	void SliderSprite5::SetN(UINT32 n /*= 0*/)
+	{
+		_n = n;
 	}
 
 	DND::SliderSprite5* SliderSprite5::Clone()
@@ -166,9 +200,12 @@ namespace DND
 		ret->_r = _r;
 		ret->_offset = _offset;
 		ret->_underSize = _underSize;
+		ret->_n = _n;
 
 		return ret;
 	}
+
+	DND::SliderSprite5* SliderSprite5::_focus = NULL;
 
 	SliderSprite5::SliderSprite5()
 	{
@@ -180,6 +217,7 @@ namespace DND
 		_coor = NULL;
 		_cur = 0;
 		_seleted = false;
+		_n = 0;
 	}
 
 }

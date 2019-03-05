@@ -29,7 +29,15 @@ namespace DND
 		float GetCur();
 		void SetCur(float k);
 
+		//将1.0划分到 0 - N-1 ,从而响应滚轮(设为0不响应)
+		void SetN(UINT32 n = 0);
+
+		bool IsFocus() { return _focus == this; }
+
+		Sprite* GetSprite(UINT32 n) { return _spr[n]; }
+
 		SliderSprite5* Clone();
+		static SliderSprite5* _focus;
 	private:
 		Sprite* _spr[5];
 		Coor* _coor;
@@ -40,6 +48,7 @@ namespace DND
 		bool _seleted;//是否被选中
 		bool _r;//是否横向
 		Vector2 _offset;//光标相对条的偏移
+		UINT32 _n;
 
 		float _underSize;
 	};

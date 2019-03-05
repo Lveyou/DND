@@ -123,7 +123,7 @@ namespace DND
 		Vector2 operator/(float var);
 		Vector2 operator*(float var);
 		Vector2 operator-();
-		//不要问我为何返回 (a,vb.b) 因为我疯了 
+		//暂时返回 (a,vb.b) 
 		Vector2 operator*(const Vector2& vb);
 		//此操作返回自己
 		Vector2& Scale(const Vector2& vb);

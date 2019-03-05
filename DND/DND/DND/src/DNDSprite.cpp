@@ -122,6 +122,22 @@ namespace DND
 		_quad.v[3] = _quad.v[3] + pos;
 	}
 
+	void Sprite::SetQuadScale(Vector2 s)
+	{
+		_quad.v[0] = _quad.v[0].Scale(s);
+		_quad.v[1] = _quad.v[1].Scale(s);
+		_quad.v[2] = _quad.v[2].Scale(s);
+		_quad.v[3] = _quad.v[3].Scale(s);
+	}
+
+	void Sprite::SetQuadScale(float s)
+	{
+		_quad.v[0] = _quad.v[0].Scale(s);
+		_quad.v[1] = _quad.v[1].Scale(s);
+		_quad.v[2] = _quad.v[2].Scale(s);
+		_quad.v[3] = _quad.v[3].Scale(s);
+	}
+
 	void Sprite::FloorQuad()
 	{
 		/*Vector2 d = Vector2(
