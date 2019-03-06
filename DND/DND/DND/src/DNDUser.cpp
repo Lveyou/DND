@@ -123,6 +123,13 @@ namespace DND
 		return atan2f(b, a);
 	}
 
+	void Vector2::Normalize()
+	{
+		float d = Math::InvSqrt(GetlengthSquared());
+		a *= d;
+		b *= d;
+	}
+
 	DND::Vector2 DND::Vector2::operator+(const Vector2& vb)
 	{
 		return Vector2(a + vb.a, b + vb.b);

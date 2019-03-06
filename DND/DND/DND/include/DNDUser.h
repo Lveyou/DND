@@ -132,7 +132,7 @@ namespace DND
 		double CrossProduct(const Vector2& vb);//≤Ê≥À
 		float GetlengthSquared();
 		float Angle();//∑µªÿ”ÎX÷·º–Ω«
-
+		void Normalize();
 	};
 
 
