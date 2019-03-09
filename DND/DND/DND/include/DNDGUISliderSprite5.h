@@ -35,6 +35,7 @@ namespace DND
 		bool IsFocus() { return _focus == this; }
 
 		Sprite* GetSprite(UINT32 n) { return _spr[n]; }
+		void SetOrder(int order);
 
 		SliderSprite5* Clone();
 		static SliderSprite5* _focus;

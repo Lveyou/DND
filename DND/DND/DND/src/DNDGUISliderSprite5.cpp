@@ -141,14 +141,14 @@ namespace DND
 				if (_r)
 				{
 					float x = _max * _cur;// Math::GetBetween<float>(_max * _cur, _offset.a, _max + _offset.a);
-					_spr[4]->GetCoor()->SetPosition(Vector2(x, _offset.b));
+					_spr[4]->GetCoor()->SetPosition(Vector2(x + _offset.a, _offset.b));
 					_spr[3]->SetQuad(1, Vector2(x - _offset.a, -_underSize));
 					_spr[3]->SetQuad(2, Vector2(x - _offset.a, _underSize));
 				}
 				else
 				{
 					float y = _max * _cur;//Math::GetBetween<float>(_max * _cur, _offset.b, _max + _offset.b);
-					_spr[4]->GetCoor()->SetPosition(Vector2(_offset.a, y));
+					_spr[4]->GetCoor()->SetPosition(Vector2(_offset.a, y + _offset.b));
 					_spr[3]->SetQuad(2, Vector2(_underSize, y - _offset.b));
 					_spr[3]->SetQuad(3, Vector2(-_underSize, y - _offset.b));
 				}
@@ -177,6 +177,15 @@ namespace DND
 	void SliderSprite5::SetN(UINT32 n /*= 0*/)
 	{
 		_n = n;
+	}
+
+	void SliderSprite5::SetOrder(int order)
+	{
+		_spr[0]->SetOrder(order);
+		_spr[1]->SetOrder(order);
+		_spr[2]->SetOrder(order);
+		_spr[3]->SetOrder(order + 1);
+		_spr[4]->SetOrder(order + 2);
 	}
 
 	DND::SliderSprite5* SliderSprite5::Clone()

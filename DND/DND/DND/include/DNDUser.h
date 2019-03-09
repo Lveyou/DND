@@ -178,6 +178,7 @@ namespace DND
 		Rect(const String& value);
 		Size GetSize() const;
 		String GetString() const;
+		void XYWHToRect();
 	};
 
 	DLL_API Size PointToSize(const Point& p);

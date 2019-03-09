@@ -411,6 +411,11 @@ namespace DND
 		return String::Format(64, L"%d,%d,%d,%d", p1.x, p1.y, p2.x, p2.y);
 	}
 
+	void Rect::XYWHToRect()
+	{
+		p2 = p2 + p1;
+	}
+
 	XYWH::XYWH(Point ip, Size isize) :
 		p(ip), size(isize)
 	{

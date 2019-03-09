@@ -43,6 +43,13 @@ namespace DND
 		return _coor;
 	}
 
+	void ButtonSprite3::SetOrder(int order)
+	{
+		_spr[0]->SetOrder(order);
+		_spr[1]->SetOrder(order);
+		_spr[2]->SetOrder(order);
+	}
+
 	bool ButtonSprite3::_is_pickup()
 	{
 		switch (GetState())

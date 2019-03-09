@@ -427,6 +427,12 @@ namespace DND
 		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter)
 		{
 			spr = iter->second;
+			if (spr == NULL)
+			{
+				debug_warn(L"DND: Canvas::_update: 出现一个空精灵！");
+				continue;
+			}
+				
 			spr->_update_rigidbody();//根据rigidbody刷新位置
 			//in_eye = false;
 			for (unsigned j = 0; j < 4; ++j)
