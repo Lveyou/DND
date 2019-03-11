@@ -43,9 +43,11 @@ namespace DND
 		Canvas* GetCanvas();
 		INT32 GetOrder();
 		void SetQuad(INT32 i, Vector2 pos);
+		void SetQuad(Quad quad);
 		void SetQuadOffset(Vector2 pos);
 		void SetQuadScale(Vector2 s);
 		void SetQuadScale(float s);
+		Vector2 GetQuad(UINT32 i);
 		//暂时无用
 		void FloorQuad();
 		//调用一次即生效，再调一次还原
@@ -75,6 +77,8 @@ namespace DND
 		//开启后，会检测是否与鼠标重合
 		bool _ui;
 		bool _noCoor;
+		//调用render后，设为true
+		bool _show;
 	};
 }
 

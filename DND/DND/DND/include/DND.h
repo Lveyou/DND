@@ -53,6 +53,7 @@
 #include "DNDGUISliderSprite2.h"		//SliderSprite2				2精灵滚动条
 #include "DNDGUISliderSprite5.h"		//SliderSprite5				5精灵滚动条
 #include "DNDGUIComboBox.h"				//ComboBox					下拉框
+#include "DNDGUIShadeBox.h"				//ShadeBox					旋转技能读条
 //////////////////////////////////////////////////////////////////////////
 
 #endif

@@ -244,6 +244,9 @@
     <ClInclude Include="include\DNDGUISliderSprite5.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\DNDGUIShadeBox.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">
@@ -427,6 +430,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\DNDGUISliderSprite5.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DNDGUIShadeBox.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

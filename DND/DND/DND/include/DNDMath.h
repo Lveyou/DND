@@ -23,6 +23,7 @@ namespace DND
 		static UINT32 GetPow2Large(UINT32 var);
 		static UINT32 GetUIntLength(UINT32 var);
 		static UINT32 GetIntLength(int var);
+		//请使用 GetTypeEpsilon获取差值
 		static inline bool IsFloatEqual(float a, float b)
 		{
 			return abs(a - b) < 1e-6;

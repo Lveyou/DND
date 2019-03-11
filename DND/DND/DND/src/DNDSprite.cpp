@@ -28,6 +28,7 @@ namespace DND
 	}
 	void Sprite::Render()
 	{
+		_show = true;
 		((Canvas_imp*)_canvas)->_sprites.insert(make_pair(this->_order, this));
 		if (_ui && IsPickup())
 		{
@@ -114,6 +115,11 @@ namespace DND
 		_quad.v[i] = pos;
 	}
 
+	void Sprite::SetQuad(Quad quad)
+	{
+		_quad = quad;
+	}
+
 	void Sprite::SetQuadOffset(Vector2 pos)
 	{
 		_quad.v[0] = _quad.v[0] + pos;
@@ -136,6 +142,11 @@ namespace DND
 		_quad.v[1] = _quad.v[1].Scale(s);
 		_quad.v[2] = _quad.v[2].Scale(s);
 		_quad.v[3] = _quad.v[3].Scale(s);
+	}
+
+	DND::Vector2 Sprite::GetQuad(UINT32 i)
+	{
+		return _quad.v[i];
 	}
 
 	void Sprite::FloorQuad()
@@ -181,7 +192,10 @@ namespace DND
 	Sprite::~Sprite()
 	{
 		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
-
+		if (_show)
+		{
+			debug_err(L"DND: 你不该在精灵Render后delete！");
+		}
 		//调用 Delete 删除
 		if (_coor && !_noCoor)
 			delete _coor;
@@ -196,6 +210,7 @@ namespace DND
 		_rigidBody = NULL;
 		_ui = false;
 		_noCoor = false;
+		_show = false;
 	}
 	Sprite* Sprite::Clone(Canvas* canvas /*= NULL*/)
 	{

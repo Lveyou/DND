@@ -37,6 +37,7 @@
     <ClInclude Include="include\DNDGUIButtonTextColor.h" />
     <ClInclude Include="include\DNDGUIComboBox.h" />
     <ClInclude Include="include\DNDGUIEditBoxSprite.h" />
+    <ClInclude Include="include\DNDGUIShadeBox.h" />
     <ClInclude Include="include\DNDGUISliderSprite2.h" />
     <ClInclude Include="include\DNDGUISliderSprite5.h" />
     <ClInclude Include="include\DNDGUISprite9.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="src\DNDGUIButtonTextColor.cpp" />
     <ClCompile Include="src\DNDGUIComboBox.cpp" />
     <ClCompile Include="src\DNDGUIEditBoxSprite.cpp" />
+    <ClCompile Include="src\DNDGUIShadeBox.cpp" />
     <ClCompile Include="src\DNDGUISliderSprite2.cpp" />
     <ClCompile Include="src\DNDGUISliderSprite5.cpp" />
     <ClCompile Include="src\DNDGUISprite9.cpp" />
