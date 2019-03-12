@@ -51,7 +51,8 @@ namespace DND
 		spr->_color[2] = color;
 		spr->_color[3] = color;
 		spr->_canvas = this;
-		//_allSprite.push_back(spr);
+		_tex->GetUV(imgID, spr->_uv);
+		
 		return spr;
 	}
 
@@ -73,7 +74,8 @@ namespace DND
 		spr->_color[2] = color;
 		spr->_color[3] = color;
 		spr->_canvas = this;
-		//_allSprite.push_back(spr);
+		_tex->GetUV(img_ID, spr->_uv);
+
 		return spr;
 	}
 
@@ -462,8 +464,8 @@ namespace DND
 				_vertexs[_renderSprNum + j].color.y = spr->_color[j].g();
 				_vertexs[_renderSprNum + j].color.z = spr->_color[j].b();
 				_vertexs[_renderSprNum + j].color.w = spr->_color[j].a();
-				_vertexs[_renderSprNum + j].t.x = _tex->GetTu(spr->_imageRectID, j);
-				_vertexs[_renderSprNum + j].t.y = _tex->GetTv(spr->_imageRectID, j);
+				_vertexs[_renderSprNum + j].t.x = spr->_uv[j].a;
+				_vertexs[_renderSprNum + j].t.y = spr->_uv[j].b;
 				//int a = 0;
 			}
 			_renderSprNum += 4;
@@ -472,6 +474,7 @@ namespace DND
 		
 		_sprites.clear();
 
+		//_iter = _sprites.begin();
 		//m_vertexs => m_buffer_vertex
 		//从内存复制到 显存
 
@@ -534,7 +537,8 @@ namespace DND
 
 		_bSetImage = false;
 		_shaderType = DND_SHADER_NORMAL;
-		
+
+		//_iter = _sprites.begin();
 	}
 
 	void Canvas_imp::SetShader(UINT32 type /*= 0*/)

@@ -191,6 +191,23 @@ namespace DND
 		else
 			return float(vector4.p2.y) / _size;
 	}
+
+	void Texture::GetUV(UINT32 image_rect_ID, Vector2* uv)
+	{
+		Rect vector4 = _imageRects[image_rect_ID];
+		uv[0].a = float(vector4.p1.x) / _size;
+		uv[0].b = float(vector4.p1.y) / _size;
+
+		uv[1].a = float(vector4.p2.x) / _size;
+		uv[1].b = float(vector4.p1.y) / _size;
+
+		uv[2].a = float(vector4.p2.x) / _size;
+		uv[2].b = float(vector4.p2.y) / _size;
+
+		uv[3].a = float(vector4.p1.x) / _size;
+		uv[3].b = float(vector4.p2.y) / _size;
+	}
+
 	//于2017-06-10修改 吴泔游
 	//传入WH,返回XY
 	bool Texture::_find_xy(const Size& size, Point& xy)
@@ -232,10 +249,10 @@ namespace DND
 			rect_test = XYWH(Point(dx, dy), size);
 
 			//如果test 不与现有的 相交，则返回
-			map<unsigned, Rect>::iterator itor;
-			for (itor = _imageRects.begin(); itor != _imageRects.end(); ++itor)
+			
+			for (auto& iter : _imageRects)
 			{
-				if (Math::TestCollisionRectAndRect(rect_test, itor->second))
+				if (Math::TestCollisionRectAndRect(rect_test, iter.second))
 				{
 					//Debug::Instance()->Write_Line(String(L"相交了"));
 					goto next;

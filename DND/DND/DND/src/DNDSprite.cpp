@@ -29,7 +29,7 @@ namespace DND
 	void Sprite::Render()
 	{
 		_show = true;
-		((Canvas_imp*)_canvas)->_sprites.insert(make_pair(this->_order, this));
+		((Canvas_imp*)_canvas)->_insert_sprite(this);
 		if (_ui && IsPickup())
 		{
 			((Canvas_imp*)_canvas)->_onGUISpr++;
@@ -252,6 +252,10 @@ namespace DND
 		spr->_color[3] = _color[3];
 		
 		spr->_ui = _ui;
+		spr->_uv[0] = _uv[0];
+		spr->_uv[1] = _uv[1];
+		spr->_uv[2] = _uv[2];
+		spr->_uv[3] = _uv[3];
 
 		return spr;
 	}

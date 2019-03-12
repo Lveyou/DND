@@ -1,6 +1,7 @@
 #include "DNDCanvas.h"
 #include "DNDCoor.h"
 #include "DNDTexture.h"
+#include "DNDSprite.h"
 
 #include <d3d11.h>
 #include <list>
@@ -63,6 +64,12 @@ namespace DND
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
 		void _create_vertex_buffer();
 		void _release_vertex_buffer();
+
+		inline void _insert_sprite(Sprite* spr)
+		{
+			_sprites.insert(make_pair(spr->_order, spr));
+		}
+		//multimap<int, Sprite*>::iterator _iter;
 
 		INT32 _order;
 		//all_sprite

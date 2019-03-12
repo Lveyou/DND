@@ -13,7 +13,7 @@
 #include <d3d11.h>
 #include "DNDImage.h"
 #include "DNDUser.h"
-#include <map>
+#include <unordered_map>
 using namespace std;
 
 namespace DND
@@ -31,11 +31,13 @@ namespace DND
 		void AddImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect);
 		float GetTu(UINT32 image_rect_ID, UINT32 index);
 		float GetTv(UINT32 image_rect_ID, UINT32 index);
+		//一次性返回所有uv
+		void GetUV(UINT32 image_rect_ID, Vector2* uv);
 		ID3D11Texture2D* _texture;
 		ID3D11ShaderResourceView* _shaderResourceView;
 		UINT32 _size;
 		
-		map<unsigned, Rect> _imageRects;
+		unordered_map<unsigned, Rect> _imageRects;
 
 		bool _find_xy(const Size& size, Point& xy);
 

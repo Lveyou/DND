@@ -71,6 +71,7 @@ namespace DND
 		Quad _quad;
 		Color _color[4];
 		unsigned _imageRectID;
+		Vector2 _uv[4];
 		//bool _show;
 		//bool _dead;
 		RigidBody* _rigidBody;
