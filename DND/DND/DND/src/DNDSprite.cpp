@@ -194,7 +194,7 @@ namespace DND
 		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
 		if (_show)
 		{
-			debug_err(L"DND: 你不该在精灵Render后delete！");
+			dnd_assert(0, ERROR_00051);
 		}
 		//调用 Delete 删除
 		if (_coor && !_noCoor)

@@ -85,6 +85,7 @@ namespace DND
 	const String ERROR_00048 = L"暂无。";
 	const String ERROR_00049 = L"初始化WinSock失败。";
 	const String ERROR_00050 = L"NetMsg::UnBuild失败，类型不匹配。";
+	const String ERROR_00051 = L"删除了Render过的Sprite。";
 
 }
 
