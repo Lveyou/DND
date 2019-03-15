@@ -86,6 +86,7 @@ namespace DND
 
 	};
 	//debugger console
+	
 	class DLL_API DebuggerConsole : public Debugger
 	{
 	public:
@@ -107,6 +108,8 @@ namespace DND
 		//	YELLOW,//warning
 		//	RED,//error
 		//};
+		//指定一个文件输出日志，选择是否覆盖
+		void SetLogFile(const String& path_name, bool cover = true);
 		//build console window and relocation stream
 		DebuggerConsole();
 		~DebuggerConsole();
@@ -118,6 +121,7 @@ namespace DND
 		Mutex _mutex2;
 		void _get_console_hwnd();
 		
+		FILE* _logFile;
 	};
 
 

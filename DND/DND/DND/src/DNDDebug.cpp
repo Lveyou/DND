@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <iostream>
 #include "DNDMutex.h"
+#include "DNDSystem.h"
 
 namespace DND
 {
@@ -129,12 +130,20 @@ namespace DND
 			break;
 		}
 		std::wcout << str.GetWcs();
+		if (_logFile)
+		{
+			fputws(str.GetWcs(), _logFile);
+		}
 		_mutex.UnLock();
 	}
 
 	void DebuggerConsole::WriteEndl(int level)
 	{
 		std::wcout << std::endl;
+		if (_logFile)
+		{
+			fputwc(L'\n', _logFile);
+		}
 	}
 
 	DebuggerConsole::DebuggerConsole()
@@ -147,6 +156,7 @@ namespace DND
 		_get_console_hwnd();
 		_handleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 		_bTimeStamp = true;
+		_logFile = NULL;
 	}
 
 	void DebuggerConsole::_get_console_hwnd()
@@ -166,6 +176,8 @@ namespace DND
 
 	DebuggerConsole::~DebuggerConsole()
 	{
+		if (_logFile)
+			fclose(_logFile);
 		FreeConsole();
 	}
 
@@ -193,6 +205,15 @@ namespace DND
 		wcin >> temp;
 
 		return temp;
+	}
+
+	void DebuggerConsole::SetLogFile(const String& path_name, bool cover /*= true*/)
+	{
+		if (cover || Game::Get()->sys->IsFileExist(path_name))
+		{
+			_wfopen_s(&_logFile, path_name.GetWcs(), L"w");
+		}
+		
 	}
 
 }
