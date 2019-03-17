@@ -51,7 +51,7 @@ namespace DND
 		//暂时无用
 		void FloorQuad();
 		//调用一次即生效，再调一次还原
-		void Clip(bool x, bool y);
+		void Flip(bool x, bool y);
 
 		void SetUI(bool open);
 

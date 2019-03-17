@@ -165,7 +165,7 @@ namespace DND
 		_quad.v[3] = _quad.v[3] + d;*/
 	}
 
-	void Sprite::Clip(bool x, bool y)
+	void Sprite::Flip(bool x, bool y)
 	{
 		if (x)
 		{

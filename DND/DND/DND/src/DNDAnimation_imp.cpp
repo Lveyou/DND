@@ -159,11 +159,11 @@ namespace DND
 		_fps = fps;
 	}
 
-	void Animation_imp::Clip(bool x, bool y)
+	void Animation_imp::Flip(bool x, bool y)
 	{
 		for (auto& iter : _listSpr)
 		{
-			iter->Clip(x, y);
+			iter->Flip(x, y);
 		}
 	}
 
