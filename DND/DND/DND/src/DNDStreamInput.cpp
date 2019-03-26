@@ -48,7 +48,7 @@ namespace DND
 		Read(&data, sizeof(INT32));
 	}
 
-	void StreamInput::LoadFromFile(const String& path_name)
+	bool StreamInput::LoadFromFile(const String& path_name)
 	{
 		FILE* p= NULL;
 
@@ -56,15 +56,17 @@ namespace DND
 
 		if (p != NULL)
 		{
-			fseek(p, 0, SEEK_END);   
-			_size = ftell(p); 
+			fseek(p, 0, SEEK_END);
+			_size = ftell(p);
 			fseek(p, 0, SEEK_SET);
 			_buffer = (BYTE*)malloc(_size);
 
 			fread_s(_buffer, _size, _size, 1, p);
 			fclose(p);
+			return true;
 		}
-
+		else
+			return false;
 		
 	}
 

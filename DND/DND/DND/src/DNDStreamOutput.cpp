@@ -47,14 +47,22 @@ namespace DND
 		Write(&data, sizeof(INT32));
 	}
 
-	void StreamOutput::Save(const String& path_name)
+	bool StreamOutput::Save(const String& path_name)
 	{
-		FILE* p;
+		FILE* p = NULL;
 		
 		_wfopen_s(&p, path_name.GetWcs(), L"wb");//二进制只写
 
-		fwrite(_buffer, _head, 1, p);
-		fclose(p);
+		if (p != NULL)
+		{
+			fwrite(_buffer, _head, 1, p);
+			fclose(p);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	void StreamOutput::_realloc(UINT32 size)

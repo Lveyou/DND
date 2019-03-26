@@ -40,7 +40,7 @@ namespace DND
 		void Write(UINT32 data);
 		void Write(INT32 data);
 
-		void Save(const String& path_name);
+		bool Save(const String& path_name);
 	private:
 		void _realloc(UINT32 size);
 

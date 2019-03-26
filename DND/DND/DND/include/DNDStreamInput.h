@@ -40,7 +40,7 @@ namespace DND
 		void Read(UINT32& data);
 		void Read(INT32& data);
 
-		void LoadFromFile(const String& path_name);
+		bool LoadFromFile(const String& path_name);
 		void LoadFromMemory(BYTE* buffer, UINT32 length);
 	private:
 
