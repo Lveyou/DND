@@ -44,7 +44,7 @@ namespace DND
 		
 		UINT32 GetIndex(UINT32 w);
 		//UINT32 ToUINT32();
-		//bool operator<(const Point& b) const;
+		bool operator<(const Point& b) const;
 		bool operator==(const Point& b);
 		bool operator!=(const Point& b);
 		Point operator-(const Point& b) const;

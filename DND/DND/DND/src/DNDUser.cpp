@@ -326,6 +326,13 @@ namespace DND
 		return x + y * w;
 	}
 
+	bool Point::operator<(const Point& b) const
+	{
+		if (x < b.x) return true;
+		else if (x == b.x) return y < b.y;
+
+	}
+
 	bool Point::operator==(const Point& b)
 	{
 		return (x == b.x) && (y == b.y);
