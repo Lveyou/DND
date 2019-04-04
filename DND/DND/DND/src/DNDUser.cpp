@@ -330,6 +330,7 @@ namespace DND
 	{
 		if (x < b.x) return true;
 		else if (x == b.x) return y < b.y;
+		else return false;
 
 	}
 
@@ -554,6 +555,14 @@ namespace DND
 		v[2] = window / 2 + wh2;
 		v[1] = Vector2(v[2].a, v[0].b);
 		v[3] = Vector2(v[0].a, v[2].b);
+	}
+
+	void Quad::Offset(Vector2 offset)
+	{
+		v[0] += offset;
+		v[2] += offset;
+		v[1] += offset;
+		v[3] += offset;
 	}
 
 	PointU::PointU() : x(0), y(0)

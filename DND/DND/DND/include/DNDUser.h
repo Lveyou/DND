@@ -205,6 +205,7 @@ namespace DND
 		Quad(Vector2 size);
 
 	public:
+		void Offset(Vector2 offset);
 		Vector2 v[4];
 	};
 }
