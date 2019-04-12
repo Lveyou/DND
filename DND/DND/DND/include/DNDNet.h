@@ -47,7 +47,7 @@ namespace DND
 			_code = typeid(T).hash_code();
 		}
 	};
-
+	
 	template<typename T>
 	inline UINT32 GetClassType()
 	{
