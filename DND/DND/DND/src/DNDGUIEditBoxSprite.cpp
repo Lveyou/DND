@@ -1,5 +1,6 @@
 #include "DNDGUIEditBoxSprite.h"
 #include "DNDDebug.h"
+#include "DNDText.h"
 
 namespace DND
 {
@@ -9,11 +10,13 @@ namespace DND
 		
 	}
 
-	EditBoxSprite* EditBoxSprite::Create(Sprite* spr)
+	EditBoxSprite* EditBoxSprite::Create(Sprite* spr, Text* txt)
 	{
 		EditBoxSprite* ret = new EditBoxSprite;
 		ret->m_spr = spr;
 		ret->m_spr->SetUI(true);
+		ret->_txt = txt;
+		ret->_txt->GetCoor()->SetParent(ret->m_spr->GetCoor());
 
 		return ret;
 	}

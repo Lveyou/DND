@@ -16,6 +16,7 @@
 
 #include "DNDDLL.h"
 #include "DNDString.h"
+#include "DNDUser.h"
 
 namespace DND
 {
@@ -69,12 +70,15 @@ namespace DND
 	};
 
 	class Sprite;
+	class Coor;
+	class Text;
 	class DLL_API EditBox
 	{
 		friend class System_imp;
 	public:
 		void Run();
-
+		Coor* GetCoor();// 返回文本的坐标
+		Vector2 GetEndOffset();//返回末尾便宜
 		
 		void SetFocus(bool focus);
 		bool IsFocus();
@@ -92,6 +96,7 @@ namespace DND
 	private:
 		virtual void RunRender() = 0;
 		virtual bool TestCollision() = 0;
+		
 
 		unsigned m_max_size;
 
@@ -104,6 +109,7 @@ namespace DND
 
 	protected:
 		String m_string;
+		Text* _txt;
 		virtual void OnChar(wchar_t ch) = 0;
 		virtual void OnBack() = 0;
 	public:
@@ -112,7 +118,7 @@ namespace DND
 
 		static void _process_input_char(wchar_t c);
 	private:
-
+		
 	};
 
 	class DLL_API GUIPanel

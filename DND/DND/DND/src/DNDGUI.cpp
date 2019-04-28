@@ -3,6 +3,7 @@
 #include "DNDInput.h"
 #include "DNDDebug.h"
 #include "DNDSprite.h"
+#include "DNDText.h"
 
 namespace DND
 {
@@ -255,6 +256,18 @@ namespace DND
 	}
 
 
+	DND::Coor* EditBox::GetCoor()
+	{
+		if (_txt) return _txt->GetCoor();
+		else return NULL;
+	}
+
+	Vector2 EditBox::GetEndOffset()
+	{
+		if (_txt) return _txt->GetEndPosition();
+		else return Vector2();
+	}
+
 	void EditBox::SetFocus(bool f)
 	{
 		if (f)
@@ -322,6 +335,7 @@ namespace DND
 		m_contrl = true;
 		m_other = true;
 		m_max_size = -1;
+		_txt = NULL;
 	}
 
 }

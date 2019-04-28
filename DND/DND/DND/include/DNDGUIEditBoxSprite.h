@@ -4,6 +4,7 @@
 //date:		17-09-24
 
 //other:
+//1.由于需要定位光标，改为所有Edit都有txt 19-04-28
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -21,7 +22,7 @@ namespace DND
 	class DLL_API EditBoxSprite : public EditBox
 	{
 	public:
-		static EditBoxSprite* Create(Sprite* spr);
+		static EditBoxSprite* Create(Sprite* spr, Text* txt);
 		void Push(wchar_t ch);
 	private:
 		EditBoxSprite();
@@ -29,6 +30,7 @@ namespace DND
 		virtual bool TestCollision() override;
 		virtual void OnChar(wchar_t ch) override;
 		virtual void OnBack() override;
+
 		Sprite* m_spr;
 	};
 }
