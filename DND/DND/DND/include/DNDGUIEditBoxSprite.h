@@ -24,6 +24,7 @@ namespace DND
 	public:
 		static EditBoxSprite* Create(Sprite* spr, Text* txt);
 		void Push(wchar_t ch);
+		Sprite* GetSprite() { return m_spr; }
 	private:
 		EditBoxSprite();
 		virtual void RunRender() override;

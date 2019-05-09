@@ -9,6 +9,7 @@
 //17-09-24: EditBox为特殊的输入框控件基类
 //17-10-10: 引入Control Mode的概念
 //18-07-24: 我只能说，以上全部作废
+//19-05-09: EditBox需要重写，暂时用着以后再说
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_GUI_H_
@@ -83,6 +84,7 @@ namespace DND
 		void SetFocus(bool focus);
 		bool IsFocus();
 		String GetString();
+		Text* GetText() { return _txt; }
 
 		void SetString(const String& str);
 		void SetMaxSize(unsigned size = -1);
