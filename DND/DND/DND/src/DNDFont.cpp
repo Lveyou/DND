@@ -42,7 +42,7 @@ namespace DND
 		return true;
 	}
 
-	void Font::_get_char(const String& name, unsigned int size, WCHAR ch, Image*& img, Point& offset)
+	bool Font::_get_char(const String& name, unsigned int size, WCHAR ch, Image*& img, Point& offset)
 	{
 		//2017-06-19
 		//这里返回的img是大图，rect是在图中的位置
@@ -55,16 +55,25 @@ namespace DND
 			maps.push_back(temp);
 			//
 			node = temp->_get_char(ch);
+			if (node.image == NULL)
+			{
+				return false;
+			}
 		}
 		else
 		{
 			node = (*iter)->_get_char(ch);
 			delete temp;
+			if (node.image == NULL)
+			{
+				return false;
+			}
 		}
 
 		offset = node.offset;
 		img = node.image;
 
+		return true;
 	}
 
 
@@ -103,10 +112,22 @@ namespace DND
 
 				FT_Glyph glyph;
 				FT_BitmapGlyph glyph_bitmap;
-				if(iter_face->mode)
-					FT_Load_Char(ft_face, ch, FT_LOAD_DEFAULT);
+				if (iter_face->mode)
+				{
+					if (FT_Load_Char(ft_face, ch, FT_LOAD_DEFAULT))
+					{
+						debug_warn(String(L"DND: FontCharMap::_get_char: 字体没有字符: ") + ch);
+						return FontCharMapNode();
+					}		
+				}	
 				else
-					FT_Load_Char(ft_face, ch, FT_LOAD_RENDER);
+				{
+					if (FT_Load_Char(ft_face, ch, FT_LOAD_RENDER))
+					{
+						debug_warn(String(L"DND: FontCharMap::_get_char: 字体没有字符: ") + ch);
+						return FontCharMapNode();
+					}
+				}
 				FT_Get_Glyph(ft_face->glyph, &glyph);
 
 				
@@ -159,16 +180,16 @@ namespace DND
 
 
 
-					FT_Done_Glyph(glyph);
-					//////////////////////////////////////////////////////////////////////////
+				FT_Done_Glyph(glyph);
+				//////////////////////////////////////////////////////////////////////////
 
 
 
 
 
-					nodes[ch] = charmap_node;
+				nodes[ch] = charmap_node;
 
-					return charmap_node;
+				return charmap_node;
 			}
 		}
 		else

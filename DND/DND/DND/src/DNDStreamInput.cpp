@@ -24,18 +24,20 @@ namespace DND
 		return _buffer;
 	}
 
-	void StreamInput::Read(void* data, UINT32 byte_count)
+	bool StreamInput::Read(void* data, UINT32 byte_count)
 	{
 		UINT32 result_head = _head + byte_count;
 
 		if(result_head > _size)
 		{
 			debug_err(L"DND: StreamInput::Read超出了buffer大小。");
+			return false;
 		}
 
 		memcpy(data, _buffer + _head, byte_count);
 
 		_head = result_head;
+		return true;
 	}
 
 	void StreamInput::Read(UINT32& data)

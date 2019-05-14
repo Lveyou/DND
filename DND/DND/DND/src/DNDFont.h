@@ -86,7 +86,7 @@ namespace DND
 	public:
 		Font();
 		bool _load_font_file(const String& name, const String& path, int mode);
-		void _get_char(const String& name, unsigned int size, WCHAR ch, Image*& img, Point& offset);
+		bool _get_char(const String& name, unsigned int size, WCHAR ch, Image*& img, Point& offset);
 
 		FT_Library library;
 		list<FontFace> faces;

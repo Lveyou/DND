@@ -114,5 +114,13 @@ namespace DND
 		_offsetTxt = offset;
 	}
 
+	void ButtonSprite3Text1::SetOrder(int order)
+	{
+		_spr[0]->SetOrder(order);
+		_spr[1]->SetOrder(order);
+		_spr[2]->SetOrder(order);
+		_txt->SetOrder(order);
+	}
+
 }
 

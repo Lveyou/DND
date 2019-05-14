@@ -225,13 +225,16 @@ namespace DND
 
 		Rect rect_test = rect_add;
 		//
-		const unsigned d = 3;
+		unsigned d = 3;
 		while (true)
 		{
 		next:
 			//大于整图，直接返回false
 			if (size.w > _size)
+			{
 				return false;
+			}
+				
 			//变化测试
 			if (dx + size.w + d > _size)
 			{
@@ -239,7 +242,10 @@ namespace DND
 				dx = 0;
 				//如果换行后 超过范围
 				if (dy + size.h > _size)
+				{
 					return false;
+				}
+					
 			}
 			else
 			{

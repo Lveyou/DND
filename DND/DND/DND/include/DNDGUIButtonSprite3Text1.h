@@ -28,6 +28,8 @@ namespace DND
 		ButtonSprite3Text1* Clone();
 		void ApplyUIScale(float scale);
 		void SetTxtOffset(Vector2 offset);
+
+		void SetOrder(int order);
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;

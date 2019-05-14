@@ -28,9 +28,12 @@ namespace DND
 		void PushBack(const String& str);
 		int Run();
 		String GetCur();
+		int GetCurNumber();
 		void SetCur(int i);
 		Coor* GetCoor();
 		ComboBox* Clone();
+
+		ButtonSprite3* GetRight() { return _btnRight; }
 	private:
 		//////////////////////////////////////////////////////////////////////////
 		Sprite* _sprTop;//top

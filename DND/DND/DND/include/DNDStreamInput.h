@@ -27,7 +27,7 @@ namespace DND
 		~StreamInput();
 		
 		const BYTE* GetBuffer();
-		
+		UINT32 GetSize() { return _size; }
 
 		template <typename T>
 		void Read(T* data)
@@ -36,7 +36,7 @@ namespace DND
 				debug_err(L"StreamOutput::Write: 不能用模板初始化基础类型！");
 			Read(data, sizeof(T));
 		}
-		void Read(void* data, UINT32 byte_count);
+		bool Read(void* data, UINT32 byte_count);
 		void Read(UINT32& data);
 		void Read(INT32& data);
 

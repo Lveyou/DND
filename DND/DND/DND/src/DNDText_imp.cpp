@@ -109,28 +109,26 @@ namespace DND
 
 				break;
 			default:
-
 				//ÕâÀï·µ»ØµÄÊÇ¸´ÖÆµÄspr
 				spr = m_canvas->GetCharSprite(m_font_name, m_font_size, buffer[i]);
 				if (spr == NULL)
 				{
-					//Debug::Instance()->Write_Line(String(L"Set_String ÖÐÄ³×Ö·ûÎ´×¢²á£¡") + buffer[i]);
-					assert(spr && L"Set_String ÖÐÄ³×Ö·ûÎ´×¢²á£¡");
+					debug_warn(String(L"Text_imp::SetStringFast: ×Ö·ûÎ´×¢²á£¡") + buffer[i]);
+					spr = m_canvas->CreateSprite(0, Quad(Vector2(0, 0), Point(dw, dh)));
 				}
 				spr->SetColor(m_color);
 				break;
 			}
 
+				
+				spr->SetOrder(m_order);
+				coor = spr->GetCoor();
+				coor->SetPosition((Point(x, y)));
+				coor->SetParent(m_coor);
 
-			spr->SetOrder(m_order);
-			coor = spr->GetCoor();
-			coor->SetPosition((Point(x, y)));
-			coor->SetParent(m_coor);
+				m_sprites.push_back(spr);
 
-			m_sprites.push_back(spr);
-
-			x += (UINT32)((INT32)(spr->_quad.v[0].a) + (INT32)(spr->GetSize().w));
-
+				x += (UINT32)((INT32)(spr->_quad.v[0].a) + (INT32)(spr->GetSize().w));
 		}
 		if (x > x_max)
 			x_max = x;

@@ -17,15 +17,19 @@ namespace DND
 
 		ret->_sprUnder = under;
 		ret->_sprUnder->GetCoor()->SetParent(ret->_coor);
+		under->SetOrder(top->GetOrder() + 1);
 
 		ret->_sprOver = over;
 		ret->_sprOver->GetCoor()->SetParent(ret->_sprUnder->GetCoor());
+		over->SetOrder(top->GetOrder() + 2);
 
 		ret->_btnRight = right;
 		ret->_btnRight->GetCoor()->SetParent(ret->_coor);
+		right->SetOrder(top->GetOrder());
 
 		ret->_txt = txt;
 		ret->_txt->GetCoor()->SetParent(ret->_coor);
+		txt->SetOrder(top->GetOrder());
 
 		ret->_dy = dy == 0 ? over->GetSize().h : dy;
 
@@ -35,6 +39,7 @@ namespace DND
 	void ComboBox::PushBack(const String& str)
 	{
 		Text* txt = _txt->Clone();
+		txt->SetOrder(_sprTop->GetOrder() + 2);
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_back(txt);
@@ -117,6 +122,11 @@ namespace DND
 			return STRING_EMPTY;
 
 		return (*iter)->GetString();
+	}
+
+	int ComboBox::GetCurNumber()
+	{
+		return _cur;
 	}
 
 	void ComboBox::SetCur(int i)

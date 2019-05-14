@@ -242,7 +242,12 @@ namespace DND
 				continue;
 			}
 			//////////////////////////////
-			font->_get_char(name, font_size, temp[i], img, offset);
+			if (!font->_get_char(name, font_size, temp[i], img, offset))
+			{
+				continue;
+			}
+			//
+			//debug_msg(node.ch);
 			//字符的注册id为 起始 + 100000 * size + 加值
 			RegisterImageAll(CANVAS_TEXT_ID_START + 100000 * font_size + node.ch, img);
 			
