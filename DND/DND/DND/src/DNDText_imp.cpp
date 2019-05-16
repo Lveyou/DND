@@ -102,6 +102,13 @@ namespace DND
 
 			}
 			break;
+			case L'\t':
+			{
+				dw = space_w * 8;
+				spr = m_canvas->CreateSprite(0, Quad(Vector2(0, 0), Point(dw, dh)), Color::ALPHACOLOR);
+
+			}
+			break;
 			case L'\n':
 
 				dw = m_max_w - x;
