@@ -128,6 +128,22 @@ namespace DND
 		_quad.v[3] = _quad.v[3] + pos;
 	}
 
+	void Sprite::SetQuadRotate(float r)
+	{
+		//x1 = x?cos¦È + y?sin¦È
+		//y1 = -x?sin¦È + y?cos¦È
+		float c = cos(r);
+		float s = sin(r);
+		float x, y;
+		for (UINT32 i = 0; i != 4; ++i)
+		{
+			x = _quad.v[i].a;
+			y = _quad.v[i].b;
+			_quad.v[i].a = x * c + y * s;
+			_quad.v[i].b = -x * s + y * c;
+		}
+	}
+
 	void Sprite::SetQuadScale(Vector2 s)
 	{
 		_quad.v[0] = _quad.v[0].Scale(s);

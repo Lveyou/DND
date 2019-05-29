@@ -32,6 +32,7 @@ namespace DND
 		virtual void SetOrder(INT32 n) = 0;
 		virtual void SetColor(Color color) = 0;
 		virtual void SetQuadOffset(Vector2 offset) = 0;
+		virtual void SetQuadRotate(float r) = 0;
 		virtual void SetFPS(UINT32 fps) = 0;
 		virtual void Flip(bool x, bool y) = 0;
 

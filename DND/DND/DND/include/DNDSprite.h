@@ -45,6 +45,7 @@ namespace DND
 		void SetQuad(INT32 i, Vector2 pos);
 		void SetQuad(Quad quad);
 		void SetQuadOffset(Vector2 pos);
+		void SetQuadRotate(float r);
 		void SetQuadScale(Vector2 s);
 		void SetQuadScale(float s);
 		Vector2 GetQuad(UINT32 i);

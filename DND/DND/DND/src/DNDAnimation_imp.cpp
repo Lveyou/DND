@@ -154,6 +154,14 @@ namespace DND
 		}
 	}
 
+	void Animation_imp::SetQuadRotate(float r)
+	{
+		for (auto& iter : _listSpr)
+		{
+			iter->SetQuadRotate(r);
+		}
+	}
+
 	void Animation_imp::SetFPS(UINT32 fps /*= 0*/)
 	{
 		_fps = fps;
