@@ -45,7 +45,7 @@ namespace DND
 		static void SetSeed(UINT32 seed);//设置种子
 		static void SwapInt(int& a, int& b);
 		static void SwapFloat(float& a, float& b);
-		
+
 		static bool TestCollisionRayAndTriangle(const Vector3& orig, const Vector3& dir,
 			const Vector3& v0, const Vector3& v1, const Vector3& v2,
 			float& t, float& u, float& v);//射线与三角形相交
@@ -70,8 +70,8 @@ namespace DND
 		{
 			return (std::numeric_limits<T>::min)();
 		}
-		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1,const Vector2& p2);
-	
+		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1, const Vector2& p2);
+
 		//从 -x轴 开始，编号为0-7，顺时针
 		static int GetLookAt(const Vector2& p);
 
@@ -85,6 +85,20 @@ namespace DND
 			else
 				return var;
 		}
+
+		//点 绕原点旋转（若绕某点，则平移旋转再平移即可）
+		static void RotateWithDot(Vector2& p, float r)
+		{
+			float c = cos(r);
+			float s = sin(r);
+			float x = p.a;
+			float y = p.b;
+			p.a = x * c + y * s;
+			p.b = x * s - y * c;
+		}
+
+		static void RotateArray(Point& p, int r, Size wh);
+		static void RotateArray(Vector2& p, int r, Size wh);
 	};
 }
 

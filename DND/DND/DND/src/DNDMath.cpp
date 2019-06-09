@@ -79,6 +79,54 @@ namespace DND
 		return look_at;
 	}
 
+	void Math::RotateArray(Point& p, int r, Size wh)
+	{
+		if (r == 0 || r > 3)
+			return;
+
+		if (r == 1)
+		{
+			auto t = p.x;
+			p.x = -p.y + wh.h;
+			p.y = t;
+		}
+		else if (r == 2)
+		{
+			p.x = -p.x + wh.w;
+			p.y = -p.y + wh.h;
+		}
+		else if (r == 3)
+		{
+			auto t = p.x;
+			p.x = p.y;
+			p.y = -t + wh.w;
+		}
+	}
+
+	void Math::RotateArray(Vector2& p, int r, Size wh)
+	{
+		if (r == 0 || r > 3)
+			return;
+
+		if (r == 1)
+		{
+			auto t = p.a;
+			p.a = p.b;
+			p.b = t;
+		}
+		else if (r == 2)
+		{
+			p.a = wh.w - p.a;
+			p.b = wh.h - p.b;
+		}
+		else if (r == 3)
+		{
+			auto t = p.a;
+			p.a = p.b;
+			p.b = wh.w - t;
+		}
+	}
+
 	UINT32 DND::Math::GetIntLength(int var)
 	{
 		if (var == 0)

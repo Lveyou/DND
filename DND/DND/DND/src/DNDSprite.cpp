@@ -130,8 +130,8 @@ namespace DND
 
 	void Sprite::SetQuadRotate(float r)
 	{
-		//x1 = x?cos¦È + y?sin¦È
-		//y1 = -x?sin¦È + y?cos¦È
+		//x1 = x?cos¦È - y?sin¦È
+		//y1 = x?sin¦È + y?cos¦È
 		float c = cos(r);
 		float s = sin(r);
 		float x, y;
@@ -139,8 +139,8 @@ namespace DND
 		{
 			x = _quad.v[i].a;
 			y = _quad.v[i].b;
-			_quad.v[i].a = x * c + y * s;
-			_quad.v[i].b = -x * s + y * c;
+			_quad.v[i].a = x * c - y * s;
+			_quad.v[i].b = x * s + y * c;
 		}
 	}
 
