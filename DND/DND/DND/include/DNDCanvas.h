@@ -20,6 +20,7 @@ const UINT32 DND_SHADER_NORMAL = 0;
 const UINT32 DND_SHADER_OVERLAY = 1;//叠加
 const UINT32 DND_SHADER_DARKEN = 2;//变暗
 const UINT32 DND_SHADER_CLOLOR_DODGE = 3;//颜色减淡
+const UINT32 DND_SHADER_WATER = 4;//水面
 
 namespace DND
 {
@@ -71,6 +72,7 @@ namespace DND
 		virtual UINT32 GetOnGUISpriteNumber() = 0;
 
 		//直接设置 纹理（之后会省略注册中实际注册步骤，因为同样的代码顺序，返回的id号始终相同）
+		//直接设置的 纹理，产生tex的大小为图像大小，可能会小于默认值
 		virtual bool SetImage(const String& img_name, const String& rects) = 0;
 		virtual void SaveImageRects(const String& rects) = 0;
 

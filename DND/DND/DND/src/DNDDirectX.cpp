@@ -13,7 +13,7 @@ namespace DND
 	const String STRING_PATH_SHADER_2D_OVERLAY = L"DND\\Shader\\2d_overlay.fx";//叠加
 	const String STRING_PATH_SHADER_2D_DARKEN = L"DND\\Shader\\2d_darken.fx";//变暗
 	const String STRING_PATH_SHADER_2D_CLOLOR_DODGE = L"DND\\Shader\\2d_clolor_dodge.fx";//颜色减淡
-
+	const String STRING_PATH_SHADER_2D_WATER = L"DND\\Shader\\2d_water.fx";//水面
 
 	void Gfx2D::_init()
 	{
@@ -55,6 +55,7 @@ namespace DND
 		_init_shader(DND_SHADER_OVERLAY, STRING_PATH_SHADER_2D_OVERLAY);
 		_init_shader(DND_SHADER_DARKEN, STRING_PATH_SHADER_2D_DARKEN);
 		_init_shader(DND_SHADER_CLOLOR_DODGE, STRING_PATH_SHADER_2D_CLOLOR_DODGE);
+		_init_shader(DND_SHADER_WATER, STRING_PATH_SHADER_2D_WATER);
 	}
 
 	
@@ -151,6 +152,27 @@ namespace DND
 			dnd_assert(_shader[type]._colorTextureBg, ERROR_00042);
 		}
 
+		//time
+		if (type == DND_SHADER_WATER)
+		{
+			
+			variable = NULL;
+			variable = _shader[type]._effect->GetVariableByName("dnd_time");
+			dnd_assert(variable, ERROR_00041);
+
+			_shader[type]._time = variable->AsScalar();
+			dnd_assert(_shader[type]._time, ERROR_00042);
+
+			//noise
+			variable = NULL;
+			variable = _shader[type]._effect->GetVariableByName("NoiseTexture");
+			dnd_assert(variable, ERROR_00041);
+
+			_shader[type]._noiseTexture = variable->AsShaderResource();
+			dnd_assert(_shader[type]._noiseTexture, ERROR_00042);
+		}
+
+		//TODO: 报错提示有待修改
 	}
 
 	void Gfx2D::_reset_wvp(UINT32 type)

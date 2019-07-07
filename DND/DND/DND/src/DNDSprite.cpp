@@ -165,6 +165,11 @@ namespace DND
 		return _quad.v[i];
 	}
 
+	void Sprite::SetUV(int i, Vector2 uv)
+	{
+		_uv[i] = uv;
+	}
+
 	void Sprite::FloorQuad()
 	{
 		/*Vector2 d = Vector2(

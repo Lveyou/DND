@@ -86,6 +86,8 @@ namespace DND
 		Coor* _coor;
 		//贴图
 		Texture* _tex;
+		//贴图2（用于shader）
+		Texture* _tex2;
 
 		//用于系统注册idyon
 		unsigned _systemUseID;

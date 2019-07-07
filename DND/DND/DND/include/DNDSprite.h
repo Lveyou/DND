@@ -49,6 +49,10 @@ namespace DND
 		void SetQuadScale(Vector2 s);
 		void SetQuadScale(float s);
 		Vector2 GetQuad(UINT32 i);
+
+		//直接设置uv，慎用
+		void SetUV(int i, Vector2 uv);
+
 		//暂时无用
 		void FloorQuad();
 		//调用一次即生效，再调一次还原

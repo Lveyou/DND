@@ -33,6 +33,7 @@ namespace DND
 		float GetTv(UINT32 image_rect_ID, UINT32 index);
 		//一次性返回所有uv
 		void GetUV(UINT32 image_rect_ID, Vector2* uv);
+		
 		ID3D11Texture2D* _texture;
 		ID3D11ShaderResourceView* _shaderResourceView;
 		UINT32 _size;

@@ -9,6 +9,7 @@
 #include "DNDFont.h"
 #include "DNDMath.h"
 #include "DNDFile.h"
+#include "DNDTime.h"
 #include <algorithm>
 
 
@@ -301,6 +302,7 @@ namespace DND
 			return false;
 		}
 
+		_tex->_size = 0;//使接下来的操作重建纹理
 		_tex->SetImage(img);
 		delete img;
 
@@ -389,6 +391,26 @@ namespace DND
 
 			shader->_colorTextureBg->SetResource(directx->_rtt.mShaderResourceView);
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
+			shader->_pass->Apply(0, directx->_deviceContext);
+
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+
+			//tex，1 -> 1
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+		}
+		else if (_shaderType == DND_SHADER_WATER)
+		{
+			//tex，1 -> main
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+
+			Shader* shader = gfx_2d->_get_shader(_shaderType);
+
+			shader->_time->SetFloat(Game::Get()->time->GetCurrent());
+			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
+			
+			if(_tex2)
+				shader->_noiseTexture->SetResource(_tex2->_shaderResourceView);
 			shader->_pass->Apply(0, directx->_deviceContext);
 
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
@@ -529,7 +551,7 @@ namespace DND
 	{
 		_order = order;
 		_tex = new Texture(mipmap);//这一步会创建一个纹理
-
+		_tex2 = NULL;
 		_vertexSize = 1024;//
 		_vertexs = new Vertex2D[_vertexSize];
 
@@ -549,6 +571,12 @@ namespace DND
 	void Canvas_imp::SetShader(UINT32 type /*= 0*/)
 	{
 		_shaderType = type;
+		if (_shaderType == DND_SHADER_WATER)
+		{
+			_tex2 = new Texture(false);
+			_tex2->_size = 0;
+			_tex2->SetImage(Image::Create(L"DND\\Image\\noise.png"));
+		}
 	}
 	
 

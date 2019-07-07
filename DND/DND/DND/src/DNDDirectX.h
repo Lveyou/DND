@@ -51,6 +51,10 @@ namespace DND
 		ID3DX11EffectTechnique* _technique;
 		//wvp
 		ID3DX11EffectMatrixVariable* _wvpVariable;
+		// ±º‰
+		ID3DX11EffectScalarVariable* _time;
+		//‘Î…˘Ã˘Õº
+		ID3DX11EffectShaderResourceVariable* _noiseTexture;
 		Shader()
 		{
 			_pass = NULL;
@@ -59,6 +63,8 @@ namespace DND
 			_effect = NULL;
 			_technique = NULL;
 			_wvpVariable = NULL;
+			_time = NULL;
+			_noiseTexture = NULL;
 		}
 	};
 	//RTT
@@ -98,7 +104,7 @@ namespace DND
 		void _release_all();
 
 		DirectX* directx;
-		Shader _shader[4];
+		Shader _shader[5];
 	};
 	class GfxSimple
 	{
