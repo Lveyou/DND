@@ -165,6 +165,11 @@ namespace DND
 		return _quad.v[i];
 	}
 
+	UINT32 Sprite::GetImageRectId()
+	{
+		return _imageRectID;
+	}
+
 	void Sprite::SetUV(int i, Vector2 uv)
 	{
 		_uv[i] = uv;

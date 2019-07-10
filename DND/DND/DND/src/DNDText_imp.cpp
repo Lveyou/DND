@@ -345,6 +345,11 @@ namespace DND
 	}
 
 
+	UINT32 Text_imp::GetSpriteNum()
+	{
+		return m_sprites.size();
+	}
+
 	Vector2 Text_imp::GetEndPosition()
 	{
 		if (m_sprites.empty())

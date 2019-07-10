@@ -99,6 +99,20 @@ namespace DND
 
 		static void RotateArray(Point& p, int r, Size wh);
 		static void RotateArray(Vector2& p, int r, Size wh);
+
+		//¹þÏ£Ëã·¨
+		static UINT32 BKDRHash(char *str)
+		{
+			unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
+			unsigned int hash = 0;
+
+			while (*str)
+			{
+				hash = hash * seed + (*str++);
+			}
+
+			return (hash & 0x7FFFFFFF);
+		}
 	};
 }
 
