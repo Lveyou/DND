@@ -31,7 +31,7 @@ namespace DND
 		void AddImageRect(UINT32 register_ID, UINT32 form_ID, const Rect& rect);
 		float GetTu(UINT32 image_rect_ID, UINT32 index);
 		float GetTv(UINT32 image_rect_ID, UINT32 index);
-		//一次性返回所有uv
+		//一次性返回所有uv（size变化会导致 uv错乱）
 		void GetUV(UINT32 image_rect_ID, Vector2* uv);
 		
 		ID3D11Texture2D* _texture;
