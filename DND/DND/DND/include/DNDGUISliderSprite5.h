@@ -31,6 +31,8 @@ namespace DND
 
 		//将1.0划分到 0 - N-1 ,从而响应滚轮(设为0不响应)
 		void SetN(UINT32 n = 0);
+		UINT32 GetN() { return _n; }
+		UINT32 GetCurN() { return _cur * _n; }
 
 		bool IsFocus() { return _focus == this; }
 
@@ -52,6 +54,8 @@ namespace DND
 		UINT32 _n;
 
 		float _underSize;
+
+		void _update_ui();
 	};
 
 }

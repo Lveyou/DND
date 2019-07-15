@@ -138,22 +138,7 @@ namespace DND
 			{
 				_cur = float(int(_cur * _n) - dt) / _n;
 				_cur = Math::GetBetween<float>(_cur, 0, 1.0f);
-				if (_r)
-				{
-					float x = _max * _cur;// Math::GetBetween<float>(_max * _cur, _offset.a, _max + _offset.a);
-					_spr[4]->GetCoor()->SetPosition(Vector2(x + _offset.a, _offset.b));
-					_spr[3]->SetQuad(1, Vector2(x - _offset.a, -_underSize));
-					_spr[3]->SetQuad(2, Vector2(x - _offset.a, _underSize));
-				}
-				else
-				{
-					float y = _max * _cur;//Math::GetBetween<float>(_max * _cur, _offset.b, _max + _offset.b);
-					_spr[4]->GetCoor()->SetPosition(Vector2(_offset.a, y + _offset.b));
-					_spr[3]->SetQuad(2, Vector2(_underSize, y - _offset.b));
-					_spr[3]->SetQuad(3, Vector2(-_underSize, y - _offset.b));
-				}
-				
-
+				_update_ui();
 			}
 
 		}
@@ -168,10 +153,7 @@ namespace DND
 	{
 		_cur = k;
 
-		if(_r)
-			_spr[4]->GetCoor()->SetPosition(Vector2(_cur * _max, _offset.b));
-		else
-			_spr[4]->GetCoor()->SetPosition(Vector2(_offset.a, _cur * _max));
+		_update_ui();
 	}
 
 	void SliderSprite5::SetN(UINT32 n /*= 0*/)
@@ -227,6 +209,24 @@ namespace DND
 		_cur = 0;
 		_seleted = false;
 		_n = 0;
+	}
+
+	void SliderSprite5::_update_ui()
+	{
+		if (_r)
+		{
+			float x = _max * _cur;// Math::GetBetween<float>(_max * _cur, _offset.a, _max + _offset.a);
+			_spr[4]->GetCoor()->SetPosition(Vector2(x + _offset.a, _offset.b));
+			_spr[3]->SetQuad(1, Vector2(x - _offset.a, -_underSize));
+			_spr[3]->SetQuad(2, Vector2(x - _offset.a, _underSize));
+		}
+		else
+		{
+			float y = _max * _cur;//Math::GetBetween<float>(_max * _cur, _offset.b, _max + _offset.b);
+			_spr[4]->GetCoor()->SetPosition(Vector2(_offset.a, y + _offset.b));
+			_spr[3]->SetQuad(2, Vector2(_underSize, y - _offset.b));
+			_spr[3]->SetQuad(3, Vector2(-_underSize, y - _offset.b));
+		}
 	}
 
 }
