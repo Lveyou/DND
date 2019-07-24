@@ -33,6 +33,15 @@ namespace DND
 		static bool TestCollisionDotInRect(const Point& dot, const Rect& rect);
 		static bool TestCollisionDotInRect(const Vector2& dot, const Vector4& rect);
 
+		//返回正负
+		template <typename T>
+		static T GetSgn(T val)
+		{
+			if (val > 0) return 1;
+			if (val == 0) return 0;
+			if (val < 0) return -1;
+		}
+
 		//分子 与 分母
 		template <int N = 1, int D = 1>
 		static float GetPI()
@@ -100,7 +109,7 @@ namespace DND
 		static void RotateArray(Point& p, int r, Size wh);
 		static void RotateArray(Vector2& p, int r, Size wh);
 
-		//哈希算法
+		//哈希算法（未测试）
 		static UINT32 BKDRHash(char *str)
 		{
 			unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
