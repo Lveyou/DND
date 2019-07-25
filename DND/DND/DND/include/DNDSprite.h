@@ -49,6 +49,7 @@ namespace DND
 		void SetQuadScale(Vector2 s);
 		void SetQuadScale(float s);
 		Vector2 GetQuad(UINT32 i);
+		Quad GetQuad();
 		UINT32 GetImageRectId();
 		//直接设置uv，慎用
 		void SetUV(int i, Vector2 uv);

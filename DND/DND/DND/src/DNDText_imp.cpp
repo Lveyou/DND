@@ -135,7 +135,8 @@ namespace DND
 
 				m_sprites.push_back(spr);
 
-				x += (UINT32)((INT32)(spr->_quad.v[0].a) + (INT32)(spr->GetSize().w));
+			//	x += (UINT32)((INT32)(spr->_quad.v[0].a) + (INT32)(spr->GetSize().w));
+				x += (UINT32)(spr->_quad.v[2].a);
 		}
 		if (x > x_max)
 			x_max = x;

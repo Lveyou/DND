@@ -565,6 +565,11 @@ namespace DND
 		v[3] += offset;
 	}
 
+	DND::Size Quad::GetSize()
+	{
+		return Size(UINT32(abs(v[2].a - v[0].a)), UINT32(abs(v[2].b - v[0].b)));
+	}
+
 	PointU::PointU() : x(0), y(0)
 	{
 

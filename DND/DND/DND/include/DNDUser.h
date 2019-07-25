@@ -206,6 +206,7 @@ namespace DND
 
 	public:
 		void Offset(Vector2 offset);
+		Size GetSize();//即使被旋转，仍然返回原有宽高
 		Vector2 v[4];
 	};
 }

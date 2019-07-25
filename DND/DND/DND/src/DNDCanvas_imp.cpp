@@ -352,6 +352,8 @@ namespace DND
 		_bSetImage = skip;
 	}
 
+
+
 	void Canvas_imp::_render()
 	{
 		DirectX* directx = Game::Get()->_dx;
@@ -370,15 +372,39 @@ namespace DND
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
 
 
-			Shader* shader = gfx_2d->_get_shader(0);
+			Shader* shader = gfx_2d->_get_shader(_shaderType);
+			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
+			shader->_pass->Apply(0, directx->_deviceContext);
+
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+			
+			//tex -> main
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+		}
+		else if (_shaderType == DND_SHADER_SHADOW)
+		{
+			//tex -> 1
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+
+
+			Shader* shader = gfx_2d->_get_shader(_shaderType);
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			shader->_pass->Apply(0, directx->_deviceContext);
 
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 
+			//开启zbuffer实现只绘制一次
+			directx->_deviceContext->ClearDepthStencilView(directx->_depthStencilView, D3D11_CLEAR_DEPTH, 0.0f, 0);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState2, 0);
+			
 			//tex -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+
+			//还原
+			directx->_deviceContext->ClearDepthStencilView(directx->_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState, 0);
 		}
 		else if(_shaderType == DND_SHADER_OVERLAY ||
 			_shaderType == DND_SHADER_DARKEN || 
@@ -419,6 +445,8 @@ namespace DND
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 		}
+
+
 	}
 	void DND::Canvas_imp::_update()
 	{
@@ -450,8 +478,11 @@ namespace DND
 
 		const float PIXEL_OFFSET = 0.5f;
 		///////////////////////Sprite//////////////////////////////////////////////
-		
-		
+		float pos_z = 0.0f;
+		if (_shaderType == DND_SHADER_SHADOW)
+		{
+			pos_z = 0.5f;
+		}
 		
 		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter)
 		{
@@ -484,7 +515,7 @@ namespace DND
 				
 		
 				_vertexs[_renderSprNum + j].pos =
-					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET, 0);
+					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET, pos_z);
 
 					
 				_vertexs[_renderSprNum + j].color.x = spr->_color[j].r();
@@ -564,7 +595,6 @@ namespace DND
 
 		_bSetImage = false;
 		_shaderType = DND_SHADER_NORMAL;
-
 		//_iter = _sprites.begin();
 	}
 

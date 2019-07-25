@@ -59,6 +59,7 @@ namespace DND
 
 		virtual void SetSkipRegister(bool skip) override;
 
+
 		Canvas_imp(INT32 order, bool mipmap = false);
 		void _render();
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
@@ -105,6 +106,7 @@ namespace DND
 
 		//Shader
 		UINT32 _shaderType;
+
 	};
 
 }

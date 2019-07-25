@@ -130,6 +130,11 @@ namespace DND
 			_cur = (double)n;
 	}
 
+	UINT32 Animation_imp::GetCurrent()
+	{
+		return _cur;
+	}
+
 	void Animation_imp::SetOrder(INT32 n)
 	{
 		for (auto& iter : _listSpr)
@@ -165,6 +170,11 @@ namespace DND
 	void Animation_imp::SetFPS(UINT32 fps /*= 0*/)
 	{
 		_fps = fps;
+	}
+
+	UINT32 Animation_imp::GetFPS()
+	{
+		return _fps;
 	}
 
 	void Animation_imp::Flip(bool x, bool y)

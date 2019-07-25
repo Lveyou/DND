@@ -21,6 +21,7 @@ const UINT32 DND_SHADER_OVERLAY = 1;//叠加
 const UINT32 DND_SHADER_DARKEN = 2;//变暗
 const UINT32 DND_SHADER_CLOLOR_DODGE = 3;//颜色减淡
 const UINT32 DND_SHADER_WATER = 4;//水面
+const UINT32 DND_SHADER_SHADOW = 5;//阴影
 
 namespace DND
 {
@@ -78,6 +79,8 @@ namespace DND
 
 		//设置是否跳过图像注册（警告：不清楚底层实现，请勿调用）
 		virtual void SetSkipRegister(bool skip) = 0;
+
+		
 	};
 
 

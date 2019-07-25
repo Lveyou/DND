@@ -80,8 +80,9 @@ namespace DND
 
 	Size Sprite::GetSize()
 	{
-		return Size(UINT32(_quad.v[2].a - _quad.v[0].a),
-			UINT32(_quad.v[2].b - _quad.v[0].b));
+		return _quad.GetSize(); //为何这里改为使用quad的就会出bug?
+		//return Size(UINT32(_quad.v[2].a - _quad.v[0].a),
+		//	UINT32(_quad.v[2].b - _quad.v[0].b));
 	}
 
 	void Sprite::SetColor(Color color)
@@ -163,6 +164,11 @@ namespace DND
 	DND::Vector2 Sprite::GetQuad(UINT32 i)
 	{
 		return _quad.v[i];
+	}
+
+	DND::Quad Sprite::GetQuad()
+	{
+		return _quad;
 	}
 
 	UINT32 Sprite::GetImageRectId()

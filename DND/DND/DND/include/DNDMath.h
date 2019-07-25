@@ -107,7 +107,7 @@ namespace DND
 		}
 
 		static void RotateArray(Point& p, int r, Size wh);
-		static void RotateArray(Vector2& p, int r, Size wh);
+		//static void RotateArray(Vector2& p, int r, Size wh);
 
 		//π˛œ£À„∑®£®Œ¥≤‚ ‘£©
 		static UINT32 BKDRHash(char *str)

@@ -104,7 +104,7 @@ namespace DND
 		void _release_all();
 
 		DirectX* directx;
-		Shader _shader[5];
+		Shader _shader[6];
 	};
 	class GfxSimple
 	{
@@ -229,6 +229,7 @@ namespace DND
 		ID3D11BlendState* _blendState;
 		//深度模板缓存
 		ID3D11DepthStencilState* _depthStencilState;
+		ID3D11DepthStencilState* _depthStencilState2;//用于shadowmap
 		//深度模板视图
 		ID3D11DepthStencilView* _depthStencilView;
 		//Canvas 相关的内容

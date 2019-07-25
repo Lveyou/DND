@@ -14,6 +14,7 @@ namespace DND
 	const String STRING_PATH_SHADER_2D_DARKEN = L"DND\\Shader\\2d_darken.fx";//变暗
 	const String STRING_PATH_SHADER_2D_CLOLOR_DODGE = L"DND\\Shader\\2d_clolor_dodge.fx";//颜色减淡
 	const String STRING_PATH_SHADER_2D_WATER = L"DND\\Shader\\2d_water.fx";//水面
+	const String STRING_PATH_SHADER_2D_SHADOW = L"DND\\Shader\\2d_shadow.fx";//阴影
 
 	void Gfx2D::_init()
 	{
@@ -55,7 +56,8 @@ namespace DND
 		_init_shader(DND_SHADER_OVERLAY, STRING_PATH_SHADER_2D_OVERLAY);
 		_init_shader(DND_SHADER_DARKEN, STRING_PATH_SHADER_2D_DARKEN);
 		_init_shader(DND_SHADER_CLOLOR_DODGE, STRING_PATH_SHADER_2D_CLOLOR_DODGE);
-		_init_shader(DND_SHADER_WATER, STRING_PATH_SHADER_2D_WATER);
+		_init_shader(DND_SHADER_WATER, STRING_PATH_SHADER_2D_WATER); 
+		_init_shader(DND_SHADER_SHADOW, STRING_PATH_SHADER_2D_SHADOW);
 	}
 
 	
@@ -545,7 +547,7 @@ namespace DND
 		_deviceContext->OMSetDepthStencilState(_depthStencilState, 0);
 		_deviceContext->OMSetBlendState(_blendState, blendFactor, 0xffffffff);
 		_deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
+		
 
 		_gfxSimple = new GfxSimple;
 		_gfxSimple->_init();
@@ -669,9 +671,9 @@ namespace DND
 
 		//清除 主
 		_deviceContext->ClearRenderTargetView(_mainRenderTargetView, clear_color);
-		_deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		_deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-		
+		//| D3D11_CLEAR_STENCIL
 		_update_canvass();
 		_gfxSimple->_update();
 
@@ -826,8 +828,8 @@ namespace DND
 		ZeroMemory(&desc, sizeof(desc));
 
 		desc.DepthEnable = false;
-		desc.StencilEnable = true;
-		//深度测试： 小于时 成功
+		desc.StencilEnable = false;
+		//深度测试： 小于等于时 成功
 		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 		//模板测试 ： 一直成功
 		desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
@@ -835,10 +837,10 @@ namespace DND
 		//模板测试 和 深度测试 都 成功 的操作 ： 替换
 		desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
 		desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
-		//模板测试 失败 （深度还没试呢）的操作 ： 保持
-		desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-		//模板测试 成功 但 深度测试 失败 的操作 ： 保持
+		//模板测试 失败 （深度成功）的操作 ： 替换
+		desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_REPLACE;
+		desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_REPLACE;
+		//模板深度 测试 都失败 的操作 ： 保持
 		desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
 		desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
 		//Mask
@@ -849,6 +851,12 @@ namespace DND
 		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState)),
 			ERROR_00024);
 		
+		desc.DepthEnable = true;
+		//深度测试： 大于时 成功
+		desc.DepthFunc = D3D11_COMPARISON_GREATER;
+		
+		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState2)),
+			ERROR_00024);
 		
 	}
 
@@ -970,14 +978,14 @@ namespace DND
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
 		float w = (float)sys->_windowSize.w;
 		float h = (float)sys->_windowSize.h;
-		XMVECTOR eye = XMLoadFloat3(&XMFLOAT3(w/2.0f - 0.5f, h/2.0f - 0.5f, -1.0f));
+		XMVECTOR eye = XMLoadFloat3(&XMFLOAT3(w/2.0f - 0.5f, h/2.0f - 0.5f, 0));
 		XMVECTOR direction = XMLoadFloat3(&XMFLOAT3(0, 0, 1.0f));//z轴
 		XMVECTOR up = XMLoadFloat3(&XMFLOAT3(0, -1.0f, 0));//-y轴
 		XMMATRIX mat_v = XMMatrixLookToRH(eye, direction, up);
 
 		XMMATRIX mat_p = XMMatrixOrthographicRH(
 		(float)sys->_windowSize.w,
-		(float)sys->_windowSize.h, 0, 1.0f);
+		(float)sys->_windowSize.h, 0, 1.0f);//最终是会减去eye位置
 		
 		XMMATRIX mat_wvp = XMMatrixMultiply(mat_v, mat_p);
 		//XMMATRIX
@@ -1036,6 +1044,7 @@ namespace DND
 
 		_deviceContext->OMSetDepthStencilState(NULL, 0);
 		_depthStencilState->Release();
+		_depthStencilState2->Release();
 
 		_release_depth_stencil_view();
 		_release_render_target_view();

@@ -87,23 +87,23 @@ namespace DND
 		if (r == 1)
 		{
 			auto t = p.x;
-			p.x = -p.y + wh.h;
+			p.x = -p.y + wh.h - 1;
 			p.y = t;
 		}
 		else if (r == 2)
 		{
-			p.x = -p.x + wh.w;
-			p.y = -p.y + wh.h;
+			p.x = -p.x + wh.w - 1;
+			p.y = -p.y + wh.h - 1;
 		}
 		else if (r == 3)
 		{
 			auto t = p.x;
 			p.x = p.y;
-			p.y = -t + wh.w;
+			p.y = -t + wh.w - 1;
 		}
 	}
 
-	void Math::RotateArray(Vector2& p, int r, Size wh)
+	/*void Math::RotateArray(Vector2& p, int r, Size wh)
 	{
 		if (r == 0 || r > 3)
 			return;
@@ -125,7 +125,7 @@ namespace DND
 			p.a = p.b;
 			p.b = wh.w - t;
 		}
-	}
+	}*/
 
 	UINT32 DND::Math::GetIntLength(int var)
 	{
