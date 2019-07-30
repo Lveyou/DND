@@ -16,10 +16,10 @@
 namespace DND
 {
 
-	Canvas* Canvas::Create(INT32 order, bool mipmap)
-	{
+	DND::Canvas* Canvas::Create(INT32 order, bool mipmap /*= false*/, UINT32 size /*= 1024*/, UINT32 vertex_size /*= 1024*/)
+{
 		DirectX* directx = Game::Get()->_dx;
-		return directx->_create_canvas(order, mipmap);
+		return directx->_create_canvas(order, mipmap, size, vertex_size);
 	}
 
 	bool DND::CharSpriteNode::operator==(const CharSpriteNode& b)
@@ -578,12 +578,12 @@ namespace DND
 		}
 	}
 	
-	Canvas_imp::Canvas_imp(INT32 order, bool mipmap)
+	Canvas_imp::Canvas_imp(INT32 order, bool mipmap, UINT32 size, UINT32 vertex_size)
 	{
 		_order = order;
-		_tex = new Texture(mipmap);//这一步会创建一个纹理
+		_tex = new Texture(mipmap, size);//这一步会创建一个纹理
 		_tex2 = NULL;
-		_vertexSize = 1024;//
+		_vertexSize = vertex_size;//
 		_vertexs = new Vertex2D[_vertexSize];
 
 		_systemUseID = CANVAS_SYS_ID_START;

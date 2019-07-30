@@ -60,7 +60,7 @@ namespace DND
 		virtual void SetSkipRegister(bool skip) override;
 
 
-		Canvas_imp(INT32 order, bool mipmap = false);
+		Canvas_imp(INT32 order, bool mipmap = false, UINT32 size = 1024, UINT32 vertex_size = 1024);
 		void _render();
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
 		void _create_vertex_buffer();

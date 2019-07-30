@@ -23,7 +23,7 @@ namespace DND
 	class Texture
 	{
 	public:
-		Texture(bool mipmap);
+		Texture(bool mipmap, UINT32 size = 1024);
 		void SetImage(const Image* img);
 		void AddImageRect(UINT32 ID, const Image* img, const Rect& rect);
 		void ReplaceImageRect(UINT32 ID, const Image* img, const Rect& rect);

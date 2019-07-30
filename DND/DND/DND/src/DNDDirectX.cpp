@@ -1154,7 +1154,7 @@ namespace DND
 	}
 
 
-	DND::Canvas* DirectX::_create_canvas(INT32 order, bool mipmap)
+	DND::Canvas* DirectX::_create_canvas(INT32 order, bool mipmap, UINT32 size /*= 1024*/, UINT32 vertex_size /*= 1024*/)
 	{
 		auto iter = _canvass.find(order);
 		if (iter != _canvass.end())
@@ -1163,7 +1163,7 @@ namespace DND
 			return NULL;
 		}
 
-		Canvas_imp* temp = new Canvas_imp(order, mipmap);
+		Canvas_imp* temp = new Canvas_imp(order, mipmap, size, vertex_size);
 		_canvass.insert(make_pair(order, temp));
 		return temp;
 	}

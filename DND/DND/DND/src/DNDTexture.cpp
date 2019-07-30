@@ -6,12 +6,12 @@
 
 namespace DND
 {
-	Texture::Texture(bool mipmap)
+	Texture::Texture(bool mipmap, UINT32 size)
 	{
 		_bMipmap = mipmap;
 		_texture = NULL;
 		_shaderResourceView = NULL;
-		_size = 1024;
+		_size = size;
 
 #if defined(DEBUG) || defined(_DEBUG)
 		_img = Image::Create(Size(_size, _size), Color::PURPLE);

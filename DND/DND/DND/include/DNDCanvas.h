@@ -33,7 +33,8 @@ namespace DND
 	class DLL_API Canvas
 	{
 	public:
-		static Canvas* Create(INT32 order, bool mipmap = false);
+		//绘制顺序，是否生成mipmap，预计参数
+		static Canvas* Create(INT32 order, bool mipmap = false, UINT32 size = 1024, UINT32 vertex_size = 1024);
 		//自动注册图像
 		virtual Sprite* CreateSprite(const String& img_name) = 0;
 		virtual Sprite* CreateSprite(const Image* img) = 0;
