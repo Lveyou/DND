@@ -196,6 +196,8 @@ namespace DND
 			//////////////////////////////计算real_delta///////////////////////////////////
 			t->_update_current();
 			t->_real_delta = t->_get_cl_delta();
+			if (t->_real_delta > 1.0f)//防止调试中断引起的数值过大
+				t->_real_delta = 1.0f;
 			///////////////////////////////FPS统计//////////////////////////////////////
 			++sec_frame;
 			sec_count += t->_real_delta;
