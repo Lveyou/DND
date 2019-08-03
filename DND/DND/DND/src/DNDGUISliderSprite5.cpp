@@ -116,6 +116,7 @@ namespace DND
 				_spr[3]->SetQuad(2, Vector2(x - _offset.a, _underSize));
 
 				_cur = x / _max;
+				_cur = Math::GetBetween<float>(_cur, 0, 1.0f);
 			}
 			else
 			{
@@ -126,6 +127,7 @@ namespace DND
 				_spr[3]->SetQuad(3, Vector2(-_underSize, y - _offset.b));
 
 				_cur = y / _max;
+				_cur = Math::GetBetween<float>(_cur, 0, 1.0f);
 			}
 
 			

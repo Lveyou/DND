@@ -53,7 +53,8 @@ namespace DND
 			DEFCOLOR = WHITE,//默认情况下的颜色,白色
 			CLEARCOLOR = BLUE,
 			CLEARCOLOR_DIRECTX = 0xff6773cb,
-			ALPHACOLOR = 0x00abcdef//透明的颜色
+			ALPHACOLOR = 0x00abcdef,//透明的颜色,
+			DISABLECOLOR = 0xff4c4c4c//禁用颜色
 		};
 	};
 }

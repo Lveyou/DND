@@ -32,18 +32,31 @@ namespace DND
 
 	void SwitchSprite3Color2::_update(State state)
 	{
-		if (IsOpen())
+		if (GetState() == State::DISABLE)
 		{
-			_spr[1]->Render();
-			_spr[2]->SetColor(_color[0]);
+			_spr[0]->SetColor(Color::DISABLECOLOR);
+			_spr[0]->Render();
+			_spr[2]->SetColor(Color::DISABLECOLOR);
 			_spr[2]->Render();
 		}
 		else
 		{
-			_spr[0]->Render();
-			_spr[2]->SetColor(_color[1]);
-			_spr[2]->Render();
+			if (IsOpen())
+			{
+				_spr[0]->SetColor(Color::WHITE);
+				_spr[1]->Render();
+				_spr[2]->SetColor(_color[0]);
+				_spr[2]->Render();
+			}
+			else
+			{
+				_spr[0]->SetColor(Color::WHITE);
+				_spr[0]->Render();
+				_spr[2]->SetColor(_color[1]);
+				_spr[2]->Render();
+			}
 		}
+		
 	}
 
 	SwitchSprite3Color2::SwitchSprite3Color2()

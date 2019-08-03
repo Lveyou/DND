@@ -55,10 +55,7 @@ namespace DND
 			_spr[2]->Render();
 			break;
 		default:
-			_spr[0]->SetColor(Color(1.0f,
-				0.299f,
-				0.299f,
-				0.299f));
+			_spr[0]->SetColor(Color::DISABLECOLOR);
 			_spr[0]->Render();
 			break;
 		}
