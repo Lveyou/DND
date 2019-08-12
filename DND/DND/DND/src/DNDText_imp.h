@@ -32,6 +32,8 @@ namespace DND
 		virtual void SetAlignHorizontal(int align = TEXT_ALIGN_LEFT) override;
 		virtual void SetAlignVertical(int align = TEXT_ALIGN_TOP) override;
 		virtual void SetColor(Color color) override;
+		virtual void SetColorAlpha(float a) override;
+		virtual void SetColorAlpha(DWORD a) override;
 		virtual void SetPitchRow(float row = 1.0f) override;
 		virtual void SetMaxW(unsigned w) override;
 		virtual unsigned GetH() override;

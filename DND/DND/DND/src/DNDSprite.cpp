@@ -326,6 +326,19 @@ namespace DND
 		}
 	}
 
+	void Sprite::SetColorAlpha(DWORD a)
+	{
+		_color[0].SetA(a);
+		_color[1].SetA(a);
+		_color[2].SetA(a);
+		_color[3].SetA(a);
+	}
+
+	void Sprite::SetColorAlpha(float a)
+	{
+		SetColorAlpha(a * 255);
+	}
+
 	Color Sprite::GetColor(INT32 i /*= 0*/)
 	{
 		return _color[i];

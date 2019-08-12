@@ -52,6 +52,11 @@ namespace DND
 		return m_color >> 24 << 24 | (~m_color) << 8 >> 8;
 	}
 
+	void Color::SetA(DWORD A)
+	{
+		m_color = (A << 24) | (m_color << 8 >> 8);
+	}
+
 	Color DND::Color::Rand()
 	{
 		return Color(0xff << 24 | Math::GetRandInt(0, 256) << 16 | Math::GetRandInt(0, 256) << 8 | Math::GetRandInt(0, 256));

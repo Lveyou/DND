@@ -35,6 +35,7 @@ namespace DND
 		void GetARGB(int& A, int& R, int& G, int& B);
 		void GetArgb(float& a, float& r, float& g, float& b);
 		DWORD GetInverse();
+		void SetA(DWORD A);
 		static Color Rand();
 	private:
 		DWORD m_color;

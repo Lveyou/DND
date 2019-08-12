@@ -43,6 +43,8 @@ namespace DND
 		virtual void SetAlignHorizontal(int align = TEXT_ALIGN_LEFT) = 0;
 		virtual void SetAlignVertical(int align = TEXT_ALIGN_TOP) = 0;
 		virtual void SetColor(Color color) = 0;
+		virtual void SetColorAlpha(float a) = 0;
+		virtual void SetColorAlpha(DWORD a) = 0;
 		virtual void SetPitchRow(float row = 1.0f) = 0;
 		virtual void SetMaxW(unsigned w) = 0;
 		virtual unsigned GetH() = 0;

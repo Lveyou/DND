@@ -39,6 +39,8 @@ namespace DND
 		Size GetSize();
 		void SetColor(Color color);
 		void SetColor(Color* color);
+		void SetColorAlpha(DWORD a);//不改变颜色，只改变a通道
+		void SetColorAlpha(float a);//不改变颜色，只改变a通道
 		Color GetColor(INT32 i = 0);
 		Canvas* GetCanvas();
 		INT32 GetOrder();

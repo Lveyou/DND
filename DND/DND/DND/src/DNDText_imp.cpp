@@ -297,6 +297,20 @@ namespace DND
 
 
 
+	void Text_imp::SetColorAlpha(float a)
+	{
+		SetColorAlpha(DWORD(a * 255));
+	}
+
+	void Text_imp::SetColorAlpha(DWORD a)
+	{
+		for (auto& iter : m_sprites)
+		{
+			if(iter->GetColor(0).Get() != Color::ALPHACOLOR)//不是透明色
+				iter->SetColorAlpha(a);
+		}
+	}
+
 	void Text_imp::SetPitchRow(float row /*= 1.0f*/)
 	{
 		m_pitch_row = row;
