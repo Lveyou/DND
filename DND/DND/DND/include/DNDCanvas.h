@@ -82,6 +82,11 @@ namespace DND
 		virtual void SetSkipRegister(bool skip) = 0;
 
 		
+
+		virtual bool IsAddedText() = 0;
+		
+
+
 	};
 
 

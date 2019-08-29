@@ -10,6 +10,8 @@
 #include "DNDMath.h"
 #include "DNDFile.h"
 #include "DNDTime.h"
+#include "DNDStreamOutput.h"
+#include "DNDStreamInput.h"
 #include <algorithm>
 
 
@@ -250,8 +252,26 @@ namespace DND
 			//
 			//debug_msg(node.ch);
 			//字符的注册id为 起始 + 100000 * size + 加值
-			RegisterImageAll(CANVAS_TEXT_ID_START + 100000 * font_size + node.ch, img);
-			
+			//auto skip = _bSetImage;
+			//_bSetImage = false;
+			UINT32 reg_id = CANVAS_TEXT_ID_START + 100000 * font_size + node.ch;
+			RegisterImageAll(reg_id, img);
+			//_bSetImage = skip;
+
+			//如果是跳过模式，就加写到ui
+			if (_bSetImage == true)
+			{
+				if (_tex->_imageRects.find(reg_id) == _tex->_imageRects.end())
+				{
+					//没有添加，则强行添加
+					_bSetImage = false;
+					RegisterImageAll(reg_id, img);
+					_bSetImage = true;
+
+					_bAddedText = true;
+				}
+			}
+
 
 			Size wh = img->GetSize();
 
@@ -289,14 +309,17 @@ namespace DND
 	{
 		
 		Image* img = Image::Create(img_name);
-		File* file = File::Create();
+		//File* file = File::Create();
+		StreamInput s;
+		
+		
 
 		if (img == NULL)
 		{
 			debug_warn(String(L"DND: Canvas_imp::SetImage: 图像加载失败") + img_name);
 			return false;
 		}
-		if (!file->OpenFile(rects))
+		if (!s.LoadFromFile(rects))
 		{
 			debug_warn(String(L"DND: Canvas_imp::SetImage: 图像区域配置加载失败") + rects);
 			return false;
@@ -306,9 +329,16 @@ namespace DND
 		_tex->SetImage(img);
 		delete img;
 
-		for (UINT32 i = 0; i < file->GetLength(); ++i)
+		UINT32 size = 0;
+		s.Read(size);
+
+		for (UINT32 i = 0; i < size; ++i)
 		{
-			_tex->_imageRects[file->GetKey(i).GetInt()] = Rect(file->GetValue(i));
+			UINT32 id;
+			Rect rect;
+			s.Read(id);
+			s.Read(&rect);
+			_tex->_imageRects[id] = rect;
 		}
 
 		_bSetImage = true;
@@ -317,34 +347,45 @@ namespace DND
 
 	void Canvas_imp::SaveImageRects(const String& rects)
 	{
-		File* file = File::Create();
-		file->CreateFile(rects);
+		
+		/*File* file = File::Create();
+		file->CreateFile(rects);*/
 
+
+		//for (auto& iter : _tex->_imageRects)
+		//{
+		//	int id = iter.first;
+
+		//	//字体的 id 不导出
+		//	/*if(id > CANVAS_TEXT_ID_START)
+		//		continue;*/
+		//	
+		//	file->SetValue(String(id), iter.second.GetString());
+		//}
+
+		//file->Save();
+		//delete file;
+		
+		StreamOutput s;
+		s.Write(_tex->_imageRects.size());
 
 		for (auto& iter : _tex->_imageRects)
 		{
-			int id = iter.first;
-			//字体的 id导出
-			/*bool out = true;
-			for (auto& iter2 : _charSprites)
-			{
-				if (id == iter2.spr->_imageRectID)
-				{
-					out = false;
-					break;
-				}
-			}
-			if(out)*/
-			file->SetValue(String(id), iter.second.GetString());
+			s.Write(UINT32(iter.first));
+			s.Write<Rect>(&iter.second);
 		}
-
-		file->Save();
-		delete file;
+		
+		s.Save(rects);
 	}
 
 	bool Canvas_imp::IsSetImage()
 	{
 		return _bSetImage;
+	}
+
+	bool Canvas_imp::IsAddedText()
+	{
+		return _bAddedText;
 	}
 
 	void Canvas_imp::SetSkipRegister(bool skip)
@@ -594,6 +635,7 @@ namespace DND
 		_onGUISpr = 0;
 
 		_bSetImage = false;
+		_bAddedText = false;
 		_shaderType = DND_SHADER_NORMAL;
 		//_iter = _sprites.begin();
 	}

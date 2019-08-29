@@ -38,7 +38,8 @@ namespace DND
 		ID3D11ShaderResourceView* _shaderResourceView;
 		UINT32 _size;
 		
-		unordered_map<unsigned, Rect> _imageRects;
+		unordered_map<UINT32, Rect> _imageRects;
+		Point _lastAdd;//上一个插入点
 
 		bool _find_xy(const Size& size, Point& xy);
 

@@ -92,6 +92,8 @@ namespace DND
 		//_create_view();
 
 		_imageRects[ID] = out_rect;
+		_lastAdd = out + Point(add_size.w, 0);
+		
 	}
 
 	void Texture::AddImageRect(unsigned register_ID, unsigned form_ID, const Rect& rect)
@@ -222,19 +224,38 @@ namespace DND
 														   //dx , dy
 		unsigned dx = 0;
 		unsigned dy = 0;
-
-		Rect rect_test = rect_add;
-		//
 		unsigned d = 3;
-		while (true)
+		//____________________尝试上一个结束点________________________
+		Rect rect_test = XYWH(_lastAdd, size);
+		//如果test 不与现有的 相交，则返回
+		//如果越界，则向下移动
+		if (rect_test.p2.x + size.w > _size)
+		{
+			rect_test.p1 = rect_test.p1 + Point(-int(size.w), size.h);
+			rect_test.p2 = rect_test.p2 + Point(-int(size.w), size.h);
+		}
+		//越界
+		if (rect_test.p1.x < 0 || rect_test.p1.y < 0 || rect_test.p2.x > _size || rect_test.p2.y >_size)
+			goto next;
+
+		for (auto& iter : _imageRects)
+		{
+			if (Math::TestCollisionRectAndRect(rect_test, iter.second))
+			{
+				//Debug::Instance()->Write_Line(String(L"相交了"));
+				goto next;
+			}
+		}
+		return true;
+		//________________________________________________________
 		{
 		next:
 			//大于整图，直接返回false
-			if (size.w > _size)
+			if (size.w > _size || size.h > _size)
 			{
 				return false;
 			}
-				
+
 			//变化测试
 			if (dx + size.w + d > _size)
 			{
@@ -245,7 +266,7 @@ namespace DND
 				{
 					return false;
 				}
-					
+
 			}
 			else
 			{
@@ -255,13 +276,14 @@ namespace DND
 			rect_test = XYWH(Point(dx, dy), size);
 
 			//如果test 不与现有的 相交，则返回
-			
+
 			for (auto& iter : _imageRects)
 			{
 				if (Math::TestCollisionRectAndRect(rect_test, iter.second))
 				{
 					//Debug::Instance()->Write_Line(String(L"相交了"));
 					goto next;
+
 				}
 			}
 			//遍历了所有的 都没有相交

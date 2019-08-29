@@ -56,6 +56,7 @@ namespace DND
 		virtual bool SetImage(const String& img_name, const String& rects) override;
 		virtual void SaveImageRects(const String& rects) override;
 		virtual bool IsSetImage() override;
+		virtual bool IsAddedText() override;
 
 		virtual void SetSkipRegister(bool skip) override;
 
@@ -103,7 +104,7 @@ namespace DND
 
 		//自定义纹理
 		bool _bSetImage;
-
+		bool _bAddedText;//是否注册了新字体
 		//Shader
 		UINT32 _shaderType;
 
