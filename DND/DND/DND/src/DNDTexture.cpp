@@ -92,7 +92,7 @@ namespace DND
 		//_create_view();
 
 		_imageRects[ID] = out_rect;
-		_lastAdd = out + Point(add_size.w, 0);
+		//_lastAdd = out + Point(add_size.w, 0);
 		
 	}
 
@@ -226,7 +226,7 @@ namespace DND
 		unsigned dy = 0;
 		unsigned d = 3;
 		//____________________尝试上一个结束点________________________
-		Rect rect_test = XYWH(_lastAdd, size);
+		/*Rect rect_test = XYWH(_lastAdd, size);
 		//如果test 不与现有的 相交，则返回
 		//如果越界，则向下移动
 		if (rect_test.p2.x + size.w > _size)
@@ -235,18 +235,22 @@ namespace DND
 			rect_test.p2 = rect_test.p2 + Point(-int(size.w), size.h);
 		}
 		//越界
-		if (rect_test.p1.x < 0 || rect_test.p1.y < 0 || rect_test.p2.x > _size || rect_test.p2.y >_size)
+		if (!Math::TestCollisionRectInRect(rect_test, rect_all))
 			goto next;
 
 		for (auto& iter : _imageRects)
 		{
-			if (Math::TestCollisionRectAndRect(rect_test, iter.second))
+			//相交或在内部
+			if (Math::TestCollisionRectAndRect(rect_test, iter.second)
+				|| Math::TestCollisionRectInRect(rect_test, iter.second))
 			{
 				//Debug::Instance()->Write_Line(String(L"相交了"));
 				goto next;
 			}
 		}
+		xy = rect_test.p1;
 		return true;
+		*/
 		//________________________________________________________
 		{
 		next:
@@ -273,13 +277,14 @@ namespace DND
 				dx += d;
 			}
 
-			rect_test = XYWH(Point(dx, dy), size);
+			Rect rect_test = XYWH(Point(dx, dy), size);
 
 			//如果test 不与现有的 相交，则返回
 
 			for (auto& iter : _imageRects)
 			{
-				if (Math::TestCollisionRectAndRect(rect_test, iter.second))
+				if (Math::TestCollisionRectAndRect(rect_test, iter.second)
+					|| Math::TestCollisionRectInRect(rect_test, iter.second))
 				{
 					//Debug::Instance()->Write_Line(String(L"相交了"));
 					goto next;

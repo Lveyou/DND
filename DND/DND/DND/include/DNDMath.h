@@ -28,8 +28,11 @@ namespace DND
 		{
 			return abs(a - b) < 1e-6;
 		}
+		//相交
 		static bool TestCollisionRectAndRect(const Rect& r0, const Rect& r1);
 		static bool TestCollisionRectAndRect(const Vector4& r0, const Vector4& r1);
+		//在内部（前者在后者内部）
+		static bool TestCollisionRectInRect(const Rect& r0, const Rect& r1);
 		static bool TestCollisionDotInRect(const Point& dot, const Rect& rect);
 		static bool TestCollisionDotInRect(const Vector2& dot, const Vector4& rect);
 

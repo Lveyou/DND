@@ -39,7 +39,7 @@ namespace DND
 		UINT32 _size;
 		
 		unordered_map<UINT32, Rect> _imageRects;
-		Point _lastAdd;//上一个插入点
+		//Point _lastAdd;//上一个插入点
 
 		bool _find_xy(const Size& size, Point& xy);
 

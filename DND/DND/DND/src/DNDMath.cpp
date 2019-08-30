@@ -37,6 +37,8 @@ namespace DND
 			return true;
 	}
 
+	
+
 	inline bool Math::TestCollisionDotInRect(const Point& dot, const Rect& rect)
 	{
 		return !((dot.x < rect.p1.x) || (dot.x > rect.p2.x) || (dot.y < rect.p1.y) || (dot.y > rect.p2.y));
@@ -147,6 +149,14 @@ namespace DND
 			return false;
 		else
 			return true;
+	}
+
+	bool Math::TestCollisionRectInRect(const Rect& r0, const Rect& r1)
+	{
+		if ((r0.p1.x >= r1.p1.x) && (r0.p1.y >= r1.p1.y) && (r0.p2.x <= r1.p2.x) && (r0.p2.y <= r1.p2.y))
+			return true;
+		else
+			return false;
 	}
 
 	bool DND::Math::TestCollisionDotInRect(const Vector2& dot, const Vector4& rect)
