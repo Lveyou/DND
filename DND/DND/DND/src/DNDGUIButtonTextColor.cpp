@@ -23,6 +23,19 @@ namespace DND
 		return _text;
 	}
 
+	DND::ButtonTextColor* ButtonTextColor::Clone()
+	{
+		ButtonTextColor* ret = new ButtonTextColor;
+		ret->_text = _text->Clone();
+		ret->_color[0] = _color[0];
+		ret->_color[1] = _color[1];
+		ret->_color[2] = _color[2];
+		ret->_color[3] = _color[3];
+		ret->_color[4] = _color[4];
+
+		return ret;
+	}
+
 	bool ButtonTextColor::_is_pickup()
 	{
 		return _text->IsPickup();

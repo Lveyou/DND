@@ -13,6 +13,9 @@ namespace DND
 {
 	void Text_imp::Render()
 	{
+		if (!m_sprites.size())
+			return;
+
 		Sprite* spr = NULL;
 		list<Sprite*>::iterator itor;
 		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor)
@@ -51,12 +54,29 @@ namespace DND
 
 	void Text_imp::SetStringFast(const String& str)
 	{
-		
 		//这个函数排好队形，对齐后面只是统一偏移坐标
-		/*if (!str.Get_Length())
-		{
-		return;
-		}*/
+		if (!str.GetLength())
+		{//空字符串优化
+			//标记上次所有精灵 为 已废弃
+			for (auto& iter : m_sprites)
+			{
+				delete iter;
+			}
+			m_sprites.clear();
+			m_size.w = 0;
+			m_size.h = 0;
+			if (_txtOutline[0])
+			{
+				for (auto& iter : _txtOutline)
+				{
+					iter->SetString(L"");
+				}
+			}
+			return;
+		}
+
+		
+
 		if (m_string == str)
 			return;
 

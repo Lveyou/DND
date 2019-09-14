@@ -25,6 +25,7 @@ namespace DND
 		static ButtonTextColor* Create(Text* text, Color normal, Color over, Color down,
 			Color disable = Color::GRAY, Color choose = Color::WHITE);
 		Text* GetText();
+		ButtonTextColor* Clone();
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;
