@@ -125,6 +125,10 @@ namespace DND
 
 			return (hash & 0x7FFFFFFF);
 		}
+
+		static UINT32 GetSeed() { return g_seed; }
+	private:
+		static UINT32 g_seed;
 	};
 }
 

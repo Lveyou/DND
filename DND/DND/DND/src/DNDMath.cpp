@@ -177,7 +177,7 @@ namespace DND
 		
 		//return 1.0f / sqrtf(x);
 	}
-	UINT32 g_seed = 0;
+	UINT32 Math::g_seed = 0;
 	int DND::Math::GetRandInt(int min, int max)
 	{
 		//随机数算法 copy 自 hge
