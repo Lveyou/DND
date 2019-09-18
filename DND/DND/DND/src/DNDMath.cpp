@@ -209,8 +209,10 @@ namespace DND
 
 	void DND::Math::SetSeed(UINT32 seed)
 	{
-		if (!seed) g_seed = (UINT32)time(0);
-		else g_seed = seed;
+		if (!seed) 
+			g_seed = (UINT32)time(0);
+		else 
+			g_seed = seed;
 	}
 
 	void DND::Math::SwapInt(int& a, int& b)
