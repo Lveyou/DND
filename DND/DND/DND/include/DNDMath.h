@@ -85,7 +85,31 @@ namespace DND
 		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1, const Vector2& p2);
 
 		//从 -x轴 开始，编号为0-7，顺时针
+		//修改为从 x轴开始
 		static int GetLookAt(const Vector2& p);
+
+		//0-8 -> 0-4
+		static int LookAtToDirection(int look_at)
+		{
+			if (look_at >= 0 && look_at < 2)
+			{//朝右
+				return 0;
+			}
+			else if (look_at < 3)
+			{
+				return 1;
+			}
+			else if (look_at < 5)
+			{
+				return 2;
+			}
+			else if (look_at < 8)
+			{
+				return 3;
+			}
+			else
+				return -1;
+		}
 
 		template<typename T>
 		static T GetBetween(T var, T min, T max)//取上界和下界，包含

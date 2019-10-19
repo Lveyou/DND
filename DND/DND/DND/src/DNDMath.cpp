@@ -63,22 +63,15 @@ namespace DND
 	{
 		if (p.a == 0 && p.b == 0)
 			return -1;
-		const float pi = 3.1415926f;
-		const float pi_1_4 = pi * 0.25f;
-		const float pi_1_8 = pi_1_4 * 0.5f;
 
-		int look_at = -1;
 		float r = atan2(p.b, p.a);
 
-		//r += (pi + pi_1_8);
+		if (r < 0)
+			r += Math::GetPI<2, 1>();
 
-		r += (pi + pi_1_8);
+		r += Math::GetPI<1, 8>();
 
-		look_at = r / pi_1_4;
-
-		look_at %= 8;
-
-		return look_at;
+		return r / Math::GetPI<1, 4>();
 	}
 
 	void Math::RotateArray(Point& p, int r, Size wh)
