@@ -368,15 +368,14 @@ namespace DND
 
 	Sprite* Text_imp::GetSprite(unsigned n)
 	{
-		unsigned i = 0;
-		list<Sprite*>::iterator itor;
-		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor, ++i)
-		{
-			if (i == n)
-				return *itor;
-		}
+		if (n >= m_sprites.size())
+			return NULL;
 
-		return 0;
+		auto iter = m_sprites.begin();
+		advance(iter, n);
+
+		
+		return *iter;
 	}
 
 

@@ -6,33 +6,15 @@
 
 namespace DND
 {
-	class StrVector : public vector<WCHAR>
+	String::String() : _data(1, 0)
 	{
-	public:
-		StrVector(vector<WCHAR>* p) : 
-			vector<WCHAR>(*p)
-		{
-			
-		}
-		StrVector()
-		{
-
-		}
-	};
-
-	String::String()
-	{
-		_init();
 	}
 
 	String::String(const char* str)
 	{
-		_init();
-
 		UINT32 len = strlen(str) + 1;
 		WCHAR* wcs = new WCHAR[len];
 		MultiByteToWideChar(CP_ACP, NULL, str, -1, wcs, len);
-		p->reserve(len);
 
 		_copy(wcs);
 
@@ -41,138 +23,101 @@ namespace DND
 
 	String::String(const WCHAR* wcs)
 	{
-		_init();
-
-		UINT32 len = wcslen(wcs);
-
-		p->reserve(len);
-
 		_copy(wcs);
-	
-		
 	}
 
-	String::String(WCHAR wc)
+	String::String(WCHAR wc) : _data(1, wc)
 	{
-		_init();
-
-		p->push_back(wc);
+		_data.push_back(0);
 	}
 
 	String::String(const String& b)
 	{
-		//_init();
-
-		p = new StrVector(*b.p);
+		_data = b._data;
 	}
 
 	String::String(const int b)
 	{
-		_init();
-		UINT32 len = Math::GetIntLength(b) + 1;
-		WCHAR* wcs = new WCHAR[len];
-		swprintf_s(wcs, len, L"%d", b);
+		WCHAR wcs[16];
 
-		p->reserve(len - 1);
+		_itow(b, wcs, 10);
 		_copy(wcs);
-		delete[] wcs;
 	}
 
-	String::String(WCHAR ch, UINT32 len)
+	String::String(WCHAR ch, UINT32 len) : _data(ch, len)
 	{
-		_init();
-
-		p->resize(len, ch);
+		_data.push_back(0);
 	}
 
 
-	String::String(StrVector* b)
+	String& String::operator+=(const String& b)
 	{
-		p = new StrVector(*b);
+		_data.insert(_data.end() - 1, b._data.begin(), b._data.end());
+		_data.pop_back();
+
+		return *this;
 	}
 
-	String String::operator+(const String& b) const
+	bool operator!=(const String& a, const String& b)
 	{
-		String str = *this;
-		str.p->insert(str.p->end(), b.p->begin(), b.p->end());
-		return str;
+		return wcscmp(a.GetWcs(), b.GetWcs()) != 0;
 	}
 
-	bool String::operator!=(const String& b) const
+	bool operator==(const String& a, const String& b)
 	{
-		return wcscmp(GetWcs(), b.GetWcs()) != 0;
+		return wcscmp(a.GetWcs(), b.GetWcs()) == 0;
 	}
 
-	bool String::operator<(const String& b) const
+	DND::String operator+(const String& a, const String& b) //连接
 	{
-		return wcscmp(GetWcs(), b.GetWcs()) < 0;
+		String ret = a;
+		return ret += b;
+	}
+
+	bool operator<(const String& a, const String& b)
+	{
+		return wcscmp(a.GetWcs(), b.GetWcs()) < 0;
 	}
 
 	UINT32 String::GetLength() const
 	{
-		return p->size();
+		return _data.size() - 1;
 	}
 
 
 	BYTE* String::GetBuffer()
 	{
-		return (BYTE*)p->data();
-	}
-
-	void String::SetBufferSize(UINT32 size)
-	{
-		p->resize(size);
+		return (BYTE*)_data.data();
 	}
 
 	const WCHAR* String::GetWcs() const
 	{
-		p->push_back(0);
-		WCHAR * temp = &(*p)[0];//保证0下标不越界
-		p->pop_back();
-		return temp;
+		return _data.data();
 	}
 
 	void String::GetWideCharStr(WCHAR* target, UINT32 max_len) const
 	{
-		UINT32 i = 0;
-		while (i < max_len && i < p->size())
-		{
-			target[i] = (*p)[i];
-			++i;
-		}
-		target[i] = 0;
+		memcpy_s(target, max_len, _data.data(), _data.size());
 	}
 
-	bool String::operator==(const String& b) const
-	{
-		return wcscmp(GetWcs(),b.GetWcs()) == 0;
-	}
 
 	String& String::operator=(const String& b)
 	{
-		*p = StrVector(*b.p);
+		_data = b._data;
 		return *this;
 	}
 
 	String::~String()
 	{
-		p->clear();
-		delete p;
-	}
-
-	void String::_init()
-	{
-		p = new StrVector;
 	}
 
 	void String::_copy(const WCHAR* wcs)
 	{
-		UINT32 i = 0;
-		while (wcs[i])
-		{
-			p->push_back(wcs[i]);
-			++i;
-		}
+		UINT32 len = wcslen(wcs) + 1;
+	
+		_data.resize(len);
+
+		memcpy(_data.data(), wcs, len * sizeof(WCHAR));
 	}
 
 	void String::GetMultiByteStr(char* target, UINT32 max_len) const
@@ -199,17 +144,19 @@ namespace DND
 
 	void String::Clear()
 	{
-		p->resize(1, 0);
+		_data.resize(1, 0);
 	}
 
 	void String::Pop()
 	{
-		p->pop_back();
+		_data.pop_back();
+		_data.back() = 0;
 	}
 
 	void String::Push(WCHAR ch)
 	{
-		p->push_back(ch);
+		_data[_data.size() - 1] = ch;
+		_data.push_back(0);
 	}
 
 	UINT32 String::FindEnd(WCHAR ch)
@@ -219,26 +166,26 @@ namespace DND
 
 	UINT32 String::FindStr(const String& str)
 	{
-		auto s = search(p->begin(), p->end(), str.p->begin(), str.p->end());
+		auto s = search(_data.begin(), _data.end() - 1, str._data.begin(), str._data.end() - 1);
 		
-		return s == p->end() ? -1 : s - p->begin();
+		return s == (_data.end() - 1) ? -1 : s - _data.begin();
 	}
 
 	UINT32 String::FindN(WCHAR wc, UINT32 N) const
 	{
 		if (N == 0)
 			return -1;
-		auto itor_begin = p->begin();
+		auto itor_begin = _data.begin();
 		auto itor_find = itor_begin;
 		while (true)
 		{
 			N--;
-			itor_find = find(itor_begin, p->end(),wc);
-			if (itor_find == p->end())
+			itor_find = find(itor_begin, _data.end(),wc);
+			if (itor_find == _data.end())
 				return -1;
 			else if(0 == N)
 			{
-				return itor_find - p->begin();
+				return itor_find - _data.begin();
 			}
 
 			itor_begin = itor_find + 1;
@@ -247,27 +194,27 @@ namespace DND
 
 	UINT32 String::GetCharCount(WCHAR ch) const
 	{
-		return count(p->begin(), p->end(), ch);
+		return count(_data.begin(), _data.end(), ch);
 	}
 
 	String String::GetStr(UINT32 begin, UINT32 end) const
 	{
-		return String(&StrVector(&vector<WCHAR>(p->begin() + begin, p->begin() + end)));
+		return String(vector<WCHAR>(_data.begin() + begin, _data.begin() + end));
 	}
 
 	void String::Cut(UINT32 begin, UINT32 end)
 	{
-		p->erase(p->begin() + begin, p->begin() + end);
+		_data.erase(_data.begin() + begin, _data.begin() + end);
 	}
 
 	void String::CutTail(UINT32 i)
 	{
-		p->erase(p->begin() + i, p->end());
+		_data.erase(_data.begin() + i, _data.end() - 1);
 	}
 
 	void String::CutHead(UINT32 i)
 	{
-		p->erase(p->begin(), p->begin() + i);
+		_data.erase(_data.begin(), _data.begin() + i);
 	}
 
 	void String::CutHeadStr(const String& str)
@@ -282,22 +229,22 @@ namespace DND
 
 	void String::DeleteChar(UINT32 i)
 	{
-		p->erase(p->begin() + i);
+		_data.erase(_data.begin() + i);
 	}
 
 	void String::InsertChar(UINT32 i, WCHAR ch)
 	{
-		p->insert(p->begin() + i, ch);
+		_data.insert(_data.begin() + i, ch);
 	}
 
 	void String::ReplaceChar(WCHAR source, WCHAR target)
 	{
-		replace(p->begin(), p->end(), source, target);
+		replace(_data.begin(), _data.end(), source, target);
 	}
 
 	bool String::IsHaveLetter()
 	{
-		for (auto& iter : *p)
+		for (auto& iter : _data)
 		{
 			if (isalpha(iter))
 				return true;
@@ -307,19 +254,19 @@ namespace DND
 
 	UINT32 String::Split(WCHAR wc, String* strs, UINT32 max_size) const
 	{
-		auto iter_begin = p->begin();
+		auto iter_begin = _data.begin();
 		auto iter_find = iter_begin;
 	
 		UINT32 i = 0;
 		while (i < max_size)
 		{
-			iter_find = find(iter_begin, p->end(), wc);
+			iter_find = find(iter_begin, _data.end(), wc);
 
-			if (p->end() == iter_find)
+			if (_data.end() == iter_find)
 				return i;
 			else
 			{
-				strs[i] = &StrVector(&vector<WCHAR>(iter_begin, iter_find));
+				strs[i] = vector<WCHAR>(iter_begin, iter_find);
 				iter_begin = iter_find + 1;
 			}
 			++i;

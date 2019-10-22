@@ -4,6 +4,7 @@
 #include "DNDCanvas.h"
 #include "DNDSystem.h"
 #include "DNDDebug.h"
+#include <vector>
 
 namespace DND
 {

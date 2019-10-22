@@ -6,10 +6,12 @@
 //other:
 //17-06-12: 修改内部实现基于 vector<wchar_t>
 //			规范化接口。 - Lveyou
+//19-10-22: 重写，包含结尾符，不包含多余无用字符，内存由vector自己管理 - Lveyou
 //////////////////////////////////////////////////////////////////////////
 #ifndef _DND_STRING_H_
 #define _DND_STRING_H_
 
+#pragma warning(disable:4251)
 
 #include "DNDDLL.h"
 #include "DNDTypedef.h"
@@ -18,8 +20,6 @@ using namespace std;
 
 namespace DND
 {
-	
-	class StrVector;
 	class DLL_API String
 	{
 	public:
@@ -33,16 +33,14 @@ namespace DND
 		//String(const unsigned b);
 		String(const INT32 b);//数字构造
 		String(WCHAR ch, UINT32 len);//填充len 个 ch
-		String(StrVector*);//strvector构造
+		String(vector<WCHAR> vec) : _data(vec) {}//strvector构造
 		String& operator=(const String& b);//=号重载
-		String operator+(const String& b) const;//连接
-		bool operator==(const String& b) const;//相同
-		bool operator!=(const String& b) const;//不相同
-		bool operator<(const String& b) const;//小于
+
+		String& String::operator+=(const String& b);
+		
 
 		UINT32 GetLength() const;//返回长度
 		BYTE* GetBuffer();
-		void SetBufferSize(UINT32 size);//设置缓存大小，会保留旧数据
 		//==================转化==================
 		const WCHAR* GetWcs() const;
 		void GetWideCharStr(WCHAR* target, UINT32 max_len) const;//获得宽字符数组
@@ -81,12 +79,17 @@ namespace DND
 		static String Format(UINT32 max_size, const WCHAR* format, ...);//max size 不包含结束符
 
 	private:
-		StrVector* p;
-		void _init();
+		vector<WCHAR> _data;
 		void _copy(const WCHAR* wcs);
 	};
 
 	const String STRING_EMPTY = L"";
+
+
+	DLL_API String operator+(const String& a, const String& b);//连接
+	DLL_API bool operator==(const String& a, const String& b);//相同
+	DLL_API bool operator!=(const String& a, const String& b);//不相同
+	DLL_API bool operator<(const String& a, const String& b);//小于
 }
 
 #endif
