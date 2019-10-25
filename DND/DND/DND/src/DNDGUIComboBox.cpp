@@ -113,6 +113,9 @@ namespace DND
 	DND::String ComboBox::GetCur()
 	{
 		auto p = (std::list<Text*>*)_listItem;
+		if (p->size() == 0)
+			return STRING_EMPTY;
+
 		auto iter = p->begin();
 		UINT32 i = 0;
 
