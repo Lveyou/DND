@@ -234,6 +234,11 @@ namespace DND
 		Point mouse = Game::Get()->input->GetMousePosition();
 		Vector2 fmouse = m_coor->WorldToThis(mouse);
 
+		Vector4 rect_test = Vector4(x1, 0.0f, x2, h);
+		//”“∂‘∆Î‘Ú∆´“∆w
+		if (m_align_h == TEXT_ALIGN_RIGHT)
+			rect_test = rect_test + Vector2(x1 - x2, 0);
+
 		return Math::TestCollisionDotInRect(fmouse, Vector4(x1, 0.0f, x2, h));
 	}
 
