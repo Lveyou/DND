@@ -102,6 +102,14 @@ namespace DND
 			for (int i = 1; i <= 0xfe; ++i)
 				_key[i] = KEYDOWN(i);
 		}
+		else
+		{
+			//È«²¿ÖÃ¿Õ
+			for (int i = 1; i <= 0xfe; ++i)
+				_keyPre[i] = 0;
+			for (int i = 1; i <= 0xfe; ++i)
+				_key[i] = 0;
+		}
 	}
 
 	void Input_imp::_xinput_run()

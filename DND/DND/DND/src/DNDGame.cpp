@@ -342,6 +342,12 @@ namespace DND
 				}
 			}
 
+			//最小化也失去焦点
+			if (wParam == SIZE_MINIMIZED)
+			{
+				sys->_foucs = false;
+			}
+
 		}
 		else if(WM_EXITSIZEMOVE)
 		{

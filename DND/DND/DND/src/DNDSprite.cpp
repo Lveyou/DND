@@ -226,7 +226,8 @@ namespace DND
 		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
 		if (_show)
 		{
-			dnd_assert(0, ERROR_00051);
+			//dnd_assert(0, ERROR_00051);
+			assert(0 && ERROR_00051);
 		}
 		//调用 Delete 删除
 		if (_coor && !_noCoor)
