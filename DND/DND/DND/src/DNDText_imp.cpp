@@ -237,9 +237,9 @@ namespace DND
 		Vector4 rect_test = Vector4(x1, 0.0f, x2, h);
 		//”“∂‘∆Î‘Ú∆´“∆w
 		if (m_align_h == TEXT_ALIGN_RIGHT)
-			rect_test = rect_test + Vector2(x1 - x2, 0);
+			rect_test = rect_test + Vector2(-x2, 0);
 
-		return Math::TestCollisionDotInRect(fmouse, Vector4(x1, 0.0f, x2, h));
+		return Math::TestCollisionDotInRect(fmouse, rect_test);
 	}
 
 	void Text_imp::SetAlignHorizontal(int align)
