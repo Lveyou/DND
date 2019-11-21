@@ -170,43 +170,11 @@ namespace DND
 		
 		//return 1.0f / sqrtf(x);
 	}
-	UINT32 Math::g_seed = 0;
-	int DND::Math::GetRandInt(int min, int max)
-	{
-		//随机数算法 copy 自 hge
-		if (min == max)
-		{
-			return min;
-		}
-		else if (min > max)//如果小值在后面
-		{
-			SwapInt(min, max);
-		}
-		g_seed = 214013 * g_seed + 2531011;
-		return min + (g_seed ^ g_seed >> 15) % (max - min + 1);
-	}
+	
+	//随机数
+	unsigned int Math::g_seed = 0;
+	default_random_engine Math::g_random;
 
-	float DND::Math::GetRandFloat(float min, float max)
-	{
-		if (min == max)
-		{
-			return min;
-		}
-		else if (min > max)//如果小值在后面
-		{
-			SwapFloat(min, max);
-		}
-		g_seed = 214013 * g_seed + 2531011;
-		return min + (g_seed >> 16)*(1.0f / 65535.0f)*(max - min);
-	}
-
-	void DND::Math::SetSeed(UINT32 seed)
-	{
-		if (!seed) 
-			g_seed = (UINT32)time(0);
-		else 
-			g_seed = seed;
-	}
 
 	void DND::Math::SwapInt(int& a, int& b)
 	{

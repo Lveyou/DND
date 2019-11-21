@@ -6,6 +6,7 @@
 //other:
 //17-07-26: 数学相关函数。 - Lveyou
 //17-08-15: 随机数和极值 需改为 std方法
+//19-11-20: 随机数 修改为 std方法
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_MATH_H_
@@ -14,6 +15,8 @@
 
 #include "DNDDLL.h"
 #include "DNDUser.h"
+
+#include <random>
 
 namespace DND
 {
@@ -52,9 +55,7 @@ namespace DND
 			return 3.1415926f * N / D;
 		}
 		static float InvSqrt(float x);
-		static int GetRandInt(int min, int max);//返回[min,max]区间的随机数
-		static float GetRandFloat(float min, float max);//此函数尚未测试正确性
-		static void SetSeed(UINT32 seed);//设置种子
+
 		static void SwapInt(int& a, int& b);
 		static void SwapFloat(float& a, float& b);
 
@@ -148,11 +149,73 @@ namespace DND
 			}
 
 			return (hash & 0x7FFFFFFF);
+
 		}
 
-		static UINT32 GetSeed() { return g_seed; }
+		//Random
+		//设置种子 0代表随机
+		static void SetSeed(unsigned int s)
+		{
+			if (s == 0)
+			{
+				random_device rd;
+				g_random.seed(g_seed = rd());
+			}
+			else
+				g_random.seed(g_seed = s);
+			
+		}
+		//返回种子值
+		static unsigned int GetSeed() { return g_seed; }
+
+		//返回[min,max]区间的随机int
+		static int GetRandInt(int min, int max)
+		{
+			return GetRandInteger<int>(min, max);
+		}
+
+		//返回[min,max)区间的随机float
+		static float GetRandFloat(float min, float max)
+		{
+			return GetRandReal<float>(min, max);
+		}
+
+		//返回[min,max]区间的 整型随机值
+		template <typename T>
+		static T GetRandInteger(T min, T max)
+		{
+			static uniform_int_distribution<T> dist_int;
+			//设定区间
+			dist_int.param(uniform_int_distribution<T>::param_type{ min, max });
+			return dist_int(g_random);
+		}
+
+		//返回[min,max)区间的 实数随机值
+		template <typename T>
+		static T GetRandReal(T min, T max)
+		{
+			static uniform_real_distribution<T> dist_real;
+			//设定区间
+			dist_real.param(uniform_real_distribution<T>::param_type{ min, max });
+			return dist_real(g_random);
+		}
+
+		//返回 期望mu，标准差sigma 的正态分布随机值
+		template <typename T>
+		static T GetRandNormal(T mu, T sigma)
+		{
+			static normal_distribution<T> dist_normal;
+			//设定期望与标准差
+			dist_normal.param(normal_distribution<T>::param_type{ mu, sigma });
+			return dist_normal(g_random);
+		}
+
 	private:
-		static UINT32 g_seed;
+		//种子值
+		static unsigned int g_seed;
+		//随机数序列生成器
+		static default_random_engine g_random;
+	
 	};
 }
 
