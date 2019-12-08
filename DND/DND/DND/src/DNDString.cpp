@@ -226,6 +226,7 @@ namespace DND
 			CutHead(str.GetLength());
 		}
 	}
+	
 
 	void String::DeleteChar(UINT32 i)
 	{
@@ -262,11 +263,19 @@ namespace DND
 		{
 			iter_find = find(iter_begin, _data.end(), wc);
 
-			if (_data.end() == iter_find)
+			if (iter_begin == iter_find)
+			{
 				return i;
-			else
+			}
+			else if (_data.end() == iter_find)
 			{
 				strs[i] = vector<WCHAR>(iter_begin, iter_find);
+				return i + 1;
+			}	
+			else
+			{
+				strs[i] = String(vector<WCHAR>(iter_begin, iter_find), true);
+				
 				iter_begin = iter_find + 1;
 			}
 			++i;
@@ -292,6 +301,8 @@ namespace DND
 
 		return ret;
 	}
+
 	
+
 
 }

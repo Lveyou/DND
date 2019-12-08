@@ -33,7 +33,11 @@ namespace DND
 		//String(const unsigned b);
 		String(const INT32 b);//数字构造
 		String(WCHAR ch, UINT32 len);//填充len 个 ch
-		String(vector<WCHAR> vec) : _data(vec) {}//strvector构造
+		String(vector<WCHAR> vec, bool add_end = false) : _data(vec) 
+		{
+			if (add_end)
+				_data.push_back(0);
+		}//strvector构造
 		String& operator=(const String& b);//=号重载
 
 		String& String::operator+=(const String& b);
@@ -65,7 +69,33 @@ namespace DND
 		void CutHead(UINT32 i);//去掉i位置前的 包括i
 		void CutHeadStr(const String& str);//去除头部字符串
 		
-		
+		void String::CutHeadChar(bool(*func)(WCHAR ch)) //去掉尾部的指定字符
+		{
+			auto iter = _data.begin();
+			for (; iter != _data.end() - 1; ++iter)
+			{
+				if (!func(*iter))
+				{
+					break;
+				}
+			}
+
+			_data.erase(_data.begin(), iter);
+		}
+
+		void String::CutTailChar(bool (*func)(WCHAR ch)) //去掉尾部的指定字符
+		{
+			auto iter = _data.rbegin() + 1;
+			for (; iter != _data.rend(); ++iter)
+			{
+				if (!func(*iter))
+				{
+					break;
+				}
+			}
+
+			_data.erase(iter.base(), _data.end() - 1);
+		}
 		//==================修改==================
 		void DeleteChar(UINT32 i);//i位置删除一个字符
 		void InsertChar(UINT32 i, WCHAR ch);//i位置前插入一个字符,第一个字符位置为0
@@ -74,7 +104,7 @@ namespace DND
 		//==================工具==================
 		bool IsHaveLetter();//是否含有字母
 
-		//返回实际分隔后的字符串个数。例如 a;b; 返回 a b 2
+		//返回实际分隔后的字符串个数。例如 a;b 返回 a b 2
 		UINT32 Split(WCHAR wc, String* strs, UINT32 max_size) const;
 		static String Format(UINT32 max_size, const WCHAR* format, ...);//max size 不包含结束符
 

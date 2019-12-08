@@ -29,43 +29,56 @@ namespace DND
 			return false;
 		}
 		
+		
 
-		wchar_t temp[DND_FILE_DATA_LENGTH_MAX + 2];
-		String str_name;
-		String str_value;
-		in >> temp;
+		wchar_t temp[DND_FILE_DATA_LENGTH_MAX];
+		String str_nv[2];
+		in.getline(temp, DND_FILE_DATA_LENGTH_MAX);
 		if (wcscmp(L"[DNDFILE]", temp) == 0)
 		{
 
 			//////////////////////////////////////////////////////////////////////////处理node
 
-			for (int i = 0;; i++)
+			for (int i = 0; !in.eof(); i++)
 			{
 			first:
 				temp[0] = 0;
-				in >> temp;
+				in.getline(temp, DND_FILE_DATA_LENGTH_MAX);
 				if (wcscmp(temp, L"[-]") == 0)
 				{
-					//assert(0 && L"DNDFile 读取结束！");
 					in.close();
 					return true;
 				}
 				else if (temp[0] != 0)
 				{
-					str_name = temp;
 					//匹配到注释行
-					if (str_name.FindStr(L"//") != -1)
+					if (temp[0] == L'/' && temp[1] == L'/')
 					{
 						goto first;
 					}
+					String str = temp;
+
+					//debug_msg(str);
+					str.Split(L'=', str_nv, 2);
+
+					//debug_msg(str_nv[0]);
+					//debug_msg(str_nv[1]);
+
+					//去除多余空格
+					str_nv[0].CutTailChar([](WCHAR wc) {return wc == L' ' || wc == L'\t'; });
+					str_nv[1].CutHeadChar([](WCHAR wc) {return wc == L' ' || wc == L'\t'; });
+
+					//debug_msg(str_nv[0]);
+					//debug_msg(str_nv[1]);
+
+					m_strings[str_nv[0]] = str_nv[1];
 				}		
 				else
-				{
-					in.close();
-					return false;
+				{//空行
+					goto first;
 				}
 
-				temp[0] = 0;
+				/*temp[0] = 0;
 				in >> temp;
 				if (wcscmp(temp, L"=") != 0)
 				{
@@ -86,7 +99,7 @@ namespace DND
 					return false;
 				}
 
-				m_strings[str_name] = str_value;
+				m_strings[str_name] = str_value;*/
 
 			}
 
