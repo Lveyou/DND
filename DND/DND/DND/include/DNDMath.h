@@ -210,6 +210,15 @@ namespace DND
 			return dist_normal(g_random);
 		}
 
+		//返回 权值的 随机索引（均为size_t类型）
+		static size_t GetRandWeight(discrete_distribution<size_t>::param_type weight)
+		{
+			static discrete_distribution<size_t> dist_weight;
+			dist_weight.param(weight);
+
+			return dist_weight(g_random);
+		}
+
 	private:
 		//种子值
 		static unsigned int g_seed;
