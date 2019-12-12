@@ -30,17 +30,18 @@ namespace DND
 		UINT32 GetLength();
 
 		template <typename T>
-		void Write(T* data)
+		void Write(const T* data)
 		{
-			if (is_arithmetic<T>::value || is_enum<T>::value)
-				debug_err(L"StreamOutput::Write: 不能用模板初始化基础类型！");
+			/*if (is_arithmetic<T>::value || is_enum<T>::value)
+				debug_err(L"StreamOutput::Write: 不能用模板初始化基础类型！");*/
 			Write(data, sizeof(T));
 		}
 		void Write(const void* data, UINT32 byte_count);
-		void Write(UINT32 data);
-		void Write(INT32 data);
+		/*void Write(UINT32 data);
+		void Write(INT32 data);*/
 
 		bool Save(const String& path_name);
+		void Clear();
 	private:
 		void _realloc(UINT32 size);
 

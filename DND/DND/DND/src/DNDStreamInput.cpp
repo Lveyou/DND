@@ -40,7 +40,7 @@ namespace DND
 		return true;
 	}
 
-	void StreamInput::Read(UINT32& data)
+	/*void StreamInput::Read(UINT32& data)
 	{
 		Read(&data, sizeof(UINT32));
 	}
@@ -48,7 +48,7 @@ namespace DND
 	void StreamInput::Read(INT32& data)
 	{
 		Read(&data, sizeof(INT32));
-	}
+	}*/
 
 	bool StreamInput::LoadFromFile(const String& path_name)
 	{

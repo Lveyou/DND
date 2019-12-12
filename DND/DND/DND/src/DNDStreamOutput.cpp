@@ -2,6 +2,7 @@
 #include "DNDValue.h"
 #include "DNDMath.h"
 #include <stdlib.h>
+#include "DNDDebug.h"
 
 namespace DND
 {
@@ -37,7 +38,7 @@ namespace DND
 		_head = result_head;
 	}
 
-	void StreamOutput::Write(UINT32 data)
+	/*void StreamOutput::Write(UINT32 data)
 	{
 		Write(&data, sizeof(UINT32));
 	}
@@ -45,7 +46,7 @@ namespace DND
 	void StreamOutput::Write(INT32 data)
 	{
 		Write(&data, sizeof(INT32));
-	}
+	}*/
 
 	bool StreamOutput::Save(const String& path_name)
 	{
@@ -61,8 +62,14 @@ namespace DND
 		}
 		else
 		{
+			debug_err(String(L"DND: StreamOutput::Save: ±£¥Ê ß∞‹") + path_name);
 			return false;
 		}
+	}
+
+	void StreamOutput::Clear()
+	{
+		_head = 0;
 	}
 
 	void StreamOutput::_realloc(UINT32 size)

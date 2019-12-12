@@ -330,13 +330,13 @@ namespace DND
 		delete img;
 
 		UINT32 size = 0;
-		s.Read(size);
+		s.Read(&size);
 
 		for (UINT32 i = 0; i < size; ++i)
 		{
 			UINT32 id;
 			Rect rect;
-			s.Read(id);
+			s.Read(&id);
 			s.Read(&rect);
 			_tex->_imageRects[id] = rect;
 		}
@@ -367,11 +367,12 @@ namespace DND
 		//delete file;
 		
 		StreamOutput s;
-		s.Write(_tex->_imageRects.size());
+		size_t size = _tex->_imageRects.size();
+		s.Write<size_t>(&size);
 
 		for (auto& iter : _tex->_imageRects)
 		{
-			s.Write(UINT32(iter.first));
+			s.Write(&UINT32(iter.first));
 			s.Write<Rect>(&iter.second);
 		}
 		

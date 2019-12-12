@@ -32,13 +32,13 @@ namespace DND
 		template <typename T>
 		void Read(T* data)
 		{
-			if (is_arithmetic<T>::value || is_enum<T>::value)
-				debug_err(L"StreamOutput::Write: 不能用模板初始化基础类型！");
+			/*if (is_arithmetic<T>::value || is_enum<T>::value)
+				debug_err(L"StreamOutput::Write: 不能用模板初始化基础类型！");*/
 			Read(data, sizeof(T));
 		}
 		bool Read(void* data, UINT32 byte_count);
-		void Read(UINT32& data);
-		void Read(INT32& data);
+		/*void Read(UINT32& data);
+		void Read(INT32& data);*/
 
 		bool LoadFromFile(const String& path_name);
 		void LoadFromMemory(BYTE* buffer, UINT32 length);

@@ -152,7 +152,7 @@ namespace DND
 			//如果时间不够就不绘图了
 			if(sleepTime < 0)
 			{
-				debug_warn(L"DND: SKIP CPU -> GPU and Render!");
+				//debug_warn(L"DND: SKIP CPU -> GPU and Render!");
 				t->_except_render = 0;
 
 				//清除填充的 画布内容
