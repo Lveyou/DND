@@ -45,6 +45,15 @@ namespace DND
 		((std::list<Text*>*)_listItem)->push_back(txt);
 	}
 
+	void ComboBox::PushFront(const String& str)
+	{
+		Text* txt = _txt->Clone();
+		txt->SetOrder(_sprTop->GetOrder() + 2);
+		txt->SetString(str);
+
+		((std::list<Text*>*)_listItem)->push_front(txt);
+	}
+
 	int ComboBox::Run()
 	{
 		_sprTop->Render();

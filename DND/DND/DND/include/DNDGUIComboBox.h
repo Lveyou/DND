@@ -26,6 +26,7 @@ namespace DND
 	public:
 		static ComboBox* Create(Sprite* top, Sprite* over, Sprite9* under, ButtonSprite3* right, Text* txt, UINT32 dy = 0);
 		void PushBack(const String& str);
+		void PushFront(const String& str);
 		int Run();
 		String GetCur();
 		int GetCurNumber();
