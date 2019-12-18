@@ -42,6 +42,11 @@ namespace DND
 
 		bool LoadFromFile(const String& path_name);
 		void LoadFromMemory(BYTE* buffer, UINT32 length);
+
+		//返回 流位置
+		UINT32 GetPos() { return _head; }
+		//设置 流位置
+		void SetPos(UINT32 pos);
 	private:
 
 		BYTE* _buffer;

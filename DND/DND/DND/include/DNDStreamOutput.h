@@ -40,8 +40,16 @@ namespace DND
 		/*void Write(UINT32 data);
 		void Write(INT32 data);*/
 
+		//填充指定数据 字节长度、以字节对齐
+		void Fill(int val, UINT32 byte_count);
+
 		bool Save(const String& path_name);
 		void Clear();
+
+		//返回 流位置
+		UINT32 GetPos() { return _head; }
+		//设置 流位置
+		void SetPos(UINT32 pos);
 	private:
 		void _realloc(UINT32 size);
 

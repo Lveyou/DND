@@ -38,6 +38,20 @@ namespace DND
 		_head = result_head;
 	}
 
+	void StreamOutput::Fill(int val, UINT32 byte_count)
+	{
+		UINT32 result_head = _head + byte_count;
+
+		if (result_head > _size)
+		{
+			_realloc(Math::GetPow2Large(result_head));
+		}
+
+		memset(_buffer + _head, val, byte_count);
+
+		_head = result_head;
+	}
+
 	/*void StreamOutput::Write(UINT32 data)
 	{
 		Write(&data, sizeof(UINT32));
@@ -70,6 +84,16 @@ namespace DND
 	void StreamOutput::Clear()
 	{
 		_head = 0;
+	}
+
+	void StreamOutput::SetPos(UINT32 pos)
+	{
+
+		if (pos > _size)
+		{
+			_realloc(Math::GetPow2Large(pos));
+		}
+		_head = pos;
 	}
 
 	void StreamOutput::_realloc(UINT32 size)

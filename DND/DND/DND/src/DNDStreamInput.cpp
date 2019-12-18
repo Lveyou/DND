@@ -85,6 +85,16 @@ namespace DND
 
 
 
+	void StreamInput::SetPos(UINT32 pos)
+	{
+		if (pos > _size)
+		{
+			debug_err(L"DND: StreamInput::SetPos超出了buffer大小。");
+			return;
+		}
+		_head = pos;
+	}
+
 }
 
 
