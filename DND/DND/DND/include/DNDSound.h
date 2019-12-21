@@ -15,16 +15,19 @@
 #include "DNDDLL.h"
 #include "DNDTypedef.h"
 #include "DNDString.h"
+#include "DNDGame.h"
 
 
-#define snd_safe(snd, func1) if(snd)snd->func1;
 
 namespace DND
 {
+	
+
 	class DLL_API Voice
 	{
 	public:
 		virtual void Play() = 0;
+		virtual void Pause() = 0;
 	};
 
 	class DLL_API Sound
@@ -36,7 +39,16 @@ namespace DND
 		virtual Voice* Create(const String& name) = 0;
 		virtual void SetVolume(float v) = 0;
 		virtual float GetVolume() = 0;
+		//可能比create更快
+		virtual Voice* GetVoice(const String& name) = 0;
 	};
+
+	inline void snd_safe_play(const String& name)
+	{
+		auto* voice = Game::Get()->sound->GetVoice(name);
+		if (voice)
+			voice->Play();
+	}
 }
 
 #endif

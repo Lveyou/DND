@@ -1,7 +1,6 @@
 #include "DNDSound_imp.h"
 #include "DNDDebug.h"
 
-
 namespace DND
 {
 #ifdef _XBOX //Big-Endian
@@ -98,6 +97,9 @@ namespace DND
 		return _open;
 	}
 
+	
+
+
 	//////////////////////////////////////////////////////////////////////////
 	//以上代码copy自dx sdk文档
 
@@ -156,8 +158,13 @@ namespace DND
 		(ret->_buffer).AudioBytes = dwChunkSize;  //buffer containing audio data
 		(ret->_buffer).pAudioData = pDataBuffer;  //size of the audio buffer in bytes
 		(ret->_buffer).Flags = XAUDIO2_END_OF_STREAM; // tell the source voice not to expect any data after this buffer
+		(ret->_buffer).LoopCount = XAUDIO2_LOOP_INFINITE;
+		
 
 		_mapVoiceData[name] = ret;
+
+		//至少一个准备播放
+		_mapAllVoice[name].push_back((Voice_imp*)Create(name));
 		
 	}
 
@@ -167,6 +174,8 @@ namespace DND
 			return NULL;
 
 		Voice_imp* ret = new Voice_imp;
+		ret->_voiceCallBack = new VoiceCallback; 
+		ret->_voiceCallBack->_voice = ret;
 
 		auto& iter = _mapVoiceData.find(name);
 
@@ -178,11 +187,12 @@ namespace DND
 
 
 		if (FAILED(_xaudio2->CreateSourceVoice(&(ret->_sourceVoice), (WAVEFORMATEX*)&(iter->second->_wfx),
-			0, XAUDIO2_DEFAULT_FREQ_RATIO, NULL, NULL, NULL)))
+			0, XAUDIO2_DEFAULT_FREQ_RATIO, ret->_voiceCallBack, NULL, NULL)))
 		{
 			debug_err(String(L"DND: Sound::Create: 创建SourceVoice失败: ") + name);
 			return NULL;
 		}
+
 
 		if (FAILED(ret->_sourceVoice->SubmitSourceBuffer(&(iter->second->_buffer))))
 		{
@@ -207,6 +217,25 @@ namespace DND
 		float ret;
 		_masterVoice->GetVolume(&ret);
 		return ret;
+	}
+
+	DND::Voice* Sound_imp::GetVoice(const String& name)
+	{
+		auto& iter = _mapAllVoice.find(name);
+		if (iter == _mapAllVoice.end())
+			return NULL;
+
+		for (auto& iter2 : iter->second)
+		{
+			if (iter2->_ready)
+				return iter2;
+		}
+
+		Voice* ret = Create(name);
+		iter->second.push_back((Voice_imp*)ret);
+
+		return ret;
+
 	}
 
 	void Sound_imp::_init()
@@ -237,7 +266,24 @@ namespace DND
 	void Voice_imp::Play()
 	{
 		_sourceVoice->Start(0, XAUDIO2_COMMIT_NOW);
+		_ready = false;
+
+		/*WaitForSingleObject(_voiceCallBack->hBufferEndEvent, INFINITE);
+		Thread::Start();*/
+
 	}
+
+
+	void Voice_imp::Pause()
+	{
+		_sourceVoice->Stop(0, XAUDIO2_COMMIT_NOW);
+
+	}
+
+	/*void Voice_imp::_run()
+	{
+
+	}*/
 
 }
 
