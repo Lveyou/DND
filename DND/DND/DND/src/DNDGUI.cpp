@@ -12,9 +12,20 @@ namespace DND
 
 	bool Control::IsRelease()
 	{
-		bool ret = _isRelease;
+		/*bool ret = _isRelease;
 		_isRelease = false;
-		return ret;
+		return ret;*/
+		return (_preState == DOWN) && (_state == OVER);
+	}
+
+	bool Control::IsInOnce()
+	{
+		return (_preState == NORMAL) && (_state == OVER);
+	}
+
+	bool Control::IsClick()
+	{
+		return (_preState == OVER) && (_state == DOWN);
 	}
 
 	Control::State Control::GetState()
@@ -30,6 +41,7 @@ namespace DND
 
 	void Control::Run()
 	{
+		_preState = _state;
 		switch (_mode)
 		{
 		case DND::Control::BUTTON:
@@ -67,8 +79,8 @@ namespace DND
 	{
 		_open = open;
 		//·ÅÖ¹ReleaseÊÂ¼þ
-		_state = _open ? DOWN : NORMAL;
-		
+		_state = _open ? DOWN : (_state == OVER ? OVER : NORMAL);
+
 	}
 
 	void Control::SetDisable(bool disable)
@@ -78,6 +90,7 @@ namespace DND
 
 	Control::Control() :
 		_disable(false),
+		_preState(NORMAL),
 		_state(NORMAL),
 		_isRelease(false),
 		_mode(Mode::BUTTON),

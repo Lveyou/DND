@@ -224,11 +224,14 @@ namespace DND
 	Sprite::~Sprite()
 	{
 		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
-		if (_show)
-		{
-			//dnd_assert(0, ERROR_00051);
-			assert(0 && ERROR_00051);
-		}
+		//if (_show)
+		//{
+		//	//dnd_assert(0, ERROR_00051);
+		//	dnd_assert(0, ERROR_00051);
+		//	/*__asm {
+		//		int 3
+		//	}*/
+		//}
 		//调用 Delete 删除
 		if (_coor && !_noCoor)
 			delete _coor;
@@ -345,6 +348,17 @@ namespace DND
 		return _color[i];
 	}
 
+	void Sprite::SetQuadSize(DND::Size size)
+	{
+		_quad.v[1].a = _quad.v[0].a + size.w;
+		_quad.v[1].b = _quad.v[0].b;
+
+		_quad.v[2].a = _quad.v[0].a + size.w;
+		_quad.v[2].b = _quad.v[0].b + size.h;
+
+		_quad.v[3].a = _quad.v[0].a;
+		_quad.v[3].b = _quad.v[0].b + size.h;
+	}
 
 
 	

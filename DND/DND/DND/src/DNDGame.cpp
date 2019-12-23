@@ -71,9 +71,11 @@ namespace DND
 		sound = new Sound_imp;
 		_init();
 		debug_notice(L"DND: user init ok!");
+
+		//改为了手动调用就初始化
 		//init sound（用户可设置是否初始化音效TODO）
-		((Sound_imp*)sound)->_init();
-		debug_notice(L"DND: sound init ok!");
+		//((Sound_imp*)sound)->_init();
+		
 		debug_notice(L"DND: game init ok!");
 	}
 

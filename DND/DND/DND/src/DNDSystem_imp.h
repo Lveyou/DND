@@ -54,8 +54,13 @@ namespace DND
 
 		virtual bool LoadFontFile(const String& name, const String& path, int mode = 0) override;
 
-		virtual String GetChooseFolder(const String& title, String root) override;
-		virtual bool GetChooseFile(const WCHAR* filter, String& path, String& name) override;
+		virtual String GetChooseFolder() override;
+		virtual String GetChooseFile(
+			bool save = false,
+			vector<FileNameType>* file_type = NULL,
+			int index = 1,
+			vector<String>* ret_mutil = NULL) override;
+
 
 		virtual bool GetPathFileFirst(const String& path, String& name, bool& is_path) override;
 		virtual bool GetPathFileNext(const String& path, String& name, bool& is_path) override;

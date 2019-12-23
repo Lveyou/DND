@@ -50,6 +50,9 @@ namespace DND
 		void SetQuadRotate(float r);
 		void SetQuadScale(Vector2 s);
 		void SetQuadScale(float s);
+
+		//根据左上角的坐标 设置指定大小
+		void SetQuadSize(DND::Size size);
 		Vector2 GetQuad(UINT32 i);
 		Quad GetQuad();
 		UINT32 GetImageRectId();
@@ -88,6 +91,7 @@ namespace DND
 		bool _noCoor;
 		//调用render后，设为true
 		bool _show;
+
 	};
 }
 

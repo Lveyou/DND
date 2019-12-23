@@ -102,6 +102,7 @@ namespace DND
 			_xaudio2 = NULL;
 			_masterVoice = NULL;
 			_open = false;
+			_inited = false;
 		}
 	public:
 		IXAudio2* _xaudio2;
@@ -116,6 +117,7 @@ namespace DND
 		
 
 		bool _open;
+		bool _inited;
 	};
 }
 

@@ -18,6 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Maker.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Maker.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7F997027-ED74-4ECA-B049-7554594A40AE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -145,19 +151,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="DGame.cpp" />
-    <ClCompile Include="DSGameInfo.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Maker.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="DCanvas.h" />
-    <ClInclude Include="DGame.h" />
-    <ClInclude Include="DSGameInfo.h" />
-    <ClInclude Include="head.h" />
-    <ClInclude Include="Maker.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

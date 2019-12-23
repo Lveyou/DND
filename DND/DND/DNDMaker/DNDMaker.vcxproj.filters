@@ -15,34 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Maker.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DGame.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DSGameInfo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="head.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Maker.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DGame.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DCanvas.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="DSGameInfo.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Maker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

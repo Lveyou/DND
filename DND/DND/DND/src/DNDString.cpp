@@ -97,7 +97,7 @@ namespace DND
 
 	void String::GetWideCharStr(WCHAR* target, UINT32 max_len) const
 	{
-		memcpy_s(target, max_len, _data.data(), _data.size());
+		memcpy_s(target, max_len * sizeof(WCHAR), _data.data(), _data.size() * sizeof(WCHAR));
 	}
 
 

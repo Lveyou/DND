@@ -90,6 +90,10 @@ namespace DND
 	void Sound_imp::SetOpen(bool open /*= true*/)
 	{
 		_open = open;
+		
+		if(_open)
+			_init();
+		
 	}
 
 	bool Sound_imp::IsOpen()
@@ -240,8 +244,9 @@ namespace DND
 
 	void Sound_imp::_init()
 	{
-		if (!_open)
+		if (_inited)
 			return;
+		_inited = true;
 
 #ifndef _XBOX
 		CoInitializeEx(NULL, COINIT_MULTITHREADED);

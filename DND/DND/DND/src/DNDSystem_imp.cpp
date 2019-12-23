@@ -269,85 +269,239 @@ namespace DND
 
 
 
-	String System_imp::GetChooseFolder(const String& title, String root)
+	DND::String System_imp::GetChooseFolder()
 	{
-		wchar_t buffer[MAX_PATH] = { 0 };
+		IFileDialog *pfd = NULL;
 
-		BROWSEINFO bi = { 0 };
-		if (root == L"")
-		{
-			bi.pidlRoot = NULL;
-		}
-		else
-		{
-			//获取想要的根目录
-			LPSHELLFOLDER pShellFolder = NULL;
-			ULONG nCharsParsed = 0;
+		HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+		
+		if (!SUCCEEDED(hr))
+			return L"";
 
-			SHGetDesktopFolder(&pShellFolder);
+		DWORD dwFlags;
+		hr = pfd->GetOptions(&dwFlags);
+		if (!SUCCEEDED(hr))
+			return L"";
 
-			wchar_t temp[MAX_PATH] = { 0 };
-			//root.Replace_Char(L'/', L'\\');
-			root.GetWideCharStr(temp, MAX_PATH);
-			//第三个参数
-			pShellFolder->ParseDisplayName(NULL, NULL, temp, &nCharsParsed, (LPITEMIDLIST*)&(bi.pidlRoot), NULL);
+		hr = pfd->SetOptions(dwFlags | FOS_PICKFOLDERS);//| FOS_FORCEFILESYSTEM | FOS_ALLOWMULTISELECT);//FOS_PICKFOLDERS
+		if (!SUCCEEDED(hr))
+			return L"";
 
 
-			pShellFolder->Release();
-		}
-
-		bi.hwndOwner = _hWnd;//拥有着窗口句柄，为NULL表示对话框是非模态的，实际应用中一般都要有这个句柄
-		bi.pszDisplayName = buffer;//接收文件夹的缓冲区
-		bi.lpszTitle = title.GetWcs();//标题
-		bi.ulFlags = BIF_NEWDIALOGSTYLE;
-		LPITEMIDLIST idl = SHBrowseForFolder(&bi);
+		/*	COMDLG_FILTERSPEC fileType[] =
+			{
+				{ L"All files", L"*.*" },
+			};
+			hr = pfd->SetFileTypes(ARRAYSIZE(fileType), fileType);
+			hr = pfd->SetFileTypeIndex(1);*/
 
 
-		if (SHGetPathFromIDList(idl, buffer))
-		{
-			String ret = buffer;
-			return ret + L"\\";
-		}
-		else
-		{
-			return String();
-		}
+		hr = pfd->Show(NULL);
+		if (!SUCCEEDED(hr))
+			return L"";
+
+
+		IShellItem *pSelItem;
+		hr = pfd->GetResult(&pSelItem);
+		if (!SUCCEEDED(hr))
+			return L"";
+
+		LPWSTR pszFilePath = NULL;
+		hr = pSelItem->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &pszFilePath);
+		if (!SUCCEEDED(hr))
+			return L"";
+
+		String ret = pszFilePath;
+
+		CoTaskMemFree(pszFilePath);
+
+		if (SUCCEEDED(pSelItem->Release()))
+			pfd->Release();
+		
+
+		return ret;
 	}
 
 
-	bool System_imp::GetChooseFile(const WCHAR* filter, String& ipath_name, String& iname)
+	String System_imp::GetChooseFile(
+		bool save,
+		vector<FileNameType>* file_type,
+		int index,
+		vector<String>* ret_mutil)
 	{
-		
-		wchar_t path[MAX_PATH] = { 0 };
-		wchar_t name[MAX_PATH] = { 0 };
-		OPENFILENAME openFileName = { 0 };
-		openFileName.lStructSize = sizeof(OPENFILENAME);
-		openFileName.nMaxFile = MAX_PATH;  //这个必须设置，不设置的话不会出现打开文件对话框 
-		openFileName.lpstrFilter = filter;
-			//L"文本文件(*.png)\0*.png\0所有文件(*.*)\0*.*\0\0";
-		openFileName.lpstrFile = path;
-		openFileName.lpstrFileTitle = name;
-		openFileName.nMaxFileTitle = MAX_PATH;
-		openFileName.nFilterIndex = 1;
-		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-		
-		if (GetOpenFileName(&openFileName))
+		if (ret_mutil)
 		{
-			
+			IFileOpenDialog  *pfd = NULL;
 
-			SetCurrentDirectory(_exePath.GetWcs());
 
-			ipath_name = openFileName.lpstrFile;
-			iname = openFileName.lpstrFileTitle;
-			
-			
+			HRESULT hr = save ? CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd))
+				: CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
 
-			return true;
+			if (!SUCCEEDED(hr))
+				return L"";
+
+			DWORD dwFlags;
+			hr = pfd->GetOptions(&dwFlags);
+			if (!SUCCEEDED(hr))
+				return L"";
+
+			hr = pfd->SetOptions(dwFlags | FOS_ALLOWMULTISELECT);//| FOS_FORCEFILESYSTEM | FOS_ALLOWMULTISELECT);//FOS_PICKFOLDERS
+			if (!SUCCEEDED(hr))
+				return L"";
+
+
+			COMDLG_FILTERSPEC* fileType;
+			UINT type_length = 1;
+			if (file_type)
+			{
+				type_length = file_type->size();
+				fileType = new COMDLG_FILTERSPEC[type_length];
+
+				UINT32 i = 0;
+				for (auto& iter : *file_type)
+				{
+					fileType[i].pszName = iter.name;
+					fileType[i].pszSpec = iter.type;
+					i++;
+				}
+			}
+			else
+			{
+				fileType = new COMDLG_FILTERSPEC[1];
+				fileType[0] = { L"All files", L"*.*" };
+			}
+
+			hr = pfd->SetFileTypes(type_length, fileType);
+			hr = pfd->SetFileTypeIndex(index);
+
+
+			hr = pfd->Show(NULL);
+			if (!SUCCEEDED(hr))
+				return L"";
+
+			IShellItemArray  *pSelResultArray;
+			if (SUCCEEDED(pfd->GetResults(&pSelResultArray)))
+			{
+				DWORD dwNumItems = 0; // number of items in multiple selection
+				hr = pSelResultArray->GetCount(&dwNumItems);  // get number of selected items
+				for (DWORD i = 0; i < dwNumItems; i++)
+				{
+					IShellItem *pSelOneItem = NULL;
+					PWSTR pszFilePath = NULL; // hold file paths of selected items
+					// get a selected item from the IShellItemArray
+					if (SUCCEEDED(pSelResultArray->GetItemAt(i, &pSelOneItem)))
+					{
+						hr = pSelOneItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+						ret_mutil->push_back(pszFilePath);
+						if (SUCCEEDED(hr))
+						{
+							CoTaskMemFree(pszFilePath);
+						}
+						pSelOneItem->Release();
+					}
+				}
+				pSelResultArray->Release();
+			}
+			pfd->Release();
+
+			return L"true";
 		}
+		else
+		{
+			IFileDialog *pfd = NULL;
+
+			//多选只能是打开
+			HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pfd));
+
+			if (!SUCCEEDED(hr))
+				return L"";
+
+			COMDLG_FILTERSPEC* fileType;
+			UINT type_length = 1;
+			if (file_type)
+			{
+				type_length = file_type->size();
+				fileType = new COMDLG_FILTERSPEC[type_length];
+				
+				UINT32 i = 0;
+				for (auto& iter : *file_type)
+				{
+					fileType[i].pszName = iter.name;
+					fileType[i].pszSpec = iter.type;
+					i++;
+				}
+			}
+			else
+			{
+				fileType = new COMDLG_FILTERSPEC[1];
+				fileType[0] = { L"All files", L"*.*" };
+			}
+
+			hr = pfd->SetFileTypes(type_length, fileType);
+			hr = pfd->SetFileTypeIndex(index);
+
+
+			hr = pfd->Show(NULL);
+			if (!SUCCEEDED(hr))
+				return L"";
+
+
+			IShellItem *pSelItem;
+			hr = pfd->GetResult(&pSelItem);
+			if (!SUCCEEDED(hr))
+				return L"";
+
+			LPWSTR pszFilePath = NULL;
+			hr = pSelItem->GetDisplayName(SIGDN_DESKTOPABSOLUTEPARSING, &pszFilePath);
+			if (!SUCCEEDED(hr))
+				return L"";
+
+			String ret = pszFilePath;
+
+			CoTaskMemFree(pszFilePath);
+
+			if (SUCCEEDED(pSelItem->Release()))
+				pfd->Release();
+
+
+			return ret;
+
+		}
+		
+
+		
+
+
+		//wchar_t path[MAX_PATH] = { 0 };
+		//wchar_t name[MAX_PATH] = { 0 };
+		//OPENFILENAME openFileName = { 0 };
+		//openFileName.lStructSize = sizeof(OPENFILENAME);
+		//openFileName.nMaxFile = MAX_PATH;  //这个必须设置，不设置的话不会出现打开文件对话框 
+		//openFileName.lpstrFilter = filter;
+		//	//L"文本文件(*.png)\0*.png\0所有文件(*.*)\0*.*\0\0";
+		//openFileName.lpstrFile = path;
+		//openFileName.lpstrFileTitle = name;
+		//openFileName.nMaxFileTitle = MAX_PATH;
+		//openFileName.nFilterIndex = 1;
+		//openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+		//
+		//if (GetOpenFileName(&openFileName))
+		//{
+		//	
+
+		//	SetCurrentDirectory(_exePath.GetWcs());
+
+		//	ipath_name = openFileName.lpstrFile;
+		//	iname = openFileName.lpstrFileTitle;
+		//	
+		//	
+
+		//	return true;
+		//}
 
 	
-		return false;
+		//return false;
 	}
 
 	void System_imp::CopyAFile(const String& source, const String& target)

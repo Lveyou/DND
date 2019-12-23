@@ -41,7 +41,13 @@ namespace DND
 			SWITCH,
 			RADIO
 		};
+		//点击并释放，用于button
 		bool IsRelease();
+		//进入按钮上面一次
+		bool IsInOnce();
+		//点击，用于switch和 radio不能立刻弹起的（radio不能再次点击弹起）
+		bool IsClick();
+
 		State GetState();
 		void SetState(State state);
 		void Run();
@@ -52,6 +58,7 @@ namespace DND
 		void SetDisable(bool disable);
 		Control();
 	private:
+		State _preState;
 		State _state;
 		//子类控件需要重载
 		virtual bool _is_pickup() = 0;

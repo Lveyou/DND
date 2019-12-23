@@ -18,6 +18,15 @@
 
 namespace DND
 {
+	struct FileNameType
+	{
+		//All files
+		//PNG files
+		WCHAR name[64];
+		//*.*
+		//*.png
+		WCHAR type[64];
+	};
 	class Coor;
 	class DLL_API System
 	{	
@@ -49,9 +58,32 @@ namespace DND
 
 		//file 文件操作
 		//选择文件夹
-		virtual String GetChooseFolder(const String& title, String root) = 0;
+		virtual String GetChooseFolder() = 0;
+
+		//是否保存模式、 文件类型、 默认选择的文件类型(从1开始)、是否可以多选（多选只能为打开模式）
+		virtual String GetChooseFile(
+			bool save = false,
+			vector<FileNameType>* file_type = NULL,
+			int index = 1,
+			vector<String>* ret_mutil = NULL) = 0;
+		//示例如下
+		/*vector<FileNameType> vecs =
+		{
+			{ L"all", L"*.*" },
+			{ L"图像", L"*.png" }
+		};
+
+		vector<String> ret_str;
+		debug_msg(sys->GetChooseFile(true, &vecs, 2, &ret_str));
+
+		for (auto& iter : ret_str)
+		{
+			debug_msg(iter);
+		}*/
+
+
 		//选择文件
-		virtual bool GetChooseFile(const WCHAR* filter, String& path_name, String& name) = 0;
+		//virtual bool GetChooseFile(const WCHAR* filter, String& path_name, String& name) = 0;
 		//遍历文件（需手动加上通配符）
 		virtual bool GetPathFileFirst(const String& path, String& name, bool& is_path) = 0;
 		virtual bool GetPathFileNext(const String& path, String& name, bool& is_path) = 0;
