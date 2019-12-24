@@ -168,20 +168,8 @@ namespace DND
 		return ret;
 	}
 
-
-	void Locator_imp::AddCoor(Coor* coor)
-	{
-		_mapCoor[coor] = Vector2(0.5f, 0.5f);
-	}
-
 	void Locator_imp::SetCoor(Coor* coor, Vector2 pos)
 	{
-		auto& iter = _mapCoor.find(coor);
-		if (iter == _mapCoor.end())
-		{
-			debug_warn(L"DND: Locator_imp::SetCoor所传Coor不存在！");
-			return;
-		}
 		_mapCoor[coor] = pos;
 	}
 

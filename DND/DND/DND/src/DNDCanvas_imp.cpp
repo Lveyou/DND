@@ -54,7 +54,7 @@ namespace DND
 		spr->_color[2] = color;
 		spr->_color[3] = color;
 		spr->_canvas = this;
-		_tex->GetUV(imgID, spr->_uv);
+		spr->_uvConst = _tex->GetUV(imgID);
 		
 		return spr;
 	}
@@ -77,7 +77,7 @@ namespace DND
 		spr->_color[2] = color;
 		spr->_color[3] = color;
 		spr->_canvas = this;
-		_tex->GetUV(img_ID, spr->_uv);
+		spr->_uvConst = _tex->GetUV(img_ID);
 
 		return spr;
 	}
@@ -339,6 +339,7 @@ namespace DND
 			s.Read(&id);
 			s.Read(&rect);
 			_tex->_imageRects[id] = rect;
+			_tex->_update_uv(id);
 		}
 
 		_bSetImage = true;
@@ -564,8 +565,8 @@ namespace DND
 				_vertexs[_renderSprNum + j].color.y = spr->_color[j].g();
 				_vertexs[_renderSprNum + j].color.z = spr->_color[j].b();
 				_vertexs[_renderSprNum + j].color.w = spr->_color[j].a();
-				_vertexs[_renderSprNum + j].t.x = spr->_uv[j].a;
-				_vertexs[_renderSprNum + j].t.y = spr->_uv[j].b;
+				_vertexs[_renderSprNum + j].t.x = spr->_uvConst ? spr->_uvConst[j].a : spr->_uv[j].a;
+				_vertexs[_renderSprNum + j].t.y = spr->_uvConst ? spr->_uvConst[j].b : spr->_uv[j].b; 
 				//int a = 0;
 			}
 			_renderSprNum += 4;

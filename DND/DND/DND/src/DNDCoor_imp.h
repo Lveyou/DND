@@ -67,7 +67,6 @@ namespace DND
 	class Locator_imp : public Locator
 	{
 	public:
-		virtual void AddCoor(Coor* coor) override;
 		virtual void SetCoor(Coor* coor, Vector2 pos) override;
 		virtual void RemoveCoor(Coor* coor) override;
 		virtual void Run(Size size) override;

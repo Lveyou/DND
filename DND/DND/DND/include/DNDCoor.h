@@ -45,7 +45,10 @@ namespace DND
 	{
 	public:
 		static Locator* Create();
-		virtual void AddCoor(Coor* coor) = 0;
+		//什么都不做，请直接调用SetCoor
+		void AddCoor(Coor* coor)
+		{
+		}
 		virtual void SetCoor(Coor* coor, Vector2 pos) = 0;
 		virtual void RemoveCoor(Coor* coor) = 0;
 		virtual void Run(Size size) = 0;

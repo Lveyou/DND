@@ -26,7 +26,7 @@ namespace DND
 
 		_add_xy(_imgTemp, Rect(XYWH(Point(), Size(32, 32))),Point(0, 0));
 		_imageRects[0] = Rect(XYWH(Point(), Size(32, 32)));
-		
+		_update_uv(0);
 
 		delete _imgTemp;
 		_imgTemp = NULL;
@@ -52,6 +52,7 @@ namespace DND
 		_img = Image::Create(img);
 		_add_img(_img);
 		_imageRects[0] = Rect(XYWH(Point(), size_img));
+		_update_uv(0);
 	}
 
 	void Texture::AddImageRect(unsigned ID, const Image* img, const Rect& rect)
@@ -83,6 +84,11 @@ namespace DND
 			//插入以前的图像
 			_add_xy(_imgTemp, Rect(XYWH(Point(), Size(_size >> 1,_size >> 1))), Point(0, 0));
 
+			//更新所有旧uv
+			for (auto& iter : _imageRects)
+			{
+				_update_uv(iter.first);
+			}
 		}
 		//直到找到了位置
 		//out_rect = Vector4(out.a, out.b, rect.c - rect.a + out.a - 0.0039f, rect.d - rect.b + out.b - 0.0039f);
@@ -93,6 +99,8 @@ namespace DND
 
 		_imageRects[ID] = out_rect;
 		//_lastAdd = out + Point(add_size.w, 0);
+
+		_update_uv(ID);
 		
 	}
 
@@ -116,6 +124,7 @@ namespace DND
 		return;
 		}*/
 		_imageRects[register_ID] = out;
+		_update_uv(register_ID);
 	}
 
 	void Texture::ReplaceImageRect(UINT32 ID, const Image* img, const Rect& rect)
@@ -126,7 +135,7 @@ namespace DND
 			
 		}
 		_imageRects.erase(ID);
-
+		
 		Point out;
 		Size add_size = rect.GetSize();
 		Rect out_rect;
@@ -149,6 +158,11 @@ namespace DND
 			//插入以前的图像
 			_add_xy(_imgTemp, Rect(XYWH(Point(), Size(_size >> 1, _size >> 1))), Point(0, 0));
 
+			//更新所有旧uv
+			for (auto& iter : _imageRects)
+			{
+				_update_uv(iter.first);
+			}
 		}
 		//直到找到了位置
 		//out_rect = Vector4(out.a, out.b, rect.c - rect.a + out.a - 0.0039f, rect.d - rect.b + out.b - 0.0039f);
@@ -158,6 +172,7 @@ namespace DND
 		//_create_view();
 
 		_imageRects[ID] = out_rect;
+		_update_uv(ID);
 	}
 
 	void Texture::ReplaceImageRectFast(UINT32 ID, const Image* img, const Rect& rect)
@@ -176,38 +191,24 @@ namespace DND
 
 	float Texture::GetTu(unsigned image_rect_ID, unsigned index)
 	{
-		Rect vector4 = _imageRects[image_rect_ID];
-
 		if (index == 0 || index == 3)
-			return float(vector4.p1.x) / _size;
+			return _uvs[image_rect_ID][0].a;
 		else
-			return float(vector4.p2.x) / _size;
+			return _uvs[image_rect_ID][2].a;
 	}
 
 	float Texture::GetTv(unsigned image_rect_ID, unsigned index)
 	{
-		Rect vector4 = _imageRects[image_rect_ID];
-
 		if (index == 0 || index == 1)
-			return float(vector4.p1.y) / _size;
+			return _uvs[image_rect_ID][0].b;
 		else
-			return float(vector4.p2.y) / _size;
+			return _uvs[image_rect_ID][2].b;
+
 	}
 
-	void Texture::GetUV(UINT32 image_rect_ID, Vector2* uv)
+	Vector2* Texture::GetUV(UINT32 image_rect_ID)
 	{
-		Rect vector4 = _imageRects[image_rect_ID];
-		uv[0].a = float(vector4.p1.x) / _size;
-		uv[0].b = float(vector4.p1.y) / _size;
-
-		uv[1].a = float(vector4.p2.x) / _size;
-		uv[1].b = float(vector4.p1.y) / _size;
-
-		uv[2].a = float(vector4.p2.x) / _size;
-		uv[2].b = float(vector4.p2.y) / _size;
-
-		uv[3].a = float(vector4.p1.x) / _size;
-		uv[3].b = float(vector4.p2.y) / _size;
+		return _uvs[image_rect_ID];	
 	}
 
 	//于2017-06-10修改 吴泔游
@@ -445,6 +446,24 @@ namespace DND
 			_shaderResourceView->Release();
 			_shaderResourceView = NULL;
 		}
+	}
+
+	void Texture::_update_uv(UINT32 image_rect_ID)
+	{
+		Rect vector4 = _imageRects[image_rect_ID];
+		auto& iter = _uvs[image_rect_ID];
+
+		iter[0].a = float(vector4.p1.x) / _size;
+		iter[0].b = float(vector4.p1.y) / _size;
+
+		iter[1].a = float(vector4.p2.x) / _size;
+		iter[1].b = float(vector4.p1.y) / _size;
+
+		iter[2].a = float(vector4.p2.x) / _size;
+		iter[2].b = float(vector4.p2.y) / _size;
+
+		iter[3].a = float(vector4.p1.x) / _size;
+		iter[3].b = float(vector4.p2.y) / _size;
 	}
 
 	Texture::~Texture()

@@ -12,11 +12,52 @@
 #include <DND.h>
 using namespace DND;
 
+#include <map>
+#include <list>
+using namespace std;
+
+
+class Maker;
+class ImageMgr
+{
+public:
+	ImageMgr(Maker* maker) : 
+		_maker(maker),
+		_curPack(-1)
+	{
+
+	}
+	void Load(const String& path);
+
+	//传入起始位置 和 高限制
+	void Render(Vector2 start, float h);
+private:
+	Maker* _maker;
+
+	struct ImageNode
+	{
+		Image* _img;
+		ButtonSprite3Text1* _btn;
+		Sprite* _spr;
+	};
+	struct ImagePack
+	{
+		map<String, ImageNode> _mapImages;
+		ButtonSprite3Text1* _btn;
+		int _curNode;//当前选择的node，为-1代表未选择
+		ImagePack() : _curNode(-1) {}
+	};
+
+	int _curPack;//当前选择的pack，为-1代表未选择
+	map<String, ImagePack*> _mapPacks;
+
+};
+
 
 class Maker : public Game
 {
 public:
-	Maker() : _locator(NULL), _sprBg(NULL)
+	Maker() : _locator(NULL), _sprBg(NULL), _mgrImage(this)
 	{
 
 	}
@@ -35,9 +76,16 @@ public:
 	virtual void _on_resize() override;
 
 	void RunOutline();
+	void RenderOutline();
 
+	void RunImage();
+	void RenderImage();
 
 	void UpdateUI();
+	Coor* GetCoorShow()
+	{
+		return _coorShow;
+	}
 private:
 
 	struct
@@ -49,7 +97,8 @@ private:
 
 	Locator* _locator;
 	Sprite* _sprBg;
-
+	Coor* _coorCenter;
+	Coor* _coorShow;
 	//菜单栏
 	enum MenuBar
 	{
@@ -60,16 +109,34 @@ private:
 		NUM
 	};
 	Text* _txtMenu;
-	Sprite* _sprBtn01[4];
+	Sprite* _sprBtn01[3];
 	Vector2 _offsetMenuBtn;
 	ButtonSprite3Text1* _btnMenu[NUM];
 
-	//OUTLINE
-	Sprite* _sprBtn02[4];
+	//______________________________OUTLINE_____________________________
+	Sprite* _sprBtn02[3];
 	Vector2 _offsetOutlineBtn;
 	ButtonSprite3Text1* _btnOutline[1];
 
 	Text* _txtWorkPath;
 	
-	void RenderOutline();
+	
+
+	//_______________________________IMAGE_______________________________
+	Sprite* _sprBtn03[3];
+	Vector2 _offsetOnelineBtn;
+	Text* _txtOneline;
+	ButtonSprite3Text1* _btnTempOneline;
+public:
+	 ButtonSprite3Text1* GetTempBtnOneline()
+	{
+		return _btnTempOneline->Clone();
+	}
+private:
+
+	Text* _txtImagePath[2];//由工作路径自动决定
+
+	//刷新
+	ButtonSprite3Text1* _btnImageFlush;
+	ImageMgr _mgrImage;
 };

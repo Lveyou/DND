@@ -83,6 +83,7 @@ namespace DND
 		Color _color[4];
 		unsigned _imageRectID;
 		Vector2 _uv[4];
+		Vector2* _uvConst;//
 		//bool _show;
 		//bool _dead;
 		RigidBody* _rigidBody;

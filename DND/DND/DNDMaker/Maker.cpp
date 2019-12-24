@@ -15,15 +15,11 @@ DNDMain()
 
 void Maker::_update()
 {
-
 	//Run
 	_sl._menuState = -1;
 	for (UINT32 i = 0; i != NUM; ++i)
 	{
 		_btnMenu[i]->Run();
-
-		
-
 		if (_btnMenu[i]->IsOpen())
 		{
 			for (UINT32 j = 0; j != NUM; ++j)
@@ -81,6 +77,9 @@ void Maker::_update()
 	case OUTLINE:
 		RunOutline();
 		break;
+	case IMAGE:
+		RunImage();
+		break;
 	default:
 		break;
 	}
@@ -93,6 +92,9 @@ void Maker::_update()
 	{
 	case OUTLINE:
 		RenderOutline();
+		break;
+	case IMAGE:
+		RenderImage();
 		break;
 	default:
 		break;
@@ -123,6 +125,12 @@ void Maker::_init()
 	//定位器
 	_locator = Locator::Create();
 
+	//绘制的坐标系
+	_coorCenter = Coor::Create(0);
+	_coorShow = Coor::Create(_coorCenter);
+	_locator->SetCoor(_coorCenter, Vector2(0.70f, 0.5f));
+	
+
 	//背景 护眼色
 	_sprBg = canvas->CreateSprite(0, false, Color(255, 204, 232, 207));
 	_sprBg->SetOrder(-10000);
@@ -139,11 +147,13 @@ void Maker::_init()
 	_txtMenu = canvas->CreateText(L"cn", 20);
 
 	auto* img_menu = Image::Create(L"data\\image\\btn_01.png");
-	for (UINT32 i = 0; i != 4; ++i)
+	for (UINT32 i = 0; i != 3; ++i)
 	{
 		_sprBtn01[i] = canvas->CreateSprite(
 			canvas->RegisterImageRect(img_menu, Rect(XYWH(Point(0, 32 * i), Size(96, 32)))),
 			false);
+
+		
 	}
 	delete img_menu;
 
@@ -161,6 +171,7 @@ void Maker::_init()
 		_btnMenu[i]->GetText()->SetColor(0xff910718);
 		_btnMenu[i]->GetText()->SetString(str_btn_menu[i]);
 		_btnMenu[i]->SetMode(Control::RADIO);
+		
 	}
 
 	//btn_02
@@ -192,13 +203,47 @@ void Maker::_init()
 	_txtWorkPath = canvas->CreateText(L"en", 14);
 	_txtWorkPath->SetColor(0xff410f15);
 	
+	_txtImagePath[0] = canvas->CreateText(L"cn", 14);
+	_txtImagePath[0]->SetColor(0xff410f15);
+	_txtImagePath[0]->SetString(L"图像路径如下:");
+
+	_txtImagePath[1] = canvas->CreateText(L"en", 14);
+	_txtImagePath[1]->SetColor(0xff410f15);
+	_txtImagePath[1]->SetString(L"\\data\\image");
+
+	_btnImageFlush = _btnMenu[0]->Clone();
+	_btnImageFlush->SetMode(Control::BUTTON);
+	_btnImageFlush->GetText()->SetString(L"刷新");
+
+	//单项按钮
+	auto* img_oneline = Image::Create(L"data\\image\\btn_03.png");
+	for (UINT32 i = 0; i != 3; ++i)
+	{
+		_sprBtn03[i] = canvas->CreateSprite(
+			canvas->RegisterImageRect(img_oneline, Rect(XYWH(Point(0, 16 * i), Size(94, 16)))),
+			false);
+	}
+	delete img_oneline;
+
+	_txtOneline = canvas->CreateText(L"en", 12);
+	_txtOneline->SetColor(0xff0f4d16);
+
+	_offsetOnelineBtn = Vector2(47, 6);
+	_btnTempOneline = ButtonSprite3Text1::Create(
+		_sprBtn03[0]->Clone(),
+		_sprBtn03[1]->Clone(),
+		_sprBtn03[2]->Clone(),
+		_txtOneline->Clone(), _offsetOnelineBtn);
+
+	_btnTempOneline->GetText()->SetAlignHorizontal(TEXT_ALIGN_HCENTER);
+	_btnTempOneline->GetText()->SetAlignVertical(TEXT_ALIGN_VCENTER);
 
 	//加载
 	StreamInput stream;
 	stream.LoadFromFile(L"config.sav");
 	stream.Read(&_sl);
 	UpdateUI();
-
+	
 
 	_on_resize();
 }
@@ -235,6 +280,12 @@ void Maker::_on_resize()
 		_btnOutline[0]->GetCoor()->SetPosition(Vector2(20, 64) + Vector2(96 * 0, 0));
 
 		_txtWorkPath->GetCoor()->SetPosition(Vector2(18, 64 + 75 + 15));
+
+		_txtImagePath[0]->GetCoor()->SetPosition(Vector2(18, 64 - 20 + 15));
+		_txtImagePath[1]->GetCoor()->SetPosition(Vector2(18, 64 + 0 + 15));
+
+
+		_btnImageFlush->GetCoor()->SetPosition(Vector2(10, 10) + Vector2(96 * 3, 64 - 20 + 15));
 	}
 		
 
@@ -250,13 +301,11 @@ void Maker::RunOutline()
 	{
 		snd_safe_play(L"btn_over");
 	}
-
-	if (_btnOutline[0]->IsRelease())
+	else if (_btnOutline[0]->IsRelease())
 	{
 		snd_safe_play(L"btn_down");
 	}
-
-	if (_btnOutline[0]->IsInOnce())
+	else if (_btnOutline[0]->IsInOnce())
 	{
 		snd_safe_play(L"btn_over");
 	}
@@ -269,7 +318,7 @@ void Maker::RunOutline()
 		String str = sys->GetChooseFolder();
 		if (str != L"")
 		{
-			str.CutHeadStr(sys->GetExePath());
+			//str.CutHeadStr(sys->GetExePath());
 
 			debug_msg(str);
 
@@ -287,9 +336,194 @@ void Maker::UpdateUI()
 		_btnMenu[_sl._menuState]->SetOpen(true);
 
 	_txtWorkPath->SetString(_sl._workPath);
+
+	
 }
 
 void Maker::RenderOutline()
 {
 	_txtWorkPath->Render();
+}
+
+void Maker::RunImage()
+{
+	_btnImageFlush->Run();
+	if (_btnImageFlush->IsClick())
+	{
+		snd_safe_play(L"btn_over");
+	}
+	else if (_btnImageFlush->IsRelease())
+	{
+		snd_safe_play(L"btn_down");
+		//
+		_mgrImage.Load(_txtWorkPath->GetString() + L"\\" + _txtImagePath[1]->GetString());
+	}
+	else if (_btnImageFlush->IsInOnce())
+	{
+		snd_safe_play(L"btn_over");
+	}
+}
+
+void Maker::RenderImage()
+{
+	_mgrImage.Render(Vector2(10, 10) + Vector2(10, 96), sys->GetWindowSize().h * 0.8f);
+
+	_txtImagePath[0]->Render();
+	_txtImagePath[1]->Render();
+}
+
+void ImageMgr::Load(const String& path)
+{
+	String ret_name;
+	bool is_path;
+	list<String> list_paths;
+
+	//读子目录
+	if (_maker->sys->GetPathFileFirst(path + L"\\*.*", ret_name, is_path))
+	{
+		if (is_path && ret_name != L"." && ret_name != L"..")
+			list_paths.push_back(ret_name);
+
+		while (_maker->sys->GetPathFileNext(path + L"*.*", ret_name, is_path))
+		{
+			if (is_path && ret_name != L"." && ret_name != L"..")
+				list_paths.push_back(ret_name);
+		}
+	}
+
+
+
+	//读子目录的png
+	for (auto& iter : list_paths)
+	{
+		//遍历内部png
+		String child_path = path + L"\\" + iter;
+		if (_maker->sys->GetPathFileFirst(child_path + L"\\*.png", ret_name, is_path))
+		{
+			ImagePack*& add = _mapPacks[iter];
+			
+			if (add == NULL)
+			{
+				add = new ImagePack;
+				add->_btn = _maker->GetTempBtnOneline();
+				add->_btn->GetText()->SetColor(0xff0f4d16);
+				add->_btn->SetMode(Control::RADIO);
+				add->_btn->GetText()->SetString(iter);
+				debug_notice(String(L"Game: 创建了一个图像pack: ") + iter);
+			}
+
+			
+
+			auto func_load_img = [&]()
+			{
+				if (!is_path && ret_name.GetWcs()[0] != L'~')
+				{
+					Image* img = Image::Create(child_path + "\\" + ret_name);
+					ret_name.CutTail(ret_name.FindEnd(L'.'));
+					auto& iter = add->_mapImages.find(ret_name);
+					if (iter != add->_mapImages.end())
+					{//存在则先释放
+						delete iter->second._img;
+						iter->second._img = img;
+						iter->second._btn->GetText()->SetString(ret_name);
+					}
+					else
+					{
+						ImageNode node;
+						node._btn = _maker->GetTempBtnOneline();
+						node._btn->GetText()->SetColor(0xff2921c8);
+						node._btn->SetMode(Control::RADIO);
+						node._btn->GetText()->SetString(ret_name);
+						node._img = img;
+						node._spr = _maker->canvas->CreateSprite(img);
+						node._spr->GetCoor()->SetParent(_maker->GetCoorShow());
+
+						add->_mapImages.insert(make_pair(ret_name, node));
+					}
+					
+					debug_info(String(L"Game: 加载了图像: ") + ret_name);
+				}
+				else
+				{
+					debug_warn(String(L"Game: 跳过加载一个图像: ") + ret_name);
+				}
+			};
+
+			func_load_img();
+
+			while (_maker->sys->GetPathFileNext(path + ret_name, ret_name, is_path))
+			{
+				func_load_img();
+			}
+		}
+	}
+}
+
+void ImageMgr::Render(Vector2 start, float h)
+{
+	UINT32 i = 0;
+	const float dx = 100.0f;
+	const float dy = 16.0f;
+	UINT32 h_num = h / dy;
+
+	for (auto& iter : _mapPacks)
+	{
+		auto* btn = iter.second->_btn;
+
+		btn->GetCoor()->SetPosition(start + Vector2(i / h_num * dx, i % h_num * dy));
+		btn->Run();
+		if (btn->IsOpen())
+		{
+			for (auto& iter2 : _mapPacks)
+			{
+				if (iter2.second->_btn != iter.second->_btn)
+					iter2.second->_btn->SetOpen(false);
+			}
+			//logic
+			_curPack = i;
+
+		}
+		++i;
+	}
+
+	if (_curPack >= 0)
+	{
+		auto iter5 = _mapPacks.begin();
+		advance(iter5, _curPack);
+
+		if (iter5 != _mapPacks.end())
+		{
+			UINT32 j = 0;
+			for (auto& iter2 : iter5->second->_mapImages)
+			{
+				auto* btn = iter2.second._btn;
+
+				btn->GetCoor()->SetPosition(start + Vector2(dx + 31 + j / h_num * dx, j % h_num * dy));
+				btn->Run();
+				if (btn->IsOpen())
+				{
+					for (auto& iter3 : iter5->second->_mapImages)
+					{
+						if (iter3.second._btn != btn)
+							iter3.second._btn->SetOpen(false);
+					}
+					//logic
+					iter5->second->_curNode = j;
+
+				}
+				++j;
+			}
+
+			if (iter5->second->_curNode >= 0)
+			{
+				auto iter6 = iter5->second->_mapImages.begin();
+				advance(iter6, iter5->second->_curNode);
+
+				if (iter6 != iter5->second->_mapImages.end())
+				{
+					iter6->second._spr->Render();
+				}
+			}
+		}
+	}
 }

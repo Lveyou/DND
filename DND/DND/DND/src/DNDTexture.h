@@ -32,13 +32,15 @@ namespace DND
 		float GetTu(UINT32 image_rect_ID, UINT32 index);
 		float GetTv(UINT32 image_rect_ID, UINT32 index);
 		//一次性返回所有uv（size变化会导致 uv错乱）
-		void GetUV(UINT32 image_rect_ID, Vector2* uv);
+		//现在返回指针引用
+		Vector2* GetUV(UINT32 image_rect_ID);
 		
 		ID3D11Texture2D* _texture;
 		ID3D11ShaderResourceView* _shaderResourceView;
 		UINT32 _size;
 		
 		unordered_map<UINT32, Rect> _imageRects;
+		unordered_map<UINT32, Vector2[4]> _uvs;
 		//Point _lastAdd;//上一个插入点
 
 		bool _find_xy(const Size& size, Point& xy);
@@ -50,6 +52,8 @@ namespace DND
 		void _release_texture2d();
 		void _create_view();
 		void _release_view();
+
+		void _update_uv(UINT32 id);
 
 		~Texture();
 		Image* _img;

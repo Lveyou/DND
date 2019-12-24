@@ -179,6 +179,7 @@ namespace DND
 	void Sprite::SetUV(int i, Vector2 uv)
 	{
 		_uv[i] = uv;
+		_uvConst = NULL;
 	}
 
 	void Sprite::FloorQuad()
