@@ -264,6 +264,8 @@ namespace DND
 			else if (focus == this)
 				focus = NULL;
 		}
+
+		_txt->SetString(m_string);
 		RunRender();
 
 	}

@@ -68,8 +68,8 @@ namespace DND
 	{
 	public:
 		virtual void SetCoor(Coor* coor, Vector2 pos) override;
-		virtual void RemoveCoor(Coor* coor) override;
 		virtual void Run(Size size) override;
+		virtual void UpdateCoor(Coor* coor, Size size) override;
 	private:
 		map<Coor*, Vector2> _mapCoor;
 	};

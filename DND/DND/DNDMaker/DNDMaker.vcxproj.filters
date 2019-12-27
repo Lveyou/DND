@@ -18,9 +18,15 @@
     <ClInclude Include="Maker.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteMgr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Maker.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteMgr.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

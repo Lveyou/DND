@@ -13,10 +13,11 @@ namespace DND
 	EditBoxSprite* EditBoxSprite::Create(Sprite* spr, Text* txt)
 	{
 		EditBoxSprite* ret = new EditBoxSprite;
-		ret->m_spr = spr;
-		ret->m_spr->SetUI(true);
 		ret->_txt = txt;
-		ret->_txt->GetCoor()->SetParent(ret->m_spr->GetCoor());
+		ret->_spr = spr;
+		ret->_spr->GetCoor()->SetParent(ret->_txt->GetCoor());
+		ret->_spr->SetUI(true);
+		
 
 		return ret;
 	}
@@ -28,12 +29,13 @@ namespace DND
 
 	void EditBoxSprite::RunRender()
 	{
-		m_spr->Render();
+		_spr->Render();
+		_txt->Render();
 	}
 
 	bool EditBoxSprite::TestCollision()
 	{
-		return m_spr->IsPickup();
+		return _spr->IsPickup();
 	}
 
 	void EditBoxSprite::OnChar(wchar_t ch)

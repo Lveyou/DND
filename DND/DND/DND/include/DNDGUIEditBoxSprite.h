@@ -24,7 +24,7 @@ namespace DND
 	public:
 		static EditBoxSprite* Create(Sprite* spr, Text* txt);
 		void Push(wchar_t ch);
-		Sprite* GetSprite() { return m_spr; }
+		Sprite* GetSprite() { return _spr; }
 	private:
 		EditBoxSprite();
 		virtual void RunRender() override;
@@ -32,7 +32,7 @@ namespace DND
 		virtual void OnChar(wchar_t ch) override;
 		virtual void OnBack() override;
 
-		Sprite* m_spr;
+		Sprite* _spr;
 	};
 }
 

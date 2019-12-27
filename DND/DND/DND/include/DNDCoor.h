@@ -50,8 +50,13 @@ namespace DND
 		{
 		}
 		virtual void SetCoor(Coor* coor, Vector2 pos) = 0;
-		virtual void RemoveCoor(Coor* coor) = 0;
+		void RemoveCoor(Coor* coor) {}
+
 		virtual void Run(Size size) = 0;
+		//更新 比例坐标
+		virtual void UpdateCoor(Coor* coor, Size size) = 0;
+
+
 	};
 
 }

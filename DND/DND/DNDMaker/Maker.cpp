@@ -1,5 +1,5 @@
 #include "Maker.h"
-
+#include "SpriteMgr.h"
 
 DNDMain()
 {
@@ -80,11 +80,37 @@ void Maker::_update()
 	case IMAGE:
 		RunImage();
 		break;
+	case SPRITE:
+		;// _sprMgr->
 	default:
 		break;
 	}
 
-	//Render
+	//网格
+	if (int dt = input->GetMouseWheelDelta())
+	{
+		Vector2 pos = _coorShow->WorldToThis(input->GetMousePosition());
+
+		_sl._gridScale = _coorShow->GetScale().a;
+		float scale_dt = _sl._gridScale * dt / 4.0f;
+
+		_coorShow->SetPosition(_coorShow->GetPosition() - Vector2(scale_dt * pos.a, scale_dt * pos.b));
+
+		_coorShow->SetScale(Vector2(_sl._gridScale + scale_dt, _sl._gridScale + scale_dt));
+		//缩放也会变更位置
+		_locator->UpdateCoor(_coorShow, sys->GetWindowSize());
+	}
+
+	if (input->KeyState(KeyCode::MOUSE_L) &&
+		(_coorShow->WorldToThis(input->GetMousePosition()).GetlengthSquared() < 320 * 320))
+	{
+		_coorShow->SetPosition(_coorShow->GetPosition() + input->GetMousePositionDelta());
+		//缩放也会变更位置
+		_locator->UpdateCoor(_coorShow, sys->GetWindowSize());
+	}
+	
+
+	//_________________________________________Render_________________________________________
 	_sprBg->Render();
 
 
@@ -96,9 +122,35 @@ void Maker::_update()
 	case IMAGE:
 		RenderImage();
 		break;
+	case SPRITE:
+		_sprMgr->Render(Vector2(10, 10) + Vector2(10, 96), sys->GetWindowSize().h * 0.8f);
+		break;
 	default:
 		break;
 	}
+
+	const int LINE_NUM = 12; 
+	//网格
+	if (_sl._gridShow)
+	{
+		Vector2 p1, p2;
+		for (int j = -LINE_NUM; j <= LINE_NUM; ++j)
+		{
+			p1 = Vector2(-LINE_NUM * _sl._gridDw, j * _sl._gridDh);
+			p2 = Vector2(LINE_NUM * _sl._gridDw, j * _sl._gridDh);
+
+			sys->RenderLine(_coorShow->ThisToWorld(p1), _coorShow->ThisToWorld(p2), _sl._gridColor);
+		}
+		for (int i = -LINE_NUM; i <= LINE_NUM; ++i)
+		{
+			p1 = Vector2(i * _sl._gridDw, -LINE_NUM * _sl._gridDh);
+			p2 = Vector2(i * _sl._gridDw, LINE_NUM * _sl._gridDh);
+
+			sys->RenderLine(_coorShow->ThisToWorld(p1), _coorShow->ThisToWorld(p2), _sl._gridColor);
+		}
+		sys->RenderCoor(_coorShow);
+	}
+	
 	
 }
 
@@ -126,10 +178,10 @@ void Maker::_init()
 	_locator = Locator::Create();
 
 	//绘制的坐标系
-	_coorCenter = Coor::Create(0);
-	_coorShow = Coor::Create(_coorCenter);
-	_locator->SetCoor(_coorCenter, Vector2(0.70f, 0.5f));
-	
+	_coorRight = Coor::Create(0);
+	_coorShow = Coor::Create(NULL);
+	_locator->SetCoor(_coorRight, Vector2(0.85f, 0.2f));
+	_locator->SetCoor(_coorShow, Vector2(0.70f, 0.5f));
 
 	//背景 护眼色
 	_sprBg = canvas->CreateSprite(0, false, Color(255, 204, 232, 207));
@@ -237,6 +289,10 @@ void Maker::_init()
 
 	_btnTempOneline->GetText()->SetAlignHorizontal(TEXT_ALIGN_HCENTER);
 	_btnTempOneline->GetText()->SetAlignVertical(TEXT_ALIGN_VCENTER);
+
+	//_sprMgr
+	_sprMgr = new SpriteMgr;
+	_sprMgr->Init(this);
 
 	//加载
 	StreamInput stream;
@@ -356,7 +412,7 @@ void Maker::RunImage()
 	{
 		snd_safe_play(L"btn_down");
 		//
-		_mgrImage.Load(_txtWorkPath->GetString() + L"\\" + _txtImagePath[1]->GetString());
+		_mgrImage.LoadImage(_txtWorkPath->GetString() + L"\\" + _txtImagePath[1]->GetString());
 	}
 	else if (_btnImageFlush->IsInOnce())
 	{
@@ -372,7 +428,7 @@ void Maker::RenderImage()
 	_txtImagePath[1]->Render();
 }
 
-void ImageMgr::Load(const String& path)
+void ImageMgr::LoadImage(const String& path)
 {
 	String ret_name;
 	bool is_path;
@@ -437,6 +493,9 @@ void ImageMgr::Load(const String& path)
 						node._img = img;
 						node._spr = _maker->canvas->CreateSprite(img);
 						node._spr->GetCoor()->SetParent(_maker->GetCoorShow());
+						//加入到精灵管理器
+						_maker->_sprMgr->AddSprite(L"all", ret_name, node._spr);
+
 
 						add->_mapImages.insert(make_pair(ret_name, node));
 					}

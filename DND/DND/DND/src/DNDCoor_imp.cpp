@@ -173,10 +173,6 @@ namespace DND
 		_mapCoor[coor] = pos;
 	}
 
-	void Locator_imp::RemoveCoor(Coor* coor)
-	{
-		_mapCoor.erase(coor);
-	}
 
 	void Locator_imp::Run(Size size)
 	{
@@ -186,6 +182,13 @@ namespace DND
 			coor->SetPosition(Vector2(size).Scale(iter.second));
 			
 		}
+	}
+
+
+
+	void Locator_imp::UpdateCoor(Coor* coor, Size size)
+	{
+		_mapCoor[coor] = Vector2(coor->GetPosition().a /size.w, coor->GetPosition().b / size.h);
 	}
 
 }

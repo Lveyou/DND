@@ -18,6 +18,7 @@ using namespace std;
 
 
 class Maker;
+class SpriteMgr;
 class ImageMgr
 {
 public:
@@ -27,12 +28,13 @@ public:
 	{
 
 	}
-	void Load(const String& path);
+	void LoadImage(const String& path);
 
 	//传入起始位置 和 高限制
 	void Render(Vector2 start, float h);
 private:
 	Maker* _maker;
+	
 
 	struct ImageNode
 	{
@@ -59,7 +61,7 @@ class Maker : public Game
 public:
 	Maker() : _locator(NULL), _sprBg(NULL), _mgrImage(this)
 	{
-
+		
 	}
 	~Maker()
 	{
@@ -86,19 +88,44 @@ public:
 	{
 		return _coorShow;
 	}
+	Coor* GetCoorRight()
+	{
+		return _coorRight;
+	}
 private:
 
-	struct
+	struct SL
 	{
 		WCHAR _workPath[MAX_PATH];
 		int _menuState;
+		int _gridDw;
+		int _gridDh;
+		DWORD _gridColor;
+		bool _gridShow;
+		float _gridScale;
+		SL()
+		{
+			_workPath[0] = 0;
+			_menuState = -1;
+			_gridDw = 32;
+			_gridDh = 32;
+			_gridColor = 0x66000000;
+			_gridShow = true;
+			_gridScale = 1.0f;
+		}
+			
 	}_sl;
 
+	
 
 	Locator* _locator;
 	Sprite* _sprBg;
-	Coor* _coorCenter;
+	//center暂时无用
+	Coor* _coorRight;
 	Coor* _coorShow;
+
+	//网格
+
 	//菜单栏
 	enum MenuBar
 	{
@@ -128,9 +155,14 @@ private:
 	Text* _txtOneline;
 	ButtonSprite3Text1* _btnTempOneline;
 public:
-	 ButtonSprite3Text1* GetTempBtnOneline()
+	SpriteMgr* _sprMgr;
+	ButtonSprite3Text1* GetTempBtnOneline()
 	{
 		return _btnTempOneline->Clone();
+	}
+	ButtonSprite3Text1*  GetTempBtnMenu()
+	{
+		return _btnMenu[0]->Clone();
 	}
 private:
 
@@ -139,4 +171,6 @@ private:
 	//刷新
 	ButtonSprite3Text1* _btnImageFlush;
 	ImageMgr _mgrImage;
+public:
+	
 };
