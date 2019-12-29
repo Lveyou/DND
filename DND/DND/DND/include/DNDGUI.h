@@ -56,6 +56,12 @@ namespace DND
 		bool IsOpen();
 		void SetOpen(bool open);
 		void SetDisable(bool disable);
+
+		bool IsDisable()
+		{
+			return _disable;
+		}
+
 		Control();
 	private:
 		State _preState;

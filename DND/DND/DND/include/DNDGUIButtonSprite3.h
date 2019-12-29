@@ -25,6 +25,7 @@ namespace DND
 		ButtonSprite3* Clone();
 		Coor* GetCoor();
 		void SetOrder(int order);
+
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;
@@ -33,6 +34,8 @@ namespace DND
 		Sprite* _spr[3];
 		Coor* _coor;
 		ButtonSprite3();
+
+		
 
 	};
 
