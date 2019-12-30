@@ -55,8 +55,25 @@ private:
 
 	Text* _txtNoticeAdd;
 
+	//锚点开关、缩放、形变等
+	enum 
+	{
+		ANCHOR,
+		SCALE,
+		ROTATE,
+		STRETCH,
+		NUM
+	};
+	ButtonSprite3Text1* _btnTools[NUM];
+
+	struct SL
+	{
+		//当前工具选择
+		int _curTool;
+		int _curPack;//当前选择的pack，为-1代表未选择
+		SL() : _curTool(-1), _curPack(-1) {}
+	}_sl;
 	//Canvas -> Sprites
-	int _curPack;//当前选择的pack，为-1代表未选择
 	map<String, CanvasPack*> _mapCanvas;
 public:
 	void AddCanvas(String canvas_name, Canvas* canvas);

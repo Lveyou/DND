@@ -4,7 +4,7 @@
 
 SpriteMgr::SpriteMgr()
 {
-	_curPack = -1;
+	_sl._curPack = -1;
 }
 
 void SpriteMgr::Init(Maker* maker)
@@ -35,6 +35,22 @@ void SpriteMgr::Init(Maker* maker)
 	_txtNoticeAdd->SetColor(0xff1722bb);
 	_txtNoticeAdd->GetCoor()->SetParent(_maker->GetCoorRight());
 	_txtNoticeAdd->GetCoor()->SetPosition(Vector2(-15, 10));
+
+	_btnTools[ANCHOR] = _maker->GetTempBtnMenu();
+	_btnTools[ANCHOR]->GetText()->SetString(L"设置锚点");
+	_btnTools[ANCHOR]->SetMode(Control::RADIO);
+
+	_btnTools[SCALE] = _maker->GetTempBtnMenu();
+	_btnTools[SCALE]->GetText()->SetString(L"缩放");
+	_btnTools[SCALE]->SetMode(Control::RADIO);
+
+	_btnTools[ROTATE] = _maker->GetTempBtnMenu();
+	_btnTools[ROTATE]->GetText()->SetString(L"旋转");
+	_btnTools[ROTATE]->SetMode(Control::RADIO);
+
+	_btnTools[STRETCH] = _maker->GetTempBtnMenu();
+	_btnTools[STRETCH]->GetText()->SetString(L"形变");
+	_btnTools[STRETCH]->SetMode(Control::RADIO);
 }
 
 void SpriteMgr::Render(Vector2 start, float h)
@@ -59,7 +75,7 @@ void SpriteMgr::Render(Vector2 start, float h)
 					iter2.second->_btn->SetOpen(false);
 			}
 			//logic
-			_curPack = i;
+			_sl._curPack = i;
 
 		}
 		++i;
@@ -80,10 +96,12 @@ void SpriteMgr::Render(Vector2 start, float h)
 		}
 	}
 
-	if (_curPack >= 0)
+	CanvasPack* cur_canvas = NULL;
+	SpriteNode* sprite_node = NULL;
+	if (_sl._curPack >= 0)
 	{
 		auto iter5 = _mapCanvas.begin();
-		advance(iter5, _curPack);
+		advance(iter5, _sl._curPack);
 
 		if (iter5 != _mapCanvas.end())
 		{
@@ -103,7 +121,7 @@ void SpriteMgr::Render(Vector2 start, float h)
 					}
 					//logic
 					iter5->second->_curNode = j;
-
+					cur_canvas = iter5->second;
 				}
 				++j;
 			}
@@ -115,7 +133,9 @@ void SpriteMgr::Render(Vector2 start, float h)
 
 				if (iter6 != iter5->second->_mapSprites.end())
 				{
+					sprite_node = &(iter6->second);
 					iter6->second._spr->Render();
+					iter6->second._spr->RenderFrame();
 				}
 			}
 		}
@@ -131,6 +151,44 @@ void SpriteMgr::Render(Vector2 start, float h)
 	}
 
 	_txtNoticeAdd->Render();
+
+	//工具一栏
+	UINT32 l = 0;
+	for (auto& iter9 : _btnTools)
+	{
+		iter9->GetCoor()->SetPosition(Vector2(l++ * dx + 400, 65));
+		iter9->Run();
+
+		if (iter9->IsOpen())
+		{
+			for (auto& iter10 : _btnTools)
+			{
+				if (iter9 != iter10)
+					iter10->SetOpen(false);
+			}
+			//logic
+			_sl._curTool = l - 1;
+
+		}
+	}
+
+	//
+	if (_sl._curTool == 0)
+	{
+		//设置锚点
+		if (sprite_node)
+		{
+			if (_maker->input->KeyUp(KeyCode::MOUSE_L))
+			{
+				Vector2 pos = sprite_node->_spr->GetCoor()->WorldToThis(_maker->input->GetMousePosition());
+				if (sqrt(pos.GetlengthSquared()) < sprite_node->_spr->GetSize().w * 2)
+				{
+					sprite_node->_spr->SetQuadOffset(-pos);
+				}
+				
+			}
+		}
+	}
 }
 
 void SpriteMgr::AddCanvas(String canvas_name, Canvas* canvas)
@@ -145,6 +203,7 @@ void SpriteMgr::AddCanvas(String canvas_name, Canvas* canvas)
 	pack->_btnAddThis = _maker->GetTempBtnMenu();
 	pack->_btnAddThis->GetText()->SetString(canvas_name);
 	pack->_btnAddThis->GetCoor()->SetParent(_maker->GetCoorRight());
+	pack->_btnAddThis->SetMode(Control::SWITCH);
 
 	pack->_canvas = canvas;
 	pack->_name = canvas_name;
