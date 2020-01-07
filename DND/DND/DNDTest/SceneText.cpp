@@ -70,7 +70,7 @@ void SceneText::Run()
 
 		_test->sys->SetShowCursor(true);
 
-		if (_test->sys->GetChooseFile(L"字体文件(*.ttf)\0*.ttf\0所有文件(*.*)\0*.*\0\0", path_name, name))
+		if (_test->sys->GetChooseFile() != L"")
 		{
 			if (_test->sys->LoadFontFile(name, path_name, 0))
 			{

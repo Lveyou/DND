@@ -60,7 +60,7 @@ void SceneAnimation::Run()
 		_mapSpr.clear();
 
 		_test->sys->SetShowCursor(true);
-		_strChoosePath = _test->sys->GetChooseFolder(L"Ñ¡ÔñÍ¼Æ¬Â·¾¶", L"");
+		_strChoosePath = _test->sys->GetChooseFolder();
 		_test->sys->SetShowCursor(false);
 
 		//
