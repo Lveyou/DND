@@ -27,10 +27,12 @@ namespace DND
 		static ComboBox* Create(Sprite* top, Sprite* over, Sprite9* under, ButtonSprite3* right, Text* txt, UINT32 dy = 0);
 		void PushBack(const String& str);
 		void PushFront(const String& str);
+		void Clear();
 		int Run();
 		String GetCur();
 		int GetCurNumber();
 		void SetCur(int i);
+		UINT32 GetSize();
 		Coor* GetCoor();
 		ComboBox* Clone();
 

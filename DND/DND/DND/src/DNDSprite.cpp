@@ -11,6 +11,11 @@ namespace DND
 {
 	bool Sprite::IsPickup()
 	{
+		//如果自己是ui，且已经有高层ui遮挡了，则自己不响应
+		if (_ui && _canvas->GetOnGUISpriteMaxOrder() > _order)
+		{
+			return false;
+		}
 		if(_rigidBody)
 		{
 			return _rigidBody->IsPickup();
@@ -33,6 +38,8 @@ namespace DND
 		if (_ui && IsPickup())
 		{
 			((Canvas_imp*)_canvas)->_onGUISpr++;
+			((Canvas_imp*)_canvas)->_orderUISprMax =
+				max(((Canvas_imp*)_canvas)->_orderUISprMax, _order);
 		}
 	}
 	void Sprite::RenderFrame()

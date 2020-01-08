@@ -14,9 +14,11 @@ namespace DND
 
 		ret->_sprTop = top;
 		ret->_sprTop->GetCoor()->SetParent(ret->_coor);
+		ret->_sprTop->SetUI(true);
 
 		ret->_sprUnder = under;
 		ret->_sprUnder->GetCoor()->SetParent(ret->_coor);
+		ret->_sprUnder->SetUI(true);
 		under->SetOrder(top->GetOrder() + 1);
 
 		ret->_sprOver = over;
@@ -52,6 +54,11 @@ namespace DND
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_front(txt);
+	}
+
+	void ComboBox::Clear()
+	{
+		((std::list<Text*>*)_listItem)->clear();
 	}
 
 	int ComboBox::Run()
@@ -147,6 +154,11 @@ namespace DND
 		_txt->SetString(GetCur());
 	}
 
+	UINT32 ComboBox::GetSize()
+	{
+		return ((std::list<Text*>*)_listItem)->size();
+	}
+
 	DND::Coor* ComboBox::GetCoor()
 	{
 		return _coor;
@@ -189,5 +201,7 @@ namespace DND
 		_coor = NULL;
 		_cur = -1;
 	}
+
+	
 
 }

@@ -305,6 +305,11 @@ namespace DND
 
 
 
+	int Canvas_imp::GetOnGUISpriteMaxOrder()
+	{
+		return _orderUISprMax;
+	}
+
 	bool Canvas_imp::SetImage(const String& img_name, const String& rects)
 	{
 		
@@ -635,6 +640,7 @@ namespace DND
 		_coor = Coor::Create();
 
 		_onGUISpr = 0;
+		_orderUISprMax = Math::GetTypeMin<int>();
 
 		_bSetImage = false;
 		_bAddedText = false;

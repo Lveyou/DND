@@ -52,6 +52,7 @@ namespace DND
 		virtual void SetShader(UINT32 type = DND_SHADER_NORMAL) override;
 
 		virtual UINT32 GetOnGUISpriteNumber() override;
+		virtual int GetOnGUISpriteMaxOrder() override;
 
 		virtual bool SetImage(const String& img_name, const String& rects) override;
 		virtual void SaveImageRects(const String& rects) override;
@@ -101,6 +102,8 @@ namespace DND
 
 		//触碰的UI精灵数
 		UINT32 _onGUISpr;
+		//最大ui精灵 的order（会屏蔽小order的ui精灵 检测）
+		int _orderUISprMax;
 
 		//自定义纹理
 		bool _bSetImage;

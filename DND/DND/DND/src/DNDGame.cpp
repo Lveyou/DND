@@ -9,6 +9,7 @@
 #include "DNDBox2DDebugDraw.h"
 #include "DNDGUI.h"
 #include "DNDSound_imp.h"
+#include "DNDMath.h"
 
 #include <Box2D/Box2D.h>
 #include <time.h>
@@ -140,6 +141,7 @@ namespace DND
 			for (auto& iter : _dx->_canvass)
 			{
 				iter.second->_onGUISpr = 0;
+				iter.second->_orderUISprMax = Math::GetTypeMin<int>();
 			}
 			//用户逻辑片段
 			_fixed_update();
@@ -152,19 +154,19 @@ namespace DND
 			double sleepTime = t->_delta - d1 - t->_except_render;
 			
 			//如果时间不够就不绘图了
-			if(sleepTime < 0)
-			{
-				//debug_warn(L"DND: SKIP CPU -> GPU and Render!");
-				t->_except_render = 0;
+			//if(sleepTime < 0)
+			//{
+			//	//debug_warn(L"DND: SKIP CPU -> GPU and Render!");
+			//	t->_except_render = 0;
 
-				//清除填充的 画布内容
-				for (auto& iter : _dx->_canvass)
-				{
-					Canvas_imp* temp = iter.second;
-					temp->_sprites.clear();
-				}
-			}
-			else
+			//	//清除填充的 画布内容
+			//	for (auto& iter : _dx->_canvass)
+			//	{
+			//		Canvas_imp* temp = iter.second;
+			//		temp->_sprites.clear();
+			//	}
+			//}
+			//else
 			{
 				///////////////////////d2: CPU -> GPU//////////////////////////////////
 				_dx->_run_render();

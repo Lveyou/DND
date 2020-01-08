@@ -28,6 +28,11 @@ namespace DND
 		void Render();
 		void SetOrder(int order);
 		Size GetSize();
+		void SetUI(bool open)
+		{
+			for (auto& iter : _spr)
+				iter->SetUI(open);
+		}
 
 		Sprite9* Clone();
 	private:
