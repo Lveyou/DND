@@ -28,8 +28,10 @@ namespace DND
 		Vector2 v2 = _coor->ThisToWorld(_quad.v[2]);
 		Vector2 v3 = _coor->ThisToWorld(_quad.v[3]);
 
-		return Math::TestDotInTriangle(mouse, v0, v1, v2) ||
+		bool ret = Math::TestDotInTriangle(mouse, v0, v1, v2) ||
 			Math::TestDotInTriangle(mouse, v0, v2, v3);
+
+		return ret;
 	}
 	void Sprite::Render()
 	{

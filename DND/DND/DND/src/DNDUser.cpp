@@ -131,7 +131,7 @@ namespace DND
 		b *= d;
 	}
 
-	DND::Vector2 DND::Vector2::operator+(const Vector2& vb)
+	DND::Vector2 DND::Vector2::operator+(const Vector2& vb) const
 	{
 		return Vector2(a + vb.a, b + vb.b);
 	}
