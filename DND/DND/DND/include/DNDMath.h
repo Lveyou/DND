@@ -85,8 +85,7 @@ namespace DND
 		}
 		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1, const Vector2& p2);
 
-		//从 -x轴 开始，编号为0-7，顺时针
-		//修改为从 x轴开始
+		//修改为从 x轴开始，编号为0-7，顺时针
 		static int GetLookAt(const Vector2& p);
 
 		//0-8 -> 0-4

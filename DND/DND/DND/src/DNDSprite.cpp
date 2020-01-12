@@ -170,6 +170,22 @@ namespace DND
 		_quad.v[3] = _quad.v[3].Scale(s);
 	}
 
+	DND::Size Sprite::GetImageSize()
+	{
+		return _canvas->GetImageRect(_imageRectID).GetSize();
+	}
+
+	void Sprite::SetAnchorCenter()
+	{
+		Size size = GetImageSize();
+		float x = float(size.w) * 0.5f;
+		float y = float(size.h) * 0.5f;
+		_quad.v[0] = { -x, -y };
+		_quad.v[1] = { x, -y };
+		_quad.v[2] = { x, y };
+		_quad.v[3] = { -x, y };
+	}
+
 	DND::Vector2 Sprite::GetQuad(UINT32 i)
 	{
 		return _quad.v[i];

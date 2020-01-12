@@ -133,7 +133,10 @@ namespace DND
 
 	UINT32 Animation_imp::GetCurrent()
 	{
-		return _cur;
+		if (_fps)
+			return UINT32(_cur * _fps) % _listSpr.size();
+		else
+			return UINT32(_cur) % _listSpr.size();
 	}
 
 	void Animation_imp::SetOrder(INT32 n)

@@ -51,6 +51,11 @@ namespace DND
 		void SetQuadScale(Vector2 s);
 		void SetQuadScale(float s);
 
+		Size GetImageSize();
+
+		void SetAnchorCenter();
+		Vector2 GetAnchor() { return -_quad.v[0]; }
+
 		//根据左上角的坐标 设置指定大小
 		void SetQuadSize(DND::Size size);
 		Vector2 GetQuad(UINT32 i);
