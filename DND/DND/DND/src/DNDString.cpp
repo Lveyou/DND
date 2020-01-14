@@ -90,6 +90,12 @@ namespace DND
 		return (BYTE*)_data.data();
 	}
 
+	void String::SetBufferSize(UINT32 length)
+	{
+		_data.reserve(length);
+	}
+
+
 	const WCHAR* String::GetWcs() const
 	{
 		return _data.data();
@@ -168,7 +174,7 @@ namespace DND
 	{
 		auto s = search(_data.begin(), _data.end() - 1, str._data.begin(), str._data.end() - 1);
 		
-		return s == (_data.end() - 1) ? -1 : s - _data.begin();
+		return (s == (_data.end() - 1)) ? -1 : s - _data.begin();
 	}
 
 	UINT32 String::FindN(WCHAR wc, UINT32 N) const

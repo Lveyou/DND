@@ -45,6 +45,8 @@ namespace DND
 
 		UINT32 GetLength() const;//返回长度
 		BYTE* GetBuffer();
+		void SetBufferSize(UINT32 length);//预留长度 单位为WCHAR
+
 		//==================转化==================
 		const WCHAR* GetWcs() const;
 		void GetWideCharStr(WCHAR* target, UINT32 max_len) const;//获得宽字符数组
