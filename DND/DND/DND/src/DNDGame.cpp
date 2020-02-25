@@ -197,6 +197,18 @@ namespace DND
 			}
 			//////////////////////////////重置滚轮状态//////////////////////////////////////
 			i->_mouseWheelDelta = 0;
+			//////////////////////////////删除音效//////////////////////////////////////
+			auto& snd_list = ((Sound_imp*)(sound))->_listDelete;
+			for (list<Voice_imp*>::iterator iter = snd_list.begin(); iter != snd_list.end();)
+			{
+				if ((*iter)->_ready)
+				{
+					delete (*iter);
+					snd_list.erase(iter++);
+				}	
+				else
+					++iter;
+			}
 			//////////////////////////////计算real_delta///////////////////////////////////
 			t->_update_current();
 			t->_real_delta = t->_get_cl_delta();

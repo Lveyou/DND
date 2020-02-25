@@ -172,7 +172,7 @@ namespace DND
 	}
 
 	//vector3
-	DND::Vector3 DND::Vector2::To_Vector3(float c)
+	DND::Vector3 DND::Vector2::GetVector3(float c)
 	{
 		return Vector3(a, b, c);
 	}

@@ -34,6 +34,13 @@ namespace DND
 		UINT32 GetN() { return _n; }
 		UINT32 GetCurN() { return _cur * _n; }
 
+		void SetFocus(bool focus) 
+		{ 
+			if (focus)
+				_focus = this;
+			else if (_focus == this)
+				_focus = NULL;
+		}
 		bool IsFocus() { return _focus == this; }
 
 		Sprite* GetSprite(UINT32 n) { return _spr[n]; }

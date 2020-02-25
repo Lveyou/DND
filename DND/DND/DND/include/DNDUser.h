@@ -94,6 +94,7 @@ namespace DND
 		float a, b, c;
 		Vector3();
 		Vector3(float ia, float ib, float ic);
+		
 
 		Vector3 operator-(const Vector3& b) const;
 		Vector3 operator+(const Vector3& b);
@@ -128,7 +129,7 @@ namespace DND
 		//此操作返回自己
 		Vector2& Scale(const Vector2& vb);
 		Vector2& Scale(float k);
-		Vector3 To_Vector3(float c = 0);
+		Vector3 GetVector3(float c = 0);
 		double CrossProduct(const Vector2& vb);//叉乘
 		float GetlengthSquared();
 		float Angle();//返回与X轴夹角
