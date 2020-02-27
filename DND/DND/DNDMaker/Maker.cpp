@@ -34,12 +34,12 @@ void Maker::_update()
 
 		if (_btnMenu[i]->IsClick())
 		{
-			snd_safe_play(L"btn_down");
+			snd_play(L"btn_down");
 		}
 
 		if (_btnMenu[i]->IsInOnce())
 		{
-			snd_safe_play(L"btn_over");
+			snd_play(L"btn_over");
 		}
 		
 	}
@@ -355,15 +355,15 @@ void Maker::RunOutline()
 	_btnOutline[0]->Run();
 	if (_btnOutline[0]->IsClick())
 	{
-		snd_safe_play(L"btn_over");
+		snd_play(L"btn_over");
 	}
 	else if (_btnOutline[0]->IsRelease())
 	{
-		snd_safe_play(L"btn_down");
+		snd_play(L"btn_down");
 	}
 	else if (_btnOutline[0]->IsInOnce())
 	{
-		snd_safe_play(L"btn_over");
+		snd_play(L"btn_over");
 	}
 
 
@@ -406,17 +406,17 @@ void Maker::RunImage()
 	_btnImageFlush->Run();
 	if (_btnImageFlush->IsClick())
 	{
-		snd_safe_play(L"btn_over");
+		snd_play(L"btn_over");
 	}
 	else if (_btnImageFlush->IsRelease())
 	{
-		snd_safe_play(L"btn_down");
+		snd_play(L"btn_down");
 		//
 		_mgrImage.LoadImage(_txtWorkPath->GetString() + L"\\" + _txtImagePath[1]->GetString());
 	}
 	else if (_btnImageFlush->IsInOnce())
 	{
-		snd_safe_play(L"btn_over");
+		snd_play(L"btn_over");
 	}
 }
 

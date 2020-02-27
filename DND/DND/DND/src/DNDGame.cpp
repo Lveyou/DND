@@ -148,6 +148,8 @@ namespace DND
 			_update();
 			_late_update();
 
+			debug_line(L"Test: 008");
+
 			t->_update_current();
 			double d1 = t->_get_cl_delta();
 			//////////////////////////////////////////////////////////////////////////
@@ -169,12 +171,14 @@ namespace DND
 			//else
 			{
 				///////////////////////d2: CPU -> GPU//////////////////////////////////
+				debug_line(L"Test: 009");
 				_dx->_run_render();
 				//render
 				t->_update_current();
 				double d2 = t->_get_cl_delta();
 				t->_except_render = d2 - d1;
 				////////////////////////Sleep至毫秒/////////////////////////////////////
+				debug_line(L"Test: 010");
 				if (t->_fps != 0)//为0代表尽快执行
 				{
 					long st = (long)((t->_delta - d2) * 1000 - 15);
@@ -182,6 +186,7 @@ namespace DND
 						Sleep(st);
 					///////////////////////GPU->显示器//////////////////////////////////////
 					_dx->_present();
+					debug_line(L"Test: 011");
 					////////////////////////延时至CPU周期/////////////////////////////////////////
 					t->_update_current();
 					double d3 = t->_get_cl_delta();
@@ -195,6 +200,7 @@ namespace DND
 					_dx->_present();
 				
 			}
+			debug_line(L"Test: 012");
 			//////////////////////////////重置滚轮状态//////////////////////////////////////
 			i->_mouseWheelDelta = 0;
 			//////////////////////////////删除音效//////////////////////////////////////
@@ -223,7 +229,7 @@ namespace DND
 				sec_frame = 0;
 				sec_count = 0;
 			}
-			
+			debug_line(L"Test: 013");
 			
 		}while(!_bEndLoop);
 
@@ -325,61 +331,76 @@ namespace DND
 	LRESULT CALLBACK Game::_on_wm_size(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
-		if(msg == WM_SIZE)
-		{
-			if (Get()->_dx && wParam != SIZE_MINIMIZED)
-			{
-				static WPARAM wparam_pre = SIZE_RESTORED;
-				switch (wParam)
-				{
-				case SIZE_MAXIMIZED:
-					{
-						wparam_pre = SIZE_MAXIMIZED;
-						RECT rect;
-						GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
-						sys->_windowSize.w = rect.right - rect.left;
-						sys->_windowSize.h = rect.bottom - rect.top;
-						Get()->_dx->_sizeChange = true;
-					}
-					break;
-				case SIZE_RESTORED:
-					{
-						//if (SIZE_RESTORED != wparam_pre) 暂时取消判断
-						{
-							RECT rect;
-							GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
-							sys->_windowSize.w = rect.right - rect.left;
-							sys->_windowSize.h = rect.bottom - rect.top;
-							Get()->_dx->_sizeChange = true;
-							wparam_pre = SIZE_RESTORED;
-						}
-					}
-					break;
-				}
-			}
 
-			//最小化也失去焦点
-			if (wParam == SIZE_MINIMIZED)
-			{
-				sys->_foucs = false;
-			}
+		RECT rect;
+		GetClientRect(hWnd, &rect);//消息返回的并非客户区大小
+		sys->_windowSize.w = rect.right - rect.left;
+		sys->_windowSize.h = rect.bottom - rect.top;
 
-		}
-		else if(WM_EXITSIZEMOVE)
+
+		DirectX* dx = (Game::Get()->_dx);
+		if (dx && wParam != SIZE_MINIMIZED)
 		{
-			//exitsizemove并不能获取大小
-			//消息返回的并非客户区大小
-			if (Get()->_dx)
-			{
-				RECT rect;
-				GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
-				sys->_windowSize.w = rect.right - rect.left;
-				sys->_windowSize.h = rect.bottom - rect.top;
-				Get()->_dx->_sizeChange = true;
-			}		
+			dx->_resize();
 		}
+		
+		//if(msg == WM_SIZE)
+		//{
+		//	if (Get()->_dx && wParam != SIZE_MINIMIZED)
+		//	{
+		//		static WPARAM wparam_pre = SIZE_RESTORED;
+		//		switch (wParam)
+		//		{
+		//		case SIZE_MAXIMIZED:
+		//			{
+		//				wparam_pre = SIZE_MAXIMIZED;
+		//				RECT rect;
+		//				GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
+		//				sys->_windowSize.w = rect.right - rect.left;
+		//				sys->_windowSize.h = rect.bottom - rect.top;
+		//				Get()->_dx->_sizeChange = true;
+		//			}
+		//			break;
+		//		case SIZE_RESTORED:
+		//			{
+		//				//if (SIZE_RESTORED != wparam_pre) 暂时取消判断
+		//				{
+		//					RECT rect;
+		//					GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
+		//					sys->_windowSize.w = rect.right - rect.left;
+		//					sys->_windowSize.h = rect.bottom - rect.top;
+		//					Get()->_dx->_sizeChange = true;
+		//					wparam_pre = SIZE_RESTORED;
+		//				}
+		//			}
+		//			break;
+		//		}
+		//	}
+
+		//	//最小化也失去焦点
+		//	if (wParam == SIZE_MINIMIZED)
+		//	{
+		//		sys->_foucs = false;
+		//	}
+
+		//}
+		//else if(WM_EXITSIZEMOVE)
+		//{
+		//	//exitsizemove并不能获取大小
+		//	//消息返回的并非客户区大小
+		//	if (Get()->_dx)
+		//	{
+		//		RECT rect;
+		//		GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
+		//		sys->_windowSize.w = rect.right - rect.left;
+		//		sys->_windowSize.h = rect.bottom - rect.top;
+		//		Get()->_dx->_sizeChange = true;
+		//	}		
+		//}
 		Get()->_on_resize();//用户自定义
-		return DefWindowProc(hWnd, msg, wParam, lParam);
+		//return DefWindowProc(hWnd, msg, wParam, lParam);
+
+		return 1;
 	}
 
 	LRESULT CALLBACK Game::_window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -422,7 +443,7 @@ namespace DND
 			((Input_imp*)(Get()->input))->_mouseWheelDelta += (short)HIWORD(wParam);
 			break;
 		case WM_SIZE:
-		case WM_EXITSIZEMOVE:
+		//case WM_EXITSIZEMOVE:
 			return _on_wm_size(hWnd, msg, wParam, lParam);
 		case WM_MOVE:
 			sys->_windowPoint.x = LOWORD(lParam);

@@ -294,7 +294,7 @@ namespace DND
 				&_dsp);
 
 			//应用效果
-			p->_sourceVoice->SetOutputMatrix(_submixVoice[p->_groupID], 1, _deviceDetails.OutputFormat.Format.nChannels, _dsp.pMatrixCoefficients);
+			p->_sourceVoice->SetOutputMatrix(_submixVoice[p->_groupID], 1, _cannelMask, _dsp.pMatrixCoefficients);
 			p->_sourceVoice->SetFrequencyRatio(_dsp.DopplerFactor);
 
 			//p->_sourceVoice->SetOutputMatrix(_submixVoice[p->_groupID], 1, 1, &_dsp.ReverbLevel);
@@ -329,18 +329,19 @@ namespace DND
 		}
 
 		//Dx版本的使用下列方法获取ChannelMask（不同于更高版本）
-		_xaudio2->GetDeviceDetails(0, &_deviceDetails);
+		//_xaudio2->GetDeviceDetails(0, &_deviceDetails);
+		_masterVoice->GetChannelMask(&_cannelMask);
 
 		//子混音（应和主混音通道数一致）
 		if (FAILED(hr = _xaudio2->CreateSubmixVoice(&(_submixVoice[0]),
-			_deviceDetails.OutputFormat.Format.nChannels,
+			_cannelMask,
 			44100, 0, 0, 0)))
 		{
 			dnd_assert(0, L"DND: XAudio2 创建 SubmixVoice0 失败！");
 			return;
 		}
 		if (FAILED(hr = _xaudio2->CreateSubmixVoice(&(_submixVoice[1]), 
-			_deviceDetails.OutputFormat.Format.nChannels,
+			_cannelMask,
 			44100, 0, 0, 0)))
 		{
 			dnd_assert(0, L"DND: XAudio2 创建 SubmixVoice1 失败！");
@@ -354,7 +355,7 @@ namespace DND
 		
 
 		//初始化X3DAudio
-		X3DAudioInitialize(_deviceDetails.OutputFormat.dwChannelMask, X3DAUDIO_SPEED_OF_SOUND, _x3dInstance);
+		X3DAudioInitialize(_cannelMask, X3DAUDIO_SPEED_OF_SOUND, _x3dInstance);
 
 		//听者只有一个
 		ZeroMemory(&_listener, sizeof(X3DAUDIO_LISTENER));
@@ -362,9 +363,9 @@ namespace DND
 		//_listener.OrientTop = { 0.0f,-1.0f,0.0f };
 		//dsp
 		ZeroMemory(&_dsp, sizeof(X3DAUDIO_DSP_SETTINGS));
-		FLOAT32 * matrix = new FLOAT32[_deviceDetails.OutputFormat.Format.nChannels];
+		FLOAT32 * matrix = new FLOAT32[_cannelMask];
 		_dsp.SrcChannelCount = 1;
-		_dsp.DstChannelCount = _deviceDetails.OutputFormat.Format.nChannels;
+		_dsp.DstChannelCount = _cannelMask;
 		_dsp.pMatrixCoefficients = matrix;
 
 

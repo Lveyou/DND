@@ -11,18 +11,34 @@
 #ifndef _DND_DIRECTX_H_
 #define _DND_DIRECTX_H_
 
-#include <..\dx11_sdk\include\D3D11.h>
-#include <..\dx11_sdk\include\D3DX11.h>
-#include <..\dx11_sdk\include\d3dcompiler.h>
-#include <d3dx11effect.h>
+//优先使用SDK 8.1 的头文件
+#include <d3d11.h>
+#include <d3dcompiler.h>
+//#include <..\dx11_sdk\include\D3DX11.h>
+//#pragma warning(disable:4838)
+// 关闭语句得加在头文件之前
+//#include <..\dx11_sdk\include\xnamath.h>
+#include <DirectXMath.h>
+#include <DirectXPackedVector.h>
+using namespace DirectX;
 
-#pragma warning(disable:4838)
-#include <..\dx11_sdk\include\xnamath.h>// 关闭语句得加在头文件之前
+#include <..\FX11-master\inc\d3dx11effect.h>
 
 #include <map>
 using namespace std;
 
 #include "DNDString.h"
+
+
+#include "dxerr.h"
+#define HR(x)                                               \
+{                                                           \
+	HRESULT hr = (x);                                       \
+	if (FAILED(hr))                                          \
+	{                                                       \
+		DXTrace(__FILEW__, (DWORD)__LINE__, hr, L#x, true); \
+	}                                                       \
+}
 
 namespace DND
 {
@@ -197,8 +213,7 @@ namespace DND
 		void _present();
 
 		void _run_render();
-		//窗口大小发生改变,
-		bool _sizeChange;
+
 		void _resize();
 		void _on_wm_paint();
 		DirectX();
@@ -221,6 +236,7 @@ namespace DND
 		ID3D11DeviceContext* _deviceContext;
 		//使用的dx特性版本
 		D3D_FEATURE_LEVEL _featureLevel;
+		char _fxVersion[8];
 		//主显示表面
 		ID3D11RenderTargetView* _mainRenderTargetView;
 		//默认索引缓存

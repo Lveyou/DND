@@ -31,7 +31,7 @@ namespace DND
 
 	void System_imp::_create_window()
 	{
-		dnd_assert(!_hWnd ,ERROR_00001);
+		dnd_assert(!_hWnd, ERROR_00001);
 		//窗口类
 		WNDCLASS wc;
 		wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -193,7 +193,30 @@ namespace DND
 
 	void System_imp::SetWindowSize(Size size)
 	{
-		_windowSize = size;
+		DirectX* dx = (Game::Get()->_dx);
+
+		if (dx->_full)
+		{
+			debug_err(L"DND: System::SetWindowSize: 全屏不能直接设置窗口大小！");
+			return;
+		}
+		else
+		{
+			DXGI_SWAP_CHAIN_DESC desc2;
+			dx->_swapChain->GetDesc(&desc2);
+
+			DXGI_MODE_DESC desc;
+			desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			desc.Width = size.w;
+			desc.Height = size.h;
+			desc.RefreshRate = desc2.BufferDesc.RefreshRate;
+			desc.Scaling = desc2.BufferDesc.Scaling;
+			desc.ScanlineOrdering = desc2.BufferDesc.ScanlineOrdering;
+
+			dx->_swapChain->ResizeTarget(&desc);
+		}
+		
+		
 	}
 
 	Size System_imp::GetWindowSize()

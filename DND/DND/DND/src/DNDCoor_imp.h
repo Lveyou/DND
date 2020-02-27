@@ -13,8 +13,10 @@
 #include "DNDCoor.h"
 
 #include <windows.h>
-#pragma warning(disable:4838)
-#include <xnamath.h>// 关闭语句得加在头文件之前
+
+#include <DirectXMath.h>
+#include <DirectXPackedVector.h>
+using namespace DirectX;
 
 #include <map>
 using namespace std;

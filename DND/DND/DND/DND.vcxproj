@@ -214,7 +214,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>..\..\libpng1630\;$(WindowsSDK_IncludePath);..\..\dx11_sdk\include;..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\Effects11\Inc;..\..\libzplay-2.02_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\Win32;..\..\libzplay-2.02_sdk\lib;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\FX11-master\Bin\Desktop_2015\Win32\Debug;..\..\Box2D-master\Box2D\Build\vs2010\bin\Debug;..\..\freetype-2.8\objs\vc2010\Win32;..\..\libzplay-2.02_sdk\lib;..\Debug;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
     <ExcludePath>
     </ExcludePath>
   </PropertyGroup>
@@ -226,8 +226,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(WindowsSDK_IncludePath);..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\Effects11\Inc;..\..\libzplay-2.02_sdk\include;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\Box2D-master\Box2D\Build\vs2010\bin\Release;..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatRelease;..\..\libzplay-2.02_sdk\lib;..\Release;..\..\dx11_sdk\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(WindowsSDK_IncludePath);..\..\Box2D-master\Box2D;..\..\freetype-2.8\include;..\..\libpng1630;..\..\zlib-1.2.8;..\..\FX11-master\inc;..\..\dx11_sdk\include;..\DND\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\FX11-master\Bin\Desktop_2015\Win32\Release;..\..\dx11_sdk\lib\x86;..\..\Box2D-master\Box2D\Build\vs2010\bin\Release;..\..\freetype-2.8\objs\vc2010\Win32;..\..\zlib-1.2.8\contrib\vstudio\vc10\x86\ZlibStatRelease;..\Release;$(LibraryPath)</LibraryPath>
+    <ExcludePath>$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -245,7 +246,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;libpngd.lib;freetype28d.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;Effects11d.lib;libpngd.lib;freetype28d.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -281,7 +282,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxgi.lib;Effects11.lib;d3dcompiler.lib;libpng.lib;freetype28.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;Effects11.lib;libpng.lib;freetype28.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

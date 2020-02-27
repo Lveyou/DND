@@ -45,6 +45,8 @@
 #define debug_msg(str)\
 	Debug::WriteLine(str, DebugLevel::MSG)
 	
+#define debug_line(str)/*\
+	Debug::WriteLine(str, DebugLevel::ERR)*/
 
 #endif // DEBUG
 
@@ -54,6 +56,8 @@
 
 namespace DND
 {
+	DLL_API void dnd_assert(bool exp, const WCHAR* str);
+
 	//debug level
 	struct DLL_API DebugLevel
 	{

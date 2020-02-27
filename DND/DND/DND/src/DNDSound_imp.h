@@ -10,8 +10,8 @@
 #ifndef _DND_SOUND_IMP_H_
 #define _DND_SOUND_IMP_H_
 
-#include <..\dx11_sdk\include\XAudio2.h>
-#include <..\dx11_sdk\include\X3DAudio.h>
+#include <XAudio2.h>
+#include <X3DAudio.h>
 #include <map>
 #include <list>
 using namespace std;
@@ -144,7 +144,7 @@ namespace DND
 		XAUDIO2_VOICE_SENDS _voiceSends[2];
 
 		//设备信息
-		XAUDIO2_DEVICE_DETAILS _deviceDetails;
+		DWORD _cannelMask;//主混音
 		X3DAUDIO_HANDLE _x3dInstance;
 
 		//name -> data

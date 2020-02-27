@@ -11,7 +11,14 @@
 
 namespace DND
 {
-
+	void dnd_assert(bool exp, const WCHAR* str)
+	{
+		if (!exp)
+		{
+			debug_err(str);
+			MessageBoxW(NULL, str, NULL, MB_OK | MB_ICONERROR | MB_TASKMODAL);
+		}
+	}
 
 
 	void Debug::WriteLine(const String& str, int level)
@@ -143,6 +150,7 @@ namespace DND
 		if (_logFile)
 		{
 			fputwc(L'\n', _logFile);
+			fflush(_logFile);
 		}
 	}
 

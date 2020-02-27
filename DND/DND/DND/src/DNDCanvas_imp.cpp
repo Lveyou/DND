@@ -404,6 +404,8 @@ namespace DND
 
 	void Canvas_imp::_render()
 	{
+		if (_renderSprNum == 0)
+			return;
 		DirectX* directx = Game::Get()->_dx;
 		Gfx2D* gfx_2d = directx->_gfx2d;
 
@@ -412,35 +414,55 @@ namespace DND
 		UINT b = 0;
 		directx->_deviceContext->IASetVertexBuffers(0, 1, &_bufferVertex, &a, &b);
 
-		
+		debug_line(L"Test: 031");
 		
 		if (_shaderType == DND_SHADER_NORMAL)
 		{
 			//tex -> 1
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
-
+			debug_line(L"Test: 032");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
-			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
-			shader->_pass->Apply(0, directx->_deviceContext);
+			HRESULT hr;
+			hr = shader->_colorTexture->SetResource(_tex->_shaderResourceView);
+			if (FAILED(hr))
+			{
+				dnd_assert(0, L"Test: 066");
+				return;
+			}
+			hr = shader->_pass->Apply(0, directx->_deviceContext);
+			if (FAILED(hr))
+			{
+				dnd_assert(0, L"Test: 067");
+				return;
+			}
+
+			debug_line(L"Test: 061");
+			debug_line(String::Format(32, L"Test: spr_num: %d", _renderSprNum));
+			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+
+			//tex -> main
+			debug_line(L"Test: 065");
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			debug_line(L"Test: 062");
 
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
-			
-			//tex -> main
-			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
-			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+			debug_line(L"Test: 063");
+
+			debug_line(L"Test: 033");
 		}
 		else if (_shaderType == DND_SHADER_SHADOW)
 		{
 			//tex -> 1
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
-
+			debug_line(L"Test: 034");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			shader->_pass->Apply(0, directx->_deviceContext);
 
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+			debug_line(L"Test: 035");
 
 			//开启zbuffer实现只绘制一次
 			directx->_deviceContext->ClearDepthStencilView(directx->_depthStencilView, D3D11_CLEAR_DEPTH, 0.0f, 0);
@@ -449,10 +471,13 @@ namespace DND
 			//tex -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+			debug_line(L"Test: 036");
 
 			//还原
 			directx->_deviceContext->ClearDepthStencilView(directx->_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState, 0);
+
+			debug_line(L"Test: 037");
 		}
 		else if(_shaderType == DND_SHADER_OVERLAY ||
 			_shaderType == DND_SHADER_DARKEN || 
@@ -460,6 +485,7 @@ namespace DND
 		{
 			//tex，1 -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			debug_line(L"Test: 038");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
 
@@ -467,31 +493,47 @@ namespace DND
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			shader->_pass->Apply(0, directx->_deviceContext);
 
+			
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+			debug_line(L"Test: 039");
 
 			//tex，1 -> 1
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+			
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+			debug_line(L"Test: 040");
 		}
 		else if (_shaderType == DND_SHADER_WATER)
 		{
 			//tex，1 -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			debug_line(L"Test: 041");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
+			debug_line(L"Test: 055");
 
 			shader->_time->SetFloat(Game::Get()->time->GetCurrent());
+			debug_line(L"Test: 051");
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			
+			debug_line(L"Test: 052");
 			if(_tex2)
 				shader->_noiseTexture->SetResource(_tex2->_shaderResourceView);
+
+			debug_line(L"Test: 053");
 			shader->_pass->Apply(0, directx->_deviceContext);
 
+			debug_line(L"Test: 054");
+			debug_line(String::Format(32, L"Test: spr_num: %d", _renderSprNum));
+			
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
-
+			
+			debug_line(L"Test: 042");
 			//tex，1 -> 1
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+			
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
+			debug_line(L"Test: 043");
 		}
 
 

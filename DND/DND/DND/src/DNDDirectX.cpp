@@ -8,13 +8,13 @@
 
 namespace DND
 {
-	const String STRING_PATH_SHADER_SIMPLE = L"DND\\Shader\\simple.fx";
-	const String STRING_PATH_SHADER_2D = L"DND\\Shader\\2d.fx";
-	const String STRING_PATH_SHADER_2D_OVERLAY = L"DND\\Shader\\2d_overlay.fx";//叠加
-	const String STRING_PATH_SHADER_2D_DARKEN = L"DND\\Shader\\2d_darken.fx";//变暗
-	const String STRING_PATH_SHADER_2D_CLOLOR_DODGE = L"DND\\Shader\\2d_clolor_dodge.fx";//颜色减淡
-	const String STRING_PATH_SHADER_2D_WATER = L"DND\\Shader\\2d_water.fx";//水面
-	const String STRING_PATH_SHADER_2D_SHADOW = L"DND\\Shader\\2d_shadow.fx";//阴影
+	const String STRING_PATH_SHADER_SIMPLE = L"simple.fx";
+	const String STRING_PATH_SHADER_2D = L"2d.fx";
+	const String STRING_PATH_SHADER_2D_OVERLAY = L"2d_overlay.fx";//叠加
+	const String STRING_PATH_SHADER_2D_DARKEN = L"2d_darken.fx";//变暗
+	const String STRING_PATH_SHADER_2D_CLOLOR_DODGE = L"2d_clolor_dodge.fx";//颜色减淡
+	const String STRING_PATH_SHADER_2D_WATER = L"2d_water.fx";//水面
+	const String STRING_PATH_SHADER_2D_SHADOW = L"2d_shadow.fx";//阴影
 
 	void Gfx2D::_init()
 	{
@@ -74,13 +74,18 @@ namespace DND
 		ID3D10Blob* error_message = NULL;
 
 		System_imp* sys = (System_imp*)Game::Get()->sys;
+		DirectX* dx = (DirectX*)Game::Get()->_dx;
+
+		path_name = String(L"DND\\Shader\\") + dx->_fxVersion + L"\\" + path_name;
+
+
 
 		if (sys->IsFileExist(path_name))
 		{
-			if (FAILED(D3DX11CompileFromFile(path_name.GetWcs(),
-				NULL, NULL, NULL, "fx_5_0",
-				shader_flags, 0, NULL,
-				&compiled_shader, &error_message, NULL)))
+			if (FAILED(D3DCompileFromFile(path_name.GetWcs(),
+				NULL, NULL, NULL, dx->_fxVersion,
+				shader_flags, 0,
+				&compiled_shader, &error_message)))
 			{
 				if (error_message)
 					debug_err(String((char*)error_message->GetBufferPointer()));
@@ -97,10 +102,11 @@ namespace DND
 				dnd_assert(0, ERROR_00037);
 				return;
 			}
-			if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL,
-				NULL, NULL, NULL, "fx_5_0",
-				shader_flags, 0, NULL,
-				&compiled_shader, &error_message, NULL)))
+			if (FAILED(D3DCompile2(buffer, size, NULL,
+				NULL, NULL, NULL, dx->_fxVersion,
+				shader_flags, 0,
+				0, NULL, 0, 
+				&compiled_shader, &error_message)))
 			{
 				if (error_message)
 					sys->MessageBox(String((char*)error_message->GetBufferPointer()));
@@ -428,7 +434,6 @@ namespace DND
 
 	void GfxSimple::_create_shader()
 	{
-
 		UINT shader_flags = 0;
 #if defined(DEBUG) || defined(_DEBUG)
 		shader_flags |= D3DCOMPILE_DEBUG;
@@ -439,13 +444,19 @@ namespace DND
 		ID3D10Blob* error_message = NULL;
 
 		System_imp* sys = (System_imp*)Game::Get()->sys;
+		DirectX* dx = (DirectX*)Game::Get()->_dx;
 
-		if (sys->IsFileExist(STRING_PATH_SHADER_SIMPLE))
+		//strcpy_s(dx->_fxVersion, "fx_4_0");
+
+		String path_name = String(L"DND\\Shader\\") + dx->_fxVersion + L"\\" + STRING_PATH_SHADER_SIMPLE;
+
+		if (sys->IsFileExist(path_name))
 		{
-			if (FAILED(D3DX11CompileFromFile(STRING_PATH_SHADER_SIMPLE.GetWcs(),
-				NULL, NULL, NULL, "fx_5_0",
-				shader_flags, 0, NULL,
-				&compiled_shader, &error_message, NULL)))
+			
+			if (FAILED(D3DCompileFromFile(path_name.GetWcs(),
+				NULL, NULL, NULL, dx->_fxVersion,
+				shader_flags, 0,
+				&compiled_shader, &error_message)))
 			{
 				if (error_message)
 					debug_err(String((char*)error_message->GetBufferPointer()));
@@ -461,11 +472,13 @@ namespace DND
 				dnd_assert(0, ERROR_00031);
 				return;
 			}
+			
 
-			if (FAILED(D3DX11CompileFromMemory(buffer, size, NULL,
-				NULL, NULL, NULL, "fx_5_0",
-				shader_flags, 0, NULL,
-				&compiled_shader, &error_message, NULL)))
+			if (FAILED(D3DCompile2(buffer, size, NULL,
+				NULL, NULL, NULL, dx->_fxVersion,
+				shader_flags, 0,
+				0, NULL, 0,
+				&compiled_shader, &error_message)))
 			{
 				if (error_message)
 					sys->MessageBox(String((char*)error_message->GetBufferPointer()));
@@ -474,6 +487,9 @@ namespace DND
 			}
 			delete buffer;
 		}
+
+		//D3D11CreateEffectFromMemory()
+
 		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
 			compiled_shader->GetBufferPointer(),
 			compiled_shader->GetBufferSize(),
@@ -580,13 +596,20 @@ namespace DND
 		////////////////////获取显示器支持的全屏显示模式//////////////////////////
 		_displayModes = 0;
 		_displayModeLength = 0;
-		DXGI_FORMAT format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-		_output->GetDisplayModeList(format, 0, &_displayModeLength, NULL);
+		_output->GetDisplayModeList(format, DXGI_ENUM_MODES_INTERLACED, &_displayModeLength, NULL);
 		_displayModes = new DXGI_MODE_DESC[_displayModeLength];
-		_output->GetDisplayModeList(format, 0, &_displayModeLength, _displayModes);
+		_output->GetDisplayModeList(format, DXGI_ENUM_MODES_INTERLACED, &_displayModeLength, _displayModes);
 
-		
+		//输出显卡信息
+		DXGI_ADAPTER_DESC adapter_desc;
+		_adapter->GetDesc(&adapter_desc);
+
+		debug_msg(String::Format(1024, L"DND: %ws", adapter_desc.Description));
+		debug_msg(String::Format(1024, L"DND: 显卡内存: %d", int(adapter_desc.DedicatedVideoMemory / 1024 / 1024)));
+		debug_msg(String::Format(1024, L"DND: 独占内存: %d", int(adapter_desc.DedicatedSystemMemory / 1024 / 1024)));
+		debug_msg(String::Format(1024, L"DND: 共享内存: %d", int(adapter_desc.SharedSystemMemory / 1024 / 1024)));
 	}
 
 	bool DirectX::_check_support_full_screen_size(int w, int h)
@@ -607,32 +630,114 @@ namespace DND
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
 
 		//需尝试的 Ferature 版本 数组
-		const UINT32 ARRAY_NUM = 6;
-		D3D_FEATURE_LEVEL array_feature[ARRAY_NUM] =
+		D3D_FEATURE_LEVEL array_feature[] =
 		{
+			D3D_FEATURE_LEVEL_11_1,
 			D3D_FEATURE_LEVEL_11_0,
 			D3D_FEATURE_LEVEL_10_1,
 			D3D_FEATURE_LEVEL_10_0,
 			D3D_FEATURE_LEVEL_9_3,
 			D3D_FEATURE_LEVEL_9_2,
 			D3D_FEATURE_LEVEL_9_1
-
 		};
-		UINT create_devive_flags = 0;
+
+		HRESULT hr;
+
+		//获取特性等级
+		hr = D3D11CreateDevice(
+			NULL,
+			D3D_DRIVER_TYPE_HARDWARE,
+			NULL,
+			0,
+			array_feature,
+			_countof(array_feature),
+			D3D11_SDK_VERSION,
+			NULL,
+			&_featureLevel,
+			NULL
+			);
+		////打印功能级别
+		if (_featureLevel <= D3D_FEATURE_LEVEL_9_3)
+		{
+			debug_msg(String(L"DND: 显卡功能级别: D3D_9_X"));
+		}
+		else if (_featureLevel <= D3D_FEATURE_LEVEL_10_0)
+		{
+			debug_msg(String(L"DND: 显卡功能级别: D3D_10_0"));
+		}
+		else if (_featureLevel <= D3D_FEATURE_LEVEL_10_1)
+		{
+			debug_msg(String(L"DND: 显卡功能级别: D3D_10_1"));
+		}
+		else
+		{
+			debug_msg(String(L"DND: 显卡功能级别: D3D_11_X"));
+		}
+
+		UINT create_devive_flags = D3D11_CREATE_DEVICE_SINGLETHREADED;//
+			//| D3D11_CREATE_DEVICE_PREVENT_INTERNAL_THREADING_OPTIMIZATIONS
+			//| D3D11_CREATE_DEVICE_DEBUG;// 0;
 #if defined(DEBUG) || defined(_DEBUG)
 		if(_MSC_VER > 1600)
 			create_devive_flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 		//创建设备， 设备关联 和 交换链（分开创建才能屏蔽alt+enter）
-		dnd_assert(!FAILED(D3D11CreateDevice(
-		_adapter,
-		D3D_DRIVER_TYPE_UNKNOWN,
-		NULL, create_devive_flags,
-		array_feature, ARRAY_NUM,
-		D3D11_SDK_VERSION,
-		&_device,
-		&_featureLevel,
-		&_deviceContext)), ERROR_00015);
+		if (_featureLevel >= D3D_FEATURE_LEVEL_11_0)
+		{
+			hr = D3D11CreateDevice(
+				_adapter,
+				D3D_DRIVER_TYPE_UNKNOWN,
+				NULL, create_devive_flags,
+				array_feature, _countof(array_feature),
+				D3D11_SDK_VERSION,
+				&_device,
+				&_featureLevel,
+				&_deviceContext);
+			if (hr == E_INVALIDARG)
+			{
+				hr = D3D11CreateDevice(
+					_adapter,
+					D3D_DRIVER_TYPE_UNKNOWN,
+					NULL, create_devive_flags,
+					&array_feature[1], _countof(array_feature) - 1,
+					D3D11_SDK_VERSION,
+					&_device,
+					&_featureLevel,
+					&_deviceContext);
+			}
+		}
+		else
+		{
+			debug_warn(L"DND: DirectX创建Device: 显卡不支持Dx11！");
+			hr = D3D11CreateDevice(
+				NULL,
+				D3D_DRIVER_TYPE_WARP,
+				NULL, create_devive_flags,
+				array_feature, _countof(array_feature),
+				D3D11_SDK_VERSION,
+				&_device,
+				&_featureLevel,
+				&_deviceContext);
+		}
+		if (FAILED(hr))
+		{
+			dnd_assert(0, String::Format(256, L"DND: DirectX创建Device失败: %x", hr).GetWcs());
+			return;
+		}
+		
+		//必须为fx_5_0
+		strcpy_s(_fxVersion, "fx_5_0");
+		//获取桌面的显示模式
+		UINT32 desktop_mdoe = 0;
+		Size size = sys->GetDesktopSize();
+		for (UINT32 i = 0; i != _displayModeLength; ++i)
+		{
+			if (_displayModes[i].Width == size.w && _displayModes[i].Height == size.h)
+			{
+				desktop_mdoe = i;
+				break;
+			}
+		}
 
 		//创建交换链
 		ZeroMemory(&_swapChainDesc, sizeof(_swapChainDesc));
@@ -640,9 +745,8 @@ namespace DND
 		_swapChainDesc.BufferCount = 1;
 		_swapChainDesc.BufferDesc.Width = sys->_windowSize.w;
 		_swapChainDesc.BufferDesc.Height = sys->_windowSize.h;
-		_swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		_swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-		_swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+		_swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		_swapChainDesc.BufferDesc.RefreshRate = _displayModes[desktop_mdoe].RefreshRate;
 		_swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		_swapChainDesc.OutputWindow = sys->_hWnd;
 		_swapChainDesc.SampleDesc.Count = 1;
@@ -668,32 +772,41 @@ namespace DND
 			c.g(),
 			c.b(),
 			c.a() };//RGBA
-
+		debug_line(L"Test: 021");
 		//清除 主
 		_deviceContext->ClearRenderTargetView(_mainRenderTargetView, clear_color);
 		_deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
+		debug_line(L"Test: 022");
 		//| D3D11_CLEAR_STENCIL
 		_update_canvass();
+
+		debug_line(L"Test: 023");
 		_gfxSimple->_update();
 
 		
-
+		
 		////三角形
+		debug_line(L"Test: 024");
 		_deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		_deviceContext->IASetInputLayout(_gfx2d->_inputLayout);
 
 		
 		//设置顶点缓存 贴图就交给 canvas了
+		debug_line(L"Test: 025");
 		_render_canvass();
 
 		//清除 1
+		debug_line(L"Test: 026");
 		_deviceContext->ClearRenderTargetView(_rtt.mRenderTargetView, clear_color);
 
 
 		//点线绘图
+		debug_line(L"Test: 027");
 		_gfxSimple->_pass->Apply(0, _deviceContext);
 		_gfxSimple->_render();
+
+		debug_line(L"Test: 028");
 		
 	}
 
@@ -703,7 +816,16 @@ namespace DND
 
 		//创建显示表面
 		ID3D11Texture2D *back_buffer;
-		dnd_assert(!FAILED(_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&back_buffer)), ERROR_00019);
+
+		HRESULT hr;
+
+
+		hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&back_buffer);//, ERROR_00019)
+		if (FAILED(hr))
+		{
+			debug_err(String::Format(256, L"%ws: %x", ERROR_00019, hr));
+			return;
+		}
 		
 
 		dnd_assert(!FAILED(_device->CreateRenderTargetView(back_buffer, NULL, &_mainRenderTargetView)),
@@ -712,13 +834,13 @@ namespace DND
 		
 
 		back_buffer->Release();
-
 	}
 
 	void DirectX::_release_render_target_view()
 	{
 		dnd_assert(_mainRenderTargetView, ERROR_00018);
-		
+	
+
 		_mainRenderTargetView->Release();
 		_mainRenderTargetView = NULL;
 		
@@ -730,6 +852,7 @@ namespace DND
 	{
 		dnd_assert(_depthStencilView, ERROR_00021);
 
+		
 		_depthStencilView->Release();
 		_depthStencilView = NULL;
 	}
@@ -737,12 +860,22 @@ namespace DND
 
 	void DirectX::_present()
 	{
-		_swapChain->Present(_vsync, 0);
-		if (_sizeChange)
+		debug_line(L"Test: 015");
+		HRESULT hr = _swapChain->Present(_vsync, 0);
+		if (FAILED(hr))
+		{
+			if (hr == 0x887A0005)//设备已移除
+			{
+				hr = _device->GetDeviceRemovedReason();
+			}
+			dnd_assert(false, String::Format(256, L"DND: DirectX::_present: %x", hr).GetWcs());
+		}
+		debug_line(L"Test: 016");
+		/*if (_sizeChange)
 		{
 			_sizeChange = false;
 			_resize();
-		}
+		}*/
 	}
 
 	void DirectX::_reset_viewport()
@@ -872,7 +1005,7 @@ namespace DND
 		textureDesc.Height = window_size.h;
 		textureDesc.MipLevels = 1;
 		textureDesc.ArraySize = 1;
-		textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; 
+		textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; 
 		textureDesc.SampleDesc.Count = 1;
 		textureDesc.Usage = D3D11_USAGE_DEFAULT;
 		textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
@@ -968,6 +1101,8 @@ namespace DND
 	void DirectX::_release_rtt()
 	{
 		_rtt._bufferVertex->Release();
+
+		
 		_rtt.mShaderResourceView->Release();
 		_rtt.mRenderTargetView->Release();
 		_rtt.mRenderTargetTexture->Release();
@@ -1025,6 +1160,7 @@ namespace DND
 			ERROR_00026);
 		
 		depth_stencil_buffer->Release();
+
 	}
 
 	void DirectX::_release_all()
@@ -1071,28 +1207,44 @@ namespace DND
 	{
 		Size s = Game::Get()->sys->GetWindowSize();
 
+		_deviceContext->OMSetDepthStencilState(NULL, 0);
+		_deviceContext->OMSetRenderTargets(0, 0, 0);
+		_release_rtt();
 		_release_depth_stencil_view();
 		_release_render_target_view();
 
-		_swapChain->ResizeBuffers(1,
+		
+		//Sleep(1000);
+		HRESULT hr;
+		hr = _swapChain->ResizeBuffers(1,
 			s.w,
 			s.h,
-			_swapChainDesc.BufferDesc.Format,
+			DXGI_FORMAT_UNKNOWN,
 			_swapChainDesc.Flags
 			);
+		if (FAILED(hr))
+		{
+			dnd_assert(0, String::Format(256, L"DND: ResizeBuffers失败: %x", hr).GetWcs());
+			return;
+		}
+
 		_init_render_target_view();
 		_init_depth_stencil_view();
-
-		//_deviceContext->OMSetRenderTargets(1, &_mainRenderTargetView, _depthStencilView);
-		_deviceContext->OMSetDepthStencilState(_depthStencilState, 0);
+		_init_rtt();
+		
 		_reset_viewport();
 		_reset_wvp();
+
+		
+
 		_gfxSimple->_reset_wvp();
 		_gfx2d->_reset_all_wvp();
 
-		_release_rtt();
-		_init_rtt();
+		
+		
 
+		_deviceContext->OMSetRenderTargets(1, &_mainRenderTargetView, _depthStencilView);
+		_deviceContext->OMSetDepthStencilState(_depthStencilState, 0);
 	}
 
 	DirectX::DirectX()
