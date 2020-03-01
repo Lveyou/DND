@@ -108,8 +108,8 @@ namespace DND
 		return _listSpr.size();
 	}
 
-	UINT32 Animation_imp::GetOrder()
-	{
+	float Animation_imp::GetOrder()
+{
 		if (_listSpr.empty())
 		{
 			return 0;
@@ -139,7 +139,7 @@ namespace DND
 			return UINT32(_cur) % _listSpr.size();
 	}
 
-	void Animation_imp::SetOrder(INT32 n)
+	void Animation_imp::SetOrder(float n)
 	{
 		for (auto& iter : _listSpr)
 		{

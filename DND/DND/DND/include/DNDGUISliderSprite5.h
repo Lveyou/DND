@@ -22,7 +22,7 @@ namespace DND
 	public:
 		static SliderSprite5* Create(
 			Sprite* head, Sprite* body, Sprite* tail,
-			Sprite* under, Sprite* slider, int length, int max, Vector2 offset, bool r = true, bool filp = false);
+			Sprite* under, Sprite* slider, UINT32 length, UINT32 max, Vector2 offset, bool r = true, bool filp = false);
 		Coor* GetCoor();
 
 		void Run();
@@ -32,7 +32,7 @@ namespace DND
 		//将1.0划分到 0 - N-1 ,从而响应滚轮(设为0不响应)
 		void SetN(UINT32 n = 0);
 		UINT32 GetN() { return _n; }
-		UINT32 GetCurN() { return _cur * _n; }
+		UINT32 GetCurN() { return UINT32(_cur * _n); }
 
 		void SetFocus(bool focus) 
 		{ 
@@ -44,7 +44,7 @@ namespace DND
 		bool IsFocus() { return _focus == this; }
 
 		Sprite* GetSprite(UINT32 n) { return _spr[n]; }
-		void SetOrder(int order);
+		void SetOrder(float order);
 
 		SliderSprite5* Clone();
 		static SliderSprite5* _focus;

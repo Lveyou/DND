@@ -72,7 +72,7 @@ namespace DND
 		virtual void SetShader(UINT32 type = DND_SHADER_NORMAL) = 0;
 
 		virtual UINT32 GetOnGUISpriteNumber() = 0;
-		virtual int GetOnGUISpriteMaxOrder() = 0;
+		virtual float GetOnGUISpriteMaxOrder() = 0;
 
 		//直接设置 纹理（之后会省略注册中实际注册步骤，因为同样的代码顺序，返回的id号始终相同）
 		//直接设置的 纹理，产生tex的大小为图像大小，可能会小于默认值

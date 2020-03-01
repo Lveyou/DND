@@ -6,10 +6,14 @@
 #include <d3d11.h>
 #include <list>
 #include <map>
+#include <queue>
 using namespace std;
 
 namespace DND
 {
+	
+	
+
 	const UINT32 CANVAS_SYS_ID_START = 1000000000;
 	const UINT32 CANVAS_TEXT_ID_START = 2000000000;//文本ID起始
 	struct Vertex2D;
@@ -52,7 +56,7 @@ namespace DND
 		virtual void SetShader(UINT32 type = DND_SHADER_NORMAL) override;
 
 		virtual UINT32 GetOnGUISpriteNumber() override;
-		virtual int GetOnGUISpriteMaxOrder() override;
+		virtual float GetOnGUISpriteMaxOrder() override;
 
 		virtual bool SetImage(const String& img_name, const String& rects) override;
 		virtual void SaveImageRects(const String& rects) override;
@@ -70,7 +74,8 @@ namespace DND
 
 		inline void _insert_sprite(Sprite* spr)
 		{
-			_sprites.insert(make_pair(spr->_order, spr));
+			//_sprites.insert(make_pair(spr->_order, spr));
+			_sprites.push_back(spr);
 		}
 		//multimap<int, Sprite*>::iterator _iter;
 
@@ -78,7 +83,15 @@ namespace DND
 		//all_sprite
 		//list<Sprite*> _allSprite;
 		//Sprites 按 绘制顺序（小的先画） 存所有 sprite
-		multimap<int, Sprite*> _sprites;
+		
+		
+		//multimap<int, Sprite*> _sprites;
+		//改为Z-buffer
+		list<Sprite*> _sprites;
+
+		//z值的优先级队列（越大越先出，先入先出）【有奇怪的bug……】
+		//priority_queue<Sprite*, vector<Sprite*>, SpriteCompareZ> _sprites;
+
 		//顶点缓存
 		ID3D11Buffer* _bufferVertex;
 		//顶点缓存(内存区)大小
@@ -103,7 +116,7 @@ namespace DND
 		//触碰的UI精灵数
 		UINT32 _onGUISpr;
 		//最大ui精灵 的order（会屏蔽小order的ui精灵 检测）
-		int _orderUISprMax;
+		float _orderUISprMin;
 
 		//自定义纹理
 		bool _bSetImage;

@@ -19,17 +19,13 @@ namespace DND
 		//防止纹理超过一个像素
 		_img = Image::Create(Size(_size, _size), Color::NONE);
 #endif
-		_imgTemp = Image::Create(Size(_size, _size), Color::WHITE);
-
+		//_imgTemp = Image::Create(Size(_size, _size), Color::WHITE);
+		
 		_create_texture2d();
 		_create_view();
 
-		_add_xy(_imgTemp, Rect(XYWH(Point(), Size(32, 32))),Point(0, 0));
-		_imageRects[0] = Rect(XYWH(Point(), Size(32, 32)));
-		_update_uv(0);
-
-		delete _imgTemp;
-		_imgTemp = NULL;
+		_add_zero_spr();
+		
 	}
 
 	void Texture::SetImage(const Image* img)
@@ -66,6 +62,7 @@ namespace DND
 		Size add_size = rect.GetSize();
 		Rect out_rect;
 
+		//TODO: vsp _find_xy需要优化
 		while (!_find_xy(add_size, out))
 		{
 			_release_view();
@@ -215,89 +212,59 @@ namespace DND
 	//传入WH,返回XY
 	bool Texture::_find_xy(const Size& size, Point& xy)
 	{
-		
+		//大于整图，直接返回false
+		if (size.w  > _size || size.h > _size)
+		{
+			return false;
+		}
+
+
 		//整个纹理rect
 		Rect rect_all(XYWH(Point(), Size(_size, _size)));
 
-		//插入的初始 rect
-		Rect rect_add = XYWH(Point(), size); // 
+		//dx , dy
+		UINT32 dx = 0;
+		UINT32 dy = 0;
+		UINT32 d = size.w + 1;
+		
+		//________________________________________________________
 
-														   //dx , dy
-		unsigned dx = 0;
-		unsigned dy = 0;
-		unsigned d = 3;
-		//____________________尝试上一个结束点________________________
-		/*Rect rect_test = XYWH(_lastAdd, size);
+next:
+		Rect rect_test = XYWH(Point(dx, dy), size);
 		//如果test 不与现有的 相交，则返回
-		//如果越界，则向下移动
-		if (rect_test.p2.x + size.w > _size)
-		{
-			rect_test.p1 = rect_test.p1 + Point(-int(size.w), size.h);
-			rect_test.p2 = rect_test.p2 + Point(-int(size.w), size.h);
-		}
-		//越界
-		if (!Math::TestCollisionRectInRect(rect_test, rect_all))
-			goto next;
-
 		for (auto& iter : _imageRects)
 		{
-			//相交或在内部
 			if (Math::TestCollisionRectAndRect(rect_test, iter.second)
 				|| Math::TestCollisionRectInRect(rect_test, iter.second))
 			{
 				//Debug::Instance()->Write_Line(String(L"相交了"));
+				//变化
+				dx += d;
+				//测试
+				if (dx + size.w > _size)
+				{
+					dy += d;
+					dx = 0;
+					//如果换行后 超过范围
+					if (dy + size.h > _size)
+					{
+						//减小d（已经很小了，就返回false）
+						if (d <= 3)
+							return false;
+						d /= 2;
+						dx = 0;
+						dy = 0;
+						
+					}
+				}
+				//进入下一次遍历
 				goto next;
 			}
 		}
-		xy = rect_test.p1;
+		//遍历了所有的 都没有相交
+		xy.x = dx;
+		xy.y = dy;
 		return true;
-		*/
-		//________________________________________________________
-		{
-		next:
-			//大于整图，直接返回false
-			if (size.w > _size || size.h > _size)
-			{
-				return false;
-			}
-
-			//变化测试
-			if (dx + size.w + d > _size)
-			{
-				dy += d;
-				dx = 0;
-				//如果换行后 超过范围
-				if (dy + size.h > _size)
-				{
-					return false;
-				}
-
-			}
-			else
-			{
-				dx += d;
-			}
-
-			Rect rect_test = XYWH(Point(dx, dy), size);
-
-			//如果test 不与现有的 相交，则返回
-
-			for (auto& iter : _imageRects)
-			{
-				if (Math::TestCollisionRectAndRect(rect_test, iter.second)
-					|| Math::TestCollisionRectInRect(rect_test, iter.second))
-				{
-					//Debug::Instance()->Write_Line(String(L"相交了"));
-					goto next;
-
-				}
-			}
-			//遍历了所有的 都没有相交
-			xy.x = dx;
-			xy.y = dy;
-			return true;
-		}
-
 	}
 
 	void Texture::_add_img(const Image* img)
@@ -474,6 +441,18 @@ namespace DND
 			delete _imgTemp;
 		_release_view();
 		_release_texture2d();
+	}
+
+	void Texture::_add_zero_spr()
+	{
+		_imgTemp = Image::Create(Size(32, 32), Color::WHITE);
+
+		_add_xy(_imgTemp, Rect(XYWH(Point(), Size(32, 32))), Point(0, 0));
+		_imageRects[0] = Rect(XYWH(Point(), Size(32, 32)));
+		_update_uv(0);
+
+		delete _imgTemp;
+		_imgTemp = NULL;
 	}
 
 }

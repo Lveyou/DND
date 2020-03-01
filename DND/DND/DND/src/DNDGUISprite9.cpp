@@ -60,7 +60,7 @@ namespace DND
 		_spr[1]->Render();*/
 	}
 
-	void Sprite9::SetOrder(int order)
+	void Sprite9::SetOrder(float order)
 	{
 		for (auto iter : _spr)
 		{

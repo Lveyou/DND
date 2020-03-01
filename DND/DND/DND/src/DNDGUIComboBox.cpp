@@ -19,11 +19,11 @@ namespace DND
 		ret->_sprUnder = under;
 		ret->_sprUnder->GetCoor()->SetParent(ret->_coor);
 		ret->_sprUnder->SetUI(true);
-		under->SetOrder(top->GetOrder() + 1);
+		under->SetOrder(top->GetOrder() + 1 * FLT_EPSILON);
 
 		ret->_sprOver = over;
 		ret->_sprOver->GetCoor()->SetParent(ret->_sprUnder->GetCoor());
-		over->SetOrder(top->GetOrder() + 2);
+		over->SetOrder(top->GetOrder() + 2 * FLT_EPSILON);
 
 		ret->_btnRight = right;
 		ret->_btnRight->GetCoor()->SetParent(ret->_coor);
@@ -41,7 +41,7 @@ namespace DND
 	void ComboBox::PushBack(const String& str)
 	{
 		Text* txt = _txt->Clone();
-		txt->SetOrder(_sprTop->GetOrder() + 2);
+		txt->SetOrder(_sprTop->GetOrder() + FLT_EPSILON);
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_back(txt);
@@ -50,7 +50,7 @@ namespace DND
 	void ComboBox::PushFront(const String& str)
 	{
 		Text* txt = _txt->Clone();
-		txt->SetOrder(_sprTop->GetOrder() + 2);
+		txt->SetOrder(_sprTop->GetOrder() + 2 * FLT_EPSILON);
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_front(txt);
@@ -77,17 +77,17 @@ namespace DND
 
 			Vector2 pos = _sprUnder->GetCoor()->WorldToThis(input->GetMousePosition());
 			float ox = _sprOver->GetCoor()->GetPosition().a;
-			int i = pos.b / (float)_dy;
+			int i = int(pos.b / (float)_dy);
 			if (pos.b < 0 || pos.a < 0 || pos.a > _sprTop->GetSize().w)
 				i = -1;
 
-			if (i < 0 || i >= p->size())
+			if (i < 0 || i >= int(p->size()))
 			{
-				_sprOver->GetCoor()->SetPosition(Vector2(ox, _cur * _dy));				
+				_sprOver->GetCoor()->SetPosition(Vector2(ox, float(_cur * _dy)));				
 			}
 			else
 			{
-				_sprOver->GetCoor()->SetPosition(Vector2(ox, i * _dy));
+				_sprOver->GetCoor()->SetPosition(Vector2(ox, float(i * _dy)));
 				if (input->KeyUp(KeyCode::MOUSE_L))
 				{
 					if (_cur != i)
@@ -106,7 +106,7 @@ namespace DND
 			_sprOver->Render();
 
 			//定位背景
-			_sprUnder->SetPosition(Vector4(0, 0, _sprTop->GetSize().w, p->size() * _dy));
+			_sprUnder->SetPosition(Vector4(0, 0, float(_sprTop->GetSize().w), float(p->size() * _dy)));
 			_sprUnder->Render();
 			
 			//绘制条目

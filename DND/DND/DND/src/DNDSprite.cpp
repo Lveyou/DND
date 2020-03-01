@@ -12,7 +12,7 @@ namespace DND
 	bool Sprite::IsPickup()
 	{
 		//如果自己是ui，且已经有高层ui遮挡了，则自己不响应
-		if (_ui && _canvas->GetOnGUISpriteMaxOrder() > _order)
+		if (_ui && _canvas->GetOnGUISpriteMaxOrder() < _order)
 		{
 			return false;
 		}
@@ -36,12 +36,13 @@ namespace DND
 	void Sprite::Render()
 	{
 		_show = true;
+		//TODO: vsp
 		((Canvas_imp*)_canvas)->_insert_sprite(this);
 		if (_ui && IsPickup())
 		{
 			((Canvas_imp*)_canvas)->_onGUISpr++;
-			((Canvas_imp*)_canvas)->_orderUISprMax =
-				max(((Canvas_imp*)_canvas)->_orderUISprMax, _order);
+			((Canvas_imp*)_canvas)->_orderUISprMin =
+				min(((Canvas_imp*)_canvas)->_orderUISprMin, _order);
 		}
 	}
 	void Sprite::RenderFrame()
@@ -82,9 +83,19 @@ namespace DND
 		}
 	}
 
-	void Sprite::SetOrder(INT32 order)
+	void Sprite::SetOrder(float order)
 	{
 		_order = order;
+		if (_order < 0 || _order > 1.0f)
+		{
+#ifndef _DEBUG
+			debug_err(String::Format(256, L"DND: Sprite::SetOrder: order范围必须是[0, 1][%f]！", _order));
+#else
+			debug_err(String::Format(256, L"DND: Sprite::SetOrder: order范围必须是[0, 1][%f]！", _order));
+			assert(0 && L"DND: Sprite::SetOrder: order范围必须是[0, 1]");
+#endif
+			_order = Math::GetBetween(_order, 0.0f, 1.0f);
+		}
 	}
 
 	Size Sprite::GetSize()
@@ -115,7 +126,7 @@ namespace DND
 		return _canvas;
 	}
 
-	INT32 Sprite::GetOrder()
+	float Sprite::GetOrder()
 	{
 		return _order;
 	}
@@ -250,14 +261,14 @@ namespace DND
 	Sprite::~Sprite()
 	{
 		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
-		//if (_show)
-		//{
-		//	//dnd_assert(0, ERROR_00051);
-		//	dnd_assert(0, ERROR_00051);
-		//	/*__asm {
-		//		int 3
-		//	}*/
-		//}
+		if (_show)
+		{
+			//dnd_assert(0, ERROR_00051);
+			dnd_assert(0, ERROR_00051);
+			/*__asm {
+				int 3
+			}*/
+		}
 		//调用 Delete 删除
 		if (_coor && !_noCoor)
 			delete _coor;
@@ -273,6 +284,7 @@ namespace DND
 		_ui = false;
 		_noCoor = false;
 		_show = false;
+		_uvConst = NULL;
 	}
 	Sprite* Sprite::Clone(Canvas* canvas /*= NULL*/)
 	{
@@ -366,7 +378,7 @@ namespace DND
 
 	void Sprite::SetColorAlpha(float a)
 	{
-		SetColorAlpha(a * 255);
+		SetColorAlpha(DWORD(a * 255));
 	}
 
 	Color Sprite::GetColor(INT32 i /*= 0*/)

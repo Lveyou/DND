@@ -115,7 +115,7 @@ namespace DND
 		}
 	}
 
-	void ShadeBox::SetOrder(int order)
+	void ShadeBox::SetOrder(float order)
 	{
 		for (auto& iter : _spr)
 		{

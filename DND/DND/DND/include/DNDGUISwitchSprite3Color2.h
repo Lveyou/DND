@@ -27,7 +27,7 @@ namespace DND
 		Coor* GetCoor();
 
 		SwitchSprite3Color2* Clone();
-		void SetOrder(int order);
+		void SetOrder(float order);
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;

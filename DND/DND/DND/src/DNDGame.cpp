@@ -67,6 +67,7 @@ namespace DND
 		
 		debug_notice(L"DND: init directx ok!");
 		canvas = Canvas::Create(0);
+
 		debug_notice(L"DND: init default canvas ok!");
 		//init user
 		sound = new Sound_imp;
@@ -141,7 +142,7 @@ namespace DND
 			for (auto& iter : _dx->_canvass)
 			{
 				iter.second->_onGUISpr = 0;
-				iter.second->_orderUISprMax = Math::GetTypeMin<int>();
+				iter.second->_orderUISprMin = 1.0f;
 			}
 			//用户逻辑片段
 			_fixed_update();
@@ -342,6 +343,8 @@ namespace DND
 		if (dx && wParam != SIZE_MINIMIZED)
 		{
 			dx->_resize();
+			Get()->_on_resize();//用户自定义
+			return 1;
 		}
 		
 		//if(msg == WM_SIZE)
@@ -397,16 +400,14 @@ namespace DND
 		//		Get()->_dx->_sizeChange = true;
 		//	}		
 		//}
-		Get()->_on_resize();//用户自定义
-		//return DefWindowProc(hWnd, msg, wParam, lParam);
-
-		return 1;
+		
+		return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
 
 	LRESULT CALLBACK Game::_window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		PAINTSTRUCT ps;
-		HDC hdc;
+		/*PAINTSTRUCT ps;
+		HDC hdc;*/
 		System_imp* sys = (System_imp*)(Get()->sys);
 		DirectX* dx = Get()->_dx;
 		switch (msg)

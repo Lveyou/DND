@@ -37,8 +37,8 @@ namespace DND
 		virtual String GetString() = 0;
 		virtual Coor* GetCoor() = 0;
 		virtual Color GetColor() = 0;
-		virtual void SetOrder(int order) = 0;
-		virtual int GetOrder() = 0;
+		virtual void SetOrder(float order) = 0;
+		virtual float GetOrder() = 0;
 		virtual bool IsPickup() = 0;
 		virtual void SetAlignHorizontal(int align = TEXT_ALIGN_LEFT) = 0;
 		virtual void SetAlignVertical(int align = TEXT_ALIGN_TOP) = 0;

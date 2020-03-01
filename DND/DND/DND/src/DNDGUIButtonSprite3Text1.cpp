@@ -103,7 +103,7 @@ namespace DND
 		float scale_pre = _coor->GetScale().a;
 		_coor->SetScale(Vector2(scale, scale));
 
-		_txt->SetFontSize(scale * _txt->GetFontSize() / scale_pre);
+		_txt->SetFontSize(UINT32(scale * _txt->GetFontSize() / scale_pre));
 	}
 
 	void ButtonSprite3Text1::SetTxtOffset(Vector2 offset)
@@ -111,7 +111,7 @@ namespace DND
 		_offsetTxt = offset;
 	}
 
-	void ButtonSprite3Text1::SetOrder(int order)
+	void ButtonSprite3Text1::SetOrder(float order)
 	{
 		_spr[0]->SetOrder(order);
 		_spr[1]->SetOrder(order);

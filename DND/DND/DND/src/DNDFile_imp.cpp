@@ -106,10 +106,10 @@ namespace DND
 		}
 		else//第一行必须这样I标记
 		{
-			debug_warn(String(L"DND: File匹配首行失败: ") + path);
-			in.close();
-			return false;
+			debug_warn(String(L"DND: File匹配首行失败: ") + path);	
 		}
+		in.close();
+		return false;
 	}
 
 

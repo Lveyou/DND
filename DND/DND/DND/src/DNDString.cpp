@@ -40,7 +40,7 @@ namespace DND
 	{
 		WCHAR wcs[16];
 
-		_itow(b, wcs, 10);
+		_itow_s(b, wcs, 10);
 		_copy(wcs);
 	}
 

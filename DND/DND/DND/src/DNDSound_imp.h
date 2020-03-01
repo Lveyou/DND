@@ -64,14 +64,7 @@ namespace DND
 			_emitter = NULL;
 		}
 
-		~Voice_imp()
-		{
-			delete _voiceCallBack;
-			if(_sourceVoice)
-				_sourceVoice->DestroyVoice();
-
-			delete _emitter;
-		}
+		~Voice_imp();
 	};
 
 	//»Øµ÷

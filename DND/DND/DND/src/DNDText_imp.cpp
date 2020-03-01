@@ -148,7 +148,7 @@ namespace DND
 			}
 
 				
-				spr->SetOrder(m_order);
+				spr->SetOrder(_order);
 				coor = spr->GetCoor();
 				coor->SetPosition((Point(x, y)));
 				coor->SetParent(m_coor);
@@ -199,9 +199,21 @@ namespace DND
 		return m_coor;
 	}
 
-	void Text_imp::SetOrder(int order)
+	void Text_imp::SetOrder(float order)
 	{
-		m_order = order;
+		_order = order;
+
+		if (_order < 0 || _order > 1.0f)
+		{
+#ifndef _DEBUG
+			debug_err(String::Format(256, L"DND: Text::SetOrder: order范围必须是[0, 1][%f]！", _order));
+#else
+			debug_err(String::Format(256, L"DND: Text::SetOrder: order范围必须是[0, 1][%f]！", _order));
+			assert(0 && L"DND: Text::SetOrder: order范围必须是[0, 1]");
+#endif
+			_order = Math::GetBetween(_order, 0.0f, 1.0f);
+		}
+
 		list<Sprite*>::iterator itor;
 		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor)
 		{
@@ -209,9 +221,9 @@ namespace DND
 		}
 	}
 
-	int Text_imp::GetOrder()
-	{
-		return m_order;
+	float Text_imp::GetOrder()
+{
+		return _order;
 	}
 
 	bool Text_imp::IsPickup()
@@ -408,7 +420,7 @@ namespace DND
 			for (auto& iter : _txtOutline)
 			{
 				iter = this->Clone();
-				iter->SetOrder(m_order - 1);
+				iter->SetOrder(_order - 1);
 				iter->GetCoor()->SetParent(m_coor);
 			}	
 		}
@@ -453,7 +465,7 @@ namespace DND
 		m_font_size = size;
 		m_string = L"";
 		SetString(str);
-		SetOrder(m_order);
+		SetOrder(_order);
 		//描边属性不能复制，否则会造成递归
 	}
 
@@ -474,7 +486,7 @@ namespace DND
 			text->m_max_w = m_max_w;
 			text->m_pitch_row = m_pitch_row;
 			text->SetString(m_string);
-			text->SetOrder(m_order);
+			text->SetOrder(_order);
 			//描边属性不能复制，否则会造成递归
 			
 			
@@ -497,7 +509,7 @@ namespace DND
 		m_string = L"";
 		m_pitch_row = 1.0f;
 		m_max_w = -1;
-		m_order = 0;
+		_order = 0;
 		m_h = 0;
 		_showOutLine = false;
 		for (auto& iter : _txtOutline)

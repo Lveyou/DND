@@ -45,8 +45,14 @@
 #define debug_msg(str)\
 	Debug::WriteLine(str, DebugLevel::MSG)
 	
-#define debug_line(str)/*\
-	Debug::WriteLine(str, DebugLevel::ERR)*/
+#define debug_line(str)//\
+	//Debug::WriteLine(str, DebugLevel::ERR)
+
+#define debug_line_canvas(str)//\
+	//Debug::WriteLine(str, DebugLevel::ERR)
+
+#define debug_line_canvas2(str)\
+	Debug::WriteLine(str, DebugLevel::ERR)
 
 #endif // DEBUG
 

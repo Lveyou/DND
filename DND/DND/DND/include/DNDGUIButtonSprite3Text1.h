@@ -29,7 +29,7 @@ namespace DND
 		void ApplyUIScale(float scale);
 		void SetTxtOffset(Vector2 offset);
 
-		void SetOrder(int order);
+		void SetOrder(float order);
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;

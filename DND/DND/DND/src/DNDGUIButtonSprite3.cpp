@@ -43,7 +43,7 @@ namespace DND
 		return _coor;
 	}
 
-	void ButtonSprite3::SetOrder(int order)
+	void ButtonSprite3::SetOrder(float order)
 	{
 		_spr[0]->SetOrder(order);
 		_spr[1]->SetOrder(order);

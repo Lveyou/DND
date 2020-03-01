@@ -5,6 +5,7 @@
 #include "DNDColor.h"
 #include "DNDCanvas_imp.h"
 #include "DNDStreamOutput.h"
+#include "DNDMath.h"
 
 namespace DND
 {
@@ -559,11 +560,8 @@ namespace DND
 		debug_notice(L"DND: directx init wvp ok!");
 
 		float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-		_deviceContext->OMSetRenderTargets(1, &_mainRenderTargetView, _depthStencilView);
-		_deviceContext->OMSetDepthStencilState(_depthStencilState, 0);
 		_deviceContext->OMSetBlendState(_blendState, blendFactor, 0xffffffff);
 		_deviceContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-		
 
 		_gfxSimple = new GfxSimple;
 		_gfxSimple->_init();
@@ -773,9 +771,14 @@ namespace DND
 			c.b(),
 			c.a() };//RGBA
 		debug_line(L"Test: 021");
+
+
 		//清除 主
 		_deviceContext->ClearRenderTargetView(_mainRenderTargetView, clear_color);
 		_deviceContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+		_deviceContext->ClearRenderTargetView(_rtt.mRenderTargetView, clear_color);
+		_deviceContext->ClearDepthStencilView(_rtt.mDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 		debug_line(L"Test: 022");
 		//| D3D11_CLEAR_STENCIL
@@ -798,8 +801,7 @@ namespace DND
 
 		//清除 1
 		debug_line(L"Test: 026");
-		_deviceContext->ClearRenderTargetView(_rtt.mRenderTargetView, clear_color);
-
+	
 
 		//点线绘图
 		debug_line(L"Test: 027");
@@ -857,6 +859,50 @@ namespace DND
 		_depthStencilView = NULL;
 	}
 
+
+	void DirectX::_init_depth_stencil_view_rrt(ID3D11DepthStencilView*& p)
+	{
+		System_imp* sys = (System_imp*)(Game::Get()->sys);
+
+		D3D11_TEXTURE2D_DESC desc;
+		desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		desc.Width = sys->_windowSize.w;
+		desc.Height = sys->_windowSize.h;
+		desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		desc.MipLevels = 1;
+		desc.ArraySize = 1;
+		desc.CPUAccessFlags = 0;
+		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = 0;
+		desc.MiscFlags = 0;
+		desc.Usage = D3D11_USAGE_DEFAULT;
+
+		ID3D11Texture2D* depth_stencil_buffer;
+		dnd_assert(!FAILED(_device->CreateTexture2D(&desc, 0, &depth_stencil_buffer)),
+			ERROR_00025);
+
+
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC desc2;
+		ZeroMemory(&desc2, sizeof(desc2));
+		desc2.Format = desc.Format;
+		desc2.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		desc2.Texture2D.MipSlice = 0;
+
+		dnd_assert(!FAILED(_device->CreateDepthStencilView(depth_stencil_buffer, &desc2, &p)),
+			ERROR_00026);
+
+		depth_stencil_buffer->Release();
+	}
+
+	void DirectX::_release_depth_stencil_view_rrt(ID3D11DepthStencilView*& p)
+	{
+		dnd_assert(p, ERROR_00021);
+
+
+		p->Release();
+		p = NULL;
+	}
 
 	void DirectX::_present()
 	{
@@ -960,10 +1006,11 @@ namespace DND
 		D3D11_DEPTH_STENCIL_DESC desc;
 		ZeroMemory(&desc, sizeof(desc));
 
-		desc.DepthEnable = false;
+		desc.DepthEnable = true;
 		desc.StencilEnable = false;
 		//深度测试： 小于等于时 成功
-		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+		desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;// _EQUAL;// _EQUAL;
+		
 		//模板测试 ： 一直成功
 		desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 		desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
@@ -984,13 +1031,64 @@ namespace DND
 		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState)),
 			ERROR_00024);
 		
-		desc.DepthEnable = true;
-		//深度测试： 大于时 成功
-		desc.DepthFunc = D3D11_COMPARISON_GREATER;
+
+		////用于阴影
+		//desc.DepthEnable = true;
+		//desc.StencilEnable = true;
+		////深度测试： 小于等于时 成功
+		//desc.DepthFunc = D3D11_COMPARISON_LESS;// _EQUAL;// _EQUAL;
+
+		//											 //模板测试 ： 一直成功
+		//desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		//desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		////模板测试 和 深度测试 都 成功 的操作 ： 替换
+		//desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
+		//desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
+		////模板测试 失败 （深度成功）的操作 ： 替换
+		//desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_REPLACE;
+		//desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_REPLACE;
+		////模板深度 测试 都失败 的操作 ： 保持
+		//desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		//desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		////Mask
+		//desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		//desc.StencilReadMask = 0xff;
+		//desc.StencilWriteMask = 0xff;
 		
 		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState2)),
 			ERROR_00024);
 		
+	}
+
+	void DirectX::_init_depth_stencil_state_rtt(ID3D11DepthStencilState*& p)
+	{
+		D3D11_DEPTH_STENCIL_DESC desc;
+		ZeroMemory(&desc, sizeof(desc));
+
+		desc.DepthEnable = true;
+		desc.StencilEnable = false;
+		//深度测试： 小于等于时 成功
+		desc.DepthFunc = D3D11_COMPARISON_LESS;// _EQUAL;// _EQUAL;
+
+											   //模板测试 ： 一直成功
+		desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		desc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		//模板测试 和 深度测试 都 成功 的操作 ： 替换
+		desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
+		desc.BackFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE;
+		//模板测试 失败 （深度成功）的操作 ： 替换
+		desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_REPLACE;
+		desc.BackFace.StencilFailOp = D3D11_STENCIL_OP_REPLACE;
+		//模板深度 测试 都失败 的操作 ： 保持
+		desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		desc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+		//Mask
+		desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		desc.StencilReadMask = 0xff;
+		desc.StencilWriteMask = 0xff;
+
+		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &p)),
+			ERROR_00024);
 	}
 
 	void DirectX::_init_rtt()
@@ -1065,7 +1163,7 @@ namespace DND
 		_vertexs[0].t.x = 0;
 		_vertexs[0].t.y = 0;
 
-		_vertexs[1].pos = XMFLOAT3(window_size.w, 0, 0);
+		_vertexs[1].pos = XMFLOAT3(float(window_size.w), 0, 0);
 		_vertexs[1].color.x = 1.0f;
 		_vertexs[1].color.y = 1.0f;
 		_vertexs[1].color.z = 1.0f;
@@ -1073,7 +1171,7 @@ namespace DND
 		_vertexs[1].t.x = 1.0f;
 		_vertexs[1].t.y = 0;
 
-		_vertexs[2].pos = XMFLOAT3(window_size.w, window_size.h, 0);
+		_vertexs[2].pos = XMFLOAT3(float(window_size.w), float(window_size.h), 0);
 		_vertexs[2].color.x = 1.0f;
 		_vertexs[2].color.y = 1.0f;
 		_vertexs[2].color.z = 1.0f;
@@ -1081,7 +1179,7 @@ namespace DND
 		_vertexs[2].t.x = 1.0f;
 		_vertexs[2].t.y = 1.0f;
 
-		_vertexs[3].pos = XMFLOAT3(0, window_size.h, 0);
+		_vertexs[3].pos = XMFLOAT3(0, float(window_size.h), 0);
 		_vertexs[3].color.x = 1.0f;
 		_vertexs[3].color.y = 1.0f;
 		_vertexs[3].color.z = 1.0f;
@@ -1096,13 +1194,17 @@ namespace DND
 		dnd_assert(!FAILED(_device->CreateBuffer(&desc, &data, &_rtt._bufferVertex))
 			, ERROR_00044);
 
+		//
+		_init_depth_stencil_state_rtt(_rtt.mDepthStencilState);
+		_init_depth_stencil_view_rrt(_rtt.mDepthStencilView);
 	}
 
 	void DirectX::_release_rtt()
 	{
+		_release_depth_stencil_view_rrt(_rtt.mDepthStencilView);
+
 		_rtt._bufferVertex->Release();
 
-		
 		_rtt.mShaderResourceView->Release();
 		_rtt.mRenderTargetView->Release();
 		_rtt.mRenderTargetTexture->Release();
@@ -1308,6 +1410,7 @@ namespace DND
 
 	DND::Canvas* DirectX::_create_canvas(INT32 order, bool mipmap, UINT32 size /*= 1024*/, UINT32 vertex_size /*= 1024*/)
 	{
+		//order = 10000000 - order;
 		auto iter = _canvass.find(order);
 		if (iter != _canvass.end())
 		{

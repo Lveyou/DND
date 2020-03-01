@@ -27,10 +27,10 @@ namespace DND
 		virtual void RenderFrame() = 0;
 		virtual Coor* GetCoor() = 0;
 		virtual UINT32 GetLength() = 0;
-		virtual UINT32 GetOrder() = 0;
+		virtual float GetOrder() = 0;
 		virtual void SetCurrent(UINT32 n) = 0;
 		virtual UINT32 GetCurrent() = 0;
-		virtual void SetOrder(INT32 n) = 0;
+		virtual void SetOrder(float n) = 0;
 		virtual void SetColor(Color color) = 0;
 		virtual void SetQuadOffset(Vector2 offset) = 0;
 		virtual void SetQuadRotate(float r) = 0;

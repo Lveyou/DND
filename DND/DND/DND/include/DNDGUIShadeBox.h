@@ -28,7 +28,7 @@ namespace DND
 		float GetCur() { return _cur; }
 
 		void Render();
-		void SetOrder(int order);
+		void SetOrder(float order);
 		ShadeBox* Clone();
 	private:
 		ShadeBox();

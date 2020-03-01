@@ -26,7 +26,7 @@ namespace DND
 			Color disable = Color::GRAY, Color choose = Color::WHITE);
 		Text* GetText();
 		ButtonTextColor* Clone();
-		void SetOrder(int order) { _text->SetOrder(order); }
+		void SetOrder(float order) { _text->SetOrder(order); }
 	private:
 		//子类控件需要重载
 		virtual bool _is_pickup() override;

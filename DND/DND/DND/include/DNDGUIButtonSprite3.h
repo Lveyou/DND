@@ -24,7 +24,7 @@ namespace DND
 		static ButtonSprite3* Create(Sprite* normal, Sprite* over, Sprite* down);
 		ButtonSprite3* Clone();
 		Coor* GetCoor();
-		void SetOrder(int order);
+		void SetOrder(float order);
 
 	private:
 		//子类控件需要重载

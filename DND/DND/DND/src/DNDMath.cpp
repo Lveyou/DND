@@ -71,7 +71,7 @@ namespace DND
 
 		r += Math::GetPI<1, 8>();
 
-		return r / Math::GetPI<1, 4>();
+		return int(r / Math::GetPI<1, 4>());
 	}
 
 	void Math::RotateArray(Point& p, int r, Size wh)
@@ -82,19 +82,19 @@ namespace DND
 		if (r == 1)
 		{
 			auto t = p.x;
-			p.x = -p.y + wh.h - 1;
+			p.x = -p.y + int(wh.h) - 1;
 			p.y = t;
 		}
 		else if (r == 2)
 		{
-			p.x = -p.x + wh.w - 1;
-			p.y = -p.y + wh.h - 1;
+			p.x = -p.x + int(wh.w) - 1;
+			p.y = -p.y + int(wh.h) - 1;
 		}
 		else if (r == 3)
 		{
 			auto t = p.x;
 			p.x = p.y;
-			p.y = -t + wh.w - 1;
+			p.y = -t + int(wh.w) - 1;
 		}
 	}
 

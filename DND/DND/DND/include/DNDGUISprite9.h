@@ -26,7 +26,7 @@ namespace DND
 		//ว๋สน p2 > p1
 		void SetPosition(const Vector4& p1p2);
 		void Render();
-		void SetOrder(int order);
+		void SetOrder(float order);
 		Size GetSize();
 		void SetUI(bool open)
 		{

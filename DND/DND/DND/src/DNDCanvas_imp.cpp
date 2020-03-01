@@ -17,6 +17,12 @@
 
 namespace DND
 {
+	bool SpriteCompareZ(Sprite* spr1, Sprite* spr2)
+	{
+		return spr1->GetOrder() > spr2->GetOrder();
+	}
+	
+
 
 	DND::Canvas* Canvas::Create(INT32 order, bool mipmap /*= false*/, UINT32 size /*= 1024*/, UINT32 vertex_size /*= 1024*/)
 {
@@ -45,41 +51,39 @@ namespace DND
 
 	Sprite* Canvas_imp::CreateSprite(UINT32 imgID,const Quad& quad, Color color /*= Color::WHITE*/)
 	{
-		Sprite* spr = new Sprite();
-		spr->_imageRectID = imgID;
-		spr->_quad = quad;
-		spr->_coor = Coor::Create(_coor);
-		spr->_color[0] = color;
-		spr->_color[1] = color;
-		spr->_color[2] = color;
-		spr->_color[3] = color;
-		spr->_canvas = this;
-		spr->_uvConst = _tex->GetUV(imgID);
-		
-		return spr;
-	}
-
-	DND::Sprite* Canvas_imp::CreateSprite(UINT32 img_ID, bool center, Color color /*= Color::WHITE*/)
-	{
-		Sprite* spr = new Sprite();
-		spr->_imageRectID = img_ID;
-		auto iter = _tex->_imageRects.find(img_ID);
+		auto iter = _tex->_imageRects.find(imgID);
 		if (iter == _tex->_imageRects.end())
 		{
-			debug_err(String(L"DND: 创建精灵时未找到id: ") + (int)img_ID);
+			debug_err(String(L"DND: 创建精灵时未找到id: ") + (int)imgID);
 			return NULL;
 		}
 
-		spr->_quad = Quad(Vector2(), iter->second.GetSize(), center);
-		spr->_coor = Coor::Create(_coor);
+
+		Sprite* spr = new Sprite();
+		spr->_imageRectID = imgID;
+		spr->_quad = quad;	
 		spr->_color[0] = color;
 		spr->_color[1] = color;
 		spr->_color[2] = color;
 		spr->_color[3] = color;
+		spr->_coor = Coor::Create(_coor);//父坐标系 始终为 创建者
 		spr->_canvas = this;
-		spr->_uvConst = _tex->GetUV(img_ID);
+		spr->_uvConst = _tex->GetUV(imgID);
+		
 
 		return spr;
+	}
+
+	DND::Sprite* Canvas_imp::CreateSprite(UINT32 imgID, bool center, Color color /*= Color::WHITE*/)
+	{
+		auto iter = _tex->_imageRects.find(imgID);
+		if (iter == _tex->_imageRects.end())
+		{
+			debug_err(String(L"DND: 创建精灵时未找到id: ") + (int)imgID);
+			return NULL;
+		}
+
+		return CreateSprite(imgID, Quad(Vector2(), iter->second.GetSize(), center), color);
 	}
 
 	DND::Sprite9* Canvas_imp::CreateSprite9(const Image* img, const Rect& xyxy, Color color /*= Color::WHITE*/)
@@ -305,9 +309,9 @@ namespace DND
 
 
 
-	int Canvas_imp::GetOnGUISpriteMaxOrder()
-	{
-		return _orderUISprMax;
+	float Canvas_imp::GetOnGUISpriteMaxOrder()
+{
+		return _orderUISprMin;
 	}
 
 	bool Canvas_imp::SetImage(const String& img_name, const String& rects)
@@ -416,10 +420,14 @@ namespace DND
 
 		debug_line(L"Test: 031");
 		
+
 		if (_shaderType == DND_SHADER_NORMAL)
 		{
 			//tex -> 1
-			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_rtt.mDepthStencilView);// directx->_depthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_rtt.mDepthStencilState, 0);
+
 			debug_line(L"Test: 032");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
@@ -443,8 +451,12 @@ namespace DND
 
 			//tex -> main
 			debug_line(L"Test: 065");
+
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState, 0);
 			debug_line(L"Test: 062");
+
+			
 
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 			debug_line(L"Test: 063");
@@ -453,8 +465,12 @@ namespace DND
 		}
 		else if (_shaderType == DND_SHADER_SHADOW)
 		{
+			//小于深度检测（不等于），防止绘制两次
+			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState2, 0);
+
 			//tex -> 1
-			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_rtt.mDepthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_rtt.mDepthStencilState, 0);
 			debug_line(L"Test: 034");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
@@ -464,17 +480,15 @@ namespace DND
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 			debug_line(L"Test: 035");
 
-			//开启zbuffer实现只绘制一次
-			directx->_deviceContext->ClearDepthStencilView(directx->_depthStencilView, D3D11_CLEAR_DEPTH, 0.0f, 0);
-			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState2, 0);
+			
 			
 			//tex -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState, 0);
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 			debug_line(L"Test: 036");
 
 			//还原
-			directx->_deviceContext->ClearDepthStencilView(directx->_depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState, 0);
 
 			debug_line(L"Test: 037");
@@ -485,6 +499,7 @@ namespace DND
 		{
 			//tex，1 -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState, 0);
 			debug_line(L"Test: 038");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
@@ -498,7 +513,8 @@ namespace DND
 			debug_line(L"Test: 039");
 
 			//tex，1 -> 1
-			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_rtt.mDepthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_rtt.mDepthStencilState, 0);
 			
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 			debug_line(L"Test: 040");
@@ -507,12 +523,13 @@ namespace DND
 		{
 			//tex，1 -> main
 			directx->_deviceContext->OMSetRenderTargets(1, &directx->_mainRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_depthStencilState, 0);
 			debug_line(L"Test: 041");
 
 			Shader* shader = gfx_2d->_get_shader(_shaderType);
 			debug_line(L"Test: 055");
 
-			shader->_time->SetFloat(Game::Get()->time->GetCurrent());
+			shader->_time->SetFloat(float(Game::Get()->time->GetCurrent()));
 			debug_line(L"Test: 051");
 			shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			
@@ -530,7 +547,8 @@ namespace DND
 			
 			debug_line(L"Test: 042");
 			//tex，1 -> 1
-			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_depthStencilView);
+			directx->_deviceContext->OMSetRenderTargets(1, &directx->_rtt.mRenderTargetView, directx->_rtt.mDepthStencilView);
+			directx->_deviceContext->OMSetDepthStencilState(directx->_rtt.mDepthStencilState, 0);
 			
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 			debug_line(L"Test: 043");
@@ -538,27 +556,35 @@ namespace DND
 
 
 	}
+
+	
+
+	
+
 	void DND::Canvas_imp::_update()
 	{
 		DirectX* directx = Game::Get()->_dx;
 
+		debug_line_canvas(L"Test: Canvas: 001");
 		//m_sprites => m_vertexs
 		//这一步 将 sprite变化到内存顶点缓存，并判断缓存大小，适时扩大（包括显卡顶点缓存）
 		//其中需要 顶点坐标进行变换（软的，没办法）
 		while (_sprites.size() * 4 > _vertexSize)
 		{
+			debug_line_canvas(L"Test: Canvas: 002");
 			_release_vertex_buffer();
 			delete[] _vertexs;
 
 			_vertexSize <<= 1;
 
+			debug_line_canvas(L"Test: Canvas: 003");
 			_create_vertex_buffer();
 			_vertexs = new Vertex2D[_vertexSize];
 		}
 
 		/*float whk = static_cast<float>(System_imp::Get_Instance()->m_window_info.size.w) /
 			System_imp::Get_Instance()->m_window_info.size.h;*/
-
+		debug_line_canvas(L"Test: Canvas: 004");
 		Rect window = Rect(XYWH(Point(),Game::Get()->sys->GetWindowSize()));
 
 		/////////////////////////////////////////////////////////////////////
@@ -568,15 +594,19 @@ namespace DND
 
 		const float PIXEL_OFFSET = 0.5f;
 		///////////////////////Sprite//////////////////////////////////////////////
-		float pos_z = 0.0f;
-		if (_shaderType == DND_SHADER_SHADOW)
+		debug_line_canvas(L"Test: Canvas: 005");
+		//debug_line_canvas2(String::Format(512, L"顶点数: %d, 精灵数: %d", _vertexSize, _sprites.size()));
+		//逆序遍历
+		/*for (list<Sprite*>::reverse_iterator iter = _sprites.rbegin();
+			iter != _sprites.rend(); ++iter)*/
+		//_sprites.reverse();
+		_sprites.sort(SpriteCompareZ);
+
+		//由于要进行alpha混合，必须先画Z大的物体
+		for (list<Sprite*>::iterator iter = _sprites.begin();
+		iter != _sprites.end(); ++iter)
 		{
-			pos_z = 0.5f;
-		}
-		
-		for (auto iter = _sprites.begin(); iter != _sprites.end(); ++iter)
-		{
-			spr = iter->second;
+			spr = *iter;
 
 			if (spr == NULL)
 			{
@@ -587,7 +617,7 @@ namespace DND
 
 			spr->_update_rigidbody();//根据rigidbody刷新位置
 			//in_eye = false;
-			for (unsigned j = 0; j < 4; ++j)
+			for (UINT32 j = 0; j < 4; ++j)
 			{
 				//顶点变换
 				//如果 spr 的 coor 为空 则不需要变换
@@ -605,7 +635,8 @@ namespace DND
 				
 		
 				_vertexs[_renderSprNum + j].pos =
-					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET, pos_z);
+					XMFLOAT3(out.x - PIXEL_OFFSET, out.y - PIXEL_OFFSET,
+						spr->_order);
 
 					
 				_vertexs[_renderSprNum + j].color.x = spr->_color[j].r();
@@ -619,9 +650,9 @@ namespace DND
 			_renderSprNum += 4;
 		
 		}
-		
 		_sprites.clear();
 
+		debug_line_canvas(L"Test: Canvas: 006");
 		//_iter = _sprites.begin();
 		//m_vertexs => m_buffer_vertex
 		//从内存复制到 显存
@@ -633,10 +664,15 @@ namespace DND
 			&res)),
 			ERROR_00043);
 
-		memcpy(res.pData, _vertexs, _renderSprNum * sizeof(Vertex2D));
+		debug_line_canvas(L"Test: Canvas: 007");
 
+		memcpy_s(res.pData, _renderSprNum * sizeof(Vertex2D), _vertexs, _renderSprNum * sizeof(Vertex2D));
+
+		debug_line_canvas(L"Test: Canvas: 008");
 		directx->_deviceContext->Unmap(
 			(ID3D11Resource*)_bufferVertex, 0);
+
+		debug_line_canvas(L"Test: Canvas: 009");
 		
 	}
 	void DND::Canvas_imp::_create_vertex_buffer()
@@ -682,12 +718,13 @@ namespace DND
 		_coor = Coor::Create();
 
 		_onGUISpr = 0;
-		_orderUISprMax = Math::GetTypeMin<int>();
+		_orderUISprMin = 1.0f;
 
 		_bSetImage = false;
 		_bAddedText = false;
 		_shaderType = DND_SHADER_NORMAL;
-		//_iter = _sprites.begin();
+		
+		
 	}
 
 	void Canvas_imp::SetShader(UINT32 type /*= 0*/)

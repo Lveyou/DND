@@ -35,7 +35,7 @@ namespace DND
 		void RenderFrame();
 		Coor* GetCoor();
 		void SetCoor(Coor* coor);//会删除自己的Coor，然后设置传入的Coor为坐标系
-		void SetOrder(INT32 order);
+		void SetOrder(float order);
 		Size GetSize();
 		void SetColor(Color color);
 		void SetColor(Color* color);
@@ -43,7 +43,7 @@ namespace DND
 		void SetColorAlpha(float a);//不改变颜色，只改变a通道
 		Color GetColor(INT32 i = 0);
 		Canvas* GetCanvas();
-		INT32 GetOrder();
+		float GetOrder();
 		void SetQuad(INT32 i, Vector2 pos);
 		void SetQuad(Quad quad);
 		void SetQuadOffset(Vector2 pos);
@@ -81,7 +81,7 @@ namespace DND
 		Sprite();
 		
 		void _update_rigidbody();
-		INT32 _order;
+		float _order;
 		Canvas* _canvas;
 		Coor* _coor;
 		Quad _quad;

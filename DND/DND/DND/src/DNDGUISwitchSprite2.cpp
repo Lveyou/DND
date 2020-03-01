@@ -59,7 +59,7 @@ namespace DND
 		return ret;
 	}
 
-	void SwitchSprite2::SetOrder(int order)
+	void SwitchSprite2::SetOrder(float order)
 	{
 		_spr[0]->SetOrder(order);
 		_spr[1]->SetOrder(order);

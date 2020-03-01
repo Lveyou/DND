@@ -236,7 +236,7 @@ namespace DND
 
 	void System_imp::ApplyWindow()
 	{
-		RECT rect = {0, 0, _windowSize.w, _windowSize.h};
+		RECT rect = {0, 0, LONG(_windowSize.w), LONG(_windowSize.h)};
 
 		AdjustWindowRect(&rect, _windowStyle, false);
 

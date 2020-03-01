@@ -26,8 +26,8 @@ namespace DND
 		virtual void RegisterString(const String& str) override;
 		virtual Coor* GetCoor() override;
 		virtual Color GetColor() override;
-		virtual void SetOrder(int order) override;
-		virtual int GetOrder() override;
+		virtual void SetOrder(float order) override;
+		virtual float GetOrder() override;
 		virtual bool IsPickup() override;
 		virtual void SetAlignHorizontal(int align = TEXT_ALIGN_LEFT) override;
 		virtual void SetAlignVertical(int align = TEXT_ALIGN_TOP) override;
@@ -55,7 +55,7 @@ namespace DND
 		unsigned m_font_size;
 
 		Color m_color;
-		int m_order;
+		float _order;
 		//所用到的Sprite副本，在Set_String调用时刷新
 		list<Sprite*> m_sprites;
 

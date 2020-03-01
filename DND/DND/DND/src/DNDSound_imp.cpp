@@ -420,6 +420,15 @@ namespace DND
 	}
 
 
+	Voice_imp::~Voice_imp()
+	{
+		delete _voiceCallBack;
+		if (_sourceVoice)
+			_sourceVoice->DestroyVoice();
+
+		delete _emitter;
+	}
+
 	/*void Voice_imp::_run()
 	{
 

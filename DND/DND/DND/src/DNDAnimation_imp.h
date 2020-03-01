@@ -27,10 +27,10 @@ namespace DND
 		virtual void RenderFrame() override;
 		virtual Coor* GetCoor() override;
 		virtual UINT32 GetLength() override;
-		virtual UINT32 GetOrder() override;
+		virtual float GetOrder() override;
 		virtual void SetCurrent(UINT32 n) override;
 		virtual UINT32 GetCurrent() override;
-		virtual void SetOrder(INT32 n) override;
+		virtual void SetOrder(float n) override;
 		virtual void SetColor(Color color) override;
 		virtual void SetQuadOffset(Vector2 offset) override;
 		virtual void SetQuadRotate(float r) override;

@@ -91,6 +91,8 @@ namespace DND
 		ID3D11RenderTargetView* mRenderTargetView;
 		ID3D11ShaderResourceView* mShaderResourceView;
 
+		ID3D11DepthStencilState* mDepthStencilState;
+		ID3D11DepthStencilView* mDepthStencilView;
 		//顶点缓存
 		ID3D11Buffer* _bufferVertex;//仅仅用于绘制最后一个矩形
 	};
@@ -194,7 +196,7 @@ namespace DND
 		void _init_index_buffer();			//初始化索引缓存
 		void _init_blend_state();			//初始化绑定状态
 		void _init_depth_stencil_state();	//初始化深度模板缓存
-		
+		void _init_depth_stencil_state_rtt(ID3D11DepthStencilState*&);	//初始化深度模板缓存
 		//多次释放和建立
 		void _init_rtt();
 		void _release_rtt();
@@ -206,6 +208,9 @@ namespace DND
 
 		void _init_depth_stencil_view();	//创建深度模板视图
 		void _release_depth_stencil_view();	//释放深度模板视图
+
+		void _init_depth_stencil_view_rrt(ID3D11DepthStencilView*&);	//创建深度模板视图
+		void _release_depth_stencil_view_rrt(ID3D11DepthStencilView*&);	//释放深度模板视图
 
 		//反复调用的
 		void _reset_viewport();				//重设viewport

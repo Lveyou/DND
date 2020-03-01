@@ -5,7 +5,7 @@
 
 namespace DND
 {
-	SliderSprite5* SliderSprite5::Create(Sprite* head, Sprite* body, Sprite* tail, Sprite* under, Sprite* slider, int length, int max, Vector2 offset, bool r /*= true*/, bool filp /*= false*/)
+	SliderSprite5* SliderSprite5::Create(Sprite* head, Sprite* body, Sprite* tail, Sprite* under, Sprite* slider, UINT32 length, UINT32 max, Vector2 offset, bool r /*= true*/, bool filp /*= false*/)
 	{
 		SliderSprite5* ret = new SliderSprite5;
 		ret->_spr[0] = head;
@@ -26,13 +26,13 @@ namespace DND
 		auto h_w = (ret->_spr[0]->GetSize().w);
 		auto h_h = (ret->_spr[0]->GetSize().h);
 		
-		body->SetQuad(0, Vector2(0, h_h));
-		body->SetQuad(1, Vector2(h_w, h_h));
-		body->SetQuad(2, Vector2(h_w, h_h + length));
-		body->SetQuad(3, Vector2(0, h_h + length));
+		body->SetQuad(0, Vector2(0, float(h_h)));
+		body->SetQuad(1, Vector2((float)h_w, (float)h_h));
+		body->SetQuad(2, Vector2((float)h_w, (float)(h_h + length)));
+		body->SetQuad(3, Vector2(0, (float)(h_h + length)));
 
 		//设置tail
-		tail->GetCoor()->SetPosition(Vector2(0, h_h + length));
+		tail->GetCoor()->SetPosition(Vector2(0, float(h_h + length)));
 
 		//设置under under精灵直接设置quad来对齐
 		if (r)
@@ -55,8 +55,8 @@ namespace DND
 		}
 		
 
-		under->SetOrder(head->GetOrder() + 1);
-		slider->SetOrder(head->GetOrder() + 2);
+		under->SetOrder(head->GetOrder() + 1 * FLT_EPSILON);
+		slider->SetOrder(head->GetOrder() + 2 * FLT_EPSILON);
 		slider->GetCoor()->SetPosition(offset);
 
 
@@ -163,13 +163,13 @@ namespace DND
 		_n = n;
 	}
 
-	void SliderSprite5::SetOrder(int order)
+	void SliderSprite5::SetOrder(float order)
 	{
 		_spr[0]->SetOrder(order);
 		_spr[1]->SetOrder(order);
 		_spr[2]->SetOrder(order);
-		_spr[3]->SetOrder(order + 1);
-		_spr[4]->SetOrder(order + 2);
+		_spr[3]->SetOrder(order + 1 * FLT_EPSILON);
+		_spr[4]->SetOrder(order + 2 * FLT_EPSILON);
 	}
 
 	DND::SliderSprite5* SliderSprite5::Clone()

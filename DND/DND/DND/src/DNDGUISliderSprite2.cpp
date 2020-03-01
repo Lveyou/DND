@@ -18,7 +18,7 @@ namespace DND
 
 		ret->_spr[0]->GetCoor()->SetPosition(offset);
 
-		ret->_spr[0]->SetOrder(ret->_spr[1]->GetOrder() + 1);
+		ret->_spr[0]->SetOrder(ret->_spr[1]->GetOrder() + 1 * FLT_EPSILON);
 
 		ret->_spr[0]->SetUI(true);
 		ret->_spr[1]->SetUI(true);

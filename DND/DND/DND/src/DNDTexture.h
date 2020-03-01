@@ -56,6 +56,7 @@ namespace DND
 		void _update_uv(UINT32 id);
 
 		~Texture();
+		void _add_zero_spr();
 		Image* _img;
 		Image* _imgTemp;
 
