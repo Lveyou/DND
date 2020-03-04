@@ -62,7 +62,7 @@ namespace DND
 
 	void Sprite9::SetOrder(float order)
 	{
-		for (auto iter : _spr)
+		for (auto& iter : _spr)
 		{
 			iter->SetOrder(order);
 		}

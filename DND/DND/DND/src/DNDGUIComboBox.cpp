@@ -15,23 +15,24 @@ namespace DND
 		ret->_sprTop = top;
 		ret->_sprTop->GetCoor()->SetParent(ret->_coor);
 		ret->_sprTop->SetUI(true);
+		
 
 		ret->_sprUnder = under;
 		ret->_sprUnder->GetCoor()->SetParent(ret->_coor);
 		ret->_sprUnder->SetUI(true);
-		under->SetOrder(top->GetOrder() + 1 * FLT_EPSILON);
+		ret->_sprUnder->SetOrder(top->GetOrder() - 1 * FLT_EPSILON);
 
 		ret->_sprOver = over;
 		ret->_sprOver->GetCoor()->SetParent(ret->_sprUnder->GetCoor());
-		over->SetOrder(top->GetOrder() + 2 * FLT_EPSILON);
+		ret->_sprOver->SetOrder(top->GetOrder() - 2 * FLT_EPSILON);
 
 		ret->_btnRight = right;
 		ret->_btnRight->GetCoor()->SetParent(ret->_coor);
-		right->SetOrder(top->GetOrder());
+		ret->_btnRight->SetOrder(top->GetOrder() - 3 * FLT_EPSILON);
 
 		ret->_txt = txt;
 		ret->_txt->GetCoor()->SetParent(ret->_coor);
-		txt->SetOrder(top->GetOrder());
+		ret->_txt->SetOrder(top->GetOrder() - 3 * FLT_EPSILON);
 
 		ret->_dy = dy == 0 ? over->GetSize().h : dy;
 
@@ -41,7 +42,7 @@ namespace DND
 	void ComboBox::PushBack(const String& str)
 	{
 		Text* txt = _txt->Clone();
-		txt->SetOrder(_sprTop->GetOrder() + FLT_EPSILON);
+		txt->SetOrder(_sprTop->GetOrder() - 3 * FLT_EPSILON);
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_back(txt);
@@ -50,7 +51,7 @@ namespace DND
 	void ComboBox::PushFront(const String& str)
 	{
 		Text* txt = _txt->Clone();
-		txt->SetOrder(_sprTop->GetOrder() + 2 * FLT_EPSILON);
+		txt->SetOrder(_sprTop->GetOrder() - 3 * FLT_EPSILON);
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_front(txt);
