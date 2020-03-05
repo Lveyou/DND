@@ -25,13 +25,14 @@ namespace DND
 		static EditBoxSprite* Create(Sprite* spr, Text* txt);
 		void Push(wchar_t ch);
 		Sprite* GetSprite() { return _spr; }
+		void SetOrder(float order);
 	private:
 		EditBoxSprite();
 		virtual void RunRender() override;
 		virtual bool TestCollision() override;
 		virtual void OnChar(wchar_t ch) override;
 		virtual void OnBack() override;
-
+		
 		Sprite* _spr;
 	};
 }

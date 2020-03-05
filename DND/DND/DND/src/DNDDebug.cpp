@@ -11,15 +11,18 @@
 
 namespace DND
 {
+#ifndef DND_NO_DEBUG
+
 	void dnd_assert(bool exp, const WCHAR* str)
 	{
 		if (!exp)
 		{
 			debug_err(str);
+			DebugBreak();
 			MessageBoxW(NULL, str, NULL, MB_OK | MB_ICONERROR | MB_TASKMODAL);
 		}
 	}
-
+#endif
 
 	void Debug::WriteLine(const String& str, int level)
 	{

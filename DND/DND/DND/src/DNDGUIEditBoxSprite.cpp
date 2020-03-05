@@ -18,6 +18,7 @@ namespace DND
 		ret->_spr->GetCoor()->SetParent(ret->_txt->GetCoor());
 		ret->_spr->SetUI(true);
 		
+		ret->SetOrder(spr->GetOrder());
 
 		return ret;
 	}
@@ -48,6 +49,12 @@ namespace DND
 	{
 		if(m_string.GetLength())
 			m_string.Pop();
+	}
+
+	void EditBoxSprite::SetOrder(float order)
+	{
+		_spr->SetOrder(order);
+		_txt->SetOrder(order - FLT_EPSILON);
 	}
 
 }

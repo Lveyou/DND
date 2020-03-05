@@ -55,8 +55,7 @@ namespace DND
 		}
 		
 
-		under->SetOrder(head->GetOrder() + 1 * FLT_EPSILON);
-		slider->SetOrder(head->GetOrder() + 2 * FLT_EPSILON);
+		
 		slider->GetCoor()->SetPosition(offset);
 
 
@@ -70,6 +69,8 @@ namespace DND
 		ret->_offset = offset;
 		ret->_max = max;
 		ret->_r = r;
+
+		ret->SetOrder(body->GetOrder());
 
 		return ret;
 	}
@@ -165,11 +166,16 @@ namespace DND
 
 	void SliderSprite5::SetOrder(float order)
 	{
-		_spr[0]->SetOrder(order);
+		/*ret->_spr[0] = head;
+		ret->_spr[1] = body;
+		ret->_spr[2] = tail;
+		ret->_spr[3] = under;
+		ret->_spr[4] = slider;*/
+		_spr[0]->SetOrder(order - 2 * FLT_EPSILON);
 		_spr[1]->SetOrder(order);
-		_spr[2]->SetOrder(order);
-		_spr[3]->SetOrder(order + 1 * FLT_EPSILON);
-		_spr[4]->SetOrder(order + 2 * FLT_EPSILON);
+		_spr[2]->SetOrder(order - 2 * FLT_EPSILON);
+		_spr[3]->SetOrder(order - 1 * FLT_EPSILON);
+		_spr[4]->SetOrder(order - 3 * FLT_EPSILON);
 	}
 
 	DND::SliderSprite5* SliderSprite5::Clone()

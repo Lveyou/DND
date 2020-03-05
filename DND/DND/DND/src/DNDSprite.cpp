@@ -88,12 +88,8 @@ namespace DND
 		_order = order;
 		if (_order < 0 || _order > 1.0f)
 		{
-#ifndef _DEBUG
-			debug_err(String::Format(256, L"DND: Sprite::SetOrder: order范围必须是[0, 1][%f]！", _order));
-#else
-			debug_err(String::Format(256, L"DND: Sprite::SetOrder: order范围必须是[0, 1][%f]！", _order));
-			assert(0 && L"DND: Sprite::SetOrder: order范围必须是[0, 1]");
-#endif
+			dnd_assert(0, String::Format(256, L"DND: Sprite::SetOrder: order范围必须是[0, 1][%f]！", _order).GetWcs());
+
 			_order = Math::GetBetween(_order, 0.0f, 1.0f);
 		}
 	}
@@ -278,7 +274,7 @@ namespace DND
 
 	Sprite::Sprite()
 	{
-		_order = 0;
+		_order = 0.5f;
 		_coor = NULL;
 		_rigidBody = NULL;
 		_ui = false;

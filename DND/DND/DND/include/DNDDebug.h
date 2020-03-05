@@ -62,7 +62,13 @@
 
 namespace DND
 {
+#ifndef DND_NO_DEBUG
 	DLL_API void dnd_assert(bool exp, const WCHAR* str);
+#else
+
+#define dnd_assert
+
+#endif
 
 	//debug level
 	struct DLL_API DebugLevel
