@@ -31,7 +31,8 @@ namespace DND
 		~String();//析构
 		String(const String& b);//复制构造
 		//String(const unsigned b);
-		String(const INT32 b);//数字构造
+		String(int b);//数字构造
+		String(float b);//数字构造
 		String(WCHAR ch, UINT32 len);//填充len 个 ch
 		String(vector<WCHAR> vec, bool add_end = false) : _data(vec) 
 		{

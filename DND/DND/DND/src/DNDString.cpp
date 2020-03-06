@@ -50,6 +50,13 @@ namespace DND
 	}
 
 
+	String::String(float b)
+	{
+		WCHAR wcs[16];
+		swprintf_s(wcs, L"%f", b);
+		_copy(wcs);
+	}
+
 	String& String::operator+=(const String& b)
 	{
 		_data.insert(_data.end() - 1, b._data.begin(), b._data.end());
