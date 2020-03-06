@@ -38,7 +38,7 @@ namespace DND
 		virtual void SetWindowStyle(DWORD style = WS_POPUP)  = 0;
 		virtual void SetWindowSize(Size size) = 0;
 		virtual void SetWindowPoint(Point pos) = 0;
-		virtual void ApplyWindow() = 0;
+		virtual void SetWindowShow(bool show) = 0;
 		//
 		virtual void SetVsync(bool vsync = true) = 0;
 		//

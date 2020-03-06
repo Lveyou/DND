@@ -36,7 +36,7 @@ namespace DND
 		virtual void SetWindowStyle(DWORD style) override;
 		virtual void SetWindowSize(Size size) override;
 		virtual void SetWindowPoint(Point point) override;
-		virtual void ApplyWindow() override;
+		virtual void SetWindowShow(bool show) override;
 
 		virtual void SetVsync(bool vsync = true) override;
 
@@ -78,7 +78,7 @@ namespace DND
 		virtual void SetShowCursor(bool show) override;
 
 		
-
+		//bool _needApplyWindow;
 		String _windowTitle;
 		DWORD _windowStyle;
 		Size _windowSize;

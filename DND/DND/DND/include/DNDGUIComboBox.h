@@ -36,6 +36,9 @@ namespace DND
 		Coor* GetCoor();
 		ComboBox* Clone();
 
+		//top¾ö¶¨
+		void SetOrder(float order);
+
 		ButtonSprite3* GetRight() { return _btnRight; }
 	private:
 		//////////////////////////////////////////////////////////////////////////

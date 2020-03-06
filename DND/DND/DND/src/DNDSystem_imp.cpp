@@ -54,11 +54,8 @@ namespace DND
 			0,                              // Optional window styles.
 			L"DNDWindowClass",                     // Window class
 			L"DNDFirstWindow",    // Window text
-			WS_POPUP,            // Window style
-
-											// Size and position
-			-100, -100, 64, 64,
-
+			WS_POPUP,            // Window style								
+			0, 0, 64, 64,// Size and position
 			NULL,       // Parent window    
 			NULL,       // Menu
 			_hInstance,  // Instance handle
@@ -70,6 +67,7 @@ namespace DND
 			dnd_assert(L"DND: System: 创建窗口失败！");
 
 		ShowWindow(_hWnd, Debug::_nCmdShow);
+		ShowWindow(_hWnd, SW_HIDE);
 		//UpdateWindow(_hWnd);
 		//SetFocus(_hWnd);
 
@@ -155,7 +153,7 @@ namespace DND
 		_windowTitle = DEFAULT_WINDOW_TITLE;
 		_windowStyle = DEFAULT_WINDOW_STYLE;
 		_windowSize = DEFAULT_WINDOW_SIZE;
-		SetWindowCenter();
+		_windowPoint = Point(0, 0);
 
 		_hWnd = 0;
 		_hInstance = GetModuleHandle(0);
@@ -191,19 +189,36 @@ namespace DND
 	void System_imp::SetWindowCenter()
 	{
 		Size s = GetDesktopSize();
-		_windowPoint.x = (s.w - _windowSize.w) / 2;
-		_windowPoint.y = (s.h - _windowSize.h) / 2;
+		_windowPoint.x = int(s.w - _windowSize.w) / 2;
+		_windowPoint.y = int(s.h - _windowSize.h) / 2;
+		SetWindowPoint(_windowPoint);
 	}
 
 	void System_imp::SetWindowStyle(DWORD style)
 	{
 		_windowStyle = style;
+
+		if (!SetWindowLongPtr(_hWnd, GWL_STYLE, _windowStyle))
+			dnd_assert(L"DND: System: SetWindowLongPtr失败！");
+		//MSDN
+		//某些窗口数据已缓存，因此使用SetWindowLongPtr进行的更改将不会生效，除非您调用SetWindowPos函数。
+
+		if (!SetWindowPos(
+			_hWnd,
+			_hWnd,
+			_windowPoint.x,
+			_windowPoint.y,
+			_windowSize.w,
+			_windowSize.h,
+			SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED))
+			dnd_assert(L"DND: System: SetWindowPos失败！");
+
+		//ShowWindow(_hWnd, SW_SHOW);
 	}
 
 	void System_imp::SetWindowSize(Size size)
 	{
 		DirectX* dx = (Game::Get()->_dx);
-
 		if (dx->_full)
 		{
 			debug_err(L"DND: System::SetWindowSize: 全屏不能直接设置窗口大小！");
@@ -225,7 +240,6 @@ namespace DND
 			dx->_swapChain->ResizeTarget(&desc);
 		}
 		
-		
 	}
 
 	Size System_imp::GetWindowSize()
@@ -243,27 +257,6 @@ namespace DND
 		return _foucs;
 	}
 
-	void System_imp::ApplyWindow()
-	{
-		RECT rect = {0, 0, LONG(_windowSize.w), LONG(_windowSize.h)};
-
-		AdjustWindowRect(&rect, _windowStyle, false);
-
-		SetWindowLong(_hWnd, GWL_STYLE, _windowStyle);
-
-		MoveWindow(_hWnd,
-			_windowPoint.x,
-			_windowPoint.y,
-			rect.right - rect.left,
-			rect.bottom - rect.top,
-			true);
-
-		SetWindowText(_hWnd, _windowTitle.GetWcs());
-
-		ShowWindow(_hWnd, SW_SHOW);
-		/*UpdateWindow(_hWnd);
-		SetFocus(_hWnd);*/
-	}
 
 	void System_imp::SetVsync(bool vsync /*= true*/)
 	{
@@ -273,6 +266,29 @@ namespace DND
 	void System_imp::SetWindowPoint(Point point)
 	{
 		_windowPoint = point;
+
+		//此函数貌似不行
+		/*if (!SetWindowPos(
+			_hWnd,
+			_hWnd,
+			_windowPoint.x,
+			_windowPoint.y,
+			_windowSize.w,
+			_windowSize.h,
+			SWP_NOSIZE))
+			dnd_assert(L"DND: System: SetWindowPos失败！");*/
+		if (!MoveWindow(_hWnd,
+			_windowPoint.x,
+			_windowPoint.y,
+			_windowSize.w,
+			_windowSize.h,
+			false))
+			dnd_assert(L"DND: System: MoveWindow失败！");
+	}
+
+	void System_imp::SetWindowShow(bool show)
+	{
+		ShowWindow(_hWnd, show ? SW_SHOW : SW_HIDE);
 	}
 
 	Size System_imp::GetDesktopSize()

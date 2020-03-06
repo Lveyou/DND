@@ -101,8 +101,17 @@ namespace DND
 		time_t time_cur;
 		do 
 		{
+			//如果消息循环阻塞，代表游戏世界停止
+			while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				if(msg.message == WM_QUIT)
+					break;
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+				
+			}
 			////////////////////////////LOGO显示////////////////////////////////////////
-			if(_logoTime)
+			if (_logoTime)
 				time_cur = ::time(0);
 
 			if (_logoTime && (time_cur - _logoTimeStart < 0.5f))
@@ -112,15 +121,6 @@ namespace DND
 			else
 			{
 				_logoTime = false;
-			}
-			//如果消息循环阻塞，代表游戏世界停止
-			while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-			{
-				if(msg.message == WM_QUIT)
-					break;
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-				
 			}
 			/////////////////////////输入状态更新////////////////////////////////////
 			i->_calc_mouse();
@@ -415,6 +415,12 @@ namespace DND
 		{
 		case WM_CREATE:
 			break;
+		case WM_CLOSE:
+			// Create the message box. If the user clicks 
+			// the Yes button, destroy the main window. 
+
+			DestroyWindow(sys->_hWnd);
+			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			Get()->EndLoop();
@@ -448,8 +454,8 @@ namespace DND
 		//case WM_EXITSIZEMOVE:
 			return _on_wm_size(hWnd, msg, wParam, lParam);
 		case WM_MOVE:
-			sys->_windowPoint.x = LOWORD(lParam);
-			sys->_windowPoint.y = HIWORD(lParam);
+			sys->_windowPoint.x = (int)(short)LOWORD(lParam);
+			sys->_windowPoint.y = (int)(short)HIWORD(lParam);
 			break;
 		case WM_CHAR:
 			EditBox::_process_input_char(wParam);
@@ -615,7 +621,7 @@ namespace DND
 
 			for (UINT32 i = 0; i < _dx->_displayModeLength; ++i)
 			{
-				if (_dx->_displayModes[i].Format == DXGI_FORMAT_B8G8R8A8_UNORM)
+				if (_dx->_displayModes[i].Format == DXGI_FORMAT_R8G8B8A8_UNORM)
 				{
 					p->insert(Size(_dx->_displayModes[i].Width, _dx->_displayModes[i].Height));
 				}
@@ -644,7 +650,7 @@ namespace DND
 			_dx->_swapChain->GetDesc(&desc2);
 
 			DXGI_MODE_DESC desc;
-			desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+			desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 			desc.Width = size.w;
 			desc.Height = size.h;
 			desc.RefreshRate = desc2.BufferDesc.RefreshRate;

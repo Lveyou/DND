@@ -6,6 +6,9 @@
 
 namespace DND
 {
+
+	float COMBOBOX_TEXT_ORDER_DT = 3 * FLT_EPSILON;
+
 	ComboBox* ComboBox::Create(Sprite* top, Sprite* over, Sprite9* under, ButtonSprite3* right, Text* txt, UINT32 dy)
 	{
 		ComboBox* ret = new ComboBox;
@@ -20,21 +23,18 @@ namespace DND
 		ret->_sprUnder = under;
 		ret->_sprUnder->GetCoor()->SetParent(ret->_coor);
 		ret->_sprUnder->SetUI(true);
-		ret->_sprUnder->SetOrder(top->GetOrder() - 1 * FLT_EPSILON);
 
 		ret->_sprOver = over;
 		ret->_sprOver->GetCoor()->SetParent(ret->_sprUnder->GetCoor());
-		ret->_sprOver->SetOrder(top->GetOrder() - 2 * FLT_EPSILON);
 
 		ret->_btnRight = right;
 		ret->_btnRight->GetCoor()->SetParent(ret->_coor);
-		ret->_btnRight->SetOrder(top->GetOrder() - 3 * FLT_EPSILON);
 
 		ret->_txt = txt;
 		ret->_txt->GetCoor()->SetParent(ret->_coor);
-		ret->_txt->SetOrder(top->GetOrder() - 3 * FLT_EPSILON);
 
 		ret->_dy = dy == 0 ? over->GetSize().h : dy;
+		ret->SetOrder(top->GetOrder());
 
 		return ret;
 	}
@@ -42,7 +42,7 @@ namespace DND
 	void ComboBox::PushBack(const String& str)
 	{
 		Text* txt = _txt->Clone();
-		txt->SetOrder(_sprTop->GetOrder() - 3 * FLT_EPSILON);
+		txt->SetOrder(_sprTop->GetOrder() - COMBOBOX_TEXT_ORDER_DT);
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_back(txt);
@@ -51,7 +51,7 @@ namespace DND
 	void ComboBox::PushFront(const String& str)
 	{
 		Text* txt = _txt->Clone();
-		txt->SetOrder(_sprTop->GetOrder() - 3 * FLT_EPSILON);
+		txt->SetOrder(_sprTop->GetOrder() - COMBOBOX_TEXT_ORDER_DT);
 		txt->SetString(str);
 
 		((std::list<Text*>*)_listItem)->push_front(txt);
@@ -190,6 +190,21 @@ namespace DND
 		ret->_dy = _dy;
 
 		return ret;
+	}
+
+	void ComboBox::SetOrder(float order)
+	{
+		_sprTop->SetOrder(order);
+		_sprUnder->SetOrder(order - 1 * FLT_EPSILON);
+		_sprOver->SetOrder(order - 2 * FLT_EPSILON);
+		_btnRight->SetOrder(order - 3 * FLT_EPSILON);
+		_txt->SetOrder(order - COMBOBOX_TEXT_ORDER_DT);
+
+		auto* p = (std::list<Text*>*)_listItem;
+		for (auto& iter : *p)
+		{
+			iter->SetOrder(order - COMBOBOX_TEXT_ORDER_DT);
+		}
 	}
 
 	ComboBox::ComboBox()
