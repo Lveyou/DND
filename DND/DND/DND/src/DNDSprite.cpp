@@ -88,7 +88,7 @@ namespace DND
 		_order = order;
 		if (_order < 0 || _order > 1.0f)
 		{
-			dnd_assert(0, String::Format(256, L"DND: Sprite::SetOrder: order范围必须是[0, 1][%f]！", _order).GetWcs());
+			dnd_assert(String::Format(256, L"DND: Sprite::SetOrder: order范围必须是[0, 1][%f]！", _order).GetWcs());
 
 			_order = Math::GetBetween(_order, 0.0f, 1.0f);
 		}
@@ -260,7 +260,7 @@ namespace DND
 		if (_show)
 		{
 			//dnd_assert(0, ERROR_00051);
-			dnd_assert(0, ERROR_00051);
+			dnd_assert(L"DND: Sprite: 删除了已绘制的！");
 			/*__asm {
 				int 3
 			}*/

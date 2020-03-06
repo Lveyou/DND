@@ -12,7 +12,6 @@
 
 #include "DNDDLL.h"
 #include "DNDString.h"
-#include "DNDError.h"
 #include <windows.h>
 #include "DNDMutex.h"
 
@@ -63,7 +62,7 @@
 namespace DND
 {
 #ifndef DND_NO_DEBUG
-	DLL_API void dnd_assert(bool exp, const WCHAR* str);
+	DLL_API void dnd_assert(const WCHAR* str);
 #else
 
 #define dnd_assert

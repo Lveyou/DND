@@ -316,7 +316,7 @@ namespace DND
 		HRESULT hr;
 		if (FAILED(hr = XAudio2Create(&_xaudio2, 0, XAUDIO2_DEFAULT_PROCESSOR)))
 		{
-			dnd_assert(0, L"DND: XAudio2 ³õÊ¼»¯Ê§°Ü£¡");
+			dnd_assert(L"DND: XAudio2 ³õÊ¼»¯Ê§°Ü£¡");
 			return;
 		}
 
@@ -324,7 +324,7 @@ namespace DND
 		if (FAILED(hr = _xaudio2->CreateMasteringVoice(&_masterVoice, XAUDIO2_DEFAULT_CHANNELS,
 			XAUDIO2_DEFAULT_SAMPLERATE, 0, 0, NULL)))
 		{
-			dnd_assert(0, L"DND: XAudio2 ´´½¨ MasterVoice Ê§°Ü£¡");
+			dnd_assert(L"DND: XAudio2 ´´½¨ MasterVoice Ê§°Ü£¡");
 			return;
 		}
 
@@ -337,14 +337,14 @@ namespace DND
 			_cannelMask,
 			44100, 0, 0, 0)))
 		{
-			dnd_assert(0, L"DND: XAudio2 ´´½¨ SubmixVoice0 Ê§°Ü£¡");
+			dnd_assert(L"DND: XAudio2 ´´½¨ SubmixVoice0 Ê§°Ü£¡");
 			return;
 		}
 		if (FAILED(hr = _xaudio2->CreateSubmixVoice(&(_submixVoice[1]), 
 			_cannelMask,
 			44100, 0, 0, 0)))
 		{
-			dnd_assert(0, L"DND: XAudio2 ´´½¨ SubmixVoice1 Ê§°Ü£¡");
+			dnd_assert(L"DND: XAudio2 ´´½¨ SubmixVoice1 Ê§°Ü£¡");
 			return;
 		}
 		_sendArray0[0] = { 0, _submixVoice[0] };

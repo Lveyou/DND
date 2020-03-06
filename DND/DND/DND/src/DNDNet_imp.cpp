@@ -18,7 +18,9 @@ namespace DND
 		{
 			WSADATA wsaData;
 			WORD scokVersion = MAKEWORD(2, 2);
-			dnd_assert(!WSAStartup(scokVersion, &wsaData), ERROR_00049);
+			if (WSAStartup(scokVersion, &wsaData))
+				dnd_assert(L"DND: Net::GetClient: WSAStartup ß∞‹£°");
+			
 			debug_notice(L"DND: Net init ok!");
 			_bInit = 1;
 		}
@@ -33,7 +35,8 @@ namespace DND
 		{
 			WSADATA wsaData;
 			WORD scokVersion = MAKEWORD(2, 2);
-			dnd_assert(!WSAStartup(scokVersion, &wsaData), ERROR_00049);
+			if(WSAStartup(scokVersion, &wsaData))
+				dnd_assert(L"DND: Net::GetClient: WSAStartup ß∞‹£°");
 			debug_notice(L"DND: Net init ok!");
 			_bInit = 1;
 		}

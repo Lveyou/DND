@@ -8,7 +8,11 @@ namespace DND
 {
 	Font::Font()
 	{
-		dnd_assert(!FT_Init_FreeType(&library) , ERROR_00046);
+		if (FT_Init_FreeType(&library))
+		{
+			dnd_assert(L"DND: Font::FT_Init_FreeType: Ê§°Ü£¡");
+		}
+		
 	}
 
 	bool Font::_load_font_file(const String& name, const String& path, int mode)

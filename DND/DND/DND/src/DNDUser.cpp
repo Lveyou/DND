@@ -1,7 +1,7 @@
 #include "DNDUser.h"
 #include "DNDString.h"
 
-#include "DNDError.h"
+#include "DNDDebug.h"
 #include "DNDMath.h"
 
 #include "DNDGame.h"
@@ -143,7 +143,8 @@ namespace DND
 
 	DND::Vector2 DND::Vector2::operator/(float var)
 	{
-		dnd_assert(var, ERROR_00006);
+		if(var == 0)
+			dnd_assert(L"DND: Vector2: 除数不能为0！");
 		return Vector2(a / var, b / var);
 	}
 

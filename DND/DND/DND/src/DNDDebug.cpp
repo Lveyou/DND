@@ -1,5 +1,4 @@
 #include "DNDDebug.h"
-#include "DNDError.h"
 #include "DNDValue.h"
 #include "DNDGame.h"
 #include "DNDGameServer.h"
@@ -13,40 +12,46 @@ namespace DND
 {
 #ifndef DND_NO_DEBUG
 
-	void dnd_assert(bool exp, const WCHAR* str)
+	void dnd_assert(const WCHAR* str)
 	{
-		if (!exp)
-		{
-			debug_err(str);
-			DebugBreak();
-			MessageBoxW(NULL, str, NULL, MB_OK | MB_ICONERROR | MB_TASKMODAL);
-		}
+		debug_err(str);
+		DebugBreak();
+		//MessageBoxW(NULL, str, NULL, MB_OK | MB_ICONERROR | MB_TASKMODAL);
 	}
 #endif
 
+	//用于debuger还未存在时
+	void dnd_assert_2(const WCHAR* str)
+	{
+		MessageBoxW(NULL, str, NULL, MB_OK | MB_ICONERROR | MB_TASKMODAL);
+	}
+
 	void Debug::WriteLine(const String& str, int level)
 	{
-
-		assert(_debugger && L"ERROR_00008");
+		if(!_debugger)
+			dnd_assert_2(L"DND: Debug: Debugger为NULL！");
 		_debugger->WriteLine(str, level);
 
 	}
 
 	void Debug::Write(const String& str, int level)
 	{
-		assert(_debugger && L"ERROR_00008");
+		if (!_debugger)
+			dnd_assert_2(L"DND: Debug: Debugger为NULL！");
 		_debugger->Write(str, level);
 	}
 
 	void Debug::WriteEndl(int level)
 	{
-		assert(_debugger && L"ERROR_00008");
+		if (!_debugger)
+			dnd_assert_2(L"DND: Debug: Debugger为NULL！");
 		_debugger->WriteEndl(level);
 	}
 
 	void Debug::SetDebugger(Debugger* debugger)
 	{
-		assert(debugger && L"ERROR_00007");
+		/*if (_debugger)
+			dnd_assert_2(L"DND: Debug: Debugger已经存在！");*/
 		_debugger = debugger;
 	}
 
@@ -159,7 +164,8 @@ namespace DND
 
 	DebuggerConsole::DebuggerConsole()
 	{
-		dnd_assert(AllocConsole(), ERROR_00009);
+		if(!AllocConsole())
+			dnd_assert_2(L"DND: DebuggerConsole: 创建控制台窗口失败！");
 		FILE* stream;
 		freopen_s(&stream, "CON", "r", stdin);//重定向输入流
 		freopen_s(&stream, "CON", "w", stdout);//重定向输入流
@@ -181,8 +187,8 @@ namespace DND
 				break;
 			Sleep(100);
 		}
-
-		dnd_assert(_consoleHwnd, ERROR_00010);
+		if(!_consoleHwnd)
+			dnd_assert_2(L"DND: DebuggerConsole: 获取控制台窗口句柄失败！");
 	}
 
 	DebuggerConsole::~DebuggerConsole()

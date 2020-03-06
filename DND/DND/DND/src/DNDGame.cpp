@@ -1,8 +1,7 @@
 ﻿#include "DNDGame.h"
-#include "DNDError.h"
+#include "DNDDebug.h"
 #include "DNDSystem_imp.h"
 #include "DNDTime_imp.h"
-#include "DNDError.h"
 #include "DNDDirectX.h"
 #include "DNDInput_imp.h"
 #include "DNDCanvas_imp.h"
@@ -22,7 +21,8 @@ namespace DND
 
 	Game::Game()
 	{
-		dnd_assert(!_game, ERROR_00000);
+		if (_game)
+			dnd_assert(L"DND: Game: 实例已经存在！");
 		_game = this;
 		sys = NULL;
 		time = NULL;
@@ -267,7 +267,8 @@ namespace DND
 
 	Game* Game::Get()
 	{
-		dnd_assert(_game, ERROR_00005);
+		if (!_game)
+			dnd_assert(L"DND: Game: 实例还不存在！");
 		return _game;
 	}
 

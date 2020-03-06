@@ -1,5 +1,5 @@
 #include "DNDSystem_imp.h"
-#include "DNDError.h"
+#include "DNDDebug.h"
 #include "DNDGame.h"
 #include "DNDValue.h"
 #include "DNDFont.h"
@@ -31,7 +31,8 @@ namespace DND
 
 	void System_imp::_create_window()
 	{
-		dnd_assert(!_hWnd, ERROR_00001);
+		if(_hWnd)
+			dnd_assert(L"DND: System: 窗口已经创建！");
 		//窗口类
 		WNDCLASS wc;
 		wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -45,7 +46,8 @@ namespace DND
 		wc.lpszMenuName = 0;
 		wc.lpszClassName = L"DNDWindowClass";//窗口类名
 
-		dnd_assert(RegisterClass(&wc), ERROR_00002);
+		if(!RegisterClass(&wc))
+			dnd_assert(L"DND: System: 注册窗口类失败！");
 		
 		//创建窗口
 		_hWnd = CreateWindow(
@@ -58,7 +60,8 @@ namespace DND
 			100,
 			0 /*parent hwnd*/, 0 /* menu */, _hInstance, 0 /*extra*/);
 
-		dnd_assert(_hWnd, ERROR_00003);
+		if (!_hWnd)
+			dnd_assert(L"DND: System: 创建窗口失败！");
 
 		ShowWindow(_hWnd, SW_HIDE);
 		//UpdateWindow(_hWnd);

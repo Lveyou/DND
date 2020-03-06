@@ -435,13 +435,13 @@ namespace DND
 			hr = shader->_colorTexture->SetResource(_tex->_shaderResourceView);
 			if (FAILED(hr))
 			{
-				dnd_assert(0, L"Test: 066");
+				dnd_assert(L"Test: 066");
 				return;
 			}
 			hr = shader->_pass->Apply(0, directx->_deviceContext);
 			if (FAILED(hr))
 			{
-				dnd_assert(0, L"Test: 067");
+				dnd_assert(L"Test: 067");
 				return;
 			}
 
@@ -658,11 +658,12 @@ namespace DND
 		//¥”ƒ⁄¥Ê∏¥÷∆µΩ œ‘¥Ê
 
 		D3D11_MAPPED_SUBRESOURCE res;
-		dnd_assert (!FAILED(directx->_deviceContext->Map(
+		if(FAILED(directx->_deviceContext->Map(
 			(ID3D11Resource*)_bufferVertex, 0,
 			D3D11_MAP_WRITE_DISCARD, 0,
-			&res)),
-			ERROR_00043);
+			&res)))
+			dnd_assert(L"DND: Canvas: ∂•µ„ª∫¥ÊMap ß∞‹£°");
+			
 
 		debug_line_canvas(L"Test: Canvas: 007");
 
@@ -690,8 +691,8 @@ namespace DND
 
 		DirectX* directx = Game::Get()->_dx;
 
-		dnd_assert( !FAILED(directx->_device->CreateBuffer(&desc, NULL, &_bufferVertex))
-			,ERROR_00044);
+		if(FAILED(directx->_device->CreateBuffer(&desc, NULL, &_bufferVertex)))
+			dnd_assert(L"DND: Canvas: ¥¥Ω®∂•µ„ª∫¥Ê ß∞‹£°");
 		
 	}
 

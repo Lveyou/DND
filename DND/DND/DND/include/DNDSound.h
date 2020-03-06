@@ -16,7 +16,7 @@
 #include "DNDTypedef.h"
 #include "DNDString.h"
 #include "DNDGame.h"
-#include "DNDError.h"
+#include "DNDDebug.h"
 
 
 

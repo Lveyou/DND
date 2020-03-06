@@ -90,7 +90,7 @@ namespace DND
 			{
 				if (error_message)
 					debug_err(String((char*)error_message->GetBufferPointer()));
-				dnd_assert(0, ERROR_00037);
+				dnd_assert(L"DND: 创建2d shader失败。");
 			}
 
 		}
@@ -100,7 +100,7 @@ namespace DND
 			LPCSTR buffer = (LPCSTR)sys->_get_file_form_zip(path_name, size);
 			if (size == 0)
 			{
-				dnd_assert(0, ERROR_00037);
+				dnd_assert(L"DND: 创建2d shader失败。");
 				return;
 			}
 			if (FAILED(D3DCompile2(buffer, size, NULL,
@@ -111,17 +111,16 @@ namespace DND
 			{
 				if (error_message)
 					sys->MessageBox(String((char*)error_message->GetBufferPointer()));
-				dnd_assert(0, ERROR_00037);
+				dnd_assert(L"DND: 创建2d shader失败。");
 				return;
 			}
 			delete buffer;
 		}
-
-		dnd_assert(!FAILED(D3DX11CreateEffectFromMemory(
+		if (FAILED(D3DX11CreateEffectFromMemory(
 			compiled_shader->GetBufferPointer(),
 			compiled_shader->GetBufferSize(),
-			0, directx->_device, &_shader[type]._effect)),
-			ERROR_00045);
+			0, directx->_device, &_shader[type]._effect)))
+			dnd_assert(L"DND: 创建2d effect失败。");
 
 		if (compiled_shader)
 			compiled_shader->Release();
@@ -129,24 +128,31 @@ namespace DND
 			error_message->Release();
 
 		_shader[type]._technique = _shader[type]._effect->GetTechniqueByName("main11");
-		dnd_assert(_shader[type]._technique, ERROR_00038);
+		if(!_shader[type]._technique)
+			dnd_assert(L"DND: 获取2d technique失败。");
 
 		_shader[type]._pass = _shader[type]._technique->GetPassByName("p0");
-		dnd_assert(_shader[type]._pass, ERROR_00039);
+		if(!_shader[type]._pass)
+			dnd_assert(L"DND: 获取2d pass失败。");
 
 
 		ID3DX11EffectVariable* variable = _shader[type]._effect->GetVariableByName("wvp");
 		_shader[type]._wvpVariable = variable->AsMatrix();
-		dnd_assert(_shader[type]._wvpVariable->IsValid(), ERROR_00040);
+		if(!_shader[type]._wvpVariable->IsValid())
+			dnd_assert(L"DND: 获取2d wvp失败。");
+
 		_reset_wvp(type);
 
 		//ColorTexture
 		variable = NULL;
 		variable = _shader[type]._effect->GetVariableByName("ColorTexture");
-		dnd_assert(variable, ERROR_00041);
+		if(!variable)
+			dnd_assert(L"DND: 获取2d texture失败。");
+
 
 		_shader[type]._colorTexture = variable->AsShaderResource();
-		dnd_assert(_shader[type]._colorTexture, ERROR_00042);
+		if(!_shader[type]._colorTexture)
+			dnd_assert(L"DND: 转换2d texture失败。");
 
 		//ColorTextureBg
 		if (type == DND_SHADER_OVERLAY ||
@@ -155,10 +161,13 @@ namespace DND
 		{
 			variable = NULL;
 			variable = _shader[type]._effect->GetVariableByName("ColorTextureBg");
-			dnd_assert(variable, ERROR_00041);
+			if (!variable)
+				dnd_assert(L"DND: 获取2d texture失败。");
 
 			_shader[type]._colorTextureBg = variable->AsShaderResource();
-			dnd_assert(_shader[type]._colorTextureBg, ERROR_00042);
+			
+			if (!_shader[type]._colorTextureBg)
+				dnd_assert(L"DND: 转换2d textureBg失败。");
 		}
 
 		//time
@@ -167,18 +176,22 @@ namespace DND
 			
 			variable = NULL;
 			variable = _shader[type]._effect->GetVariableByName("dnd_time");
-			dnd_assert(variable, ERROR_00041);
+			if (!variable)
+				dnd_assert(L"DND: 获取dnd_time失败。");
 
 			_shader[type]._time = variable->AsScalar();
-			dnd_assert(_shader[type]._time, ERROR_00042);
+			if (!_shader[type]._time)
+				dnd_assert(L"DND: 转换dnd_time失败。");
 
 			//noise
 			variable = NULL;
 			variable = _shader[type]._effect->GetVariableByName("NoiseTexture");
-			dnd_assert(variable, ERROR_00041);
+			if (!variable)
+				dnd_assert(L"DND: 获取噪声贴图失败。");
 
 			_shader[type]._noiseTexture = variable->AsShaderResource();
-			dnd_assert(_shader[type]._noiseTexture, ERROR_00042);
+			if (!_shader[type]._noiseTexture)
+				dnd_assert(L"DND: 转换噪声贴图失败。");
 		}
 
 		//TODO: 报错提示有待修改
@@ -233,8 +246,10 @@ namespace DND
 		desc_dot.StructureByteStride = 0;
 		desc_dot.Usage = D3D11_USAGE_DYNAMIC;
 
-		dnd_assert(!FAILED(directx->_device->CreateBuffer(&desc_dot, NULL, &_bufferDots)),
-			ERROR_00027);
+		if (FAILED(directx->_device->CreateBuffer(&desc_dot, NULL, &_bufferDots)))
+		{
+			dnd_assert(L"DND: GfxSimple: 创建dot顶点缓存失败！");
+		}
 	}
 
 	GfxSimple::GfxSimple()
@@ -261,7 +276,10 @@ namespace DND
 
 	void GfxSimple::_release_vertex_buffer_line()
 	{
-		dnd_assert(_bufferLines, ERROR_00030);
+		if (!_bufferLines)
+		{
+			dnd_assert(L"DND: GfxSimple: line顶点缓存已经被释放！");
+		}
 		_bufferLines->Release();
 		_bufferLines = NULL;
 	}
@@ -274,7 +292,7 @@ namespace DND
 			D3D11_MAP_WRITE_DISCARD, 0,
 			&res_dot)))
 		{
-			assert(0 && L"dot map 失败！");
+			dnd_assert(L"DND: GfxSimple: dot顶点缓存 Map失败！");
 			return;
 		}
 
@@ -294,7 +312,7 @@ namespace DND
 			D3D11_MAP_WRITE_DISCARD, 0,
 			&res_line)))
 		{
-			assert(0 && L"line map 失败！");
+			dnd_assert(L"DND: GfxSimple: line顶点缓存 Map失败！");
 			return;
 		}
 
@@ -313,8 +331,10 @@ namespace DND
 
 	void GfxSimple::_release_vertex_buffer_dot()
 	{
-		dnd_assert(_bufferDots, ERROR_00029);
-		
+		if (!_bufferDots)
+		{
+			dnd_assert(L"DND: GfxSimple: dot顶点缓存已经被释放！");
+		}
 		_bufferDots->Release();
 		_bufferDots = NULL;
 	}
@@ -331,8 +351,11 @@ namespace DND
 		desc_line.StructureByteStride = 0;
 		desc_line.Usage = D3D11_USAGE_DYNAMIC;
 
-		dnd_assert(!FAILED(directx->_device->CreateBuffer(&desc_line, NULL, &_bufferLines)),
-			ERROR_00028);
+		
+		if (FAILED(directx->_device->CreateBuffer(&desc_line, NULL, &_bufferLines)))
+		{
+			dnd_assert(L"DND: GfxSimple: 创建line顶点缓存失败！");
+		}
 	}
 
 	void GfxSimple::_render()
@@ -425,12 +448,14 @@ namespace DND
 		D3DX11_PASS_DESC pass_desc;
 		_pass->GetDesc(&pass_desc);
 
-		dnd_assert(!FAILED(directx->_device->CreateInputLayout(
+		if (FAILED(directx->_device->CreateInputLayout(
 			layout, len,
 			pass_desc.pIAInputSignature,
 			pass_desc.IAInputSignatureSize,
-			&_inputLayout)),
-			ERROR_00033);
+			&_inputLayout)))
+		{
+			dnd_assert(L"DND: GfxSimple: 创建输入布局失败！");
+		}
 	}
 
 	void GfxSimple::_create_shader()
@@ -461,7 +486,7 @@ namespace DND
 			{
 				if (error_message)
 					debug_err(String((char*)error_message->GetBufferPointer()));
-				dnd_assert(0, ERROR_00031);
+				dnd_assert(L"DND: GfxSimple: 编译Shader失败！");
 			}
 		}
 		else
@@ -470,7 +495,7 @@ namespace DND
 			LPCSTR buffer = (LPCSTR)sys->_get_file_form_zip(STRING_PATH_SHADER_SIMPLE, size);
 			if (size == 0)
 			{
-				dnd_assert(0, ERROR_00031);
+				dnd_assert(L"DND: GfxSimple: 编译Shader失败！");
 				return;
 			}
 			
@@ -483,7 +508,7 @@ namespace DND
 			{
 				if (error_message)
 					sys->MessageBox(String((char*)error_message->GetBufferPointer()));
-				dnd_assert(0, ERROR_00031);
+				dnd_assert(L"DND: GfxSimple: 编译Shader失败！");
 				return;
 			}
 			delete buffer;
@@ -491,11 +516,13 @@ namespace DND
 
 		//D3D11CreateEffectFromMemory()
 
-		dnd_assert (!FAILED(D3DX11CreateEffectFromMemory(
+		if (FAILED(D3DX11CreateEffectFromMemory(
 			compiled_shader->GetBufferPointer(),
 			compiled_shader->GetBufferSize(),
-			0, directx->_device, &_effect)),
-				ERROR_00032);
+			0, directx->_device, &_effect)))
+		{
+			dnd_assert(L"DND: GfxSimple: 创建Effect失败！");
+		}
 
 		if (compiled_shader)
 			compiled_shader->Release();
@@ -503,15 +530,18 @@ namespace DND
 			error_message->Release();
 
 		_technique = _effect->GetTechniqueByName("main11");
-		dnd_assert(_technique, ERROR_00034);
+		if(!_technique)
+			dnd_assert(L"DND: GfxSimple: 获取main11失败！");
 		
 		_pass = _technique->GetPassByName("p0");
-		dnd_assert(_pass, ERROR_00035);
+		if(!_pass)
+			dnd_assert(L"DND: GfxSimple: 获取p0失败！");
 		
 
 		ID3DX11EffectVariable* variable = _effect->GetVariableByName("wvp");
 		_wvpVariable = variable->AsMatrix();
-		dnd_assert(_wvpVariable->IsValid(), ERROR_00036);
+		if(!_wvpVariable->IsValid())
+			dnd_assert(L"DND: GfxSimple: 获取wvp失败！");
 
 		//一开始就设置好wvp
 		_reset_wvp();
@@ -583,13 +613,15 @@ namespace DND
 
 	void DirectX::_init_dxgi()
 	{
-		dnd_assert(!FAILED(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&_factory)),
-			ERROR_00012);
+		if (FAILED(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&_factory)))
+			dnd_assert(L"DND: DirectX: 创建DXGI接口失败！");
 		//////////////////////取得默认显卡///////////////////////////////////
-		dnd_assert(_factory->EnumAdapters(0, &_adapter) != DXGI_ERROR_NOT_FOUND, ERROR_00013);
+		if(_factory->EnumAdapters(0, &_adapter) == DXGI_ERROR_NOT_FOUND)
+			dnd_assert(L"DND: DirectX: 获取默认显卡失败！");
 	
 		/////////////////////取得默认显示器//////////////////////////////////////////
-		dnd_assert(_adapter->EnumOutputs(0, &_output) != DXGI_ERROR_NOT_FOUND, ERROR_00014);
+		if (_adapter->EnumOutputs(0, &_output) == DXGI_ERROR_NOT_FOUND)
+			dnd_assert(L"DND: DirectX: 获取默认显示设备失败！");
 
 		////////////////////获取显示器支持的全屏显示模式//////////////////////////
 		_displayModes = 0;
@@ -719,7 +751,7 @@ namespace DND
 		}
 		if (FAILED(hr))
 		{
-			dnd_assert(0, String::Format(256, L"DND: DirectX创建Device失败: %x", hr).GetWcs());
+			dnd_assert(String::Format(256, L"DND: DirectX创建Device失败: %x", hr).GetWcs());
 			return;
 		}
 		
@@ -754,9 +786,8 @@ namespace DND
 			//DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 		
-
-		dnd_assert(!FAILED(_factory->CreateSwapChain(_device, &_swapChainDesc, &_swapChain)),
-			ERROR_00016);
+		if (FAILED(_factory->CreateSwapChain(_device, &_swapChainDesc, &_swapChain)))
+			dnd_assert(L"DND: DirectX: 创建交换链失败！");
 		
 		_factory->MakeWindowAssociation(sys->_hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
@@ -814,7 +845,8 @@ namespace DND
 
 	void DirectX::_init_render_target_view()
 	{
-		dnd_assert(!_mainRenderTargetView, ERROR_00017);
+		if (_mainRenderTargetView)
+			dnd_assert(L"DND: DirectX: 不能重复创建主显示表面！");
 
 		//创建显示表面
 		ID3D11Texture2D *back_buffer;
@@ -825,13 +857,13 @@ namespace DND
 		hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&back_buffer);//, ERROR_00019)
 		if (FAILED(hr))
 		{
-			debug_err(String::Format(256, L"%ws: %x", ERROR_00019, hr));
+			dnd_assert(String::Format(256, L"DND: DirectX: 获取显示表面纹理失败: %x", hr).GetWcs());
 			return;
 		}
 		
+		if(FAILED(_device->CreateRenderTargetView(back_buffer, NULL, &_mainRenderTargetView)))
+			dnd_assert(L"DND: DirectX: 创建主显示表面失败！");
 
-		dnd_assert(!FAILED(_device->CreateRenderTargetView(back_buffer, NULL, &_mainRenderTargetView)),
-		ERROR_00020);
 		
 		
 
@@ -840,7 +872,8 @@ namespace DND
 
 	void DirectX::_release_render_target_view()
 	{
-		dnd_assert(_mainRenderTargetView, ERROR_00018);
+		if (!_mainRenderTargetView)
+			dnd_assert(L"DND: DirectX: 删除主显示表面失败！");
 	
 
 		_mainRenderTargetView->Release();
@@ -852,7 +885,8 @@ namespace DND
 
 	void DirectX::_release_depth_stencil_view()
 	{
-		dnd_assert(_depthStencilView, ERROR_00021);
+		if(!_depthStencilView)
+			dnd_assert(L"DND: DirectX: 删除深度模板缓存失败！");
 
 		
 		_depthStencilView->Release();
@@ -878,8 +912,9 @@ namespace DND
 		desc.Usage = D3D11_USAGE_DEFAULT;
 
 		ID3D11Texture2D* depth_stencil_buffer;
-		dnd_assert(!FAILED(_device->CreateTexture2D(&desc, 0, &depth_stencil_buffer)),
-			ERROR_00025);
+
+		if(FAILED(_device->CreateTexture2D(&desc, 0, &depth_stencil_buffer)))
+			dnd_assert(L"DND: DirectX: 创建深度模板纹理失败！");
 
 
 
@@ -889,15 +924,16 @@ namespace DND
 		desc2.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		desc2.Texture2D.MipSlice = 0;
 
-		dnd_assert(!FAILED(_device->CreateDepthStencilView(depth_stencil_buffer, &desc2, &p)),
-			ERROR_00026);
+		if(FAILED(_device->CreateDepthStencilView(depth_stencil_buffer, &desc2, &p)))
+			dnd_assert(L"DND: DirectX: 创建深度模板视图失败！");
 
 		depth_stencil_buffer->Release();
 	}
 
 	void DirectX::_release_depth_stencil_view_rrt(ID3D11DepthStencilView*& p)
 	{
-		dnd_assert(p, ERROR_00021);
+		if(!p)
+			dnd_assert(L"DND: DirectX: 释放深度模板视图失败rtt！");
 
 
 		p->Release();
@@ -914,7 +950,7 @@ namespace DND
 			{
 				hr = _device->GetDeviceRemovedReason();
 			}
-			dnd_assert(false, String::Format(256, L"DND: DirectX::_present: %x", hr).GetWcs());
+			dnd_assert(String::Format(256, L"DND: DirectX::_present: %x", hr).GetWcs());
 		}
 		debug_line(L"Test: 016");
 		/*if (_sizeChange)
@@ -972,8 +1008,8 @@ namespace DND
 		init_data.SysMemPitch = 0;
 		init_data.SysMemSlicePitch = 0;
 
-		dnd_assert(!FAILED(_device->CreateBuffer(&desc_index, &init_data, &_indexBuffer)),
-			ERROR_00022);
+		if (FAILED(_device->CreateBuffer(&desc_index, &init_data, &_indexBuffer)))
+			dnd_assert(L"DND: DirectX: 创建索引缓存失败！");
 		
 	}
 
@@ -994,11 +1030,8 @@ namespace DND
 		desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 		
-
-		dnd_assert(!FAILED(_device->CreateBlendState(&desc, &_blendState)),
-			ERROR_00023);
-		
-		
+		if(FAILED(_device->CreateBlendState(&desc, &_blendState)))
+			dnd_assert(L"DND: DirectX: 创建混合状态失败！");
 	}
 
 	void DirectX::_init_depth_stencil_state()
@@ -1028,8 +1061,8 @@ namespace DND
 		desc.StencilReadMask = 0xff;
 		desc.StencilWriteMask = 0xff;
 
-		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState)),
-			ERROR_00024);
+		if(FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState)))
+			dnd_assert(L"DND: DirectX: 创建深度模板状态失败！");
 		
 
 		////用于阴影
@@ -1055,8 +1088,8 @@ namespace DND
 		//desc.StencilReadMask = 0xff;
 		//desc.StencilWriteMask = 0xff;
 		
-		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState2)),
-			ERROR_00024);
+		if (FAILED(_device->CreateDepthStencilState(&desc, &_depthStencilState2)))
+			dnd_assert(L"DND: DirectX: 创建深度模板状态2失败！");
 		
 	}
 
@@ -1087,8 +1120,8 @@ namespace DND
 		desc.StencilReadMask = 0xff;
 		desc.StencilWriteMask = 0xff;
 
-		dnd_assert(!FAILED(_device->CreateDepthStencilState(&desc, &p)),
-			ERROR_00024);
+		if(FAILED(_device->CreateDepthStencilState(&desc, &p)))
+			dnd_assert(L"DND: DirectX: 创建深度模板状态rtt失败！");
 	}
 
 	void DirectX::_init_rtt()
@@ -1112,7 +1145,7 @@ namespace DND
 
 		if (FAILED(_device->CreateTexture2D(&textureDesc, NULL, &_rtt.mRenderTargetTexture)))
 		{
-			dnd_assert(0, L"DND: rtt 1");
+			dnd_assert(L"DND: rtt 1");
 		}
 		
 
@@ -1124,7 +1157,7 @@ namespace DND
 		renderTargetViewDesc.Texture2D.MipSlice = 0;
 		if (FAILED(_device->CreateRenderTargetView(_rtt.mRenderTargetTexture, &renderTargetViewDesc, &_rtt.mRenderTargetView)))
 		{
-			dnd_assert(0, L"DND: rtt 2");
+			dnd_assert(L"DND: rtt 2");
 		}
 		
 			
@@ -1137,7 +1170,7 @@ namespace DND
 
 		if (FAILED(_device->CreateShaderResourceView(_rtt.mRenderTargetTexture, &shaderResourceViewDesc, &_rtt.mShaderResourceView)))
 		{
-			dnd_assert(0, L"DND: rtt 3");
+			dnd_assert(L"DND: rtt 3");
 		}
 		
 
@@ -1191,8 +1224,8 @@ namespace DND
 		data.SysMemPitch = 0;
 		data.SysMemSlicePitch = 0;
 
-		dnd_assert(!FAILED(_device->CreateBuffer(&desc, &data, &_rtt._bufferVertex))
-			, ERROR_00044);
+		if(FAILED(_device->CreateBuffer(&desc, &data, &_rtt._bufferVertex)))
+			dnd_assert(L"DND: DirectX: 创建顶点缓存失败rtt！");
 
 		//
 		_init_depth_stencil_state_rtt(_rtt.mDepthStencilState);
@@ -1247,8 +1280,8 @@ namespace DND
 		desc.Usage = D3D11_USAGE_DEFAULT;
 
 		ID3D11Texture2D* depth_stencil_buffer;
-		dnd_assert(!FAILED(_device->CreateTexture2D(&desc, 0, &depth_stencil_buffer)),
-			ERROR_00025);
+		if(FAILED(_device->CreateTexture2D(&desc, 0, &depth_stencil_buffer)))
+			dnd_assert(L"DND: DirectX: 创建深度模板纹理失败！");
 	
 		
 
@@ -1258,8 +1291,8 @@ namespace DND
 		desc2.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 		desc2.Texture2D.MipSlice = 0;
 
-		dnd_assert(!FAILED(_device->CreateDepthStencilView(depth_stencil_buffer, &desc2, &_depthStencilView)),
-			ERROR_00026);
+		if(FAILED(_device->CreateDepthStencilView(depth_stencil_buffer, &desc2, &_depthStencilView)))
+			dnd_assert(L"DND: DirectX: 创建深度模板视图失败！");
 		
 		depth_stencil_buffer->Release();
 
@@ -1326,7 +1359,7 @@ namespace DND
 			);
 		if (FAILED(hr))
 		{
-			dnd_assert(0, String::Format(256, L"DND: ResizeBuffers失败: %x", hr).GetWcs());
+			dnd_assert(String::Format(256, L"DND: ResizeBuffers失败: %x", hr).GetWcs());
 			return;
 		}
 

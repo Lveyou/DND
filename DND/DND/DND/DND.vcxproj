@@ -26,7 +26,6 @@
     <ClInclude Include="include\DNDCoor.h" />
     <ClInclude Include="include\DNDDebug.h" />
     <ClInclude Include="include\DNDDLL.h" />
-    <ClInclude Include="include\DNDError.h" />
     <ClInclude Include="include\DNDFile.h" />
     <ClInclude Include="include\DNDGame.h" />
     <ClInclude Include="include\DNDGameServer.h" />
