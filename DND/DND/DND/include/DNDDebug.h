@@ -156,8 +156,11 @@ namespace DND
 			dnd_assert(_debugger, ERROR_00008);
 			return dynamic_cast<T*>(_debugger);
 		}
+
+		static int _nCmdShow;//WinMain第四个参数
 	private:
 		static Debugger* _debugger;
+		
 	};
 
 

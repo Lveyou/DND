@@ -426,7 +426,7 @@ namespace DND
 			sys->_foucs = (LOWORD(wParam) != WA_INACTIVE);
 			{		
 				//全屏模式 处理
-				if (dx->_full)
+				if (dx && dx->_full)
 				{
 					if (sys->_foucs)
 					{

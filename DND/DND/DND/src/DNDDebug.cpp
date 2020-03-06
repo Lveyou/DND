@@ -57,6 +57,9 @@ namespace DND
 
 
 	Debugger* Debug::_debugger = NULL;
+
+	int Debug::_nCmdShow = 0;
+
 	//do nothing
 	void DebuggerEmpty::WriteLine(const String& str, int level)
 	{

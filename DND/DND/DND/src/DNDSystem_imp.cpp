@@ -50,20 +50,26 @@ namespace DND
 			dnd_assert(L"DND: System: 注册窗口类失败！");
 		
 		//创建窗口
-		_hWnd = CreateWindow(
-			L"DNDWindowClass",
-			L"DNDFirstWindow",
-			WS_POPUP,
-			-100,
-			-100,
-			100,
-			100,
-			0 /*parent hwnd*/, 0 /* menu */, _hInstance, 0 /*extra*/);
+		_hWnd = CreateWindowEx(
+			0,                              // Optional window styles.
+			L"DNDWindowClass",                     // Window class
+			L"DNDFirstWindow",    // Window text
+			WS_POPUP,            // Window style
+
+											// Size and position
+			-100, -100, 64, 64,
+
+			NULL,       // Parent window    
+			NULL,       // Menu
+			_hInstance,  // Instance handle
+			NULL        // Additional application data
+			);
+
 
 		if (!_hWnd)
 			dnd_assert(L"DND: System: 创建窗口失败！");
 
-		ShowWindow(_hWnd, SW_HIDE);
+		ShowWindow(_hWnd, Debug::_nCmdShow);
 		//UpdateWindow(_hWnd);
 		//SetFocus(_hWnd);
 

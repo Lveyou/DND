@@ -7,9 +7,9 @@
 using namespace DND;
 DebuggerEmpty debugger;
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
-	
+	Debug::_nCmdShow = nCmdShow;
 	Debug::SetDebugger(&debugger);
 	//set locale
 	locale::global((locale("")));
