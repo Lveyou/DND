@@ -704,7 +704,7 @@ namespace DND
 			debug_msg(String(L"DND: 显卡功能级别: D3D_11_X"));
 		}
 
-		UINT create_devive_flags = D3D11_CREATE_DEVICE_SINGLETHREADED;//
+		UINT create_devive_flags = 0;//D3D11_CREATE_DEVICE_SINGLETHREADED;//
 			//| D3D11_CREATE_DEVICE_PREVENT_INTERNAL_THREADING_OPTIMIZATIONS
 			//| D3D11_CREATE_DEVICE_DEBUG;// 0;
 #if defined(DEBUG) || defined(_DEBUG)

@@ -234,6 +234,13 @@ namespace DND
 			
 		}while(!_bEndLoop);
 
+		//告诉子线程需要结束
+		System_imp* p_sys = ((System_imp*)sys);
+		p_sys->_bEnd = true;
+		while (p_sys->_threadCount)
+		{
+			Sleep(500);
+		}
 	}
 
 	void Game::Release()

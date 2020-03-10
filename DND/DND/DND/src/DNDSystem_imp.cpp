@@ -68,11 +68,14 @@ namespace DND
 		if (!_hWnd)
 			dnd_assert(L"DND: System: 创建窗口失败！");
 
-		ShowWindow(_hWnd, Debug::_nCmdShow);
-		ShowWindow(_hWnd, SW_HIDE);
+		/*ShowWindow(_hWnd, Debug::_nCmdShow);
+		ShowWindow(_hWnd, SW_HIDE);*/
 		//UpdateWindow(_hWnd);
 		//SetFocus(_hWnd);
 
+		ShowWindow(_hWnd, Debug::_nCmdShow);
+		ShowWindow(_hWnd, SW_HIDE);
+		UpdateWindow(_hWnd);
 	}
 
 	void* System_imp::_get_file_form_zip(const String& path, unsigned& size)
@@ -173,8 +176,8 @@ namespace DND
 		_exePath.CutTail(pos);//不去除/
 		_exeName.CutHead(pos);
 
-		
-		
+		_bEnd = false;
+		_threadCount = 0;
 	}
 
 	void System_imp::MessageBox(const String& text)
@@ -651,6 +654,11 @@ namespace DND
 		ShowCursor(show);
 	}
 
+
+	bool System_imp::IsWaitChildThreadEnd()
+	{
+		return _bEnd;
+	}
 
 	System_imp::~System_imp()
 	{

@@ -14,6 +14,8 @@
 #include "DNDSystem.h"
 #include "DNDDirectX.h"
 #include <windows.h>
+#include <atomic> 
+using namespace std;
 
 namespace DND
 {
@@ -78,13 +80,16 @@ namespace DND
 		
 
 		virtual void SetShowCursor(bool show) override;
-
+		virtual bool IsWaitChildThreadEnd() override;
 		
 		//bool _needApplyWindow;
 		String _windowTitle;
 		DWORD _windowStyle;
 		Size _windowSize;
 		Point _windowPoint;
+
+
+		
 	private:
 		System_imp();
 		~System_imp();
@@ -93,6 +98,8 @@ namespace DND
 		HWND _hWnd;
 		HINSTANCE _hInstance;
 		bool _foucs;
+		
+		
 
 		String _exePath;
 		String _exeName;
@@ -106,6 +113,10 @@ namespace DND
 
 	private:
 		Font* _font;
+
+	public:
+		atomic_bool _bEnd;//是否结束（使子线程结束）
+		atomic_int _threadCount;
 	};
 
 	

@@ -43,7 +43,13 @@ namespace DND
 		{
 			return name == b.name;
 		}
+
+		bool operator==(const String& str)
+		{
+			return name == str;
+		}
 	};
+	
 	//×Ö·û±í ½Úµã
 	class FontCharMapNode
 	{

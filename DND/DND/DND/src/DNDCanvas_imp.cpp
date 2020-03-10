@@ -295,6 +295,14 @@ namespace DND
 
 	Text* Canvas_imp::CreateText(const String& name, unsigned font_size)
 	{
+		System_imp* sys = (System_imp*)Game::Get()->sys;
+		auto& iter = find(sys->_font->faces.begin(), sys->_font->faces.end(), name);
+		if (iter == sys->_font->faces.end())
+		{
+			dnd_assert(L"DND: Canvas::CreateText: 字体文件未加载！");
+			return NULL;
+		}
+
 		Text_imp* text = new Text_imp(name, font_size);
 		text->m_canvas = this;
 		text->m_coor = Coor::Create(_coor);

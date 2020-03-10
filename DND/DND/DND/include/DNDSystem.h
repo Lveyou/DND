@@ -103,7 +103,8 @@ namespace DND
 
 		virtual void SetShowCursor(bool show) = 0;
 		
-		
+		//是否需要结束子线程
+		virtual bool IsWaitChildThreadEnd() = 0;
 	};
 }
 
