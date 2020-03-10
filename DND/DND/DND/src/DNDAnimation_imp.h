@@ -12,6 +12,8 @@
 
 #include "DNDDLL.h"
 #include "DNDAnimation.h"
+#include <vector>
+using namespace std;
 
 namespace DND
 {

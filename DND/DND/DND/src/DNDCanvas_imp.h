@@ -4,10 +4,6 @@
 #include "DNDSprite.h"
 
 #include <d3d11.h>
-#include <list>
-#include <map>
-#include <queue>
-using namespace std;
 
 namespace DND
 {

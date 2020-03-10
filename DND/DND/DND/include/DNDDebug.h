@@ -13,7 +13,10 @@
 #include "DNDDLL.h"
 #include "DNDString.h"
 #include <windows.h>
+#include <iostream>
 #include "DNDMutex.h"
+
+using namespace std;
 
 #ifdef DND_NO_DEBUG
 
@@ -50,11 +53,12 @@
 #define debug_line_canvas(str)//\
 	//Debug::WriteLine(str, DebugLevel::ERR)
 
-#define debug_line_canvas2(str)\
-	Debug::WriteLine(str, DebugLevel::ERR)
+#define debug_line_canvas2(str)//\
+	//Debug::WriteLine(str, DebugLevel::ERR)
+#define debug_line_frame(str)//\
+	//Debug::WriteLine(str, DebugLevel::ERR)
 
 #endif // DEBUG
-
 
 
 
@@ -101,6 +105,7 @@ namespace DND
 
 	};
 	//debugger console
+	
 	
 	class DLL_API DebuggerConsole : public Debugger
 	{

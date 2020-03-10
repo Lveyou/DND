@@ -71,6 +71,7 @@
     <ClInclude Include="src\DNDFile_imp.h" />
     <ClInclude Include="src\DNDFont.h" />
     <ClInclude Include="src\DNDInput_imp.h" />
+    <ClInclude Include="src\DNDMath_imp.h" />
     <ClInclude Include="src\DNDNet_imp.h" />
     <ClInclude Include="src\DNDRigidBody_imp.h" />
     <ClInclude Include="src\DNDSound_imp.h" />
@@ -280,6 +281,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <DisableSpecificWarnings>4244;4800</DisableSpecificWarnings>
       <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

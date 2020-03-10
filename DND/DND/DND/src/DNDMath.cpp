@@ -1,5 +1,5 @@
 #include "DNDMath.h"
-
+#include "DNDMath_imp.h"
 
 
 #include <limits>
@@ -44,7 +44,26 @@ namespace DND
 		return !((dot.x < rect.p1.x) || (dot.x > rect.p2.x) || (dot.y < rect.p1.y) || (dot.y > rect.p2.y));
 	}
 
-	bool Math::TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1,const Vector2& p2)
+	template<typename T>
+	T Math::GetTypeEpsilon()
+	{
+		return _pImp->GetTypeEpsilon<T>();
+	}
+
+	template<typename T>
+	T Math::GetTypeMax()
+	{
+		//À¨ºÅ¿ÉÆÁ±Îºê
+		return _pImp->GetTypeMax<T>();
+	}
+
+	template<typename T>
+	T Math::GetTypeMin()
+	{
+		return _pImp->GetTypeMin<T>();
+	}
+
+	bool Math::TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1, const Vector2& p2)
 	{
 		Vector2 pa = p0 - dot;
 		Vector2 pb = p1 - dot;
@@ -97,6 +116,23 @@ namespace DND
 			p.y = -t + int(wh.w) - 1;
 		}
 	}
+
+	void Math::SetSeed(unsigned int s)
+	{
+		_pImp->SetSeed(s);
+	}
+
+	unsigned int Math::GetSeed()
+	{
+		return _pImp->GetSeed();
+	}
+
+	/*size_t Math::GetRandWeight(discrete_distribution<size_t>::param_type weight)
+	{
+		return _pImp->GetRandWeight(weight);
+	}*/
+
+	Math_imp* Math::_pImp = new Math_imp;
 
 	/*void Math::RotateArray(Vector2& p, int r, Size wh)
 	{
@@ -152,6 +188,29 @@ namespace DND
 			return false;
 	}
 
+	template <typename T>
+	T Math::GetRandInteger(T min, T max)
+	{
+		return _pImp->GetRandInteger(min, max);
+	}
+
+	template <typename T>
+	T Math::GetRandReal(T min, T max)
+	{
+		return _pImp->GetRandReal(min, max);
+	}
+
+	template <typename T>
+	T Math::GetRandNormal(T mu, T sigma)
+	{
+		return _pImp->GetRandNormal(weight);
+	}
+
+	UINT32 Math::GetRandWeight(UINT32* arr_weight, UINT32 arr_size)
+	{
+		return _pImp->GetRandWeight(arr_weight, arr_size);
+	}
+
 	bool DND::Math::TestCollisionDotInRect(const Vector2& dot, const Vector4& rect)
 	{
 		return !((dot.a < rect.a) || (dot.a > rect.c) || (dot.b < rect.b) || (dot.b > rect.d));
@@ -171,9 +230,6 @@ namespace DND
 		//return 1.0f / sqrtf(x);
 	}
 	
-	//Ëæ»úÊý
-	unsigned int Math::g_seed = 0;
-	default_random_engine Math::g_random;
 
 
 	void DND::Math::SwapInt(int& a, int& b)

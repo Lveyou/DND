@@ -16,6 +16,7 @@
 
 #include <map>
 #include <list>
+#include <vector>
 using namespace std;
 
 #pragma warning(disable:4819)

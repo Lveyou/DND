@@ -15,11 +15,14 @@
 
 #include "DNDDLL.h"
 #include "DNDUser.h"
-
-#include <random>
+#include <cmath>
+#include <cfloat>
 
 namespace DND
 {
+	
+
+	class Math_imp;
 	class DLL_API Math
 	{
 	public:
@@ -29,7 +32,7 @@ namespace DND
 		//请使用 GetTypeEpsilon获取差值
 		static inline bool IsFloatEqual(float a, float b)
 		{
-			return abs(a - b) < 1e-6;
+			return fabsf(a - b) < 1e-6;
 		}
 		//相交
 		static bool TestCollisionRectAndRect(const Rect& r0, const Rect& r1);
@@ -66,23 +69,13 @@ namespace DND
 			const Vector3& v0, const Vector3& v1, const Vector3& v2);//射线与三角形相交(不返回参数)
 		//获取类型最小差值
 		template<typename T>
-		static T GetTypeEpsilon()
-		{
-			return numeric_limits<T>::epsilon();
-		}
+		static T GetTypeEpsilon();
 		//获取类型最小值
 		template<typename T>
-		static T GetTypeMax()
-		{
-			//括号可屏蔽宏
-			return (std::numeric_limits<T>::max)();
-		}
+		static T GetTypeMax();
 		//获取类型最大值
 		template<typename T>
-		static T GetTypeMin()
-		{
-			return (std::numeric_limits<T>::min)();
-		}
+		static T GetTypeMin();
 		static bool TestDotInTriangle(const Vector2& dot, const Vector2& p0, const Vector2& p1, const Vector2& p2);
 
 		//修改为从 x轴开始，编号为0-7，顺时针
@@ -153,19 +146,9 @@ namespace DND
 
 		//Random
 		//设置种子 0代表随机
-		static void SetSeed(unsigned int s)
-		{
-			if (s == 0)
-			{
-				random_device rd;
-				g_random.seed(g_seed = rd());
-			}
-			else
-				g_random.seed(g_seed = s);
-			
-		}
+		static void SetSeed(unsigned int s);
 		//返回种子值
-		static unsigned int GetSeed() { return g_seed; }
+		static unsigned int GetSeed();
 
 		//返回[min,max]区间的随机int
 		static int GetRandInt(int min, int max)
@@ -181,50 +164,28 @@ namespace DND
 
 		//返回[min,max]区间的 整型随机值
 		template <typename T>
-		static T GetRandInteger(T min, T max)
-		{
-			static uniform_int_distribution<T> dist_int;
-			//设定区间
-			dist_int.param(uniform_int_distribution<T>::param_type{ min, max });
-			return dist_int(g_random);
-		}
+		static T GetRandInteger(T min, T max);
 
 		//返回[min,max)区间的 实数随机值
 		template <typename T>
-		static T GetRandReal(T min, T max)
-		{
-			static uniform_real_distribution<T> dist_real;
-			//设定区间
-			dist_real.param(uniform_real_distribution<T>::param_type{ min, max });
-			return dist_real(g_random);
-		}
+		static T GetRandReal(T min, T max);
 
 		//返回 期望mu，标准差sigma 的正态分布随机值
 		template <typename T>
-		static T GetRandNormal(T mu, T sigma)
-		{
-			static normal_distribution<T> dist_normal;
-			//设定期望与标准差
-			dist_normal.param(normal_distribution<T>::param_type{ mu, sigma });
-			return dist_normal(g_random);
-		}
+		static T GetRandNormal(T mu, T sigma);
 
 		//返回 权值的 随机索引（均为size_t类型）
-		static size_t GetRandWeight(discrete_distribution<size_t>::param_type weight)
-		{
-			static discrete_distribution<size_t> dist_weight;
-			dist_weight.param(weight);
-
-			return dist_weight(g_random);
-		}
+		static UINT32 GetRandWeight(UINT32* arr_weight, UINT32 arr_size);
 
 	private:
-		//种子值
-		static unsigned int g_seed;
-		//随机数序列生成器
-		static default_random_engine g_random;
-	
+		static Math_imp* _pImp;
 	};
+
+	//模板实例化
+	template float DLL_API Math::GetTypeEpsilon<float>();
+	template int DLL_API Math::GetRandInteger<int>(int min, int max);
+	template unsigned DLL_API Math::GetRandInteger<unsigned>(unsigned min, unsigned max);
+	template float DLL_API Math::GetRandReal<float>(float min, float max);
 }
 
 #endif

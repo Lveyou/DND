@@ -11,15 +11,29 @@
 #ifndef _DND_STRING_H_
 #define _DND_STRING_H_
 
-#pragma warning(disable:4251)
+//#pragma warning(disable:4251)
 
 #include "DNDDLL.h"
 #include "DNDTypedef.h"
+
 #include <vector>
-using namespace std;
+
+//导出相关类
+//顺序有影响、class或struct也必须一致
+template class DLL_API std::allocator<wchar_t>;
+template struct DLL_API std::_Vec_base_types<wchar_t, std::allocator<wchar_t>>;
+template struct DLL_API std::_Wrap_alloc<std::allocator<wchar_t>>;
+template struct DLL_API std::_Simple_types<wchar_t>;
+template class DLL_API std::_Vector_val<std::_Simple_types<wchar_t>>;
+template class DLL_API std::_Compressed_pair<std::_Wrap_alloc<std::allocator<wchar_t>>, std::_Vector_val<std::_Simple_types<wchar_t>>, true>;
+template class DLL_API std::_Vector_alloc<std::_Vec_base_types<wchar_t, std::allocator<wchar_t>>>;
+template class DLL_API std::vector<wchar_t, std::allocator<wchar_t>>;
 
 namespace DND
 {
+
+
+	
 	class DLL_API String
 	{
 	public:
@@ -34,11 +48,7 @@ namespace DND
 		String(int b);//数字构造
 		String(float b);//数字构造
 		String(WCHAR ch, UINT32 len);//填充len 个 ch
-		String(vector<WCHAR> vec, bool add_end = false) : _data(vec) 
-		{
-			if (add_end)
-				_data.push_back(0);
-		}//strvector构造
+		String(std::vector<wchar_t>* vec, bool add_end = false);//strvector构造
 		String& operator=(const String& b);//=号重载
 
 		String& String::operator+=(const String& b);
@@ -72,33 +82,8 @@ namespace DND
 		void CutHead(UINT32 i);//去掉i位置前的 包括i
 		void CutHeadStr(const String& str);//去除头部字符串
 		
-		void String::CutHeadChar(bool(*func)(WCHAR ch)) //去掉尾部的指定字符
-		{
-			auto iter = _data.begin();
-			for (; iter != _data.end() - 1; ++iter)
-			{
-				if (!func(*iter))
-				{
-					break;
-				}
-			}
-
-			_data.erase(_data.begin(), iter);
-		}
-
-		void String::CutTailChar(bool (*func)(WCHAR ch)) //去掉尾部的指定字符
-		{
-			auto iter = _data.rbegin() + 1;
-			for (; iter != _data.rend(); ++iter)
-			{
-				if (!func(*iter))
-				{
-					break;
-				}
-			}
-
-			_data.erase(iter.base(), _data.end() - 1);
-		}
+		void CutHeadChar(bool(*func)(WCHAR ch)); //去掉尾部的指定字符
+		void CutTailChar(bool(*func)(WCHAR ch));//去掉尾部的指定字符
 		//==================修改==================
 		void DeleteChar(UINT32 i);//i位置删除一个字符
 		void InsertChar(UINT32 i, WCHAR ch);//i位置前插入一个字符,第一个字符位置为0
@@ -112,7 +97,8 @@ namespace DND
 		static String Format(UINT32 max_size, const WCHAR* format, ...);//max size 不包含结束符
 
 	private:
-		vector<WCHAR> _data;
+		std::vector<wchar_t> _data;
+
 		void _copy(const WCHAR* wcs);
 	};
 

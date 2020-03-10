@@ -66,7 +66,7 @@ namespace DND
 		{
 			NetMsg ret;
 			ret._type = GetClassType<T>();
-			ret._data = (void*)p;
+			ret.((vector<WCHAR>*)_data) = (void*)p;
 			ret._size = sizeof(T);
 			return ret;
 		}
@@ -78,7 +78,7 @@ namespace DND
 		T* UnBuild()
 		{
 			dnd_assert(_type == GetClassType<T>(), ERROR_00050);
-			return (T*)_data;
+			return (T*)((vector<WCHAR>*)_data);
 		}
 	private:
 		UINT32 _type;//4 

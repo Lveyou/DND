@@ -244,6 +244,9 @@
     <ClInclude Include="include\DNDGUIShadeBox.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="src\DNDMath_imp.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DNDMain.cpp">

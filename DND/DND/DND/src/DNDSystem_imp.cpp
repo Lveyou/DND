@@ -11,6 +11,8 @@
 #include <fstream>
 #include<Shlobj.h>
 
+#include <vector>
+using namespace std;
 
 #pragma comment(lib,"Shell32.lib")
 
@@ -84,7 +86,7 @@ namespace DND
 
 		path.GetMultiByteStr(path_name, DEAULT_PATH_MAX_SIZE);
 
-		for (auto& iter : _zips)
+		for (auto& iter : (*(vector<ZipFile*>*)_zips))
 		{
 			ZipFile* zip_file = iter;
 			zip = unzOpen(zip_file->name);
@@ -373,9 +375,11 @@ namespace DND
 
 	String System_imp::GetChooseFile(
 		bool save,
-		vector<FileNameType>* file_type,
+		FileNameType* file_type,
+		UINT32 file_type_size,
 		int index,
-		vector<String>* ret_mutil)
+		String* ret_mutil,
+		UINT32 ret_mutil_size)
 	{
 		if (ret_mutil)
 		{
@@ -402,15 +406,13 @@ namespace DND
 			UINT type_length = 1;
 			if (file_type)
 			{
-				type_length = file_type->size();
+				type_length = file_type_size;
 				fileType = new COMDLG_FILTERSPEC[type_length];
 
-				UINT32 i = 0;
-				for (auto& iter : *file_type)
+				for (UINT32 i = 0; i != file_type_size; ++i)
 				{
-					fileType[i].pszName = iter.name;
-					fileType[i].pszSpec = iter.type;
-					i++;
+					fileType[i].pszName = file_type[i].name;
+					fileType[i].pszSpec = file_type[i].type;
 				}
 			}
 			else
@@ -432,7 +434,9 @@ namespace DND
 			{
 				DWORD dwNumItems = 0; // number of items in multiple selection
 				hr = pSelResultArray->GetCount(&dwNumItems);  // get number of selected items
-				for (DWORD i = 0; i < dwNumItems; i++)
+
+				UINT32 j = 0;
+				for (DWORD i = 0; i < dwNumItems && j < ret_mutil_size; i++)
 				{
 					IShellItem *pSelOneItem = NULL;
 					PWSTR pszFilePath = NULL; // hold file paths of selected items
@@ -440,7 +444,8 @@ namespace DND
 					if (SUCCEEDED(pSelResultArray->GetItemAt(i, &pSelOneItem)))
 					{
 						hr = pSelOneItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
-						ret_mutil->push_back(pszFilePath);
+						
+						ret_mutil[j++] = pszFilePath;
 						if (SUCCEEDED(hr))
 						{
 							CoTaskMemFree(pszFilePath);
@@ -468,15 +473,13 @@ namespace DND
 			UINT type_length = 1;
 			if (file_type)
 			{
-				type_length = file_type->size();
+				type_length = file_type_size;
 				fileType = new COMDLG_FILTERSPEC[type_length];
 				
-				UINT32 i = 0;
-				for (auto& iter : *file_type)
+				for (UINT32 i = 0; i != file_type_size; ++i)
 				{
-					fileType[i].pszName = iter.name;
-					fileType[i].pszSpec = iter.type;
-					i++;
+					fileType[i].pszName = file_type[i].name;
+					fileType[i].pszSpec = file_type[i].type;
 				}
 			}
 			else
@@ -637,7 +640,7 @@ namespace DND
 		strcpy_s(zip_file->name, buffer);
 		passkey.GetMultiByteStr(zip_file->passkey, DEAULT_PATH_MAX_SIZE);
 
-		_zips.push_back(zip_file);
+		((vector<ZipFile*>*)_zips)->push_back(zip_file);
 		unzClose(file);
 
 		return true;

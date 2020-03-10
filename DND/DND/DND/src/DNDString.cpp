@@ -4,8 +4,14 @@
 #include "DNDMath.h"
 #include <algorithm>
 
+
+
+using namespace std;
+
 namespace DND
 {
+	
+
 	String::String() : _data(1, 0)
 	{
 	}
@@ -28,12 +34,12 @@ namespace DND
 
 	String::String(WCHAR wc) : _data(1, wc)
 	{
+
 		_data.push_back(0);
 	}
 
-	String::String(const String& b)
+	String::String(const String& b) : _data(b._data)
 	{
-		_data = b._data;
 	}
 
 	String::String(const int b)
@@ -44,7 +50,7 @@ namespace DND
 		_copy(wcs);
 	}
 
-	String::String(WCHAR ch, UINT32 len) : _data(ch, len)
+	String::String(WCHAR ch, UINT32 len) : _data(len, ch)
 	{
 		_data.push_back(0);
 	}
@@ -57,8 +63,16 @@ namespace DND
 		_copy(wcs);
 	}
 
+	String::String(vector<WCHAR>* vec, bool add_end /*= false*/)
+	{
+		_data = *vec;
+		if (add_end)
+			_data.push_back(0);
+	}
+
 	String& String::operator+=(const String& b)
 	{
+
 		_data.insert(_data.end() - 1, b._data.begin(), b._data.end());
 		_data.pop_back();
 
@@ -124,6 +138,7 @@ namespace DND
 	{
 	}
 
+
 	void String::_copy(const WCHAR* wcs)
 	{
 		UINT32 len = wcslen(wcs) + 1;
@@ -188,6 +203,7 @@ namespace DND
 	{
 		if (N == 0)
 			return -1;
+
 		auto itor_begin = _data.begin();
 		auto itor_find = itor_begin;
 		while (true)
@@ -212,7 +228,7 @@ namespace DND
 
 	String String::GetStr(UINT32 begin, UINT32 end) const
 	{
-		return String(vector<WCHAR>(_data.begin() + begin, _data.begin() + end));
+		return String(&vector<WCHAR>(_data.begin() + begin, _data.begin() + end));
 	}
 
 	void String::Cut(UINT32 begin, UINT32 end)
@@ -282,12 +298,12 @@ namespace DND
 			}
 			else if (_data.end() == iter_find)
 			{
-				strs[i] = vector<WCHAR>(iter_begin, iter_find);
+				strs[i] = String(&vector<WCHAR>(iter_begin, iter_find));
 				return i + 1;
 			}	
 			else
 			{
-				strs[i] = String(vector<WCHAR>(iter_begin, iter_find), true);
+				strs[i] = String(&vector<WCHAR>(iter_begin, iter_find), true);
 				
 				iter_begin = iter_find + 1;
 			}
@@ -315,7 +331,34 @@ namespace DND
 		return ret;
 	}
 
-	
+	void String::CutHeadChar(bool(*func)(WCHAR ch)) //去掉尾部的指定字符
+	{
+		auto iter = _data.begin();
+		for (; iter != _data.end() - 1; ++iter)
+		{
+			if (!func(*iter))
+			{
+				break;
+			}
+		}
+
+		_data.erase(_data.begin(), iter);
+	}
+
+	void String::CutTailChar(bool(*func)(WCHAR ch)) //去掉尾部的指定字符
+	{
+		auto iter = _data.rbegin() + 1;
+		for (; iter != _data.rend(); ++iter)
+		{
+			if (!func(*iter))
+			{
+				break;
+			}
+		}
+
+		_data.erase(iter.base(), _data.end() - 1);
+	}
+
 
 
 }

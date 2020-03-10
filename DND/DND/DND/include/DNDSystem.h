@@ -63,9 +63,11 @@ namespace DND
 		//是否保存模式、 文件类型、 默认选择的文件类型(从1开始)、是否可以多选（多选只能为打开模式）
 		virtual String GetChooseFile(
 			bool save = false,
-			vector<FileNameType>* file_type = NULL,
+			FileNameType* file_type = NULL,
+			UINT32 file_type_size = 0,
 			int index = 1,
-			vector<String>* ret_mutil = NULL) = 0;
+			String* ret_mutil = NULL,
+			UINT32 ret_mutil_size = 0) = 0;
 		//示例如下
 		/*vector<FileNameType> vecs =
 		{

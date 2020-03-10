@@ -57,9 +57,11 @@ namespace DND
 		virtual String GetChooseFolder() override;
 		virtual String GetChooseFile(
 			bool save = false,
-			vector<FileNameType>* file_type = NULL,
+			FileNameType* file_type = NULL,
+			UINT32 file_type_size = 0,
 			int index = 1,
-			vector<String>* ret_mutil = NULL) override;
+			String* ret_mutil = NULL,
+			UINT32 ret_mutil_size = 0) override;
 
 
 		virtual bool GetPathFileFirst(const String& path, String& name, bool& is_path) override;
@@ -99,7 +101,8 @@ namespace DND
 		WIN32_FIND_DATA _findData;
 
 		void* _get_file_form_zip(const String& path, unsigned& size);
-		vector<ZipFile*> _zips;
+		//vector<ZipFile*>
+		void* _zips;
 
 	private:
 		Font* _font;

@@ -5,6 +5,7 @@
 #include "DNDSystem.h"
 #include "DNDDebug.h"
 #include <vector>
+using namespace std;
 
 namespace DND
 {
