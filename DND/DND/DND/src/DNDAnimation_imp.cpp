@@ -29,7 +29,7 @@ namespace DND
 	{
 		for (auto& iter : _listSpr)
 		{
-			delete iter;
+			DELETE_SPRITE(iter);
 		}
 
 		_listSpr.clear();
@@ -255,7 +255,7 @@ namespace DND
 
 		for (auto& iter : _listSpr)
 		{
-			delete iter;
+			DELETE_SPRITE(iter)
 		}
 		_listSpr.clear();
 
@@ -269,7 +269,7 @@ namespace DND
 	{
 		for (auto& iter : _listSpr)
 		{
-			delete iter;
+			DELETE_SPRITE(iter);
 		}
 
 		delete _coor;

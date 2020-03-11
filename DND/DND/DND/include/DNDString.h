@@ -24,6 +24,7 @@ template class DLL_API std::allocator<wchar_t>;
 template struct DLL_API std::_Vec_base_types<wchar_t, std::allocator<wchar_t>>;
 template struct DLL_API std::_Wrap_alloc<std::allocator<wchar_t>>;
 template struct DLL_API std::_Simple_types<wchar_t>;
+struct DLL_API std::_Container_base12;
 template class DLL_API std::_Vector_val<std::_Simple_types<wchar_t>>;
 template class DLL_API std::_Compressed_pair<std::_Wrap_alloc<std::allocator<wchar_t>>, std::_Vector_val<std::_Simple_types<wchar_t>>, true>;
 template class DLL_API std::_Vector_alloc<std::_Vec_base_types<wchar_t, std::allocator<wchar_t>>>;

@@ -1433,10 +1433,16 @@ namespace DND
 
 	void DirectX::_render_canvass()
 	{
-		for (auto iter = _canvass.begin(); iter != _canvass.end(); ++iter)
+		for (auto& iter : _canvass)
 		{
-			Canvas_imp* temp = iter->second;
+			Canvas_imp* temp = iter.second;
 			temp->_render();
+		}
+
+		for (auto& iter2 : _canvass)
+		{
+			Canvas_imp* temp = iter2.second;
+			temp->_delete_spr();
 		}
 	}
 

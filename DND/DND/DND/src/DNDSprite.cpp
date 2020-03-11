@@ -35,7 +35,6 @@ namespace DND
 	}
 	void Sprite::Render()
 	{
-		_show = true;
 		//TODO: vsp
 		((Canvas_imp*)_canvas)->_insert_sprite(this);
 		if (_ui && IsPickup())
@@ -256,16 +255,6 @@ namespace DND
 
 	Sprite::~Sprite()
 	{
-		//debug_info(String::Format(128, L"DND: 释放了一个精灵: %x", this));
-		if (_show)
-		{
-			//dnd_assert(0, ERROR_00051);
-			dnd_assert(L"DND: Sprite: 删除了已绘制的！");
-			/*__asm {
-				int 3
-			}*/
-		}
-		//调用 Delete 删除
 		if (_coor && !_noCoor)
 			delete _coor;
 		if (_rigidBody)
@@ -279,8 +268,8 @@ namespace DND
 		_rigidBody = NULL;
 		_ui = false;
 		_noCoor = false;
-		_show = false;
 		_uvConst = NULL;
+		_bDelete = false;
 	}
 	Sprite* Sprite::Clone(Canvas* canvas /*= NULL*/)
 	{
@@ -328,6 +317,12 @@ namespace DND
 		spr->_uv[3] = _uv[3];
 
 		return spr;
+	}
+
+	void Sprite::Delete()
+	{
+		_bDelete = true;
+		((Canvas_imp*)_canvas)->_spritesDeleted.push_back(this);
 	}
 
 	void Sprite::CreateRigidBody(float density, float friction, float restitution)

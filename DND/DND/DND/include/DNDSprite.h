@@ -8,6 +8,7 @@
 //18-01-04: Canvas不再管理精灵指针，效率更高了 - Lveyou
 //18-01-14: 效率起见，Render之后的精灵不能删除！ - Lveyou
 //18-12-04: 节省内存起见，可以不创建自己的Coor，而是指定一个Coor - Lveyou
+//20-03-11: 由绘制之后删除，精灵内存
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef _DND_SPRITE_H_
@@ -18,6 +19,9 @@
 #include "DNDUser.h"
 #include "DNDColor.h"
 
+#define DELETE_SPRITE(spr)\
+if(spr){spr->Delete();spr = NULL;}
+
 namespace DND
 {
 	class Canvas;
@@ -27,7 +31,7 @@ namespace DND
 	class DLL_API Sprite
 	{
 		friend class Canvas_imp;
-		friend class Text_imp;
+		//friend class Text_imp;
 		friend class RigidBody_imp;
 	public:
 		bool IsPickup();
@@ -75,9 +79,10 @@ namespace DND
 		RigidBody* GetRigidBody();
 
 		Sprite* Clone(Canvas* canvas = NULL);
-		~Sprite();
+		//Canvas绘制所有精灵后 删除
+		void Delete();
 	private:
-
+		~Sprite();
 		Sprite();
 		
 		void _update_rigidbody();
@@ -95,9 +100,7 @@ namespace DND
 		//开启后，会检测是否与鼠标重合
 		bool _ui;
 		bool _noCoor;
-		//调用render后，设为true
-		bool _show;
-
+		bool _bDelete;
 	};
 }
 

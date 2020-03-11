@@ -270,6 +270,7 @@ namespace DND
 		Gfx2D* _gfx2d;
 
 
+
 		//RTT
 		RTT _rtt;
 	private:

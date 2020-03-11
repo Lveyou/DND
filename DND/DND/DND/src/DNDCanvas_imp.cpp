@@ -561,13 +561,21 @@ namespace DND
 			directx->_deviceContext->DrawIndexed(_renderSprNum * 6 / 4, 0, 0);
 			debug_line(L"Test: 043");
 		}
-
-
+		
 	}
 
 	
 
 	
+	//由于不同的画布之间的精灵 有Coor等引用，所以要集中释放
+	void Canvas_imp::_delete_spr()
+	{
+		for (auto& iter939 : _spritesDeleted)
+		{
+			delete iter939;
+		}
+		_spritesDeleted.clear();
+	}
 
 	void DND::Canvas_imp::_update()
 	{
@@ -596,7 +604,7 @@ namespace DND
 		Rect window = Rect(XYWH(Point(),Game::Get()->sys->GetWindowSize()));
 
 		/////////////////////////////////////////////////////////////////////
-		Sprite* spr = NULL;
+		
 		_renderSprNum = 0;
 		Point out;
 
@@ -611,8 +619,9 @@ namespace DND
 		_sprites.sort(SpriteCompareZ);
 
 		//由于要进行alpha混合，必须先画Z大的物体
-		for (list<Sprite*>::iterator iter = _sprites.begin();
-		iter != _sprites.end(); ++iter)
+		Sprite* spr = NULL;
+		list<Sprite*>::iterator iter = _sprites.begin();
+		for (;iter != _sprites.end(); ++iter)
 		{
 			spr = *iter;
 
@@ -621,7 +630,13 @@ namespace DND
 				debug_warn(L"DND: Canvas::_update: 出现一个空精灵！");
 				continue;
 			}
-			spr->_show = false;
+
+			if (spr->_bDelete)
+			{
+				dnd_assert(L"DND: Canvas::_update: 出现一个已删除精灵！");
+				continue;
+			}
+				
 
 			spr->_update_rigidbody();//根据rigidbody刷新位置
 			//in_eye = false;
@@ -661,6 +676,9 @@ namespace DND
 		_sprites.clear();
 
 		debug_line_canvas(L"Test: Canvas: 006");
+
+		
+
 		//_iter = _sprites.begin();
 		//m_vertexs => m_buffer_vertex
 		//从内存复制到 显存

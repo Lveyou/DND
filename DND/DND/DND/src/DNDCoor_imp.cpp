@@ -8,6 +8,8 @@
 
 namespace DND
 {
+
+
 	Coor* Coor::Create(Coor* parent /*= NULL*/)
 	{
 		Coor_imp* coor = new Coor_imp();
@@ -25,6 +27,11 @@ namespace DND
 		_rotate = 0;
 		_position.x = _position.y = 0;
 		_update_matrix();
+	}
+
+	Coor_imp::~Coor_imp()
+	{
+		//debug_info(String::Format(256, L"DND: Coor: Îö¹¹: %x", this).GetWcs());
 	}
 
 	void Coor_imp::SetPosition(Vector2 pos)

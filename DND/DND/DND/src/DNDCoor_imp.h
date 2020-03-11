@@ -17,6 +17,7 @@
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
 using namespace DirectX;
+using namespace DirectX::PackedVector;
 
 #include <map>
 using namespace std;
@@ -63,7 +64,7 @@ namespace DND
 		friend class Coor;
 	private:
 		Coor_imp();
-		Coor_imp(const Coor_imp& b);
+		~Coor_imp();
 	};
 
 	class Locator_imp : public Locator

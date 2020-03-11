@@ -60,7 +60,7 @@ namespace DND
 			//标记上次所有精灵 为 已废弃
 			for (auto& iter : m_sprites)
 			{
-				delete iter;
+				DELETE_SPRITE(iter);
 			}
 			m_sprites.clear();
 			m_size.w = 0;
@@ -92,7 +92,7 @@ namespace DND
 		//标记上次所有精灵 为 已废弃
 		for (auto& iter : m_sprites)
 		{
-			delete iter;
+			DELETE_SPRITE(iter);
 		}
 		m_sprites.clear();
 		INT32 dw, dh;
@@ -141,7 +141,7 @@ namespace DND
 				if (spr == NULL)
 				{
 					debug_warn(String(L"Text_imp::SetStringFast: 字符未注册！") + buffer[i]);
-					spr = m_canvas->CreateSprite(0, Quad(Vector2(0, 0), Point(dw, dh)));
+					spr = m_canvas->CreateSprite(0, Quad(Vector2(0, 0), Point(space_w, dh)));
 				}
 				spr->SetColor(m_color);
 				break;
@@ -156,7 +156,7 @@ namespace DND
 				m_sprites.push_back(spr);
 
 			//	x += (UINT32)((INT32)(spr->_quad.v[0].a) + (INT32)(spr->GetSize().w));
-				x += (UINT32)(spr->_quad.v[2].a);
+				x += (UINT32)(spr->GetQuad(2).a);
 		}
 		if (x > x_max)
 			x_max = x;
@@ -321,7 +321,7 @@ namespace DND
 		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor)
 		{
 			spr = *itor;
-			if (spr->_color[0].Get() != Color::ALPHACOLOR)
+			if (spr->GetColor(0).Get() != Color::ALPHACOLOR)
 				spr->SetColor(color);
 		}
 		m_color = color;
@@ -406,7 +406,7 @@ namespace DND
 		if (m_sprites.empty())
 			return Vector2(0, (float)(m_size.h));
 		Sprite* spr = m_sprites.back();
-		return spr->GetCoor()->GetPosition() + spr->_quad.v[2];
+		return spr->GetCoor()->GetPosition() + spr->GetQuad(2);
 	}
 
 	void Text_imp::SetOutLine(bool open)
@@ -535,7 +535,7 @@ namespace DND
 		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor)
 		{
 			spr = *itor;
-			delete spr;
+			DELETE_SPRITE(spr);
 		}
 
 		if (_txtOutline[0])
@@ -554,12 +554,9 @@ namespace DND
 
 	void Text_imp::_sprites_offset(Vector2 offset)
 	{
-		Sprite* spr = NULL;
-		list<Sprite*>::iterator itor;
-		for (itor = m_sprites.begin(); itor != m_sprites.end(); ++itor)
+		for (auto& iter : m_sprites)
 		{
-			spr = *itor;
-			spr->GetCoor()->SetPosition(spr->GetCoor()->GetPosition() + offset);
+			iter->GetCoor()->SetPosition(iter->GetCoor()->GetPosition() + offset);
 		}
 		m_offset = m_offset + offset;
 	}

@@ -3,7 +3,8 @@
 #include "DNDTexture.h"
 #include "DNDSprite.h"
 
-#include <d3d11.h>
+#include <list>
+using namespace std;
 
 namespace DND
 {
@@ -65,6 +66,7 @@ namespace DND
 		Canvas_imp(INT32 order, bool mipmap = false, UINT32 size = 1024, UINT32 vertex_size = 1024);
 		void _render();
 		void _update();//m_all_sprites => m_sprites => m_vertexs => m_buffer_vertex
+		void _delete_spr();
 		void _create_vertex_buffer();
 		void _release_vertex_buffer();
 
@@ -85,6 +87,8 @@ namespace DND
 		//改为Z-buffer
 		list<Sprite*> _sprites;
 
+		//需要删除的精灵
+		list<Sprite*> _spritesDeleted;
 		//z值的优先级队列（越大越先出，先入先出）【有奇怪的bug……】
 		//priority_queue<Sprite*, vector<Sprite*>, SpriteCompareZ> _sprites;
 
