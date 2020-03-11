@@ -98,8 +98,9 @@ namespace DND
 		HWND _hWnd;
 		HINSTANCE _hInstance;
 		bool _foucs;
-		
-		
+		bool _bShowCursor;
+		int _cursorCount;
+		void _update_cursor();
 
 		String _exePath;
 		String _exeName;
@@ -108,6 +109,7 @@ namespace DND
 		WIN32_FIND_DATA _findData;
 
 		void* _get_file_form_zip(const String& path, unsigned& size);
+		
 		//vector<ZipFile*>
 		void* _zips;
 

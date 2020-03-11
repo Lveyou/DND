@@ -76,6 +76,7 @@ namespace DND
 		ShowWindow(_hWnd, Debug::_nCmdShow);
 		ShowWindow(_hWnd, SW_HIDE);
 		UpdateWindow(_hWnd);
+		SetFocus(_hWnd);
 	}
 
 	void* System_imp::_get_file_form_zip(const String& path, unsigned& size)
@@ -163,6 +164,9 @@ namespace DND
 		_hWnd = 0;
 		_hInstance = GetModuleHandle(0);
 		_foucs = true;
+		_bShowCursor = true;
+		_cursorCount = 0;
+
 		_font = new Font;
 
 		//exeÂ·¾¶
@@ -651,7 +655,13 @@ namespace DND
 
 	void System_imp::SetShowCursor(bool show)
 	{
-		ShowCursor(show);
+		_bShowCursor = show;
+		if (show && _cursorCount == -1)
+		{
+			ShowCursor(true);
+			++_cursorCount;
+		}
+			
 	}
 
 
@@ -698,7 +708,41 @@ namespace DND
 	{
 		return _windowPoint;
 	}
-	
+
+	void System_imp::_update_cursor()
+	{
+		if (!_bShowCursor)
+		{
+			POINT point;
+			GetCursorPos(&point);
+
+			if (_hWnd)
+				ScreenToClient(_hWnd, &point);
+
+			if (point.x < 0
+				|| point.y < 0
+				|| point.x >= (LONG)_windowSize.w
+				|| point.y >= (LONG)_windowSize.h)
+			{
+				if (_cursorCount == -1)
+				{
+					ShowCursor(true);
+					++_cursorCount;
+				}
+			}	
+			else
+			{
+				if (_cursorCount == 0)
+				{
+					ShowCursor(false);
+					--_cursorCount;
+				}
+			}
+				
+		}
+		
+	}
+
 
 
 

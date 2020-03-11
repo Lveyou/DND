@@ -10,6 +10,8 @@
 #include "DNDSound_imp.h"
 #include "DNDMath.h"
 
+#include <Windowsx.h>
+
 #include <Box2D/Box2D.h>
 #include <time.h>
 
@@ -89,6 +91,7 @@ namespace DND
 
 		Time_imp* t = (Time_imp*)time; 
 		Input_imp* i = (Input_imp*)input; 
+		System_imp* p_sys = ((System_imp*)sys);
 
 		t->_update_current();
 		t->_set_last();
@@ -101,15 +104,6 @@ namespace DND
 		time_t time_cur;
 		do 
 		{
-			//如果消息循环阻塞，代表游戏世界停止
-			while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-			{
-				if(msg.message == WM_QUIT)
-					break;
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-				
-			}
 			////////////////////////////LOGO显示////////////////////////////////////////
 			if (_logoTime)
 				time_cur = ::time(0);
@@ -122,8 +116,21 @@ namespace DND
 			{
 				_logoTime = false;
 			}
-			/////////////////////////输入状态更新////////////////////////////////////
+			//
+			p_sys->_update_cursor();
+			//记录上一帧鼠标位置
 			i->_calc_mouse();
+			//如果消息循环阻塞，代表游戏世界停止（这里会处理鼠标位置）
+			while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				if (msg.message == WM_QUIT)
+					break;
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+
+			}
+			/////////////////////////输入状态更新////////////////////////////////////
+			
 			i->_input_run();
 			i->_xinput_run();
 			//////////////////////////////////////////////////////////////////////////
@@ -235,7 +242,7 @@ namespace DND
 		}while(!_bEndLoop);
 
 		//告诉子线程需要结束
-		System_imp* p_sys = ((System_imp*)sys);
+		
 		p_sys->_bEnd = true;
 		while (p_sys->_threadCount)
 		{
@@ -418,6 +425,7 @@ namespace DND
 		HDC hdc;*/
 		System_imp* sys = (System_imp*)(Get()->sys);
 		DirectX* dx = Get()->_dx;
+		Input_imp* input = ((Input_imp*)(Get()->input));
 		switch (msg)
 		{
 		case WM_CREATE:
@@ -455,8 +463,12 @@ namespace DND
 			}
 			break;
 		case WM_MOUSEWHEEL:
-			((Input_imp*)(Get()->input))->_mouseWheelDelta += (short)HIWORD(wParam);
+			input->_mouseWheelDelta += (short)HIWORD(wParam);
 			break;
+		case WM_MOUSEMOVE:
+			input->_mousePosition.x = GET_X_LPARAM(lParam);
+			input->_mousePosition.y = GET_Y_LPARAM(lParam);
+			return 0;
 		case WM_SIZE:
 		//case WM_EXITSIZEMOVE:
 			return _on_wm_size(hWnd, msg, wParam, lParam);

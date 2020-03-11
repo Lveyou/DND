@@ -80,16 +80,6 @@ namespace DND
 	void Input_imp::_calc_mouse()
 	{
 		_mousePositionLast = _mousePosition;
-
-		System_imp* sys = (System_imp*)(Game::Get()->sys);
-		POINT point;
-		GetCursorPos(&point);
-
-		if (sys->_hWnd)
-			ScreenToClient(sys->_hWnd, &point);
-
-		_mousePosition = Point(point.x, point.y);
-
 	}
 
 	void Input_imp::_input_run()
