@@ -51,7 +51,7 @@ void Test::Init_Window()
 	sys->SetWindowStyle(WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU);
 	sys->SetWindowSize(Size(800, 600));
 	sys->SetWindowCenter();
-	sys->ApplyWindow();
+	sys->SetWindowShow(true);
 	sys->SetVsync(false);
 	time->SetFPS(0);
 }
@@ -96,7 +96,7 @@ void Test::RunWindowSize()
 	{
 		sys->SetWindowSize(Size(800, 600));
 		sys->SetWindowCenter();
-		sys->ApplyWindow();
+		sys->SetWindowShow(true);
 
 	}
 
@@ -104,25 +104,25 @@ void Test::RunWindowSize()
 	{
 		sys->SetWindowSize(Size(1024, 768));
 		sys->SetWindowCenter();
-		sys->ApplyWindow();
+		sys->SetWindowShow(true);
 	}
 	if (input->KeyUp(KeyCode::KEY3))
 	{
 		sys->SetWindowSize(Size(1366, 768));
 		sys->SetWindowCenter();
-		sys->ApplyWindow();
+		sys->SetWindowShow(true);
 	}
 	if (input->KeyUp(KeyCode::KEY4))
 	{
 		sys->SetWindowSize(Size(1600, 900));
 		sys->SetWindowCenter();
-		sys->ApplyWindow();
+		sys->SetWindowShow(true);
 	}
 	if (input->KeyUp(KeyCode::KEY5))
 	{
 		sys->SetWindowSize(Size(1920, 1080));
 		sys->SetWindowCenter();
-		sys->ApplyWindow();
+		sys->SetWindowShow(true);
 	}
 }
 

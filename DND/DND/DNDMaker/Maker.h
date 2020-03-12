@@ -66,7 +66,7 @@ public:
 	~Maker()
 	{
 		delete _locator;
-		delete _sprBg;
+		DELETE_SPRITE(_sprBg);
 	}
 
 	

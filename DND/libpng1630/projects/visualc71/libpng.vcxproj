@@ -184,6 +184,7 @@
       <PrecompiledHeaderFile>pngpriv.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>Default</CompileAs>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)libpng.lib</OutputFile>
@@ -191,6 +192,9 @@
     <PreBuildEvent>
       <Command>copy ..\..\scripts\pnglibconf.h.prebuilt ..\..\pnglibconf.h</Command>
     </PreBuildEvent>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LIB Debug|Win32'">
     <ClCompile>

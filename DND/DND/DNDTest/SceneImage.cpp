@@ -63,12 +63,7 @@ void SceneImage::Run()
 
 			SetCurrentDirectory(m_str_exe_path.GetWcs());
 
-			if (_spr)
-			{
-				delete _spr;
-				_spr = NULL;
-				
-			}
+			DELETE_SPRITE(_spr);
 
 			if (_image)
 				delete _image;

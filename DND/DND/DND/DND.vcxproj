@@ -282,6 +282,7 @@
       <DisableSpecificWarnings>4244;4800</DisableSpecificWarnings>
       <TreatWarningAsError>false</TreatWarningAsError>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -291,6 +292,9 @@
       <ModuleDefinitionFile>export.def</ModuleDefinitionFile>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;Effects11.lib;libpng.lib;freetype28.lib;box2D.lib;ws2_32.lib;Imm32.lib;XInput.lib;XAudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

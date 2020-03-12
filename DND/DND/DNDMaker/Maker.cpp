@@ -161,7 +161,7 @@ void Maker::_init()
 	sys->SetWindowStyle(WS_OVERLAPPEDWINDOW);
 	sys->SetWindowTitle(L"DNDMaker");
 	sys->SetWindowCenter();
-	sys->ApplyWindow();
+	sys->SetWindowShow(true);
 
 	time->SetFPS(120);
 

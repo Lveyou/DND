@@ -54,7 +54,7 @@ void SceneAnimation::Run()
 		_ani->Release();
 		for (auto& iter : _mapSpr)
 		{
-			delete (iter.second);
+			DELETE_SPRITE(iter.second);
 			iter.second = NULL;
 		}
 		_mapSpr.clear();

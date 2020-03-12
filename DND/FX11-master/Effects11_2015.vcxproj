@@ -186,6 +186,7 @@
       <PrecompiledHeaderFile>pchfx.h</PrecompiledHeaderFile>
       <PreprocessorDefinitions>_WIN7_PLATFORM_UPDATE;WIN32;NDEBUG;_WINDOWS;_LIB;D3DXFX_LARGEADDRESS_HANDLE;_WIN32_WINNT=0x0600;_CRT_STDIO_ARBITRARY_WIDE_SPECIFIERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -208,6 +209,9 @@
       <AdditionalDependencies>d3dcompiler.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'">
     <ClCompile>
