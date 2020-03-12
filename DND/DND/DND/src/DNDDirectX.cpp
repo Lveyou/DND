@@ -671,9 +671,10 @@ namespace DND
 			D3D_FEATURE_LEVEL_9_1
 		};
 
-		HRESULT hr;
+		_featureLevel = D3D_FEATURE_LEVEL_9_1;
 
-		//获取特性等级
+		HRESULT hr;
+		//获取特性等级（也需要检测两次）
 		hr = D3D11CreateDevice(
 			NULL,
 			D3D_DRIVER_TYPE_HARDWARE,
@@ -686,7 +687,27 @@ namespace DND
 			&_featureLevel,
 			NULL
 			);
-		////打印功能级别
+		if (hr == E_INVALIDARG)
+		{
+			hr = D3D11CreateDevice(
+				NULL,
+				D3D_DRIVER_TYPE_HARDWARE,
+				NULL,
+				0,
+				&array_feature[1],
+				_countof(array_feature) - 1,
+				D3D11_SDK_VERSION,
+				NULL,
+				&_featureLevel,
+				NULL
+				);
+		}
+		if (FAILED(hr))
+		{
+			dnd_assert(String::Format(256, L"DND: DirectX获取Dx版本失败: %x", hr).GetWcs());
+			return;
+		}
+		//打印功能级别
 		if (_featureLevel <= D3D_FEATURE_LEVEL_9_3)
 		{
 			debug_msg(String(L"DND: 显卡功能级别: D3D_9_X"));
@@ -699,9 +720,17 @@ namespace DND
 		{
 			debug_msg(String(L"DND: 显卡功能级别: D3D_10_1"));
 		}
+		else if (_featureLevel <= D3D_FEATURE_LEVEL_11_0)
+		{
+			debug_msg(String(L"DND: 显卡功能级别: D3D_11_0"));
+		}
+		else if (_featureLevel <= D3D_FEATURE_LEVEL_11_1)
+		{
+			debug_msg(String(L"DND: 显卡功能级别: D3D_11_1"));
+		}
 		else
 		{
-			debug_msg(String(L"DND: 显卡功能级别: D3D_11_X"));
+			debug_msg(String::Format(256, L"DND: 显卡功能级别: %d", (int)_featureLevel));
 		}
 
 		UINT create_devive_flags = 0;//D3D11_CREATE_DEVICE_SINGLETHREADED;//
