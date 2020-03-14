@@ -12,9 +12,6 @@ namespace DND
 
 	bool Control::IsRelease()
 	{
-		/*bool ret = _isRelease;
-		_isRelease = false;
-		return ret;*/
 		return (_preState == DOWN) && (_state == OVER);
 	}
 
