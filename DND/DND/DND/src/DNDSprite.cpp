@@ -253,6 +253,17 @@ namespace DND
 		_ui = open;
 	}
 
+	bool Sprite::IsLastFrameRender()
+	{
+		if (_bLastRender)
+		{
+			_bLastRender = false;
+			return true;
+		}
+		else 
+			return false;
+	}
+
 	Sprite::~Sprite()
 	{
 		if (_coor && !_noCoor)
@@ -270,6 +281,7 @@ namespace DND
 		_noCoor = false;
 		_uvConst = NULL;
 		_bDelete = false;
+		_bLastRender = false;
 	}
 	Sprite* Sprite::Clone(Canvas* canvas /*= NULL*/)
 	{

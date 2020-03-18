@@ -636,7 +636,8 @@ namespace DND
 				dnd_assert(L"DND: Canvas::_update: 出现一个已删除精灵！");
 				continue;
 			}
-				
+			
+			spr->_bLastRender = true;
 
 			spr->_update_rigidbody();//根据rigidbody刷新位置
 			//in_eye = false;

@@ -75,6 +75,9 @@ namespace DND
 
 		void SetUI(bool open);
 
+		///上帧是否被绘制（调用一次后，才重置为否）
+		bool IsLastFrameRender();
+
 		void CreateRigidBody(float density, float friction, float restitution);
 		RigidBody* GetRigidBody();
 
@@ -101,6 +104,7 @@ namespace DND
 		bool _ui;
 		bool _noCoor;
 		bool _bDelete;
+		bool _bLastRender;
 	};
 }
 
