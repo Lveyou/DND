@@ -1,12 +1,15 @@
-//////////////////////////////////////////////////////////////////////////
-//name:		DNDSystem
-//author:	Lveyou
-//date:		17-07-26
-
-//other:
-//17-07-26: win32相关 - Lveyou
-//////////////////////////////////////////////////////////////////////////
-
+/**
+* @file		DNDSystem.h
+* @brief	A1用于创建窗口、响应输入法、选择文件等于系统相关的事情
+* 
+* 
+* @version	1.0
+* @author	Lveyou
+* @date		17-07-26
+* 修订说明：	1
+* @date		20-03-18
+* 修订说明：	2
+*/
 #ifndef _DND_SYSTEM_H_
 #define _DND_SYSTEM_H_
 
@@ -31,7 +34,15 @@ namespace DND
 	class DLL_API System
 	{	
 	public:
+		/**
+		* @brief 弹出一个带OK的系统对话框
+		* @param text 要显示的文本
+		*/
 		virtual void MessageBox(const String& text) = 0;
+		/**
+		* @brief 设置窗口标题栏文本
+		* @param title 标题栏文本
+		*/
 		virtual void SetWindowTitle(const String& title) = 0;
 		//need call ApplyWindow to apply
 		virtual void SetWindowCenter() = 0;
