@@ -43,7 +43,9 @@ namespace DND
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = _hInstance;//ÊµÀý¾ä±ú
-		wc.hIcon = (HICON)::LoadImage(NULL, L"icon1.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+		wc.hIcon = (HICON)::LoadImage(_hInstance, L"#101",
+			IMAGE_ICON, 0, 0, LR_DEFAULTSIZE);
+			//(HICON)::LoadImage(NULL, L"icon1.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 		wc.hIconSm = NULL;
 		wc.hCursor = LoadCursor(0, IDC_ARROW);
 		wc.hbrBackground = NULL;// (HBRUSH)GetStockObject(NULL_BRUSH);//
