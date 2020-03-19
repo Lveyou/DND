@@ -9,6 +9,9 @@ DebuggerEmpty debugger;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
+	//禁用系统DPI自动适配
+	SetProcessDPIAware();
+
 	Debug::_nCmdShow = nCmdShow;
 	Debug::SetDebugger(&debugger);
 	//set locale

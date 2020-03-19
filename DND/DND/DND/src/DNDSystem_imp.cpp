@@ -36,19 +36,21 @@ namespace DND
 		if(_hWnd)
 			dnd_assert(L"DND: System: 窗口已经创建！");
 		//窗口类
-		WNDCLASS wc;
+		WNDCLASSEX wc;
+		wc.cbSize = sizeof(WNDCLASSEX);
 		wc.style = CS_HREDRAW | CS_VREDRAW;
 		wc.lpfnWndProc = Game::_window_proc; //消息处理函数
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = _hInstance;//实例句柄
-		wc.hIcon = (HICON)::LoadImage(NULL, L"game.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+		wc.hIcon = (HICON)::LoadImage(NULL, L"icon1.ico", IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
+		wc.hIconSm = NULL;
 		wc.hCursor = LoadCursor(0, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);//
+		wc.hbrBackground = NULL;// (HBRUSH)GetStockObject(NULL_BRUSH);//
 		wc.lpszMenuName = 0;
 		wc.lpszClassName = L"DNDWindowClass";//窗口类名
 
-		if(!RegisterClass(&wc))
+		if(!RegisterClassEx(&wc))
 			dnd_assert(L"DND: System: 注册窗口类失败！");
 		
 		//创建窗口
@@ -57,7 +59,7 @@ namespace DND
 			L"DNDWindowClass",                     // Window class
 			L"DNDFirstWindow",    // Window text
 			WS_POPUP,            // Window style								
-			0, 0, 64, 64,// Size and position
+			CW_USEDEFAULT, CW_USEDEFAULT, 800, 600,// Size and position
 			NULL,       // Parent window    
 			NULL,       // Menu
 			_hInstance,  // Instance handle
@@ -75,8 +77,8 @@ namespace DND
 
 		ShowWindow(_hWnd, Debug::_nCmdShow);
 		ShowWindow(_hWnd, SW_HIDE);
-		UpdateWindow(_hWnd);
-		SetFocus(_hWnd);
+		/*UpdateWindow(_hWnd);
+		SetFocus(_hWnd);*/
 	}
 
 	void* System_imp::_get_file_form_zip(const String& path, unsigned& size)
