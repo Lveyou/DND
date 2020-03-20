@@ -475,6 +475,9 @@ namespace DND
 		case WM_MOVE:
 			sys->_windowPoint.x = (int)(short)LOWORD(lParam);
 			sys->_windowPoint.y = (int)(short)HIWORD(lParam);
+			if (sys->_windowPoint.x < 0
+				|| sys->_windowPoint.y < 0)
+				dnd_assert(L"DND: WM_MOVE");
 			break;
 		case WM_CHAR:
 			EditBox::_process_input_char(wParam);

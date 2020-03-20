@@ -278,25 +278,16 @@ namespace DND
 
 	void System_imp::SetWindowPoint(Point point)
 	{
-		_windowPoint = point;
-
-		//¥À∫Ø ˝√≤À∆≤ª––
-		/*if (!SetWindowPos(
-			_hWnd,
-			_hWnd,
-			_windowPoint.x,
-			_windowPoint.y,
-			_windowSize.w,
-			_windowSize.h,
-			SWP_NOSIZE))
-			dnd_assert(L"DND: System: SetWindowPos ß∞‹£°");*/
-		if (!MoveWindow(_hWnd,
-			_windowPoint.x,
-			_windowPoint.y,
+		/*if (!MoveWindow(_hWnd,
+			point.x,
+			point.y,
 			_windowSize.w,
 			_windowSize.h,
 			false))
-			dnd_assert(L"DND: System: MoveWindow ß∞‹£°");
+			dnd_assert(L"DND: System: MoveWindow ß∞‹£°");*/
+		_windowPoint = point;
+		SetWindowPos(_hWnd, _hWnd,
+			point.x, point.y, 0, 0,SWP_NOSIZE | SWP_NOZORDER);
 	}
 
 	void System_imp::SetWindowShow(bool show)

@@ -34,15 +34,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Effects11", "..\FX11-master\Effects11_2015.vcxproj", "{DF460EAB-570D-4B50-9089-2E2FC801BF38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1342B0E2-E12A-436C-8896-61B991C60113}"
-	ProjectSection(SolutionItems) = preProject
-		Performance4.psess = Performance4.psess
-		Performance5.psess = Performance5.psess
-	EndProjectSection
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Library|Any CPU = Debug Library|Any CPU
 		Debug Library|Itanium = Debug Library|Itanium
