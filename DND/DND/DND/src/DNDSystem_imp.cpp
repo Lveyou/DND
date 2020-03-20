@@ -301,7 +301,16 @@ namespace DND
 
 	void System_imp::SetWindowShow(bool show)
 	{
-		ShowWindow(_hWnd, show ? SW_SHOW : SW_HIDE);
+		if (show)
+		{
+			ShowWindow(_hWnd, SW_SHOW);
+			SetFocus(_hWnd);
+		}
+		else
+		{
+			ShowWindow(_hWnd, SW_HIDE);
+			SetFocus(NULL);
+		}
 	}
 
 	Size System_imp::GetDesktopSize()
