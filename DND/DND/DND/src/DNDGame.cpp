@@ -478,7 +478,7 @@ namespace DND
 			if (sys->_windowPoint.x < 0
 				|| sys->_windowPoint.y < 0)
 				dnd_assert(L"DND: WM_MOVE");
-			break;
+			return 0;
 		case WM_CHAR:
 			EditBox::_process_input_char(wParam);
 			return 0;

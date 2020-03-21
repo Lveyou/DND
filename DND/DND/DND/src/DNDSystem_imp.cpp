@@ -202,8 +202,8 @@ namespace DND
 	void System_imp::SetWindowCenter()
 	{
 		Size s = GetDesktopSize();
-		_windowPoint.x = int(s.w - _windowSize.w) / 2;
-		_windowPoint.y = int(s.h - _windowSize.h) / 2;
+		_windowPoint.x = (int(s.w) - int(_windowSize.w)) / 2;
+		_windowPoint.y = (int(s.h) - int(_windowSize.h)) / 2;
 		SetWindowPoint(_windowPoint);
 	}
 
@@ -285,7 +285,7 @@ namespace DND
 			_windowSize.h,
 			false))
 			dnd_assert(L"DND: System: MoveWindow ß∞‹£°");*/
-		_windowPoint = point;
+		//_windowPoint = point;
 		SetWindowPos(_hWnd, _hWnd,
 			point.x, point.y, 0, 0,SWP_NOSIZE | SWP_NOZORDER);
 	}
