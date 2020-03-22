@@ -205,6 +205,8 @@ namespace DND
 		_windowPoint.x = (int(s.w) - int(_windowSize.w)) / 2;
 		_windowPoint.y = (int(s.h) - int(_windowSize.h)) / 2;
 		SetWindowPoint(_windowPoint);
+
+		//CenterWindow(GetDesktopWindow());
 	}
 
 	void System_imp::SetWindowStyle(DWORD style)

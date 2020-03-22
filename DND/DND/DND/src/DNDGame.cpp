@@ -347,76 +347,20 @@ namespace DND
 	LRESULT CALLBACK Game::_on_wm_size(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		System_imp* sys = (System_imp*)(Game::Get()->sys);
-
-		RECT rect;
-		GetClientRect(hWnd, &rect);//消息返回的并非客户区大小
-		sys->_windowSize.w = rect.right - rect.left;
-		sys->_windowSize.h = rect.bottom - rect.top;
-
-
 		DirectX* dx = (Game::Get()->_dx);
-		if (dx && wParam != SIZE_MINIMIZED)
+
+		if (dx && (wParam != SIZE_MINIMIZED))
 		{
+			RECT rect;
+			GetClientRect(hWnd, &rect);//消息返回的并非客户区大小
+			sys->_windowSize.w = rect.right - rect.left;
+			sys->_windowSize.h = rect.bottom - rect.top;
+
 			dx->_resize();
 			Get()->_on_resize();//用户自定义
-			return 1;
+			
 		}
-		
-		//if(msg == WM_SIZE)
-		//{
-		//	if (Get()->_dx && wParam != SIZE_MINIMIZED)
-		//	{
-		//		static WPARAM wparam_pre = SIZE_RESTORED;
-		//		switch (wParam)
-		//		{
-		//		case SIZE_MAXIMIZED:
-		//			{
-		//				wparam_pre = SIZE_MAXIMIZED;
-		//				RECT rect;
-		//				GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
-		//				sys->_windowSize.w = rect.right - rect.left;
-		//				sys->_windowSize.h = rect.bottom - rect.top;
-		//				Get()->_dx->_sizeChange = true;
-		//			}
-		//			break;
-		//		case SIZE_RESTORED:
-		//			{
-		//				//if (SIZE_RESTORED != wparam_pre) 暂时取消判断
-		//				{
-		//					RECT rect;
-		//					GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
-		//					sys->_windowSize.w = rect.right - rect.left;
-		//					sys->_windowSize.h = rect.bottom - rect.top;
-		//					Get()->_dx->_sizeChange = true;
-		//					wparam_pre = SIZE_RESTORED;
-		//				}
-		//			}
-		//			break;
-		//		}
-		//	}
-
-		//	//最小化也失去焦点
-		//	if (wParam == SIZE_MINIMIZED)
-		//	{
-		//		sys->_foucs = false;
-		//	}
-
-		//}
-		//else if(WM_EXITSIZEMOVE)
-		//{
-		//	//exitsizemove并不能获取大小
-		//	//消息返回的并非客户区大小
-		//	if (Get()->_dx)
-		//	{
-		//		RECT rect;
-		//		GetClientRect(sys->GetWindowHwnd(), &rect);//消息返回的并非客户区大小
-		//		sys->_windowSize.w = rect.right - rect.left;
-		//		sys->_windowSize.h = rect.bottom - rect.top;
-		//		Get()->_dx->_sizeChange = true;
-		//	}		
-		//}
-		
-		return DefWindowProc(hWnd, msg, wParam, lParam);
+		return 0;
 	}
 
 	LRESULT CALLBACK Game::_window_proc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -473,11 +417,29 @@ namespace DND
 		//case WM_EXITSIZEMOVE:
 			return _on_wm_size(hWnd, msg, wParam, lParam);
 		case WM_MOVE:
-			sys->_windowPoint.x = (int)(short)LOWORD(lParam);
-			sys->_windowPoint.y = (int)(short)HIWORD(lParam);
-			if (sys->_windowPoint.x < 0
-				|| sys->_windowPoint.y < 0)
-				dnd_assert(L"DND: WM_MOVE");
+		{
+			int x = (int)(short)LOWORD(lParam);
+			int y = (int)(short)HIWORD(lParam);
+
+			Size size = sys->GetDesktopSize();
+			if (x < 0
+				|| y < 0
+				|| x >= int(size.w)
+				|| y >= int(size.h))
+			{
+				debug_err(L"DND: WM_MOVE: 窗口位置超出屏幕范围");
+				/*sys->_windowPoint.x = Math::GetBetween<int>(sys->_windowPoint.x, 0, size.w);
+				sys->_windowPoint.y = Math::GetBetween<int>(sys->_windowPoint.y, 0, size.h);*/
+				/*sys->SetWindowSize({ 800, 600 });
+				sys->SetWindowCenter();
+				sys->SetWindowShow(true);*/
+			}
+			else
+			{
+				sys->_windowPoint.x = x;
+				sys->_windowPoint.y = y;
+			}
+		}
 			return 0;
 		case WM_CHAR:
 			EditBox::_process_input_char(wParam);
